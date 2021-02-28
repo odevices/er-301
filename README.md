@@ -21,7 +21,7 @@ This project contains the source code for:
 
 ## Emulator
 
-:warning: **The following instructions have been tested on Ubuntu 20.10.**
+:warning: **The following instructions have been tested on Ubuntu 20.xx.**
 
 Since cross-compilation has its own complexities, it is probably easier to first start with getting the emulator running on your development machine.  To compile and run the emulator you will need the following dependencies installed:
 
@@ -57,11 +57,7 @@ First, you will need to install the TI-RTOS development tools for the AM335x.
 ### Other required dependencies
 
 ```bash
-<<<<<<< HEAD
 sudo apt install swig python3 zip
-=======
-sudo apt install swig python3
->>>>>>> e2403818d8bc3ebde894b678c59c8bfa07d5ae45
 ```
 
 ### Try compiling the core mod
