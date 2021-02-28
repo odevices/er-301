@@ -15,8 +15,20 @@ app-clean:
 	+$(MAKE) -C scripts -f miniz.mk clean
 	+$(MAKE) -C scripts -f ne10.mk clean
 	+$(MAKE) -C scripts -f lodepng.mk clean
-	+$(MAKE) -C scripts -f core.mk clean
 	+$(MAKE) -C scripts -f app.mk clean
+
+core:
+	+$(MAKE) -C scripts -f core.mk
+
+core-clean:
+	+$(MAKE) -C scripts -f core.mk clean
+
+
+teletype:
+	+$(MAKE) -C scripts -f teletype.mk
+
+teletype-clean:
+	+$(MAKE) -C scripts -f teletype.mk clean
 
 sbl: 
 	+$(MAKE) -C scripts -f sbl.mk
@@ -48,4 +60,4 @@ emu-clean:
 dist-clean:
 	rm -rf testing debug release
 
-.PHONY: app app-clean sbl sbl-clean pbl pbl-clean emu emu-clean
+.PHONY: app sbl pbl emu
