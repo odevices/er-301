@@ -57,7 +57,11 @@ First, you will need to install the TI-RTOS development tools for the AM335x.
 ### Other required dependencies
 
 ```bash
+<<<<<<< HEAD
 sudo apt install swig python3 zip
+=======
+sudo apt install swig python3
+>>>>>>> e2403818d8bc3ebde894b678c59c8bfa07d5ae45
 ```
 
 ### Try compiling the core mod
