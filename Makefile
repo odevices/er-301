@@ -59,14 +59,12 @@ emu:
 	+$(MAKE) -f scripts/lua.mk ARCH=linux
 	+$(MAKE) -f scripts/miniz.mk ARCH=linux
 	+$(MAKE) -f scripts/lodepng.mk ARCH=linux
-	+$(MAKE) -f scripts/core.mk ARCH=linux
 	+$(MAKE) -f scripts/emu.mk
 
 emu-clean: 
 	+$(MAKE) -f scripts/lua.mk ARCH=linux clean
 	+$(MAKE) -f scripts/miniz.mk ARCH=linux clean
 	+$(MAKE) -f scripts/lodepng.mk ARCH=linux clean
-	+$(MAKE) -f scripts/core.mk ARCH=linux clean
 	+$(MAKE) -f scripts/emu.mk clean
 
 dist-clean:

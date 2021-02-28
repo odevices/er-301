@@ -19,6 +19,33 @@ This project contains the source code for:
 * factory mods (core, teletype)
 * SDK for building your own mods
 
+## Build Output
+
+All build outputs are placed in a sub folder composed of the build profile and the target architecture.  There are 3 build profiles:
+
+* testing
+* debug
+* release
+
+And here are the 2 supported target architectures:
+
+* am335x
+* linux
+
+So for example, if I execute the following make command:
+
+```bash
+make core PROFILE=debug ARCH=linux
+```
+
+Then the build outputs will be placed in the debug/linux directory of the project root.  Generally, the default profile is **testing** and the default architecture for everything except the emulator is **am335x**.  So if you execute just:
+
+```bash
+make core
+```
+
+Then the build outputs will appear in the testing/am335x directory of the project root.  See the [top-level Makefile](Makefile) for more details.
+
 ## Emulator
 
 :warning: **The following instructions have been tested on Ubuntu 20.xx.**
@@ -44,6 +71,14 @@ In the above, you are telling the emulator the location of the following 3 requi
 * lua scripts file tree (Usually the xroot folder of this project.)
 * file tree for the rear SD card (This will be created if it doesn't exist.)
 * file tree for the front SD card (This will be created if it doesn't exist.)
+
+Since you are essentially booting up the ER-301 with empty SD cards, it will populate the file trees with the default files but you will not have the core mod installed.  To compile and create the installation package for the core mod, execute:
+
+```bash
+make core ARCH=linux
+```
+
+Then copy the resulting core-x.x.x.pkg file to the ER-301/packages directory of the emulator's front SD card
 
 ## Creating your own mods
 
