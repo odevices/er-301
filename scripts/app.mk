@@ -112,7 +112,7 @@ addr2line: $(out_dir)/$(program_name).elf
 FLASHFILE ?= $(out_dir)/$(program_name).elf
 flash: all
 	@echo $(describe_env) Flashing $(FLASHFILE)
-	@$(uniflash_install_dir)/dslite.sh --config=uniflash/ER-301-USB560v2.ccxml --verbose --core=1 $(FLASHFILE)
+	@$(uniflash_install_dir)/dslite.sh --config=scripts/uniflash/ER-301-USB560v2.ccxml --verbose --core=1 $(FLASHFILE)
 
 libs: 
 	+$(MAKE) -f lua.mk

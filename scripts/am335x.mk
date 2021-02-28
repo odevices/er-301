@@ -1,7 +1,7 @@
 # Designed for processor_sdk_rtos_am335x_4_01_00_06.
 
 # TI RTOS SDK install root
-TI_INSTALL_DIR ?= ~/ti
+TI_INSTALL_DIR ?= $(HOME)/ti
 
 # TI RTOS SDK tools
 gcc_install_dir := $(TI_INSTALL_DIR)/gcc-arm-none-eabi-4_9-2015q3
