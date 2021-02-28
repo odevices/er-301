@@ -1,5 +1,16 @@
 # ER-301 Sound Computer
 
+## Table of Contents
+
+  * [Introduction](#introduction)
+  * [Emulator](#emulator)
+  * [Creating your own mods](#creating-your-own-mods)
+    + [Install the TI Processor SDK for AM335x](#install-the-ti-processor-sdk-for-am335x)
+    + [Other required dependencies](#other-required-dependencies)
+    + [Try compiling the core mod](#try-compiling-the-core-mod)
+
+## Introduction
+
 This project contains the source code for:
 * primary boot loader (MLO)
 * secondary boot loader (SBL)
@@ -10,7 +21,9 @@ This project contains the source code for:
 
 ## Emulator
 
-Let's start with the emulator.  To compile the emulator you will need the following dependencies installed:
+:warning: **The following instructions have been tested on Ubuntu 20.10.**
+
+Since cross-compilation has its own complexities, it is probably easier to first start with getting the emulator running on your development machine.  To compile the emulator you will need the following dependencies installed:
 
 ```bash
 sudo apt install libsdl2-dev libsdl2-ttf libfftw3-dev swig
