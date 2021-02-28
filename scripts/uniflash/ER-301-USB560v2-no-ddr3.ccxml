@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configurations XML_version="1.2" id="configurations_0">
+<configuration XML_version="1.2" id="Blackhawk XDS560v2-USB System Trace Emulator_0">
+        <instance XML_version="1.2" desc="Blackhawk XDS560v2-USB System Trace Emulator_0" href="connections/BH-XDS560v2-USB_Connection.xml" id="Blackhawk XDS560v2-USB System Trace Emulator_0" xml="BH-XDS560v2-USB_Connection.xml" xmlpath="connections"/>
+        <connection XML_version="1.2" id="Blackhawk XDS560v2-USB System Trace Emulator_0">
+            <instance XML_version="1.2" href="drivers/tixds560icepick_d.xml" id="drivers" xml="tixds560icepick_d.xml" xmlpath="drivers"/>
+            <instance XML_version="1.2" href="drivers/tixds560cs_dap.xml" id="drivers" xml="tixds560cs_dap.xml" xmlpath="drivers"/>
+            <instance XML_version="1.2" href="drivers/tixds560cortexM.xml" id="drivers" xml="tixds560cortexM.xml" xmlpath="drivers"/>
+            <instance XML_version="1.2" href="drivers/tixds560cs_child.xml" id="drivers" xml="tixds560cs_child.xml" xmlpath="drivers"/>
+            <instance XML_version="1.2" href="drivers/tixds560cortexA.xml" id="drivers" xml="tixds560cortexA.xml" xmlpath="drivers"/>
+            <instance XML_version="1.2" href="drivers/tixds560csstm.xml" id="drivers" xml="tixds560csstm.xml" xmlpath="drivers"/>
+            <instance XML_version="1.2" href="drivers/tixds560etbcs.xml" id="drivers" xml="tixds560etbcs.xml" xmlpath="drivers"/>
+            <property Type="choicelist" Value="7" id="JTAG TCLK Frequency (MHz)">
+                <choice Name="TCLK looped-back with user specified limit" value="automatic">
+                    <property Type="stringfield" Value="24" id="-- Enter a value from 0.5MHz to 64.0MHz"/>
+                </choice>
+            </property>
+            <property Type="choicelist" Value="1" id="TMS/TDO Output Timing"/>
+            <property Type="choicelist" Value="0" id="The cJTAG Converter Features">
+                <choice Name="Generate 1149.7 2-pin advanced modes" value="enable">
+                    <property Type="choicelist" Value="0" id="The Target Pin Width"/>
+                    <property Type="choicelist" Value="0" id="The Converter 1149.7 Frequency Source"/>
+                </choice>
+            </property>
+            <property Type="choicelist" Value="0" id="The Boot-Mode Pin Map"/>
+            <platform XML_version="1.2" id="platform_0">
+                <instance XML_version="1.2" desc="AM3352_0" href="devices/AM3352.xml" id="AM3352_0" xml="AM3352.xml" xmlpath="devices"/>
+                <device HW_revision="1" XML_version="1.2" description="AM33x - Cortex A8 Embedded Processor" id="AM3352_0" partnum="AM3352" simulation="no">
+                    <router HW_revision="1.0" XML_version="1.2" description="ICEPick_D Router" id="IcePick_D_0" isa="ICEPICK_D">
+                        <subpath id="subpath_11">
+                            <router HW_revision="1.0" XML_version="1.2" description="CS_DAP Router" id="CS_DAP_M3" isa="CS_DAP">
+                                <subpath id="M3_wakeupSS_sp">
+                                    <cpu HW_revision="1.0" XML_version="1.2" desc="M3_wakeupSS_0" description="Cortex_M3 CPU" deviceSim="false" id="M3_wakeupSS" isa="Cortex_M3">
+                                        <property Type="choicelist" Value="0" id="bypass"/>
+                                    </cpu>
+                                </subpath>
+                            <property Type="choicelist" Value="0" id="bypass"/>
+                            </router>
+                        </subpath>
+                    <subpath id="subpath_12">
+                            <router HW_revision="1.0" XML_version="1.2" description="CS_DAP Router" id="CS_DAP_0" isa="CS_DAP">
+                                <subpath id="ModenaSS">
+                                    <cpu HW_revision="1.0" XML_version="1.2" description="Cortex_A8 CPU" deviceSim="false" id="CortexA8" isa="Cortex_A8">
+                                        <property Type="filepathfield" Value="er-301-no-ddr3.gel" id="GEL File"/>
+                                    </cpu>
+                                </subpath>
+                            </router>
+                        </subpath>
+                    </router>
+                </device>
+            </platform>
+        </connection>
+    </configuration>
+</configurations>

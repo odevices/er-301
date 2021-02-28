@@ -1,0 +1,69 @@
+clean::
+	$(RM) package/am335x_DDR3_512MB.sch
+	$(RM) package/.vers_g200
+	$(RM) package/.vers_r200
+	$(RM) package/.vers_b200
+	$(RM) package/.xdc-G16
+	$(RM) package/am335x_DDR3_512MB.java
+	$(RM) package/am335x_DDR3_512MB.class
+	$(RM) package/package_am335x_DDR3_512MB.c
+	$(RM) package/package.defs.h
+	$(RM) package/am335x_DDR3_512MB.ccs
+
+.interfaces: package/am335x_DDR3_512MB.sch package/.vers_g200 package/.vers_r200 package/.vers_b200 package/.xdc-G16 package/am335x_DDR3_512MB.java package/package_am335x_DDR3_512MB.c package/package.defs.h package/am335x_DDR3_512MB.ccs 
+package/package.xdc.inc: package/.vers_g200
+package/.vers_g200:
+package/package.xdc.inc: package/.vers_r200
+package/.vers_r200:
+package/package.xdc.inc: package/.vers_b200
+package/.vers_b200:
+
+.interfaces: Platform.xdc 
+
+# schema include file dependencies
+Platform.xs:
+package/package.xdc.inc: Platform.xs
+
+# schema update dependencies
+package/package.xdc.inc: Platform.xdc
+package/package.xdc.inc: xdc/IPackage.xdc
+xdc/IPackage.xdc:
+vpath xdc/IPackage.xdc $(XPKGVPATH)
+package/package.xdc.inc: xdc/platform/IPlatform.xdc
+xdc/platform/IPlatform.xdc:
+vpath xdc/platform/IPlatform.xdc $(XPKGVPATH)
+package/package.xdc.inc: xdc/platform/IPeripheral.xdc
+xdc/platform/IPeripheral.xdc:
+vpath xdc/platform/IPeripheral.xdc $(XPKGVPATH)
+package/package.xdc.inc: xdc/platform/ICpuDataSheet.xdc
+xdc/platform/ICpuDataSheet.xdc:
+vpath xdc/platform/ICpuDataSheet.xdc $(XPKGVPATH)
+package/package.xdc.inc: ti/platforms/generic/Platform.xdc
+ti/platforms/generic/Platform.xdc:
+vpath ti/platforms/generic/Platform.xdc $(XPKGVPATH)
+package/package.xdc.inc: xdc/platform/IExeContext.xdc
+xdc/platform/IExeContext.xdc:
+vpath xdc/platform/IExeContext.xdc $(XPKGVPATH)
+
+ifneq (clean,$(MAKECMDGOALS))
+/home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/intern/xsr/java/package.jar:
+package/package.xdc.inc: /home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/intern/xsr/java/package.jar
+/home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/intern/gen/java/package.jar:
+package/package.xdc.inc: /home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/intern/gen/java/package.jar
+/home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/shelf/java/ecj.jar:
+package/package.xdc.inc: /home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/shelf/java/ecj.jar
+/home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/shelf/java/js.jar:
+package/package.xdc.inc: /home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/shelf/java/js.jar
+/home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/shelf/java/antlr.jar:
+package/package.xdc.inc: /home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/shelf/java/antlr.jar
+/home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/intern/cmd/java/package.jar:
+package/package.xdc.inc: /home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/intern/cmd/java/package.jar
+/home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/global/java/package.jar:
+package/package.xdc.inc: /home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/global/java/package.jar
+/home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/spec/java/package.jar:
+package/package.xdc.inc: /home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/services/spec/java/package.jar
+/home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/shelf/java/tar.jar:
+package/package.xdc.inc: /home/clarkson/ti/ccs910/xdctools_3_55_02_22_core/packages/xdc/shelf/java/tar.jar
+endif
+# goals for files generated during schema generation but unspecified by schema's pattern rule
+

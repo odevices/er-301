@@ -1,0 +1,14 @@
+%module testlib_objects
+%import <app/glue/sdk.cpp.swig>
+
+%{
+#undef SWIGLUA
+
+#include <TestObject.h>
+
+#define SWIGLUA
+%}
+
+%include <TestObject.h>
+
+

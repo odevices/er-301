@@ -1,0 +1,17 @@
+am335x_DDR3_512MB/Platform.xdc
+am335x_DDR3_512MB/Platform.xs
+am335x_DDR3_512MB/config.bld
+am335x_DDR3_512MB/package/.vers_b200
+am335x_DDR3_512MB/package/.vers_g200
+am335x_DDR3_512MB/package/.vers_r200
+am335x_DDR3_512MB/package/.xdc-G16
+am335x_DDR3_512MB/package/am335x_DDR3_512MB.ccs
+am335x_DDR3_512MB/package/am335x_DDR3_512MB.class
+am335x_DDR3_512MB/package/am335x_DDR3_512MB.java
+am335x_DDR3_512MB/package/am335x_DDR3_512MB.sch
+am335x_DDR3_512MB/package/build.cfg
+am335x_DDR3_512MB/package/package.bld.xml
+am335x_DDR3_512MB/package/package.defs.h
+am335x_DDR3_512MB/package/package_am335x_DDR3_512MB.c
+am335x_DDR3_512MB/package.bld
+am335x_DDR3_512MB/package.xdc

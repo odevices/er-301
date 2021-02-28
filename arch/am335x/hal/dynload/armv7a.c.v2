@@ -1,0 +1,339 @@
+#include "armv7a.h"
+//#define BUILDOPT_VERBOSE
+#include <hal/log.h>
+#include <string.h>
+
+bool verifyHeader(Elf32_Ehdr *header)
+{
+  static const char magic[] = {0x7f, 'E', 'L', 'F'};
+  if (memcmp(header->e_ident, magic, sizeof(magic)) != 0)
+  {
+    logError("Bad magic.");
+    return false;
+  }
+
+  if (header->e_type != ET_REL)
+  {
+    logError("Not a relocatable ELF.");
+    return false;
+  }
+
+  //// Checks required by the ARMv7-A architecture.
+
+  if (header->e_machine != EM_ARM)
+  {
+    logError("Target architecture (ARM) does not match.");
+    return false;
+  }
+
+  if (header->e_ident[EI_CLASS] != ELFCLASS32)
+  {
+    logError("Target architecture (32-bit) does not match.");
+    return false;
+  }
+
+  if (header->e_ident[EI_DATA] != ELFDATA2LSB)
+  {
+    logError("Target architecture (little-endian) does not match.");
+    return false;
+  }
+
+  if ((header->e_entry & 3) != 0)
+  {
+    logError("Entry point is not aligned.");
+    return false;
+  }
+
+  return true;
+}
+
+/*
+ * It is possible for the compiler to emit relocations for unaligned data.
+ * We handle this situation with these inlines.
+ */
+#define RELOC_ALIGNED_P(x) \
+  (((uintptr_t)(x) & (sizeof(void *) - 1)) == 0)
+
+static inline Elf32_Addr
+load_ptr(void *where)
+{
+  Elf32_Addr res;
+
+  memcpy(&res, where, sizeof(res));
+
+  return (res);
+}
+
+static inline void
+store_ptr(void *where, Elf32_Addr val)
+{
+
+  memcpy(where, &val, sizeof(val));
+}
+
+/*
+ * The address of Thumb function symbols is it's real address plus one.
+ * This is done by compiler, thus do not consider symtype here.
+ */
+static inline int
+isThumb(Elf32_Word symvalue)
+{
+  if ((symvalue & 0x1) == 0x1)
+    return true;
+  else
+    return false;
+}
+
+bool relocate(const Elf32_Rel *rel,
+              const Elf32_Sym *sym,
+              uintptr_t addr,
+              const char *symname)
+/*  
+bool rtems_rtl_elf_relocate_rel(const rtems_rtl_obj_t *obj,
+                                const Elf32_Rel *rel,
+                                const rtems_rtl_obj_sect_t *sect,
+                                const char *symname,
+                                const Elf32_Byte syminfo,
+                                const Elf32_Word symvalue)
+*/
+{
+  Elf32_Word symvalue = sym->st_value;
+  Elf32_Addr *where;
+  Elf32_Addr tmp;
+  Elf32_Word insn, addend;
+  Elf32_Word sign, i1, i2;
+  uint16_t lower_insn, upper_insn;
+
+  where = (Elf32_Addr *)(addr);
+
+  switch (ELF32_R_TYPE(rel->r_info))
+  {
+  case R_ARM_NONE:
+    break;
+
+  case R_ARM_CALL:   /* BL/BLX */
+  case R_ARM_JUMP24: /* B/BL<cond> */
+    insn = *where;
+
+    if (insn & 0x00800000)
+      addend = insn | 0xff000000;
+    else
+      addend = insn & 0x00ffffff;
+
+    if (isThumb(symvalue))
+    {
+      if ((insn & 0xfe000000) == 0xfa000000)
+        ; /* Already blx */
+      else
+      {
+        if ((insn & 0xff000000) == 0xeb000000)
+        {                                            /* BL <label> */
+          *where = (insn & 0x00ffffff) | 0xfa000000; /* BL-->BLX */
+        }
+        else
+        {
+          logInfo("%s: JUMP24 (0x%08x: 0x%08x) is not supported from arm to thumb", symname, addr, insn);
+          return false;
+        }
+      }
+    }
+
+    tmp = symvalue + (addend << 2) - (Elf32_Addr)where;
+    tmp = (Elf32_Sword)tmp >> 2;
+
+    if (((Elf32_Sword)tmp > 0x7fffff) || ((Elf32_Sword)tmp < -0x800000))
+    {
+      logInfo("CALL/JUMP24 Overflow");
+      return false;
+    }
+
+    *where = (*where & 0xff000000) | (tmp & 0xffffff);
+
+    break;
+
+  case R_ARM_V4BX:
+    logDebug(1, "V4BX addr=0x%08lx [0x%08lx]",
+               (long)addr, (long)(*(uint32_t *)addr));
+    /* Preserve only Rm and the condition code */
+    *(uint32_t *)addr &= 0xf000000f;
+    /* Change instruction to 'mov pc, Rm' */
+    *(uint32_t *)addr |= 0x01a0f000;
+    break;
+  case R_ARM_PREL31:
+  {
+    logDebug(1, "%s: PREL31 addr=0x%08lx [0x%08lx] st_value=0x%08lx",
+               symname, (long)addr, (long)(*(uint32_t *)addr), (long)sym->st_value);
+    addend = *(uint32_t *)addr + sym->st_value - addr;
+    *(uint32_t *)addr = addend & 0x7fffffff;
+  }
+  break;
+  case R_ARM_MOVT_ABS:
+  case R_ARM_MOVW_ABS_NC:
+    insn = *where;
+
+    addend = ((insn >> 4) & 0xf000) | (insn & 0x0fff);
+    if (addend & 0x8000)
+      addend |= 0xffff0000;
+
+    tmp = symvalue + addend;
+
+    if (ELF32_R_TYPE(rel->r_info) == R_ARM_MOVW_ABS_NC)
+      tmp &= 0xffff;
+    else
+    {
+      tmp = (Elf32_Sword)tmp >> 16;
+      if (((Elf32_Sword)tmp > 0x7fff) || ((Elf32_Sword)tmp < -0x8000))
+      {
+        logInfo("MOVT_ABS Overflow");
+        return false;
+      }
+    }
+
+    *where = (insn & 0xfff0f000) | ((tmp & 0xf000) << 4) | (tmp & 0xfff);
+    break;
+
+  case R_ARM_REL32:    /* word32 (S + A) | T - P */
+  case R_ARM_ABS32:    /* word32 (S + A) | T */
+  case R_ARM_GLOB_DAT: /* word32 (S + A) | T */
+    if (RELOC_ALIGNED_P(where))
+    {
+      tmp = *where + symvalue;
+      if (isThumb(symvalue))
+        tmp |= 1;
+      if (ELF32_R_TYPE(rel->r_info) == R_ARM_REL32)
+        tmp -= (Elf32_Addr)where;
+      *where = tmp;
+    }
+    else
+    {
+      tmp = load_ptr(where) + symvalue;
+      if (isThumb(symvalue))
+        tmp |= 1;
+      if (ELF32_R_TYPE(rel->r_info) == R_ARM_REL32)
+        tmp -= (Elf32_Addr)where;
+      store_ptr(where, tmp);
+    }
+    break;
+
+  case R_ARM_THM_MOVT_ABS:
+  case R_ARM_THM_MOVW_ABS_NC:
+    upper_insn = *(uint16_t *)where;
+    lower_insn = *((uint16_t *)where + 1);
+
+    addend = ((upper_insn & 0x000f) << 12) | ((upper_insn & 0x0400) << 1) |
+             ((lower_insn & 0x7000) >> 4) | (lower_insn & 0x00ff);
+    addend = (addend ^ 0x8000) - 0x8000;
+
+    tmp = addend + symvalue;
+    if (ELF32_R_TYPE(rel->r_info) == R_ARM_THM_MOVT_ABS)
+      tmp >>= 16;
+
+    *(uint16_t *)where = (uint16_t)((upper_insn & 0xfbf0) |
+                                    ((tmp & 0xf000) >> 12) |
+                                    ((tmp & 0x0800) >> 1));
+    *((uint16_t *)where + 1) = (uint16_t)((lower_insn & 0x8f00) |
+                                          ((tmp & 0x0700) << 4) |
+                                          (tmp & 0x00ff));
+
+    break;
+
+  case R_ARM_THM_JUMP24:
+    /* same to THM_CALL; insn b.w */
+  case R_ARM_THM_CALL:
+    upper_insn = *(uint16_t *)where;
+    lower_insn = *((uint16_t *)where + 1);
+    sign = (upper_insn & (1 << 10)) >> 10;
+    i1 = ((lower_insn >> 13) & 1) ^ sign ? 0 : 1;
+    i2 = ((lower_insn >> 11) & 1) ^ sign ? 0 : 1;
+    tmp = (i1 << 23) | (i2 << 22) | ((upper_insn & 0x3ff) << 12) | ((lower_insn & 0x7ff) << 1);
+    addend = (tmp | ((sign ? 0 : 1) << 24)) - (1 << 24);
+
+    if (isThumb(symvalue))
+      ; /*Thumb to Thumb call, nothing to care */
+    else
+    {
+      if (ELF32_R_TYPE(rel->r_info) == R_ARM_THM_JUMP24)
+      {
+        tmp = (tmp + 2) & ~3; /* aligned to 4 bytes only for JUMP24 */
+        logInfo("THM_JUMP24 to arm not supported");
+        return false;
+      }
+      else
+      {
+        /* THM_CALL bl-->blx */
+        lower_insn &= ~(1 << 12);
+      }
+    }
+
+    tmp = symvalue + addend;
+    tmp = tmp - (Elf32_Addr)where;
+
+    if (((Elf32_Sword)tmp > 0x7fffff) || ((Elf32_Sword)tmp < -0x800000))
+    {
+      logInfo("THM_CALL/JUMP24 overflow");
+      return false;
+    }
+
+    sign = (tmp >> 24) & 1;
+    *(uint16_t *)where = (uint16_t)((upper_insn & 0xf800) | (sign << 10) |
+                                    ((tmp >> 12) & 0x3ff));
+
+    *((uint16_t *)where + 1) = (uint16_t)((lower_insn & 0xd000) |
+                                          ((sign ^ (~(tmp >> 23) & 1)) << 13) |
+                                          ((sign ^ (~(tmp >> 22) & 1)) << 11) |
+                                          ((tmp >> 1) & 0x7ff));
+
+    break;
+
+  case R_ARM_THM_JUMP19:
+
+    if (!isThumb(symvalue))
+    {
+      logInfo("THM_JUMP19 to arm not supported");
+      return false;
+    }
+
+    upper_insn = *(uint16_t *)where;
+    lower_insn = *((uint16_t *)where + 1);
+    sign = (upper_insn >> 10) & 0x1;
+
+    if ((((upper_insn & 0x3f) >> 7) & 0x7) == 0x7)
+    {
+      logInfo("THM_JUMP19 failed");
+      return false; /*if cond <3:1> == '111', see Related codings in armv7a manual */
+    }
+
+    i1 = (lower_insn >> 13) & 0x1;
+    i2 = (lower_insn >> 11) & 0x1;
+
+    tmp = ((i2 << 19) | (i1 << 18) | ((upper_insn & 0x3f) << 12) | ((lower_insn & 0x7ff) << 1));
+    addend = (tmp | ((sign ? 0 : 1) << 20)) - (1 << 20);
+    tmp = symvalue + addend;
+
+    tmp = tmp - (Elf32_Addr)where;
+
+    if (((Elf32_Sword)tmp > 0x7ffffe) || ((Elf32_Sword)tmp < -0x800000))
+    {
+      logInfo("THM_JUMP19 overflow error");
+      return false;
+    }
+
+    sign = (tmp >> 20) & 0x1;
+    i2 = (tmp >> 19) & 0x1;
+    i1 = (tmp >> 18) & 0x1;
+
+    *(uint16_t *)where = (upper_insn & 0xfbc0) | (sign << 10) | ((tmp >> 12) & 0x3f);
+    *((uint16_t *)where + 1) = (lower_insn & 0xd000) | (i1 << 13) |
+                               (i2 << 11) | ((tmp >> 1) & 0x7ff);
+
+    break;
+
+  default:
+    logInfo("reloc unknown: %s, type = %lu, offset = %p, contents = %p",
+           symname, (uint32_t)ELF32_R_TYPE(rel->r_info),
+           (void *)rel->r_offset, (void *)*where);
+    return false;
+  }
+
+  return true;
+}

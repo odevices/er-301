@@ -1,0 +1,17 @@
+am335x_SRAM/Platform.xdc
+am335x_SRAM/Platform.xs
+am335x_SRAM/config.bld
+am335x_SRAM/package/.vers_b200
+am335x_SRAM/package/.vers_g200
+am335x_SRAM/package/.vers_r200
+am335x_SRAM/package/.xdc-G16
+am335x_SRAM/package/am335x_SRAM.ccs
+am335x_SRAM/package/am335x_SRAM.class
+am335x_SRAM/package/am335x_SRAM.java
+am335x_SRAM/package/am335x_SRAM.sch
+am335x_SRAM/package/build.cfg
+am335x_SRAM/package/package.bld.xml
+am335x_SRAM/package/package.defs.h
+am335x_SRAM/package/package_am335x_SRAM.c
+am335x_SRAM/package.bld
+am335x_SRAM/package.xdc
