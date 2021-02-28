@@ -7,7 +7,8 @@
   * [Creating your own mods](#creating-your-own-mods)
     + [Install the TI Processor SDK for AM335x](#install-the-ti-processor-sdk-for-am335x)
     + [Other required dependencies](#other-required-dependencies)
-    + [Try compiling the core mod](#try-compiling-the-core-mod)
+    + [Test your build environment](#test-your-build-environment)
+  * [Build Profiles and Target Architectures](#build-profiles-and-target-architectures)
 
 ## Introduction
 
@@ -18,33 +19,6 @@ This project contains the source code for:
 * emulator (Linux only)
 * factory mods (core, teletype)
 * SDK for building your own mods
-
-## Build Output
-
-All build outputs are placed in a sub folder composed of the build profile and the target architecture.  There are 3 build profiles:
-
-* testing
-* debug
-* release
-
-And here are the 2 supported target architectures:
-
-* am335x
-* linux
-
-So for example, if I execute the following make command:
-
-```bash
-make core PROFILE=debug ARCH=linux
-```
-
-Then the build outputs will be placed in the ```debug/linux``` directory of the project root.  Generally, the default profile is **testing** and the default architecture for everything except the emulator is **am335x**.  So if you execute just:
-
-```bash
-make core
-```
-
-Then the build outputs will appear in the ```testing/am335x``` directory of the project root.  See the [top-level Makefile](Makefile) for more details.
 
 ## Emulator
 
@@ -107,9 +81,37 @@ This documentation will assume that you used the default location.
 sudo apt install swig python3 zip
 ```
 
-### Try compiling the core mod
+### Test your build environment
+
+A good test of your build environment is to see if you can successfully build the factory mods:
+
+```bash
+make core teletype
+```
+
+## Build Profiles and Target Architectures
+
+All build outputs are placed in a sub folder composed of the build profile and the target architecture.  There are 3 build profiles:
+
+* testing
+* debug
+* release
+
+And here are the 2 supported target architectures:
+
+* am335x
+* linux
+
+So for example, if I execute the following make command:
+
+```bash
+make core PROFILE=debug ARCH=linux
+```
+
+Then the build outputs will be placed in the ```debug/linux``` directory of the project root.  Generally, the default profile is **testing** and the default architecture for everything except the emulator is **am335x**.  So if you execute just:
 
 ```bash
 make core
 ```
 
+Then the build outputs will appear in the ```testing/am335x``` directory of the project root.  See the [top-level Makefile](Makefile) for more details.
