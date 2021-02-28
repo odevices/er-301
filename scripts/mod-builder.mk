@@ -7,16 +7,16 @@
 ## Optional
 # MODVERSION := 1.0.0
 # asset_dir = $(src_dir)/assets
-# includes += $(mods_dir) $(arch_dir) $(top_dir) $(ne10_dir)/inc $(lua_dir)
+# includes += . $(mods_dir) $(arch_dir) $(ne10_dir)/inc $(lua_dir)
 # symbols +=
 # excludes =
 
 ###################################################
-include utils.mk
+include scripts/utils.mk
 
 LIBNAME := lib$(MODNAME)
 MODVERSION ?= 0.0.0
-out_dir = $(mods_build_dir)
+out_dir = $(build_dir)/mods
 asset_dir ?= $(src_dir)/assets
 lib_file = $(out_dir)/$(MODNAME)/$(LIBNAME).so
 all_imports_file = $(out_dir)/$(MODNAME)/imports.txt
@@ -56,18 +56,16 @@ vpath %.cpp.swig $(parent_dir)
 
 ifeq ($(ARCH),am335x)
 LFLAGS = -nostdlib -nodefaultlibs -r
-targets = $(missing_imports_file) $(package_file)
 endif
 
 ifeq ($(ARCH),linux)
 LFLAGS = -shared
-targets = $(package_file)
 endif
 
 # Prevent swig from placing symbols exported by mods in the global namespace.
 SWIGFLAGS += -nomoduleglobal -small -fvirtual
 
-all: $(targets)
+all: $(package_file)
 
 $(lib_file): $(objects)
 	@echo $(describe_env) LINK $(describe_target)
@@ -78,22 +76,19 @@ $(lib_file): $(objects)
 $(package_file): $(lib_file) $(assets)
 	@echo $(describe_env) ZIP $(describe_target)
 	@rm -f $@
-	@echo $(describe_env) + $(subst $(top_dir)/,"",$(asset_dir))/*
+	@echo $(describe_env) + $(yellowON)"$(asset_dir)/*"$(yellowOFF)
 	@cd $(asset_dir) && zip -FSrq $(abspath $@) *
 	@echo $(describe_env) + $(describe_input)
 	@zip -jq $@ $<
 
-# This file can be used to populate the 'exports.txt' file for app.mk.
-$(all_imports_file): $(lib_file)
-	@echo $(describe_env) NM $@
-	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@
-
 # Check for any undefined symbols that are not exported by app.
-$(missing_imports_file): $(all_imports_file) $(top_dir)/app/exports.txt
-	@echo $(describe_env) NM $@
-	@sort -u $(top_dir)/app/exports.txt | comm -23 $< - > $@
-	@[ ! -s $@ ] || echo "Missing Symbols:"
-	@cat $@
+missing: 
+	@echo $(describe_env) NM $(lib_file)
+	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@
+	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}'
+	@sort -u $(build_dir)/app/exports.sym | comm -23 $< - > $@
+#	@[ ! -s $@ ] || echo "Missing Symbols:"
+#	@cat $@
 
 list: $(package_file)
 	unzip -l $(package_file)
@@ -105,4 +100,4 @@ install: $(package_file)
 clean:
 	rm -rf $(out_dir)/$(MODNAME) $(package_file)
 
-include rules.mk
+include scripts/rules.mk

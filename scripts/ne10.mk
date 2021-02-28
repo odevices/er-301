@@ -1,4 +1,4 @@
-include env.mk
+include scripts/env.mk
 
 LIBNAME := ne10
 src_dir = $(ne10_dir)
@@ -21,4 +21,4 @@ excludes = NE10_fft_float32.neonintrinsic.c \
 
 CFLAGS += -Wno-unused-variable -Wno-maybe-uninitialized 
 
-include lib-builder.mk
+include scripts/lib-builder.mk

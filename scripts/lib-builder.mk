@@ -9,7 +9,7 @@
 # symbols +=
 
 ###################################################
-include utils.mk
+include scripts/utils.mk
 
 OUTPUT := lib$(LIBNAME).a
 out_dir = $(libs_build_dir)
@@ -44,4 +44,4 @@ $(out_dir)/$(OUTPUT): $(objects)
 clean:
 	rm -rf $(out_dir)/$(LIBNAME) $(out_dir)/$(OUTPUT)
 
-include rules.mk
+include scripts/rules.mk

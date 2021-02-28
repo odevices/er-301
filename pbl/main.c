@@ -111,7 +111,7 @@ Void taskFxn(UArg arg0, UArg arg1)
   Card_init();
   Card_mount(0);
 
-  runImage("0:/SBL");
+  runImage("0:/sbl.bin");
   runImage("0:/kernel.bin");
 
   while (1)

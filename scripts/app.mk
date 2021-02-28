@@ -1,15 +1,16 @@
-include env.mk
-include utils.mk
+include scripts/env.mk
+include scripts/utils.mk
 
 program_name := app
-program_dir := $(top_dir)/$(program_name)
-xroot_dir := $(top_dir)/xroot
+program_dir := $(program_name)
+xroot_dir := xroot
 out_dir := $(build_dir)/$(program_name)
-exports_file := $(program_dir)/exports.txt
+exports_dir = $(out_dir)/exports
+exports_file := $(out_dir)/exports.sym
 
 src_dirs := $(program_dir) $(hal_dir) $(arch_hal_dir) $(od_dir) $(ti_dir)
 
-includes += $(top_dir) $(arch_dir) $(lua_dir) $(ne10_dir)/inc $(lodepng_dir) $(miniz_dir)
+includes += . $(arch_dir) $(lua_dir) $(ne10_dir)/inc $(lodepng_dir) $(miniz_dir)
 
 libraries :=
 libraries += $(libs_build_dir)/lib$(lua_name).a
@@ -25,31 +26,30 @@ sysbios_platform = am335x_DDR3_512MB
 sysbios_buildtype = release
 sysbios_build_dir = $(out_dir)/sysbios
 #sysbios_objects = er301.cfg
-sysbios_objects = $(sysbios_buildtype).cfg common.cfg $(XDCLOCAL)/linkcmd_er301.xdt
+sysbios_objects = $(sysbios_dir)/$(sysbios_buildtype).cfg 
+sysbios_objects += $(sysbios_dir)/common.cfg $(XDCLOCAL)/linkcmd_er301.xdt
 	 
 # Recursive search for source files
 cpp_sources := $(foreach D,$(src_dirs),$(call rwildcard,$D,*.cpp)) 
 c_sources := $(foreach D,$(src_dirs),$(call rwildcard,$D,*.c)) 
 xroot_files := $(call rwildcard,$(xroot_dir),*)
 
-objects := $(subst $(top_dir),$(out_dir),$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)) 
+objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)) 
 
 # Manually add objects for swig wrappers and the ramdisk image.
 objects += $(out_dir)/od/glue/$(program_name)_swig.o
 objects += $(out_dir)/$(program_name)/xroot.o
 objects += $(out_dir)/$(program_name)/symtab.o
 
+# Extract exported symbols from the swig wrapper and all compiled mods
+mods = $(call rwildcard,$(build_dir)/mods,*.so)
+exports = $(exports_dir)/od/glue/$(program_name)_swig.sym
+exports += $(subst $(build_dir)/mods,$(exports_dir),$(mods:%.so=%.sym))
+
 CFLAGS += $(sysbios_cflags)
 LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lm -lstdc++ -lc -lnosys -u _printf_float 
 
-# Set search path for prerequisites
-vpath %.c $(top_dir)
-vpath %.cpp $(top_dir)
-vpath %.c.swig $(top_dir)
-vpath %.cpp.swig $(top_dir)
-vpath %.cfg $(sysbios_dir)
-
-all: $(out_dir)/kernel.bin
+all: $(out_dir)/kernel.bin $(exports)
 
 $(objects): $(sysbios_build_dir)/.timestamp
 
@@ -61,7 +61,21 @@ $(sysbios_build_dir)/.timestamp: $(sysbios_objects)
 $(out_dir)/$(program_name)/xroot.S: $(xroot_files)
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
-	@$(PYTHON) ramdisk.py $@ $(xroot_dir)
+	@$(PYTHON) scripts/ramdisk.py $@ $(xroot_dir)
+
+$(exports_dir)/%.sym: $(out_dir)/%.o
+	@echo $(describe_env) GEN $(describe_target)
+	@mkdir -p $(@D)
+	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@	
+
+$(exports_dir)/%.sym: $(build_dir)/mods/%.so
+	@echo $(describe_env) GEN $(describe_target)
+	@mkdir -p $(@D)
+	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@	
+
+$(exports_file): $(exports)
+	@echo $(describe_env) GEN $(describe_target)
+	@sort -u $(exports) > $@
 
 $(out_dir)/$(program_name)/symtab.cpp: $(program_dir)/symtab.cpp.awk $(out_dir)/$(program_name)/symtab.h $(exports_file)
 	@echo $(describe_env) AWK $(describe_target)
@@ -112,4 +126,4 @@ clean-libs:
 	+$(MAKE) -f lodepng.mk clean
 	+$(MAKE) -f ne10.mk clean
 
-include rules.mk
+include scripts/rules.mk

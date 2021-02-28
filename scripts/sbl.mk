@@ -1,13 +1,13 @@
-include env.mk
-include utils.mk
+include scripts/env.mk
+include scripts/utils.mk
 
 program_name := sbl
-program_dir := $(top_dir)/$(program_name)
+program_dir := $(program_name)
 out_dir := $(build_dir)/$(program_name)
 
 src_dirs := $(program_dir) $(hal_dir) $(arch_hal_dir) $(ti_dir)
 
-includes += $(top_dir) $(arch_dir) $(ne10_dir)/inc
+includes += . $(arch_dir) $(ne10_dir)/inc
 symbols += BUILDOPT_SBL
 libraries :=
 
@@ -18,7 +18,7 @@ sysbios_target = gnu.targets.arm.A8F
 sysbios_platform = am335x_DDR3_512MB
 sysbios_buildtype = release
 sysbios_build_dir = $(out_dir)/sysbios
-sysbios_objects = sbl.cfg 
+sysbios_objects = $(sysbios_dir)/sbl.cfg 
 
 # Recursive search for source files
 cpp_sources := $(foreach D,$(src_dirs),$(call rwildcard,$D,*.cpp)) 
@@ -34,15 +34,10 @@ cpp_sources += $(od_dir)/extras/FileReader.cpp
 cpp_sources += $(od_dir)/extras/Random.cpp
 c_sources += $(od_dir)/graphics/fonts/pixelsix48.c
 
-objects := $(subst $(top_dir),$(out_dir),$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)) 
+objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)) 
 
 CFLAGS += $(sysbios_cflags) -DSBL_VERSION=\"4.0-$(PROFILE)\"
 LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lm -lstdc++ -lc -lnosys -u _printf_float
-
-# Set search path for prerequisites
-vpath %.c $(top_dir)
-vpath %.cpp $(top_dir)
-vpath %.cfg $(sysbios_dir)
 
 all: $(out_dir)/$(program_name).bin
 
@@ -76,4 +71,4 @@ flash: all
 	@echo $(describe_env) Flashing $(FLASHFILE)
 	@$(uniflash_install_dir)/dslite.sh --config=uniflash/ER-301-USB560v2.ccxml --verbose --core=1 $(FLASHFILE)
 
-include rules.mk
+include scripts/rules.mk
