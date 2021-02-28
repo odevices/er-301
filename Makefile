@@ -1,61 +1,73 @@
 # top-level makefile
 
-all: app sbl pbl emu
+all: firmware
 
-app: 
-	+$(MAKE) -C scripts -f lua.mk
-	+$(MAKE) -C scripts -f miniz.mk
-	+$(MAKE) -C scripts -f ne10.mk
-	+$(MAKE) -C scripts -f lodepng.mk
-	+$(MAKE) -C scripts -f core.mk
-	+$(MAKE) -C scripts -f app.mk
+firmware:
+	+$(MAKE) -f scripts/firmware.mk
 
-app-clean: 
-	+$(MAKE) -C scripts -f lua.mk clean
-	+$(MAKE) -C scripts -f miniz.mk clean
-	+$(MAKE) -C scripts -f ne10.mk clean
-	+$(MAKE) -C scripts -f lodepng.mk clean
-	+$(MAKE) -C scripts -f app.mk clean
+firmware-clean:
+	+$(MAKE) -f scripts/firmware.mk clean
+
+app: core teletype
+	+$(MAKE) -f scripts/lua.mk
+	+$(MAKE) -f scripts/miniz.mk
+	+$(MAKE) -f scripts/ne10.mk
+	+$(MAKE) -f scripts/lodepng.mk
+	+$(MAKE) -f scripts/app.mk
+
+app-flash: app
+	+$(MAKE) -f scripts/app.mk flash
+
+app-clean: core-clean teletype-clean
+	+$(MAKE) -f scripts/lua.mk clean
+	+$(MAKE) -f scripts/miniz.mk clean
+	+$(MAKE) -f scripts/ne10.mk clean
+	+$(MAKE) -f scripts/lodepng.mk clean
+	+$(MAKE) -f scripts/app.mk clean
 
 core:
-	+$(MAKE) -C scripts -f core.mk
-
-core-clean:
-	+$(MAKE) -C scripts -f core.mk clean
-
+	+$(MAKE) -f scripts/core.mk
 
 teletype:
-	+$(MAKE) -C scripts -f teletype.mk
+	+$(MAKE) -f scripts/teletype.mk
+
+core-clean:
+	+$(MAKE) -f scripts/core.mk clean
 
 teletype-clean:
-	+$(MAKE) -C scripts -f teletype.mk clean
+	+$(MAKE) -f scripts/teletype.mk clean
 
 sbl: 
-	+$(MAKE) -C scripts -f sbl.mk
+	+$(MAKE) -f scripts/sbl.mk
+
+sbl-flash: sbl
+	+$(MAKE) -f scripts/sbl.mk flash	
 
 sbl-clean: 
-	+$(MAKE) -C scripts -f sbl.mk clean
-
+	+$(MAKE) -f scripts/sbl.mk clean
 
 pbl: 
-	+$(MAKE) -C scripts -f pbl.mk
+	+$(MAKE) -f scripts/pbl.mk
+
+pbl-flash: 
+	+$(MAKE) -f scripts/pbl.mk flash
 
 pbl-clean: 
-	+$(MAKE) -C scripts -f pbl.mk clean
+	+$(MAKE) -f scripts/pbl.mk clean
 
 emu: 
-	+$(MAKE) -C scripts -f lua.mk ARCH=linux
-	+$(MAKE) -C scripts -f miniz.mk ARCH=linux
-	+$(MAKE) -C scripts -f lodepng.mk ARCH=linux
-	+$(MAKE) -C scripts -f core.mk ARCH=linux
-	+$(MAKE) -C scripts -f emu.mk
+	+$(MAKE) -f scripts/lua.mk ARCH=linux
+	+$(MAKE) -f scripts/miniz.mk ARCH=linux
+	+$(MAKE) -f scripts/lodepng.mk ARCH=linux
+	+$(MAKE) -f scripts/core.mk ARCH=linux
+	+$(MAKE) -f scripts/emu.mk
 
 emu-clean: 
-	+$(MAKE) -C scripts -f lua.mk ARCH=linux clean
-	+$(MAKE) -C scripts -f miniz.mk ARCH=linux clean
-	+$(MAKE) -C scripts -f lodepng.mk ARCH=linux clean
-	+$(MAKE) -C scripts -f core.mk ARCH=linux clean
-	+$(MAKE) -C scripts -f emu.mk clean
+	+$(MAKE) -f scripts/lua.mk ARCH=linux clean
+	+$(MAKE) -f scripts/miniz.mk ARCH=linux clean
+	+$(MAKE) -f scripts/lodepng.mk ARCH=linux clean
+	+$(MAKE) -f scripts/core.mk ARCH=linux clean
+	+$(MAKE) -f scripts/emu.mk clean
 
 dist-clean:
 	rm -rf testing debug release

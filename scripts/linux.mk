@@ -12,3 +12,4 @@ READELF := readelf
 NM := nm
 SWIG := swig
 PYTHON := python3
+ZIP := zip

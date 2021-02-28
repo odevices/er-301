@@ -2,17 +2,17 @@
 CFLAGS.release = -Os -Wall
 CFLAGS.debug = -Os -Wall -DBUILDOPT_TESTING
 CFLAGS.testing = -Os -Wall -DBUILDOPT_TESTING
-include env.mk
-include utils.mk
+include scripts/env.mk
+include scripts/utils.mk
 
 program_name := pbl
-program_dir := $(top_dir)/$(program_name)
+program_dir := $(program_name)
 out_dir := $(build_dir)/$(program_name)
-pbl_hal_dir = $(top_dir)/$(program_name)/hal
+pbl_hal_dir = $(program_name)/hal
 
 src_dirs := $(program_dir)
 
-includes += $(top_dir) $(pbl_hal_dir) $(arch_dir)
+includes += . $(pbl_hal_dir) $(arch_dir)
 symbols += BUILDOPT_PBL
 libraries :=
 
@@ -23,7 +23,7 @@ sysbios_target = gnu.targets.arm.A8F
 sysbios_platform = am335x_SRAM
 sysbios_buildtype = release
 sysbios_build_dir = $(out_dir)/sysbios
-sysbios_objects = pbl.cfg 
+sysbios_objects = $(sysbios_dir)/pbl.cfg 
 
 # Recursive search for source files
 cpp_sources := $(foreach D,$(src_dirs),$(call rwildcard,$D,*.cpp)) 
@@ -35,15 +35,10 @@ c_sources += $(ti_dir)/am335x/uart.c
 c_sources += $(ti_dir)/am335x/wdt_lld.c
 c_sources += $(arch_hal_dir)/uart.c
 
-objects := $(subst $(top_dir),$(out_dir),$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)) 
+objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)) 
 
 CFLAGS += $(sysbios_cflags) -DPBL_VERSION=\"2.0-$(PROFILE)\"
 LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lc -lnosys
-
-# Set search path for prerequisites
-vpath %.c $(top_dir)
-vpath %.cpp $(top_dir)
-vpath %.cfg $(sysbios_dir)
 
 all: $(out_dir)/MLO
 
@@ -66,7 +61,7 @@ $(out_dir)/$(program_name).bin: $(out_dir)/$(program_name).elf
 	@$(OBJCOPY) -O binary $< $@
 
 $(out_dir)/MLO: $(out_dir)/$(program_name).bin
-	@echo TIIMAGE $(describe_target)
+	@echo $(describe_env) TIIMAGE $(describe_target)
 	@$(TIIMAGE) 0x402F0400 MMCSD $< $@	
 
 clean:
@@ -81,4 +76,4 @@ flash: all
 	@echo $(describe_env) Flashing $(FLASHFILE)
 	@$(uniflash_install_dir)/dslite.sh --config=uniflash/ER-301-USB560v2.ccxml --verbose --core=1 $(FLASHFILE)
 
-include rules.mk
+include scripts/rules.mk

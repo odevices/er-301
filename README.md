@@ -26,7 +26,7 @@ This project contains the source code for:
 Since cross-compilation has its own complexities, it is probably easier to first start with getting the emulator running on your development machine.  To compile and run the emulator you will need the following dependencies installed:
 
 ```bash
-sudo apt install libsdl2-dev libsdl2-ttf libfftw3-dev swig
+sudo apt install build-essential libsdl2-dev libsdl2-ttf-dev libfftw3-dev swig python3 zip
 ```
 
 To compile, execute this in the top directory:
@@ -57,7 +57,7 @@ First, you will need to install the TI-RTOS development tools for the AM335x.
 ### Other required dependencies
 
 ```bash
-sudo apt install swig
+sudo apt install swig python3 zip
 ```
 
 ### Try compiling the core mod

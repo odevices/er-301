@@ -1,19 +1,18 @@
 # Designed for processor_sdk_rtos_am335x_4_01_00_06.
 
 # TI RTOS SDK install root
-TI_INSTALL_DIR := /home/clarkson/ti
-TI2_INSTALL_DIR := /home/clarkson/ti-4.01.00.06
+TI_INSTALL_DIR ?= ~/ti-4.01.00.06
 
 # TI RTOS SDK tools
-gcc_install_dir := $(TI2_INSTALL_DIR)/gcc-arm-none-eabi-4_9-2015q3
-xdc_install_dir := $(TI2_INSTALL_DIR)/xdctools_3_32_01_22_core
+gcc_install_dir := $(TI_INSTALL_DIR)/gcc-arm-none-eabi-4_9-2015q3
+xdc_install_dir := $(TI_INSTALL_DIR)/xdctools_3_32_01_22_core
 
 # TI RTOS SDK packages
-bios_install_dir := $(TI2_INSTALL_DIR)/bios_6_46_05_55/packages
-edma_install_dir := $(TI2_INSTALL_DIR)/edma3_lld_2_12_05_29/packages
-pdk_install_dir := $(TI2_INSTALL_DIR)/pdk_am335x_1_0_8/packages
+bios_install_dir := $(TI_INSTALL_DIR)/bios_6_46_05_55/packages
+edma_install_dir := $(TI_INSTALL_DIR)/edma3_lld_2_12_05_29/packages
+pdk_install_dir := $(TI_INSTALL_DIR)/pdk_am335x_1_0_8/packages
 uia_install_dir := 
-uniflash_install_dir := $(TI_INSTALL_DIR)/uniflash_5.3.1
+uniflash_install_dir := /home/clarkson/ti/uniflash_5.3.1
 
 # Use the C system libraries shipped with BIOS (not the toolchain).
 sysbios_cflags = @$(sysbios_build_dir)/compiler.opt
@@ -39,3 +38,4 @@ TIIMAGE := $(pdk_install_dir)/ti/starterware/tools/ti_image/tiimage_bin/tiimage
 SWIG := swig
 XS = $(xdc_install_dir)/xs --xdcpath="$(XDCPATH)" xdc.tools.configuro -c $(gcc_install_dir)
 PYTHON := python3
+ZIP := zip
