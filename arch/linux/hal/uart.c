@@ -22,6 +22,7 @@ void Uart_write(const char *buffer, int size)
 {
   if (!self.enabled)
     return;
+#if 0
   for (int i = 0; i < size; i++)
   {
     if (buffer[i])
@@ -33,6 +34,9 @@ void Uart_write(const char *buffer, int size)
       fputc(buffer[i], stdout);
     }
   }
+#else
+  fwrite(buffer, 1, size, stdout);
+#endif
   fflush(stdout);
 }
 

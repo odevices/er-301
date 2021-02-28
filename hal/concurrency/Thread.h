@@ -17,7 +17,7 @@ namespace od
     void start();
     void join();
     void stop();
-    bool started();
+    bool running();
 
     static void sleep(uint32_t timeout);
     static void yield();
@@ -25,6 +25,7 @@ namespace od
   protected:
     void *mThreadHandle = 0;
     std::string mName;
+    bool mThreadRunning = false;
 
     EventFlags mEvents;
     static const uint32_t onThreadQuit = EventFlags::flag00;

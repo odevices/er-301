@@ -19,7 +19,9 @@ namespace od
       od::Thread *thread = (od::Thread *)arg0;
       logAssert(thread);
       logInfo("Thread starting: %s", thread->mName.c_str());
+      thread->mThreadRunning = true;
       thread->run();
+      thread->mThreadRunning = false;
     }
   };
 
@@ -73,9 +75,9 @@ namespace od
 #endif
   }
 
-  bool Thread::started()
+  bool Thread::running()
   {
-    return mThreadHandle != 0;
+    return mThreadRunning;
   }
 
   void Thread::stop()

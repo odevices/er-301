@@ -30,7 +30,9 @@ namespace od
         SDL_SetThreadPriority(SDL_THREAD_PRIORITY_NORMAL);
         // SDL_SetThreadPriority(SDL_THREAD_PRIORITY_TIME_CRITICAL);
       }
+      thread->mThreadRunning = true;
       thread->run();
+      thread->mThreadRunning = false;
       return 0;
     }
   };
@@ -78,9 +80,9 @@ namespace od
     }
   }
 
-  bool Thread::started()
+  bool Thread::running()
   {
-    return mThreadHandle != 0;
+    return mThreadRunning;
   }
 
   void Thread::stop()

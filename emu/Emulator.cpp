@@ -464,7 +464,7 @@ namespace emu
   {
     TLS_setName("main");
 
-    logInfo("starting ER-301 Emulator \xC2\xA2");
+    logInfo("starting ER-301 Emulator");
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0)
     {

@@ -52,11 +52,17 @@ local function disable()
   busyThread:disable()
 end
 
+local function kill()
+  if busyThread:running() then
+    busyThread:stop()
+    busyThread:join()
+  end
+end
+
 return {
   start = start,
   stop = stop,
-  -- start=function() end,
-  -- stop=function() end,
+  kill = kill,
   status = status,
   enable = enable,
   disable = disable

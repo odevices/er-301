@@ -20,7 +20,7 @@ namespace od
     if (mEnabled)
       return;
     mEvents.post(onEnable);
-    while (!mEnabled)
+    while (running() && !mEnabled)
     {
       Thread::sleep(10);
     }
@@ -32,7 +32,7 @@ namespace od
     if (!mEnabled)
       return;
     mEvents.post(onDisable);
-    while (mEnabled)
+    while (running() && mEnabled)
     {
       Thread::sleep(10);
     }
@@ -47,6 +47,7 @@ namespace od
 
     while (1)
     {
+      bool hadQuitEvent = false;
       bool hadModeEvent = false;
       bool hadStorageEvent = false;
       bool hadShiftReleaseEvent = false;
@@ -56,7 +57,7 @@ namespace od
       }
 
       mEnabled = true;
-      while (1)
+      while (!hadQuitEvent)
       {
         Events_wait();
         UIThread::restartScreenSaverTimer();
@@ -126,6 +127,10 @@ namespace od
           {
             hadShiftReleaseEvent = true;
           }
+          else if (e == EVENT_QUIT)
+          {
+            hadQuitEvent = true;
+          }
         }
         uint32_t mask = mEvents.getPosted();
         mEvents.clear();
@@ -152,6 +157,11 @@ namespace od
       {
         Events_push(EVENT_RELEASE_SHIFT);
         hadShiftReleaseEvent = false;
+      }
+      if(hadQuitEvent)
+      {
+        Events_push(EVENT_QUIT);
+        break;
       }
     }
     // should never get here

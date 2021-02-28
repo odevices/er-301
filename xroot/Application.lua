@@ -474,6 +474,7 @@ local function loop()
       elseif (e >> 16) == eventUSB then
         onUSBEvent(e)
       elseif e == eventQuit then
+        app.logInfo("Quitting...")
         quit = true
       else
         -- Debug.traceCalls(true)
@@ -496,6 +497,7 @@ local function loop()
     stopEventTimer()
   end
 
+  Busy.kill()
   app.logInfo("Application.loop: leaving event loop.")
 end
 
