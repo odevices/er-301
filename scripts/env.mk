@@ -61,10 +61,7 @@ front_card_dir = /media/$(shell whoami)/$(front_card_label)
 rear_card_label = REAR
 rear_card_dir = /media/$(shell whoami)/$(rear_card_label)
 
-include scripts/am335x.4.01.00.06.mk
-#include scripts/am335x.4.02.00.09.mk
-#include scripts/am335x.5.03.00.07.mk
-#include scripts/am335x.6.01.00.08.mk
+include scripts/am335x.mk
 
 symbols += gcc am335x am3359 evmAM335x
 CFLAGS.am335x = -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard -mabi=aapcs -Dfar= -D__DYNAMIC_REENT__ 
