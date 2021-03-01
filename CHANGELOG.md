@@ -27,7 +27,7 @@
 * SYSTEM: Object:optionSet --> Object:setOptionValue
 
 # v0.5.04
-The purpose of this version is just to upgrade v0.5.03 to a stable release.
+* No changes. The purpose of this version is just to upgrade v0.5.03 to a stable release.
 
 # v0.5.03
 * ENHANCED: Multitrack Recorder > Number of channels is now configurable (from 6 to 12 channels) via Admin > System Settings > Multitrack Recorder > Channel Count.  Please keep in mind that not all SD cards are fast enough to record this many channels of 48kHz/96kHz audio.  Please test beforehand.

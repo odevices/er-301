@@ -4,6 +4,9 @@
 
   * [Introduction](#introduction)
   * [Emulator](#emulator)
+    + [Running the emulator](#running-the-emulator)
+    + [Installing packages](#installing-packages)
+    + [Limitations](#limitations)
   * [Creating your own mods](#creating-your-own-mods)
     + [Install the TI Processor SDK for AM335x](#install-the-ti-processor-sdk-for-am335x)
     + [Other required dependencies](#other-required-dependencies)
@@ -36,6 +39,8 @@ To compile, execute this in the top directory:
 make emu
 ```
 
+### Running the emulator
+
 To run the emulator, execute the following from the top directory:
 ```bash
 testing/linux/emu/emu.elf ./xroot ~/.od/rear ~/.od/front
@@ -46,7 +51,11 @@ In the above, you are telling the emulator the location of the following 3 requi
 * file tree for the rear SD card (This will be created if it doesn't exist.)
 * file tree for the front SD card (This will be created if it doesn't exist.)
 
-Since you are essentially booting up the ER-301 with empty (virtual) SD cards, it will populate the file trees with the default files but you will not have the core mod installed.  To compile and create the installation package for the core mod, execute:
+Since you are essentially booting up the ER-301 with empty (virtual) SD cards, it will populate the file trees with the default files but you will not have the core mod installed.  
+
+### Installing packages
+
+To compile and create the installation package for the core mod, execute:
 
 ```bash
 make core ARCH=linux
@@ -59,6 +68,15 @@ cp testing/linux/mods/core-0.6.0.pkg ~/.od/front/ER-301/packages
 ```
 
 Finally, run the emulator again using the same command-line as before and install the core mod package from the Package Manager screen.  Now you will have access to all of the core units in the emulator.
+
+### Limitations
+
+Currently, the 4 output channels are mixed down to stereo for maximal compatibility with different setups.
+
+* Left channel: OUT1+OUT3
+* Right channel: OUT2+OUT4
+
+There are no external input channels implemented yet.  However, when it comes to the main purpose of this emulator, it has really been a necessity since you can generate just about any testing signals that you need within the ER-301 emulation.
 
 ## Creating your own mods
 
