@@ -41,6 +41,9 @@ function app.enableLogging()
         Signal.emit("error", text)
       end
     end
+
+    -- support legacy logging
+    app.log = app.logInfo
   end
 end
 
@@ -73,6 +76,8 @@ else
   app.logInfo = f
   app.logWarn = f
   app.logError = f
+  -- support legacy logging
+  app.log = app.logInfo
 
   function app.disableLogging()
     if app.loggingEnabled then
@@ -80,6 +85,8 @@ else
       app.logInfo = f
       app.logWarn = f
       app.logError = f
+      -- support legacy logging
+      app.log = app.logInfo
     end
   end
 

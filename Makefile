@@ -8,21 +8,25 @@ firmware:
 firmware-clean:
 	+$(MAKE) -f scripts/firmware.mk clean
 
-app: core teletype
+app-libs:
 	+$(MAKE) -f scripts/lua.mk
 	+$(MAKE) -f scripts/miniz.mk
 	+$(MAKE) -f scripts/ne10.mk
 	+$(MAKE) -f scripts/lodepng.mk
-	+$(MAKE) -f scripts/app.mk
 
-app-flash: app
-	+$(MAKE) -f scripts/app.mk flash
-
-app-clean: core-clean teletype-clean
+app-libs-clean:
 	+$(MAKE) -f scripts/lua.mk clean
 	+$(MAKE) -f scripts/miniz.mk clean
 	+$(MAKE) -f scripts/ne10.mk clean
 	+$(MAKE) -f scripts/lodepng.mk clean
+
+app: app-libs core teletype
+	+$(MAKE) -f scripts/app.mk
+
+app-flash: app-libs core teletype
+	+$(MAKE) -f scripts/app.mk flash
+
+app-clean: app-libs-clean
 	+$(MAKE) -f scripts/app.mk clean
 
 core:

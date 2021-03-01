@@ -41,7 +41,7 @@ local function refreshPackageCache()
   end
   if Card.mounted() then
     -- Refresh packages with package archives.
-    local repoPath = FS.getRoot("user-packages")
+    local repoPath = FS.getRoot("packages")
     app.logInfo(repoPath)
     for filename in dir(repoPath) do
       app.logInfo(filename)
@@ -171,12 +171,12 @@ local function load(package)
       if otherPackage then
         if not load(otherPackage) then
           app.logInfo("%s: failed to load dependency, %s.", package.id,
-                 otherPackage.id)
+                      otherPackage.id)
           return false
         end
       else
         app.logInfo("%s: required package (%s) not found.", package.id,
-               dependencyToPrettyString(dep))
+                    dependencyToPrettyString(dep))
         return false
       end
     end
@@ -309,8 +309,44 @@ local function reset()
   Busy.stop()
 end
 
+local function installUpdates()
+  -- Updates are packages found in the root of the rear SD card.
+  local packages = Utils.shallowCopy(getPackages())
+  local updated = 0
+  for filename in dir(app.roots.rear) do
+    if FS.isType("package", filename) then
+      local update = Package(filename)
+      local name = update:getName()
+      app.logInfo("Installing update: %s", update.id)
+      local wasInstalled = false
+      local wasPresent = false
+      -- remove all packages with the same name
+      for id, package in pairs(packages) do
+        if package:getName() == name then
+          wasPresent = true
+          if package.installed then wasInstalled = true end
+          app.logInfo("Removing package %s", id)
+          delete(package)
+        end
+      end
+      local srcPath = Path.join(app.roots.rear, filename)
+      local dstPath = Path.join(FS.getRoot("packages"), filename)
+      if not app.copyFile(srcPath, dstPath, true) then
+        app.logWarn("Failed to copy %s to %s.", srcPath, dstPath)
+      else
+        app.logInfo("Copied %s to %s.", srcPath, dstPath)
+        app.deleteFile(srcPath)
+        updated = updated + 1
+        if wasInstalled or not wasPresent then install(update) end
+      end
+    end
+  end
+  packageCacheIsStale = updated > 0
+end
+
 local function cardMounted()
   packageCacheIsStale = true
+  installUpdates()
   loadInstalledPackages()
 end
 
@@ -338,7 +374,10 @@ local function init()
   packageCacheIsStale = true
   local UnitFactory = require "Unit.Factory"
   UnitFactory.init()
-  if Card.mounted() then loadInstalledPackages() end
+  if Card.mounted() then
+    installUpdates()
+    loadInstalledPackages()
+  end
 end
 
 return {

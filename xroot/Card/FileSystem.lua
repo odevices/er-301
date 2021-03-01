@@ -4,8 +4,14 @@ local Path = require "Path"
 local Utils = require "Utils"
 local Busy = require "Busy"
 
-local versionFolder = string.format("/v%d.%d", Env.Version.Major,
-                                    Env.Version.Minor)
+local function getVersionFolder()
+  local t = Utils.split(app.FIRMWARE_VERSION, ".")
+  local major = t[1] or 0
+  local minor = t[2] or 0
+  return string.format("/v%d.%d", major, minor)
+end
+
+local versionFolder = getVersionFolder()
 
 local roots = {}
 
@@ -16,11 +22,10 @@ roots["rear-versioned"] = roots["rear"] .. versionFolder
 roots["rear-meta"] = roots["rear-versioned"] .. "/meta"
 roots["libs"] = roots["rear-versioned"] .. "/libs"
 roots["package-configs"] = roots["rear-meta"] .. "/packages"
-roots["system-packages"] = roots["rear-versioned"] .. "/packages"
 
 roots["front"] = app.roots.front .. "/ER-301"
 roots["tmp"] = roots["front"] .. "/tmp"
-roots["user-packages"] = roots["front"] .. "/packages"
+roots["packages"] = roots["front"] .. "/packages"
 roots["recordings"] = roots["front"] .. "/recorded"
 roots["front-versioned"] = roots["front"] .. versionFolder
 roots["front-meta"] = roots["front-versioned"] .. "/meta"
@@ -170,7 +175,7 @@ end
 
 local function findPreviousRoot()
   local currentVersion = Utils.convertVersionStringToNumber(
-                             Env.Version.SimpleString)
+                             app.FIRMWARE_VERSION)
   local previousVersion = 0
   local previousRoot
   -- Find the most recent version that is less than the current version.

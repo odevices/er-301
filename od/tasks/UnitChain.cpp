@@ -1,6 +1,7 @@
 #include <od/tasks/UnitChain.h>
 #include <od/extras/LookupTables.h>
 #include <hal/concurrency/Thread.h>
+#include <hal/audio.h>
 #include <algorithm>
 
 namespace od
@@ -316,7 +317,7 @@ namespace od
         if (!mMuted)
         {
             mFade.reset(0.0f);
-            while (mActive && mFade.notFinished())
+            while (mActive && Audio_running() && mFade.notFinished())
             {
                 Thread::yield();
             }

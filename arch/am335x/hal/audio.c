@@ -54,6 +54,7 @@ static struct AudioLocals
   // error counts
   uint32_t dmaerr, clkfail, syncerr, underrun, timeout;
   bool task_started;
+  bool running;
 
   Task_Handle hTask;
 } local;
@@ -581,10 +582,12 @@ void Audio_start(void)
   McASPTxEnable(SOC_MCASP_0_CTRL_REGS);
 
   Gpio_write(PCM4104_MUTE, 0);
+  local.running = true;
 }
 
 void Audio_stop(void)
 {
+  local.running = false;
   Gpio_write(PCM4104_MUTE, 1);
   Gpio_write(AUDIO_EXTERNAL_CLOCK_ENABLE, 0);
 
@@ -600,6 +603,11 @@ void Audio_stop(void)
 
   McASPTxIntDisable(SOC_MCASP_0_CTRL_REGS,
                     MCASP_TX_DMAERROR | MCASP_TX_CLKFAIL | MCASP_TX_SYNCERROR | MCASP_TX_UNDERRUN);
+}
+
+bool Audio_running()
+{
+  return local.running;
 }
 
 uint32_t Audio_errorCount(void)

@@ -33,7 +33,7 @@ local function readBootData()
   if data then
     metaData["prevBoot"] = data
     app.logInfo("Meta: prev booted version was %s",
-            data.firmwareVersion or data.version)
+                data.firmwareVersion or data.version)
   else
     app.logInfo("Meta: No previous boot data.")
     metaData["prevBoot"] = metaData["boot"]
@@ -43,7 +43,7 @@ end
 local function updateBootData()
   local data = metaData["boot"]
   local prev = metaData.prevBoot or data
-  data.firmwareVersion = Env.Version.String
+  data.firmwareVersion = app.FIRMWARE_VERSION
   data.version = nil -- remove legacy version field
   data.count = prev.count + 1
   data.lastSlot = prev.lastSlot or -1
@@ -104,26 +104,19 @@ local function deleteRearCardDatabase(dbName)
   if Path.exists(path) then app.deleteFile(path) end
 end
 
-local function confirmFirmwareVersionAndExecute(t, task)
-  local U = t.firmwareVersion
-  if U and type(U) == "table" and U.Major and U.Minor and U.Build then
-    local V = Env.Version
-    local x = U.Major * 1000000 + U.Minor * 1000 + U.Build
-    local y = V.Major * 1000000 + V.Minor * 1000 + V.Build
-    if y < x then
-      local text = string.format(
-                       "Preset was created by newer firmware: v%d.%d.%02d",
-                       U.Major, U.Minor, U.Build)
-      local dlg = Verification.Main(text, "Are you sure you want to continue?",
-                                    10)
-      dlg:subscribe("done", task)
-      dlg:show()
-    else
-      -- confirmed to be created with older firmware
-      task(true)
-    end
+local function confirmFirmwareVersionAndExecute(preset, task)
+  local version = preset:getVersionString()
+  local x = Utils.convertVersionStringToNumber(version)
+  local y = Utils.convertVersionStringToNumber(app.FIRMWARE_VERSION)
+  if y < x then
+    local text = string.format("Preset was created by newer firmware: v%s",
+                               version)
+    local dlg =
+        Verification.Main(text, "Are you sure you want to continue?", 10)
+    dlg:subscribe("done", task)
+    dlg:show()
   else
-    -- Assume older firmware if unable to determine version
+    -- confirmed to be created with older firmware
     task(true)
   end
 end
@@ -223,7 +216,7 @@ local function loadUnitPreset(unit, fullpath)
           Overlay.mainFlashMessage("Unit preset loaded: %s", filename)
         end
       end
-      confirmFirmwareVersionAndExecute(preset.data, task)
+      confirmFirmwareVersionAndExecute(preset, task)
     else
       showMessage("Failed to read unit preset:", filename)
     end
@@ -321,7 +314,7 @@ local function loadChainPreset(chain, fullpath)
           Overlay.mainFlashMessage("Chain preset loaded: %s", filename)
         end
       end
-      confirmFirmwareVersionAndExecute(preset.data, task)
+      confirmFirmwareVersionAndExecute(preset, task)
     else
       showMessage("Failed to load Chain Preset.")
     end
@@ -601,7 +594,7 @@ end
 local function saveQuickSaveNames()
   if quickSaveNames == nil then return end
   local filename = FS.getRoot("quicksaves") .. "/names.lua"
-  quickSaveNames.firmwareVersion = Env.Version
+  quickSaveNames.firmwareVersion = app.FIRMWARE_VERSION
   if not writeTable(filename, quickSaveNames) then
     showMessage("Failed to write to card.")
   end
@@ -712,7 +705,7 @@ local function getQuickSavePreset(slot)
         quickSaveCache[slot] = preset
       else
         app.logInfo("Persist:getQuickSavePreset(%d):Invalid quicksave file: %s",
-                slot, filename)
+                    slot, filename)
       end
     end
   end
@@ -742,7 +735,7 @@ local function quickLoad(slot, i)
           Overlay.mainFlashMessage("'%s' loaded (^_^)y", name)
         end
       end
-      confirmFirmwareVersionAndExecute(preset.data, task)
+      confirmFirmwareVersionAndExecute(preset, task)
     else
       Overlay.mainFlashMessage("Failed to load '%s' (>_<)", name)
     end
@@ -755,7 +748,7 @@ local function onCardMounted()
   -- empty the quick save cache
   for i = 1, quickSaveMaxSlots do quickSaveCache[i] = nil end
   quickSaveNames = nil
-  
+
   for i = 1, quickSaveMaxSlots do
     Path.createAll(string.format("%s/slot%d", FS.getRoot("quicksaves"), i))
   end
@@ -835,7 +828,7 @@ end
 
 local function init()
   metaData["boot"] = {
-    firmwareVersion = Env.Version.String,
+    firmwareVersion = app.FIRMWARE_VERSION,
     count = 0,
     lastSlot = -1
   }
@@ -913,7 +906,8 @@ local function deserializeObject(o, data)
   if params then
     for k, v in pairs(params) do
       if not o:deserializeParameter(k, v) then
-        app.logInfo("deserializeObject(%s): parameter '%s' not found", o:name(), k)
+        app.logInfo("deserializeObject(%s): parameter '%s' not found", o:name(),
+                    k)
       end
     end
   end

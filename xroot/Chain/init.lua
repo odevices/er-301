@@ -310,7 +310,7 @@ function Chain:serialize()
   local t = {
     lastPresetPath = self.lastPresetPath,
     lastPresetFilename = self.lastPresetFilename,
-    firmwareVersion = Env.Version,
+    firmwareVersion = app.FIRMWARE_VERSION,
     instanceKey = self:getInstanceKey()
   }
   t.units = self:serializeUnits()

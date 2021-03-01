@@ -12,7 +12,9 @@ function Path.join(...)
 end
 
 function Path.isAbsolute(path)
-  return string.sub(path, 2, 1) == ":"
+  return Utils.startsWith(path, app.roots.front) or
+             Utils.startsWith(path, app.roots.rear) or
+             Utils.startsWith(path, app.roots.x)
 end
 
 function Path.isRelative(path)
@@ -174,12 +176,6 @@ end
 function Path.popWorkingDirectory()
   if #wdStack > 0 then wdStack[#wdStack] = nil end
   app.logInfo("cwd: %s", Path.getWorkingDirectory())
-end
-
-function Path.isAbsolute(path)
-  return Utils.startsWith(path, app.roots.front) or
-             Utils.startsWith(path, app.roots.rear) or
-             Utils.startsWith(path, app.roots.x)
 end
 
 function Path.checkRelativePath(path)

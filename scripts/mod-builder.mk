@@ -15,7 +15,7 @@
 include scripts/utils.mk
 
 LIBNAME := lib$(MODNAME)
-MODVERSION ?= 0.0.0
+MODVERSION ?= $(FIRMWARE_VERSION)
 out_dir = $(build_dir)/mods
 asset_dir ?= $(src_dir)/assets
 lib_file = $(out_dir)/$(MODNAME)/$(LIBNAME).so

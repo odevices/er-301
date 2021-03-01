@@ -26,43 +26,58 @@ static bool loadImage(const char *pFileName, uint32_t *pEntryPoint)
   UINT bytesRead = 0U, total = 0U;
   ti_header imageHdr;
   void *pDestAddr;
-  UINT retStat = FALSE;
+  UINT success = FALSE;
 
+  logInfo("Trying %s...", pFileName);
   fResult = f_open(&gFileObject, pFileName, FA_READ);
 
   if (FR_OK == fResult)
   {
-    retStat = TRUE;
+    success = TRUE;
   }
   else
   {
     logError("Unable to open application file.");
   }
 
-  if (TRUE == retStat)
+  if (TRUE == success)
   {
     logInfo("Copying application image from MMC/SD card to RAM");
     fResult = f_read(&gFileObject, &imageHdr, 8U,
                      &bytesRead);
 
-    logInfo("Image Header: size = %d bytes  load = 0x%x", imageHdr.image_size, imageHdr.load_addr);
-
     if (FR_OK != fResult)
     {
       logError("Error reading application file.");
-      retStat = FALSE;
+      success = FALSE;
     }
 
     if (8U != bytesRead)
     {
-      retStat = FALSE;
+      success = FALSE;
     }
 
-    pDestAddr = (void *)imageHdr.load_addr;
-    *pEntryPoint = imageHdr.load_addr;
+    logInfo("%s: size = %d bytes  load = 0x%x", pFileName, imageHdr.image_size, imageHdr.load_addr);
+    if (imageHdr.image_size < 0)
+    {
+      logInfo("Invalid image size. Aborting.");
+      success = FALSE;
+    }
+
+    if (imageHdr.load_addr < 0x80000000 || imageHdr.load_addr + imageHdr.image_size > 0x80000000 + 0x20000000)
+    {
+      logInfo("Image load address is invalid. Aborting.");
+      success = FALSE;
+    }
+
+    if (success == TRUE)
+    {
+      pDestAddr = (void *)imageHdr.load_addr;
+      *pEntryPoint = imageHdr.load_addr;
+    }
   }
 
-  if (TRUE == retStat)
+  if (TRUE == success)
   {
     do
     {
@@ -72,7 +87,7 @@ static bool loadImage(const char *pFileName, uint32_t *pEntryPoint)
       if (fResult != FR_OK)
       {
         logError("Error reading application file.");
-        retStat = FALSE;
+        success = FALSE;
       }
 
       if (bytesRead > 0)
@@ -82,15 +97,15 @@ static bool loadImage(const char *pFileName, uint32_t *pEntryPoint)
       }
       else
       {
-        retStat = FALSE;
+        success = FALSE;
       }
-    } while (TRUE == retStat);
+    } while (TRUE == success);
 
     logInfo("Finished copying image to RAM.");
     fResult = f_close(&gFileObject);
   }
 
-  return retStat;
+  return success;
 }
 
 void runImage(const char *filename)
@@ -112,6 +127,8 @@ Void taskFxn(UArg arg0, UArg arg1)
   Card_mount(0);
 
   runImage("0:/sbl.bin");
+  runImage("0:/SBL");
+  runImage("0:/SBL_backup");
   runImage("0:/kernel.bin");
 
   while (1)

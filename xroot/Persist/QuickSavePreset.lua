@@ -47,7 +47,7 @@ function QuickSavePreset:populate()
   local Preamp = require "Preamp"
   local Clipboard = require "Chain.Clipboard"
   local data = {
-    firmwareVersion = Env.Version
+    firmwareVersion = app.FIRMWARE_VERSION
   }
 
   app.logInfo("%s:serialize: serializing sample pool", self)

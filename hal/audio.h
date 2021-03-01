@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifdef __cplusplus
 extern "C"
@@ -19,6 +20,7 @@ extern "C"
   int Audio_getRate(void);
   void Audio_printErrorStatus(void);
   int Audio_getLoad();
+  bool Audio_running();
   
   // Called on each frame in the audio thread.
   extern void Audio_callback(int *samples);

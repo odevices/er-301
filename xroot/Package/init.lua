@@ -101,7 +101,7 @@ function Package:getInstallationPath()
 end
 
 function Package:getArchivePath()
-  return Path.join(FS.getRoot("user-packages"), self.filename)
+  return Path.join(FS.getRoot("packages"), self.filename)
 end
 
 function Package:getDependencies()

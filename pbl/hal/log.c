@@ -80,6 +80,7 @@ void _logBriefNice(const char *label, const char *fmt, ...)
   System_vsnprintf(buffer, sizeof(buffer), fmt, args);
   va_end(args);
   System_printf(LOG_FMT_PREFIX " %s %s\n", count++, thread(), label, buffer);
+  System_flush();
 }
 
 void _logCompleteNice(const char *label,
@@ -96,6 +97,7 @@ void _logCompleteNice(const char *label,
   filename = skipRelativePaths(filename);
   System_printf(LOG_FMT_PREFIX " %s " LOG_FMT_FUNCTION " %s " LOG_FMT_FILE_LINE "\n",
                 count++, thread(), label, function, buffer, filename, linenum);
+  System_flush();
 }
 
 void _logRude(const char *label,

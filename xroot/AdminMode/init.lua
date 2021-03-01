@@ -1,5 +1,4 @@
 local app = app
-local Env = require "Env"
 local Context = require "Base.Context"
 local Mode = require "Base.Mode"
 local Menu = require "AdminMode.Menu"
@@ -51,12 +50,17 @@ label:setJustification(app.justifyLeft)
 label:setPosition(0, app.GRID4_LINE1 + 1)
 menu.subGraphic:addChild(label)
 
-label = app.Label("Version: " .. Env.Version.String, 10)
+local version = string.format("Version: %s (%s)", app.FIRMWARE_VERSION,
+                              app.FIRMWARE_STATUS)
+label = app.Label(version, 10)
 label:setJustification(app.justifyLeft)
 label:setPosition(0, app.GRID4_LINE2)
 menu.subGraphic:addChild(label)
 
-label = app.Label(Env.Version.Name, 10)
+local desc = string.format("%s (%0.0fkHz, %dsmps)", app.FIRMWARE_NAME,
+                           app.globalConfig.sampleRate / 1000.0,
+                           app.globalConfig.frameLength)
+label = app.Label(desc, 10)
 label:setJustification(app.justifyLeft)
 label:setPosition(0, app.GRID4_LINE3)
 menu.subGraphic:addChild(label)

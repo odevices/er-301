@@ -4,12 +4,8 @@ local Class = require "Base.Class"
 local Path = require "Path"
 local Window = require "Base.Window"
 local Verification = require "Verification"
-local Message = require "Message"
-local Card = require "Card"
 local Busy = require "Busy"
 local FileChooser = require "Card.FileChooser"
-
-local pattern = "*.zip"
 
 local Firmware = Class {}
 Firmware:include(Window)
@@ -34,12 +30,14 @@ function Firmware:init()
   label:setPosition(0, app.GRID4_LINE1 + 1)
   self.subGraphic:addChild(label)
 
-  label = app.Label("Version: " .. Env.Version.String, 10)
+  local version = string.format("Version: %s (%s)", app.FIRMWARE_VERSION,
+                                app.FIRMWARE_STATUS)
+  label = app.Label(version, 10)
   label:setJustification(app.justifyLeft)
   label:setPosition(0, app.GRID4_LINE2)
   self.subGraphic:addChild(label)
 
-  label = app.Label(Env.Version.Name, 10)
+  label = app.Label(app.FIRMWARE_NAME, 10)
   label:setJustification(app.justifyLeft)
   label:setPosition(0, app.GRID4_LINE3)
   self.subGraphic:addChild(label)
@@ -55,7 +53,8 @@ function Firmware:init()
   self:msg("Press 'update' to install a new firmware.")
 end
 
-function Firmware:msg(text)
+function Firmware:msg(...)
+  text = string.format(...)
   self.console:addItem(text)
   self.console:scrollToBottom()
 end

@@ -3,11 +3,6 @@ local Signal = require "Signal"
 local Window = require "Base.Window"
 local threshold = Env.EncoderThreshold.Default
 
-app.logInfo("---------------")
-app.logInfo("ER-301 (%s,%s)", Env.Version.String, Env.Version.Name)
-app.logInfo("Sound Computer")
-app.logInfo("---------------")
-
 local window = Window()
 window:setInstanceName("LogViewer")
 window.zOrder = -1001

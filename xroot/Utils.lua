@@ -71,7 +71,7 @@ end
 
 local function split(s, delimiter)
   local result = {}
-  for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
+  for match in (s .. delimiter):gmatch("(.-)" .. delimiter:quote()) do
     if match then table.insert(result, match) end
   end
   return result

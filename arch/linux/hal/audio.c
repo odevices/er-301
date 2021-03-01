@@ -127,3 +127,8 @@ int Audio_getLoad()
 {
   return 0;
 }
+
+bool Audio_running()
+{
+  return SDL_GetAudioDeviceStatus(local.playDev) == SDL_AUDIO_PLAYING;
+}

@@ -47,6 +47,9 @@ exports = $(exports_dir)/od/glue/$(program_name)_swig.sym
 exports += $(subst $(build_dir)/mods,$(exports_dir),$(mods:%.so=%.sym))
 
 CFLAGS += $(sysbios_cflags)
+CFLAGS += -DFIRMWARE_VERSION=\"$(FIRMWARE_VERSION)\"
+CFLAGS += -DFIRMWARE_NAME=\"$(FIRMWARE_NAME)\"
+CFLAGS += -DFIRMWARE_STATUS=\"$(FIRMWARE_STATUS)\"
 LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lm -lstdc++ -lc -lnosys -u _printf_float 
 
 all: $(out_dir)/kernel.bin $(exports)

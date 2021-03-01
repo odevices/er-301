@@ -14,7 +14,7 @@ app.logInfo("Application: pwm and display start")
 app.Pwm_start();
 app.Display_start();
 
-Busy.start("Sound Computer (%s)", Env.Version.String)
+Busy.start("Sound Computer (%s)", app.FIRMWARE_VERSION)
 
 local Settings = require "Settings"
 Settings.init()
@@ -421,6 +421,19 @@ local function init()
   local seed = app.Rng_read32()
   math.randomseed(seed)
   app.logInfo("Application.init: random seed = 0x%08x", seed)
+
+  local filename = app.roots.rear.."/onNextBoot.lua"
+  local Path = require "Path"
+  if Path.exists(filename) then
+    app.logInfo("%s: executing...", filename)
+    local success, msg = dofile(filename)
+    if success then
+      app.logInfo("%s: success, %s", filename, msg)
+      app.deleteFile(filename)
+    else
+      app.logError("%s: failed, %s", filename, msg)
+    end
+  end
 
   local QuickSavePreset = require "Persist.QuickSavePreset"
   initialState = QuickSavePreset()

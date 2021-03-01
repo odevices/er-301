@@ -342,7 +342,7 @@ local function save()
   Busy.start("Saving settings to rear card...")
   app.logInfo("Saving settings to %s.", settingsFile)
   local t = {
-    firmwareVersion = Env.Version
+    firmwareVersion = app.FIRMWARE_VERSION
   }
   for name, v in pairs(variables) do t[name] = v.value end
   if not Persist.writeTable(settingsFile, t) then

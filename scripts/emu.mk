@@ -24,6 +24,9 @@ objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)
 objects += $(out_dir)/od/glue/app_swig.o
 objects += $(out_dir)/libs/SDL_FontCache/SDL_FontCache.o
  
+CFLAGS += -DFIRMWARE_VERSION=\"$(FIRMWARE_VERSION)\"
+CFLAGS += -DFIRMWARE_NAME=\"$(FIRMWARE_NAME)\"
+CFLAGS += -DFIRMWARE_STATUS=\"$(FIRMWARE_STATUS)\"
 LFLAGS = -Wl,--export-dynamic -Wl,--gc-sections -lSDL2 -lSDL2_ttf -lfftw3f -lm -ldl -lstdc++ 
 
 all: $(out_dir)/$(program_name).elf

@@ -39,7 +39,7 @@ objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)
 CFLAGS += $(sysbios_cflags) -DSBL_VERSION=\"4.0-$(PROFILE)\"
 LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lm -lstdc++ -lc -lnosys -u _printf_float
 
-all: $(out_dir)/$(program_name).bin
+all: $(out_dir)/SBL
 
 $(objects): $(sysbios_build_dir)/.timestamp
 
@@ -58,6 +58,10 @@ $(out_dir)/$(program_name).bin: $(out_dir)/$(program_name).elf
 	@mkdir -p $(@D)
 	@$(SIZE) $<
 	@$(OBJCOPY) -O binary $< $@
+
+$(out_dir)/SBL: $(out_dir)/$(program_name).bin
+	@echo $(describe_env) TIIMAGE $(describe_target)
+	@$(TIIMAGE) 0x90000000 MMCSD $< $@	
 
 clean:
 	rm -rf $(out_dir)

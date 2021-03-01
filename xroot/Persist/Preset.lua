@@ -17,7 +17,7 @@ end
 function Preset:write(fullpath)
   local data = self.data
   if data then
-    data.firmwareVersion = Env.Version
+    data.firmwareVersion = app.FIRMWARE_VERSION
     return Serialization.writeTable(fullpath, data)
   end
 end
@@ -31,18 +31,25 @@ function Preset:get(xpath)
   return self.data and Serialization.get(xpath, self.data)
 end
 
+-- This routine is trying to cover the different ways version info was encoded in presets in the past.
 function Preset:getVersionString()
-  if self.data == nil then return end
-  local result = self:get("firmwareVersion/SimpleString")
-  if result then
-    return result
-  else
-    local V = self.data.firmwareVersion or self.data.version
-    if V and V.Major and V.Minor and V.Build then
+  local defaultVersion = "0.0.00"
+
+  if self.data == nil then return defaultVersion end
+  local V = self.data.firmwareVersion or self.data.version
+  if V == nil then return defaultVersion end
+
+  if type(V) == "string" then return V end
+
+  if type(V) == "table" then
+    if V.SimpleString then
+      return V.SimpleString
+    elseif V.Major and V.Minor and V.Build then
       return string.format("%d.%d.%02d", V.Major, V.Minor, V.Build)
     end
-    return "0.0.00"
   end
+
+  return defaultVersion
 end
 
 local function walkHelper(value, path, callback)

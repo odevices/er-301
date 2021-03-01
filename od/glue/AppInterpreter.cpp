@@ -188,9 +188,13 @@ namespace od
 
 #ifdef BUILDOPT_TESTING
     execute("app.TESTING = true");
+    execute("app.FIRMWARE_NAME = 'TESTING'");
 #else
     execute("app.TESTING = false");
+    execute("app.FIRMWARE_NAME = '%s'", FIRMWARE_NAME);
 #endif
+    execute("app.FIRMWARE_VERSION = '%s'", FIRMWARE_VERSION);
+    execute("app.FIRMWARE_STATUS = '%s'", FIRMWARE_STATUS);
   }
 
 } /* namespace od */

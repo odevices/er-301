@@ -312,7 +312,7 @@ function Unit:serialize()
     lastPresetPath = self.lastPresetPath,
     lastPresetFilename = self.lastPresetFilename,
     unitVersion = self.version,
-    firmwareVersion = Env.Version,
+    firmwareVersion = app.FIRMWARE_VERSION,
     instanceKey = self:getInstanceKey()
   }
 
