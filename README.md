@@ -104,7 +104,7 @@ This documentation will assume that you used the default location.
 ### Other required dependencies
 
 ```bash
-sudo apt install swig python3 zip
+sudo apt install swig python3 zip gcc-multilib
 ```
 
 ### Test your build environment
