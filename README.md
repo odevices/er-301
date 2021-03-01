@@ -71,12 +71,20 @@ Finally, run the emulator again using the same command-line as before and instal
 
 ### Limitations
 
+**Outputs are mixed down to stereo**
+
 Currently, the 4 output channels are mixed down to stereo for maximal compatibility with different setups.
 
 * Left channel: OUT1+OUT3
 * Right channel: OUT2+OUT4
 
-There are no external input channels implemented yet.  However, when it comes to the main purpose of this emulator, it has really been a necessity since you can generate just about any testing signals that you need within the ER-301 emulation.
+**No external inputs**
+
+There are no external input channels implemented yet.  However, when it comes to the main purpose of this emulator, it hasn't been much of an obstacle since you can generate just about any testing signals that you need within the ER-301 emulation.  In fact, when it comes to testing, it is usually much easier to deal with canned signals for their repeatibility and ease of setup.
+
+**No I2C control**
+
+The teletype mod will compile and install.  You can even instantiate its units.  However, there is no emulation of the I2C bus.
 
 ## Creating your own mods
 
