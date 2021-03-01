@@ -124,6 +124,11 @@ function Package:getAuthor()
   return toc and toc.author
 end
 
+function Package:getPresets()
+  local toc = self:getTOC()
+  return toc and toc.presets
+end
+
 function Package:satisfies(dep)
   if type(dep) == "string" then
     return self:getName() == dep

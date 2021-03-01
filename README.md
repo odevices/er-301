@@ -93,9 +93,9 @@ make core teletype
 
 All build outputs are placed in a sub folder composed of the build profile and the target architecture.  There are 3 build profiles:
 
-* testing
-* debug
-* release
+* testing: All optimizations and logging enabled.
+* debug: No optimizations.  Logging enabled.
+* release: All optimizations enabled.  Logging disabled.
 
 And here are the 2 supported target architectures:
 

@@ -29,6 +29,7 @@ function Interface:init()
   }
   Base.init(self, opts)
   self:setClassName("Package.Interface")
+  self.detailText:setJustification(app.justifyLeft)
 
   self:setSubCommand(1, "uninstall all", self.doUninstallAll)
   self:setSubCommand(3, "create package", self.doCreatePackage)
@@ -49,7 +50,15 @@ end
 
 function Interface:doCreatePackage()
   local Creator = require "Package.Creator"
-  Creator()
+  local dlg = Creator()
+  local task = function(success)
+    if success then
+      Manager.invalidatePackageCache()
+      self:refresh()
+    end
+  end
+  dlg:subscribe("done", task)
+  dlg:show()
 end
 
 function Interface:doInstallPackage()
@@ -138,18 +147,13 @@ function Interface:onSelectionChanged()
       self:setMainCommand(5, "install", self.doInstallPackage)
       self:setMainCommand(6, "delete", self.doDeletePackage)
     end
-    local title = package:getTitle()
-    local author = package:getAuthor()
-    local detail
-    if title and author then
-      detail = string.format("%s\nby\n%s", title, author)
-    elseif title then
-      detail = title
-    elseif author then
-      detail = string.format("\nby\n%s", author)
-    else
-      detail = ""
-    end
+    local author = package:getAuthor() or "anonymous"
+    local units = package:getUnits() or {}
+    local presets = package:getPresets() or {}
+    local unitCount = #units
+    local presetCount = #presets
+    local detail = string.format("By: %s\nUnits: %d\nPresets: %d", author,
+                                 unitCount, presetCount)
     self.detailText:setText(detail)
   else
     self:clearMainCommand(5)

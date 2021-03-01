@@ -28,6 +28,10 @@ local function isRebootNeeded()
   return rebootNeeded
 end
 
+local function invalidatePackageCache()
+  packageCacheIsStale = true
+end
+
 -- Move this into the Interface module?
 local function refreshPackageCache()
   Busy.start("Refreshing packages...")
@@ -250,7 +254,7 @@ local function install(package)
   local n = archive:getFileCount()
   for i = 1, n do
     local filename = archive:getFilename(i - 1)
-    Busy.status("Installing %s: %s", package.id, filename)
+    Busy.status("Installing %s: %s", package.id, Path.getFilename(filename))
     local path = Path.join(installFolder, filename)
     Path.createAll(path, true)
     if Path.isDirectory(path:gsub("/$", "")) then
@@ -389,5 +393,6 @@ return {
   uninstall = uninstall,
   delete = delete,
   reset = reset,
-  isRebootNeeded = isRebootNeeded
+  isRebootNeeded = isRebootNeeded,
+  invalidatePackageCache = invalidatePackageCache
 }

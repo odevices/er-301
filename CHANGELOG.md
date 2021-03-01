@@ -6,9 +6,9 @@
 * FIXED: The suggested save folder for unit presets has been simplified to ER-301/<version>/presets instead of the now unnecessary ER-301/<version>/presets/<unit-type-name>.
 * FIXED: Teletype CV Unit > Slew limiting is enabled by default with a 2ms rate.
 * FIXED: Quicksaving when there are unsaved buffers > If you pressed UP or HOME when in the Sample Pool saving buffers, the quicksave was being canceled.  The quicksave should only be canceled if you press CANCEL.
-* ENHANCED: G inputs > ADC driver will now reset the ADC hardware when it detects that it is no longer getting interrupts (i.e. timeout).
+* FIXED: G inputs > ADC driver will now reset the ADC hardware when it detects that it is no longer getting interrupts (i.e. timeout).
 * ENHANCED: Package Manager > sharing of code and presets via packages.
-* ENHANCED: Low Level (C/C++) SDK > It is now possible to dynamically link shared libraries (*.so) to the bare-metal firmware during runtime.  This functionality is accessible via lua's require and package.loadlib interfaces.  Please refer to the core and teletype mod packages for a comprehensive example.
+* ENHANCED: Low Level (C/C++) SDK > It is now possible to dynamically link shared libraries (*.so) to the bare-metal firmware during runtime.  This functionality is accessible via lua's require and package.loadlib interfaces.  Please refer to the core and teletype mod source code for a comprehensive example.
 * ENHANCED: System Settings > USB > The ER-301 can now enumerate as a mass storage device when connected to a USB host.  This provides access to the front SD card only for now.
 * ENHANCED: System Settings > USB > The ER-301 can now enumerate as a virtual serial port when connected to a USB host.  The ER-301 will log to this port when connected.
 * ENHANCED: System Settings > Sample rate and frame size are now configurable but require a reboot for changes to take effect.

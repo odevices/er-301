@@ -29,7 +29,7 @@ function ListWindow:init(opts)
     -- dividing boundary between list box and detail panel
     W = Env.DetailPanel.X
     -- detail panel to the side of the list
-    self.detailText = app.RichTextBox(W, 10, 256 - W, 54)
+    self.detailText = app.RichTextBox(W, 12, 256 - W, 54)
     self.detailText:setJustification(app.justifyCenter)
     self.mainGraphic:addChild(self.detailText)
   end

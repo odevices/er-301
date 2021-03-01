@@ -1,15 +1,19 @@
 local Class = require "Base.Class"
-local Object = require "Base.Object"
+local Base = require "Base.Observable"
 local FileChooser = require "Card.FileChooser"
 local FileStaging = require "Card.FileStaging"
 local FileSystem = require "Card.FileSystem"
 local Path = require "Path"
 
 local Creator = Class {}
-Creator:include(Object)
+Creator:include(Base)
 
 function Creator:init()
+  Base.init(self)
   self:setClassName("Package.Creator")
+end
+
+function Creator:show()
   local Card = require "Card"
   if Card.mounted() then
     self:askForSources()
@@ -21,10 +25,10 @@ function Creator:init()
 end
 
 local function quote(text)
-  return string.format('"%s"',text)
+  return string.format('"%s"', text)
 end
 
-function Creator:doneChoosing(srcPaths, dstPath)
+function Creator:doneChoosing(srcPaths, dstPath, author)
   app.logInfo("Packaging %d presets to %s", #srcPaths, dstPath)
   local Writer = require "Package.Writer"
   local Busy = require "Busy"
@@ -36,6 +40,7 @@ function Creator:doneChoosing(srcPaths, dstPath)
     local toc = io.open(tmpPath, "w")
     toc:write("return {\n")
     toc:write("  name = ", quote(Path.getStem(dstPath)), ",\n")
+    toc:write("  author = ", quote(author), ",\n")
     toc:write("  presets = {\n")
     for _, fullPath in ipairs(srcPaths) do
       local filename = Path.getFilename(fullPath)
@@ -58,19 +63,36 @@ function Creator:doneChoosing(srcPaths, dstPath)
     app.deleteFile(tmpPath)
     writer:close()
     Busy.stop()
+    self:emitSignal("done", true)
   else
     local Message = require "Message"
     local dialog = Message.Main("Failed to create package.")
     dialog:show()
+    self:emitSignal("done")
   end
+end
+
+function Creator:askForAuthor(srcPaths, dstPath)
+  local task = function(text)
+    if text then
+      self:doneChoosing(srcPaths, dstPath, text)
+    else
+      self:emitSignal("done")
+    end
+  end
+  local Keyboard = require "Keyboard"
+  local kb = Keyboard("Who is the author?", "", true, "Package/Creator/Author")
+  kb:subscribe("done", task)
+  kb:show()
 end
 
 function Creator:askForDestination(srcPaths)
   local task = function(result)
-    if result and result.fullpath then
-      if FileSystem.checkPath("package", "w", result.fullpath) then
-        self:doneChoosing(srcPaths, result.fullpath)
-      end
+    if result and result.fullpath and
+        FileSystem.checkPath("package", "w", result.fullpath) then
+      self:askForAuthor(srcPaths, result.fullpath)
+    else
+      self:emitSignal("done")
     end
   end
   local chooser = FileChooser {
@@ -100,6 +122,7 @@ function Creator:checkSources(srcPaths)
     local dialog = Message.Main("%d of %d selected cannot be packaged.", failed,
                                 #srcPaths)
     dialog:show()
+    self:emitSignal("done")
   else
     self:askForDestination(srcPaths)
   end
@@ -107,7 +130,11 @@ end
 
 function Creator:doStaging(sofar, morePaths)
   local doneTask = function(paths)
-    if paths then self:checkSources(paths) end
+    if paths then
+      self:checkSources(paths)
+    else
+      self:emitSignal("done")
+    end
   end
   local moreTask = function(paths)
     self:askForSources(paths)
