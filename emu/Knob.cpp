@@ -50,8 +50,9 @@ namespace emu
       SDL_SetRenderDrawColor(renderer, P_GRAY, P_GRAY, P_GRAY, 255);
       for (int i = 0; i < n; i++)
       {
-        double s, c;
-        sincos(i * dAngle, &s, &c);
+        double a = i * dAngle;
+        double s = sin(a), c = cos(a);
+
         int x = (r + 2) * s + w / 2;
         int y = (r + 2) * c + h / 2;
         drawFilledCircle(renderer, x, y, r2);

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdlib.h>
-#include <malloc.h>
 #include <hal/constants.h>
 #include <cstddef>
 
@@ -42,7 +41,9 @@ namespace od
 
     inline pointer allocate(size_type n)
     {
-      return (pointer)memalign(N, n * sizeof(value_type));
+      pointer p;
+      posix_memalign((void **)&p, N, n * sizeof(value_type));
+      return p;
     }
 
     inline void deallocate(pointer p, size_type)

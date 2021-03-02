@@ -15,24 +15,24 @@ libraries += $(libs_build_dir)/liblodepng.a
 libraries += $(libs_build_dir)/libminiz.a
 
 # Recursive search for source files
-cpp_sources := $(foreach D,$(src_dirs),$(call rwildcard,$D,*.cpp)) 
-c_sources := $(foreach D,$(src_dirs),$(call rwildcard,$D,*.c)) 
+cpp_sources := $(foreach D,$(src_dirs),$(call rwildcard,$D,*.cpp))
+c_sources := $(foreach D,$(src_dirs),$(call rwildcard,$D,*.c))
 
-objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)) 
+objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o))
 
-# Manually add objects 
+# Manually add objects
 objects += $(out_dir)/od/glue/app_swig.o
 objects += $(out_dir)/libs/SDL_FontCache/SDL_FontCache.o
- 
+
 CFLAGS += -DFIRMWARE_VERSION=\"$(FIRMWARE_VERSION)\"
 CFLAGS += -DFIRMWARE_NAME=\"$(FIRMWARE_NAME)\"
 CFLAGS += -DFIRMWARE_STATUS=\"$(FIRMWARE_STATUS)\"
-LFLAGS = -Wl,--export-dynamic -Wl,--gc-sections -lSDL2 -lSDL2_ttf -lfftw3f -lm -ldl -lstdc++ 
+LFLAGS = -L/usr/local/Cellar/sdl2/2.0.14/lib/ -L/usr/local/Cellar/sdl2_ttf/2.0.15/lib/ -L/usr/local/Cellar/fftw/3.3.9/lib/ -lSDL2 -lSDL2_ttf -lfftw3f -lm -ldl -lstdc++
 
 all: $(out_dir)/$(program_name).elf
 
 $(out_dir)/$(program_name).elf: $(objects) $(libraries)
-	@mkdir -p $(@D)	
+	@mkdir -p $(@D)
 	@echo $(describe_env) LINK $(describe_target)
 	@$(CC) $(CFLAGS) -o $@ $(objects) $(libraries) $(LFLAGS)
 
@@ -46,14 +46,14 @@ addr2line: $(out_dir)/$(program_name).elf
 missing: $(objects) $(libraries)
 	@echo $(describe_env) Generating list of missing references...
 	-@$(CC) $(CFLAGS) -o $@ $(objects) $(libraries) $(LFLAGS) 2> $(out_dir)/error.log
-	@$(PYTHON) list-undefined.py $(out_dir)/error.log > $(out_dir)/missing.log	
+	@$(PYTHON) list-undefined.py $(out_dir)/error.log > $(out_dir)/missing.log
 
-libs: 
+libs:
 	+$(MAKE) -f lua.mk ARCH=linux
 	+$(MAKE) -f miniz.mk ARCH=linux
 	+$(MAKE) -f lodepng.mk ARCH=linux
 
-clean-libs: 
+clean-libs:
 	+$(MAKE) -f lua.mk clean ARCH=linux
 	+$(MAKE) -f miniz.mk clean ARCH=linux
 	+$(MAKE) -f lodepng.mk clean ARCH=linux

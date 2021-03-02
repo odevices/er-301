@@ -3,7 +3,7 @@
 #include <hal/log.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <linux/limits.h>
+#include <limits.h>
 
 int main(int argc, char *args[])
 {

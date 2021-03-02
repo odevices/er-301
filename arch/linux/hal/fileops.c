@@ -1,6 +1,7 @@
 #include <hal/fileops.h>
 #include <sys/stat.h>
-#include <sys/statfs.h>
+#include <sys/param.h>
+#include <sys/mount.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
@@ -155,7 +156,7 @@ int diskFreeSpaceMB(const char *path)
   struct statfs fsinfo;
   if (statfs(path, &fsinfo) == 0)
   {
-    uint64_t bytes = fsinfo.f_frsize * fsinfo.f_blocks;
+    uint64_t bytes = fsinfo.f_bsize * fsinfo.f_blocks;
     return (int)(bytes / 1024 / 1024);
   }
   return 0;
@@ -166,7 +167,7 @@ int diskTotalSpaceMB(const char *path)
   struct statfs fsinfo;
   if (statfs(path, &fsinfo) == 0)
   {
-    uint64_t bytes = fsinfo.f_frsize * fsinfo.f_bavail;
+    uint64_t bytes = fsinfo.f_bsize * fsinfo.f_bavail;
     return (int)(bytes / 1024 / 1024);
   }
   return 0;

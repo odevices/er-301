@@ -4,7 +4,7 @@
 #include <hal/log.h>
 #include <hal/timing.h>
 #include <string.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 extern "C"
 {

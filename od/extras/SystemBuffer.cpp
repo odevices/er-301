@@ -1,6 +1,6 @@
 #include <od/extras/SystemBuffer.h>
 #include <hal/constants.h>
-#include <malloc.h>
+#include <stdlib.h>
 
 namespace od
 {
@@ -17,7 +17,7 @@ namespace od
 	bool SystemBuffer::allocate(int n)
 	{
 		deallocate();
-		mpData = (char *)memalign(CACHELINE_SIZE_MAX, n);
+                posix_memalign((void **)&mpData, CACHELINE_SIZE_MAX, n);
 		if (mpData)
 		{
 			mSizeInBytes = n;
