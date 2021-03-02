@@ -12,12 +12,16 @@ firmware_contents += $(build_dir)/mods/teletype-$(FIRMWARE_VERSION).pkg
 firmware_contents += scripts/install.lua
 
 $(firmware_archive): $(firmware_contents)
-	+$(MAKE) app PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) sbl PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) pbl PROFILE=$(PROFILE) ARCH=$(ARCH)
 	@echo $(describe_env) ZIP $(describe_target)
 	@rm -rf $(firmware_archive)
 	@$(ZIP) -j $(firmware_archive) $(firmware_contents)	
+
+$(firmware_contents): binaries
+
+binaries:
+	+$(MAKE) app PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) sbl PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) pbl PROFILE=$(PROFILE) ARCH=$(ARCH)
 
 clean:
 	rm -rf $(firmware_archive)
@@ -26,4 +30,4 @@ clean:
 	+$(MAKE) pbl PROFILE=$(PROFILE) ARCH=$(ARCH) clean
 
 # Force the rule to execute everytime.
-.PHONY: $(firmware_archive)
+.PHONY: binaries
