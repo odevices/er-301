@@ -33,7 +33,7 @@ local function set(channel, gain, restart)
 end
 
 local function get(channel)
-  local chId = channels[channel]
+  local chId = channel and channels[channel]
   if chId then
     local gId = app.Modulation_getChannelRange(chId)
     for k, v in pairs(gains) do if v == gId then return k end end

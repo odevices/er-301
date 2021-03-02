@@ -74,13 +74,21 @@ function ChannelControl:subReleased(i, shifted)
 end
 
 function ChannelControl:onPreampChanged()
-  local gain = Preamp.get(self.channel)
-  local text = string.format("%s: %dx", self.channel, gain)
-  self.button:setText(text)
-  self.panels[1]:deselect()
-  self.panels[2]:deselect()
-  self.panels[4]:deselect()
-  self.panels[gain]:select()
+  if self.channel then
+    local gain = Preamp.get(self.channel)
+    if gain then
+      local text = string.format("%s: %dx", self.channel, gain)
+      self.button:setText(text)
+      self.panels[1]:deselect()
+      self.panels[2]:deselect()
+      self.panels[4]:deselect()
+      self.panels[gain]:select()
+    else
+      app.logWarn("%s.onPreampChanged(): gain is nil for channel %s.", self, self.channel)
+    end
+  else
+    app.logWarn("%s.onPreampChanged(): channel is nil.", self)
+  end
 end
 
 --------------------------------------------------
@@ -119,7 +127,7 @@ function MenuControl:init(type)
     local width = 6
     for i, source in ipairs(sources) do
       local meter = app.VerticalMeter((i - 1) * (width + margin) + 6, 4, width,
-                                     56)
+                                      56)
       meter:watchOutlet(source:getOutlet())
       graphic:addChild(meter)
     end
