@@ -83,7 +83,7 @@ namespace od
 
   float Delay::allocateTimeUpTo(float seconds)
   {
-    int Ns = globalConfig.sampleRate * seconds;
+    int Ns = globalConfig.sampleRate * MAX(0.001f, seconds);
     int Nf = (Ns / FRAMELENGTH + 1);
     Ns = Nf * FRAMELENGTH;
     if (Ns == mMaxDelayInSamples)

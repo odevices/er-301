@@ -6,7 +6,7 @@ PROFILE ?= testing
 #PROFILE = debug
 
 FIRMWARE_NAME ?= Thoon
-FIRMWARE_VERSION ?= 0.6.00
+FIRMWARE_VERSION ?= 0.6.01
 FIRMWARE_STATUS ?= unstable
 
 scriptname := $(word 1, $(MAKEFILE_LIST))

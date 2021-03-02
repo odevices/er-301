@@ -30,7 +30,7 @@ This project contains the source code for:
 Since cross-compilation has its own complexities, it is probably easier to first start with getting the emulator running on your development machine.  To compile and run the emulator you will need the following dependencies installed:
 
 ```bash
-sudo apt install build-essential libsdl2-dev libsdl2-ttf-dev libfftw3-dev swig python3 zip
+sudo apt install build-essential libsdl2-dev libsdl2-ttf-dev libfftw3-dev swig python3 zip fonts-freefont-ttf
 ```
 
 To compile, execute this in the top directory:
@@ -61,10 +61,10 @@ To compile and create the installation package for the core mod, execute:
 make core ARCH=linux
 ```
 
-Next, copy the resulting ```testing/linux/mods/core-x.x.x.pkg``` file to the ```ER-301/packages``` directory of the emulator's front SD card:
+Next, copy the resulting package file to the ```ER-301/packages``` directory of the emulator's front SD card.  You will need to change the command below to match the correct version.
 
 ```bash
-cp testing/linux/mods/core-0.6.0.pkg ~/.od/front/ER-301/packages
+cp testing/linux/mods/core-<version>.pkg ~/.od/front/ER-301/packages
 ```
 
 Finally, run the emulator again using the same command-line as before and install the core mod package from the Package Manager screen.  Now you will have access to all of the core units in the emulator.

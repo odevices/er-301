@@ -18,7 +18,6 @@ namespace emu
     {
       double a = i * dAngle;
       double s = sin(a), c = cos(a);
-
       int x = r * s + xCenter;
       int y = r * c + yCenter;
       SDL_RenderDrawPoint(renderer, x, y);
@@ -49,7 +48,6 @@ namespace emu
     {
       double a = i * dAngle;
       double s = sin(a), c = cos(a);
-
       int x = r * s + xCenter;
       int y = r * c + yCenter;
       SDL_RenderDrawLine(renderer, x0, y0, x, y);

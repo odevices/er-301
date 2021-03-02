@@ -52,7 +52,6 @@ namespace emu
       {
         double a = i * dAngle;
         double s = sin(a), c = cos(a);
-
         int x = (r + 2) * s + w / 2;
         int y = (r + 2) * c + h / 2;
         drawFilledCircle(renderer, x, y, r2);
