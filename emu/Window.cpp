@@ -61,7 +61,7 @@ namespace emu
   {
     static const char *fontFiles[] = {
         "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
-        "../../libs/SDL_FontCache/test/fonts/FreeSans.ttf",
+        "libs/SDL_FontCache/test/fonts/FreeSans.ttf",
         NULL};
     auto i = fontMap.find(size);
     if (i == fontMap.end())
