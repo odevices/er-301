@@ -101,6 +101,8 @@ make core TI_INSTALL_DIR=~/your-path-to-ti-sdk
 
 This documentation will assume that you used the default location.
 
+**Note:** If you get a warning message from the installer about a "Problem running post-install step.  Installation may not complete correctly.", you can ignore it.
+
 ### Other required dependencies
 
 ```bash
