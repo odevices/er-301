@@ -85,12 +85,12 @@ function install(self, archive)
       description = "kernel binary"
     },
     {
-      filename = "core-0.6.00.pkg",
+      filename = "core-0.6.01.pkg",
       destination = "0:",
       description = "package"
     },
     {
-      filename = "teletype-0.6.00.pkg",
+      filename = "teletype-0.6.01.pkg",
       destination = "0:",
       description = "package"
     }
