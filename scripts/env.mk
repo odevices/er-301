@@ -44,8 +44,21 @@ CPPFLAGS.only = -std=gnu++11
 CFLAGS.speed = -O3 -ftree-vectorize -ffast-math
 CFLAGS.size = -Os
 
-symbols = 
-includes =
+symbols =
+
+sdl2 := $(shell brew --prefix sdl2)
+sdl2_ttf := $(shell brew --prefix sdl2_ttf)
+fftw := $(shell brew --prefix fftw)
+
+includes :=
+includes += $(sdl2)/include
+includes += $(sdl2)/include/SDL2
+includes += $(sdl2_ttf)/include
+
+libs :=
+libs += $(sdl2)/lib
+libs += $(sdl2_ttf)/lib
+libs += $(fftw)/lib
 
 ###########################
 
@@ -68,7 +81,7 @@ rear_card_dir = /media/$(shell whoami)/$(rear_card_label)
 include scripts/am335x.mk
 
 symbols += gcc am335x am3359 evmAM335x
-CFLAGS.am335x = -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard -mabi=aapcs -Dfar= -D__DYNAMIC_REENT__ 
+CFLAGS.am335x = -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard -mabi=aapcs -Dfar= -D__DYNAMIC_REENT__
 
 endif
 
@@ -97,12 +110,14 @@ $(error Error: '$(PROFILE)' is not a valid build profile.)
 endif
 
 CFLAGS += $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.$(PROFILE))
-CFLAGS += $(addprefix -I,$(includes)) 
+CFLAGS += $(addprefix -I,$(includes))
 CFLAGS += $(addprefix -D,$(symbols))
+
+LFLAGS += $(addprefix -L,$(libs))
 
 # swig-specific flags
 SWIGFLAGS = -lua -no-old-metatable-bindings
-SWIGFLAGS += $(addprefix -I,$(includes)) 
+SWIGFLAGS += $(addprefix -I,$(includes))
 # Replace speed optimization flags with size optimization flags.
 CFLAGS.swig = $(subst $(CFLAGS.speed),$(CFLAGS.size),$(CFLAGS))
 #CFLAGS.swig = $(CFLAGS)

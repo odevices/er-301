@@ -27,7 +27,7 @@ objects += $(out_dir)/libs/SDL_FontCache/SDL_FontCache.o
 CFLAGS += -DFIRMWARE_VERSION=\"$(FIRMWARE_VERSION)\"
 CFLAGS += -DFIRMWARE_NAME=\"$(FIRMWARE_NAME)\"
 CFLAGS += -DFIRMWARE_STATUS=\"$(FIRMWARE_STATUS)\"
-LFLAGS = -L/usr/local/Cellar/sdl2/2.0.14/lib/ -L/usr/local/Cellar/sdl2_ttf/2.0.15/lib/ -L/usr/local/Cellar/fftw/3.3.9/lib/ -lSDL2 -lSDL2_ttf -lfftw3f -lm -ldl -lstdc++
+LFLAGS += -lSDL2 -lSDL2_ttf -lfftw3f -lm -ldl -lstdc++
 
 all: $(out_dir)/$(program_name).elf
 
