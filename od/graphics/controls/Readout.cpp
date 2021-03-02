@@ -340,6 +340,10 @@ namespace od
     if (map)
     {
       mDialState.setMap(map);
+      if (getValueInUnits() > map->max())
+      {
+        setValueInUnits(map->max());
+      }
     }
     // force an update
     mLastValue = std::numeric_limits<float>::max();

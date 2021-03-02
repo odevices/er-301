@@ -130,7 +130,7 @@ namespace od
 
   float PedalLooper::allocateTimeUpTo(float seconds)
   {
-    int Ns = globalConfig.sampleRate * seconds;
+    int Ns = globalConfig.sampleRate * MAX(0.001f, seconds);
     int Nf = (Ns / FRAMELENGTH + 1);
     if (Nf == mMaximumFrameCount)
     {
