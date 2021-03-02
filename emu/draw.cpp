@@ -1,5 +1,6 @@
 #include <emu/draw.h>
 #include <emu/constants.h>
+#include <math.h>
 
 namespace emu
 {
@@ -15,8 +16,8 @@ namespace emu
     double dAngle = 2 * M_PI / n;
     for (int i = 0; i < n; i++)
     {
-      double s, c;
-      sincos(i * dAngle, &s, &c);
+      double a = i * dAngle;
+      double s = sin(a), c = cos(a);
       int x = r * s + xCenter;
       int y = r * c + yCenter;
       SDL_RenderDrawPoint(renderer, x, y);
@@ -45,8 +46,8 @@ namespace emu
     int x0 = xCenter, y0 = r + yCenter;
     for (int i = 1; i < nsides; i++)
     {
-      double s, c;
-      sincos(i * dAngle, &s, &c);
+      double a = i * dAngle;
+      double s = sin(a), c = cos(a);
       int x = r * s + xCenter;
       int y = r * c + yCenter;
       SDL_RenderDrawLine(renderer, x0, y0, x, y);
