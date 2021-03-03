@@ -40,9 +40,9 @@ c_sources := $(filter-out $(foreach x,$(excludes),%$x), $(c_sources))
 cpp_sources := $(filter-out $(foreach x,$(excludes),%$x), $(cpp_sources))
 s_sources := $(filter-out $(foreach x,$(excludes),%$x), $(s_sources))
 
-objects := $(subst $(parent_dir),$(out_dir),$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o) $(s_sources:%.S=%.o)) 
+objects := $(subst $(parent_dir),$(out_dir),$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o) $(s_sources:%.S=%.o))
 
-# Manually add objects for swig wrappers 
+# Manually add objects for swig wrappers
 objects += $(out_dir)/$(MODNAME)/$(MODNAME)_swig.o
 
 # Set search path for prerequisites
@@ -59,7 +59,7 @@ LFLAGS = -nostdlib -nodefaultlibs -r
 endif
 
 ifeq ($(ARCH),linux)
-LFLAGS = -shared
+LFLAGS = -dynamic -undefined dynamic_lookup -lSystem
 endif
 
 # Prevent swig from placing symbols exported by mods in the global namespace.
@@ -70,8 +70,8 @@ all: $(package_file)
 $(lib_file): $(objects)
 	@echo $(describe_env) LINK $(describe_target)
 	@mkdir -p $(@D)
-	@$(CC) $(CFLAGS) -o $@ $(objects) $(LFLAGS)
-	@$(SIZE) $@	
+	@$(LD) -o $@ $(objects) $(LFLAGS)
+	@$(SIZE) $@
 
 $(package_file): $(lib_file) $(assets)
 	@echo $(describe_env) ZIP $(describe_target)
@@ -82,7 +82,7 @@ $(package_file): $(lib_file) $(assets)
 	@$(ZIP) -jq $@ $<
 
 # Check for any undefined symbols that are not exported by app.
-missing: 
+missing:
 	@echo $(describe_env) NM $(lib_file)
 	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@
 	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}'
