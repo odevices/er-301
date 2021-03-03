@@ -11,6 +11,7 @@
     + [Install the TI Processor SDK for AM335x](#install-the-ti-processor-sdk-for-am335x)
     + [Other required dependencies](#other-required-dependencies)
     + [Test your build environment](#test-your-build-environment)
+  * [USB Functions](#usb-functions)
   * [Build Profiles and Target Architectures](#build-profiles-and-target-architectures)
 
 ## Introduction
