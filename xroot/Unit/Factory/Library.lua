@@ -94,17 +94,17 @@ function Library:loadFromTable(t)
           title = e.title,
           filename = e.filename,
           libraryName = name,
-          category = category,
+          category = e.category or category,
           isPreset = true
         }
 
         unitList[#unitList + 1] = u
         unitHash[u.id] = u
 
-        if not categoryHash[category] then
+        if not categoryHash[u.category] then
           -- app.logInfo("%s: %s",self,category)
-          categoryHash[category] = true
-          categoryList[#categoryList + 1] = category
+          categoryHash[u.category] = true
+          categoryList[#categoryList + 1] = u.category
         end
 
         if e.aliases then
