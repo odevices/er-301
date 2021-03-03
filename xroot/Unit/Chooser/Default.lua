@@ -8,6 +8,26 @@ local Clipboard = require "Chain.Clipboard"
 local Utils = require "Utils"
 local ply = app.SECTION_PLY
 
+local topCategories = {
+  "Essentials",
+  "Containers",
+  "Sample Playback",
+  "Granular Playback",
+  "Recording and Looping",
+  "Delays and Reverb",
+  "Filtering",
+  "Oscillators",
+  "Noise",
+  "Envelopes",
+  "Mapping and Control",
+  "Timing",
+  "Measurement and Conversion"
+}
+
+local bottomCategories = {
+  "Experimental"
+}
+
 local function isStandardUnit(loadInfo)
   return loadInfo.libraryName == "builtins" or loadInfo.libraryName == "core"
 end
@@ -82,6 +102,23 @@ function Chooser:init(ring, ordering)
   self:refresh()
 end
 
+function Chooser:addUnitsInCategory(category)
+  local units = Factory.getUnits(category, self.ring:getChannelCount())
+  if units and #units > 0 then
+    if allFromSameExternalLibrary(units) then
+      if category == units[1].libraryName then
+        self:addCategory(units[1].libraryName)
+      else
+        self:addCategory(units[1].libraryName .. " : " .. category)
+      end
+      for _, loadInfo in ipairs(units) do self:addUnit(loadInfo, true) end
+    else
+      self:addCategory(category)
+      for _, loadInfo in ipairs(units) do self:addUnit(loadInfo) end
+    end
+  end
+end
+
 function Chooser:refresh()
   local ordering = self.ordering
   local ring = self.ring
@@ -103,23 +140,35 @@ function Chooser:refresh()
       if Clipboard.hasData(1) then self:addClipboard() end
     end
 
+    local added = {}
+    local postpone = {}
+    for _, category in ipairs(bottomCategories) do
+      postpone[category] = true
+    end
+
+    -- First add the top categories.
+    for _, category in ipairs(topCategories) do
+      if not added[category] and not postpone[category] then
+        self:addUnitsInCategory(category)
+        added[category] = true
+      end
+    end
+
+    -- Next add the middle categories (sorted).
     local categories = Factory.getCategories()
+    table.sort(categories)
     for _, category in ipairs(categories) do
-      local units = Factory.getUnits(category, ring:getChannelCount())
-      if units and #units > 0 then
-        if allFromSameExternalLibrary(units) then
-          if category == units[1].libraryName then
-            self:addCategory(units[1].libraryName)
-          else
-            self:addCategory(units[1].libraryName .. " : " .. category)
-          end
-          for _, loadInfo in ipairs(units) do
-            self:addUnit(loadInfo, true)
-          end
-        else
-          self:addCategory(category)
-          for _, loadInfo in ipairs(units) do self:addUnit(loadInfo) end
-        end
+      if not added[category] and not postpone[category] then
+        self:addUnitsInCategory(category)
+        added[category] = true
+      end
+    end
+
+    -- Finally, add the bottom categories.
+    for _, category in ipairs(bottomCategories) do
+      if not added[category] then
+        self:addUnitsInCategory(category)
+        added[category] = true
       end
     end
 
