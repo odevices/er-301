@@ -141,24 +141,24 @@ function Chooser:refresh()
     end
 
     local added = {}
-    local postpone = {}
+    local addLast = {}
     for _, category in ipairs(bottomCategories) do
-      postpone[category] = true
+      addLast[category] = true
     end
 
     -- First add the top categories.
     for _, category in ipairs(topCategories) do
-      if not added[category] and not postpone[category] then
+      if not added[category] and not addLast[category] then
         self:addUnitsInCategory(category)
         added[category] = true
       end
     end
 
-    -- Next add the middle categories (sorted).
+    -- Next add the categories collected from the packages (sorted).
     local categories = Factory.getCategories()
     table.sort(categories)
     for _, category in ipairs(categories) do
-      if not added[category] and not postpone[category] then
+      if not added[category] and not addLast[category] then
         self:addUnitsInCategory(category)
         added[category] = true
       end
@@ -168,7 +168,6 @@ function Chooser:refresh()
     for _, category in ipairs(bottomCategories) do
       if not added[category] then
         self:addUnitsInCategory(category)
-        added[category] = true
       end
     end
 
