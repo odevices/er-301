@@ -15,11 +15,13 @@ namespace emu
   const int STATUS_H = 24;
 
   // panel color
-  const int P_GRAY = 100;
+  const int P_GRAY = 184;
 
   // button colors
-  const int B_GRAY = 75;
-  const int B_BLUE = 200;
+  const int B_GRAY = 98;
+  const int B_RED = 81;
+  const int B_GREEN = 124;
+  const int B_BLUE = 245;
 
   // toggle colors
   const int T_GRAY = 25;
