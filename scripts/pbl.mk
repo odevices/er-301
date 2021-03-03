@@ -42,7 +42,7 @@ LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lc -lnosys
 
 all: $(out_dir)/MLO
 
-$(objects): $(sysbios_build_dir)/.timestamp
+$(objects): $(sysbios_build_dir)/.timestamp scripts/pbl.mk scripts/sbl.mk
 
 $(sysbios_build_dir)/.timestamp: $(sysbios_objects)
 	@echo $(describe_env) XS $<

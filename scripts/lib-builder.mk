@@ -37,6 +37,8 @@ vpath %.S $(parent_dir)
 
 all: $(out_dir)/$(OUTPUT)
 
+$(objects): scripts/env.mk scripts/lib-builder.mk
+
 $(out_dir)/$(OUTPUT): $(objects)
 	@echo $(describe_env) LINK $(describe_target)
 	@$(AR) rcs $@ $(objects)

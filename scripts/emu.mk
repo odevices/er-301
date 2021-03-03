@@ -31,6 +31,8 @@ LFLAGS = -Wl,--export-dynamic -Wl,--gc-sections -lSDL2 -lSDL2_ttf -lfftw3f -lm -
 
 all: $(out_dir)/$(program_name).elf
 
+$(objects): scripts/env.mk scripts/emu.mk
+
 $(out_dir)/$(program_name).elf: $(objects) $(libraries)
 	@mkdir -p $(@D)	
 	@echo $(describe_env) LINK $(describe_target)

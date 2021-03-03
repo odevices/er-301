@@ -67,6 +67,8 @@ SWIGFLAGS += -nomoduleglobal -small -fvirtual
 
 all: $(package_file)
 
+$(objects): scripts/env.mk scripts/mod-builder.mk
+
 $(lib_file): $(objects)
 	@echo $(describe_env) LINK $(describe_target)
 	@mkdir -p $(@D)

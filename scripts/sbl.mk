@@ -41,7 +41,7 @@ LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lm -lstdc++ -lc -lnosys -u _printf
 
 all: $(out_dir)/SBL
 
-$(objects): $(sysbios_build_dir)/.timestamp
+$(objects): $(sysbios_build_dir)/.timestamp scripts/env.mk scripts/sbl.mk
 
 $(sysbios_build_dir)/.timestamp: $(sysbios_objects)
 	@echo $(describe_env) XS $<
