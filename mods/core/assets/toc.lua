@@ -1,10 +1,8 @@
 local units = {
   {
-    category = "Essentials"
-  },
-  {
     title = "Linear Bipolar VCA",
     moduleName = "VCA.LinearBipolar",
+    category = "Essentials",
     keywords = "modulate",
     aliases = {
       "LinearVcaUnit"
@@ -13,24 +11,25 @@ local units = {
   {
     title = "Linear Unipolar VCA",
     moduleName = "VCA.LinearUnipolar",
+    category = "Essentials",
     keywords = "modulate"
   },
   {
     title = "Limiter",
     moduleName = "LimiterUnit",
+    category = "Essentials",
     keywords = "effect, mixing"
   },
   {
     title = "Offset",
     moduleName = "OffsetUnit",
+    category = "Essentials",
     keywords = ""
-  },
-  {
-    category = "Containers"
   },
   {
     title = "2 Bands",
     moduleName = "Container.TwoBands",
+    category = "Containers",
     keywords = "effect, container",
     aliases = {
       "Custom.TwoBands"
@@ -39,6 +38,7 @@ local units = {
   {
     title = "3 Bands",
     moduleName = "Container.ThreeBands",
+    category = "Containers",
     keywords = "effect, container",
     aliases = {
       "Custom.ThreeBands"
@@ -47,6 +47,7 @@ local units = {
   {
     title = "4 Bands",
     moduleName = "Container.FourBands",
+    category = "Containers",
     keywords = "effect, container",
     aliases = {
       "Custom.FourBands"
@@ -55,6 +56,7 @@ local units = {
   {
     title = "5 Bands",
     moduleName = "Container.FiveBands",
+    category = "Containers",
     keywords = "effect, container",
     aliases = {
       "Custom.FiveBands"
@@ -63,17 +65,16 @@ local units = {
   {
     title = "6 Bands",
     moduleName = "Container.SixBands",
+    category = "Containers",
     keywords = "effect, container",
     aliases = {
       "Custom.SixBands"
     }
   },
   {
-    category = "Sample Playback"
-  },
-  {
     title = "Variable Speed Player",
     moduleName = "Player.VariSpeed",
+    category = "Sample Playback",
     keywords = "sampling, source",
     aliases = {
       "Player.PlayerUnit"
@@ -82,6 +83,7 @@ local units = {
   {
     title = "Raw Player",
     moduleName = "Player.Raw",
+    category = "Sample Playback",
     keywords = "sampling, source",
     aliases = {
       "Player.NativeSpeedPlayerUnit",
@@ -91,6 +93,7 @@ local units = {
   {
     title = "Card Player",
     moduleName = "File.CardPlayerUnit",
+    category = "Sample Playback",
     keywords = "source, sampling"
   },
   {
@@ -101,19 +104,19 @@ local units = {
   {
     title = "Manual Loops",
     moduleName = "Player.ManualLoops",
+    category = "Sample Playback",
     keywords = "sampling, source"
-  },
-  {
-    category = "Granular Playback"
   },
   {
     title = "Manual Grains",
     moduleName = "Player.ManualGrains",
+    category = "Granular Playback",
     keywords = "sampling, source"
   },
   {
     title = "Grain Stretch",
     moduleName = "Player.GrainStretch",
+    category = "Granular Playback",
     keywords = "sampling, source",
     aliases = {
       "Player.GrainPlayer"
@@ -122,19 +125,19 @@ local units = {
   {
     title = "Clocked Stretch",
     moduleName = "Player.ClockedStretch",
+    category = "Granular Playback",
     keywords = "sampling, source"
-  },
-  {
-    category = "Recording and Looping"
   },
   {
     title = "Feedback Looper",
     moduleName = "Looper.FeedbackLooper",
+    category = "Recording and Looping",
     keywords = "sampling, effect"
   },
   {
     title = "Dub Looper",
     moduleName = "Looper.DubLooper",
+    category = "Recording and Looping",
     keywords = "sampling, effect",
     aliases = {
       "Looper.LooperUnit"
@@ -143,19 +146,19 @@ local units = {
   {
     title = "Pedal Looper",
     moduleName = "Looper.PedalLooper",
+    category = "Recording and Looping",
     keywords = "sampling, effect"
-  },
-  {
-    category = "Delays and Reverb"
   },
   {
     title = "Micro Delay",
     moduleName = "Delay.MicroDelay",
+    category = "Delays and Reverb",
     keywords = "delay"
   },
   {
     title = "Delay",
     moduleName = "Delay.DelayUnit",
+    category = "Delays and Reverb",
     keywords = "delay, effect",
     aliases = {
       "Delay.FixedDelayUnit"
@@ -164,17 +167,20 @@ local units = {
   {
     title = "Spread Delay",
     moduleName = "Delay.SpreadDelayUnit",
+    category = "Delays and Reverb",
     keywords = "delay, effect",
     channelCount = 2
   },
   {
     title = "Clocked Delay",
     moduleName = "Delay.ClockedDelayUnit",
+    category = "Delays and Reverb",
     keywords = "delay, effect"
   },
   {
     title = "Doppler Delay",
     moduleName = "Delay.DopplerDelayUnit",
+    category = "Delays and Reverb",
     keywords = "delay, effect",
     aliases = {
       "Delay.VariableDelayUnit"
@@ -183,62 +189,67 @@ local units = {
   {
     title = "Clocked Doppler Delay",
     moduleName = "Delay.ClockedDopplerDelay",
+    category = "Delays and Reverb",
     keywords = "delay, effect"
   },
   {
     title = "Grain Delay",
     moduleName = "Delay.GrainDelayUnit",
+    category = "Delays and Reverb",
     keywords = "delay, effect"
   },
   {
     title = "Freeverb",
     moduleName = "FreeverbUnit",
+    category = "Delays and Reverb",
     keywords = "effect"
-  },
-  {
-    category = "Filtering"
   },
   {
     title = "Ladder LPF",
     moduleName = "LadderFilterUnit",
+    category = "Filtering",
     keywords = "filter, pitch"
   },
   {
     title = "Ladder HPF",
     moduleName = "LadderHPFUnit",
+    category = "Filtering",
     keywords = "filter, pitch"
   },
   {
     title = "EQ3",
     moduleName = "EQ3Unit",
+    category = "Filtering",
     keywords = "filter, mixing"
   },
   {
     title = "Fixed HPF",
     moduleName = "FixedHPFUnit",
+    category = "Filtering",
     keywords = "filter"
   },
   {
     title = "Slew Limiter",
     moduleName = "SlewLimiter",
+    category = "Filtering",
     keywords = "filter"
   },
   {
     title = "Exact Convolution",
     moduleName = "ConvolutionUnit",
+    category = "Filtering",
     keywords = "filter, effect"
   },
   {
     title = "Deadband Filter",
     moduleName = "DeadbandFilter",
+    category = "Filtering",
     keywords = "filter"
-  },
-  {
-    category = "Oscillators"
   },
   {
     title = "Sine Osc",
     moduleName = "Oscillators.Sine",
+    category = "Oscillators",
     keywords = "source, pitch, modulate",
     aliases = {
       "SineOscillatorUnit"
@@ -247,6 +258,7 @@ local units = {
   {
     title = "Aliasing Triangle",
     moduleName = "Oscillators.AliasingTriangle",
+    category = "Oscillators",
     keywords = "source, pitch, modulate",
     aliases = {
       "AliasingTriangleUnit"
@@ -255,6 +267,7 @@ local units = {
   {
     title = "Aliasing Saw",
     moduleName = "Oscillators.AliasingSaw",
+    category = "Oscillators",
     keywords = "source, pitch, modulate",
     aliases = {
       "AliasingSawUnit"
@@ -263,14 +276,13 @@ local units = {
   {
     title = "Single Cycle",
     moduleName = "Oscillators.SingleCycle",
+    category = "Oscillators",
     keywords = "source, pitch, modulate"
-  },
-  {
-    category = "Noise"
   },
   {
     title = "White Noise",
     moduleName = "Noise.White",
+    category = "Noise",
     keywords = "source, noise",
     aliases = {
       "Noise.WhiteNoiseUnit"
@@ -279,6 +291,7 @@ local units = {
   {
     title = "Pink Noise",
     moduleName = "Noise.Pink",
+    category = "Noise",
     keywords = "source, noise",
     aliases = {
       "Noise.PinkNoiseUnit"
@@ -287,17 +300,16 @@ local units = {
   {
     title = "Velvet Noise",
     moduleName = "Noise.Velvet",
+    category = "Noise",
     keywords = "source, noise",
     aliases = {
       "Noise.VelvetNoiseUnit"
     }
   },
   {
-    category = "Envelopes"
-  },
-  {
     title = "ADSR",
     moduleName = "Envelopes.ADSR",
+    category = "Envelopes",
     keywords = "modulate, source",
     aliases = {
       "ADSRUnit"
@@ -306,6 +318,7 @@ local units = {
   {
     title = "Skewed Sine Env",
     moduleName = "Envelopes.Sine",
+    category = "Envelopes",
     keywords = "modulate, source",
     aliases = {
       "SineEnvelopeUnit"
@@ -314,22 +327,22 @@ local units = {
   {
     title = "Envelope Follower",
     moduleName = "Envelopes.Follower",
+    category = "Envelopes",
     keywords = "modulate, measure",
     aliases = {
       "EnvelopeFollowerUnit"
     }
   },
   {
-    category = "Mapping and Control"
-  },
-  {
     title = "Scale Quantizer",
     moduleName = "Quantizer.ScaleQuantizerUnit",
+    category = "Mapping and Control",
     keywords = "pitch"
   },
   {
     title = "Grid Quantizer",
     moduleName = "Quantizer.GridQuantizerUnit",
+    category = "Mapping and Control",
     keywords = "effect",
     aliases = {
       "QuantizerUnit"
@@ -338,36 +351,43 @@ local units = {
   {
     title = "Sample & Hold",
     moduleName = "SampleHoldUnit",
+    category = "Mapping and Control",
     keywords = "effect, modulate"
   },
   {
     title = "Track & Hold",
     moduleName = "TrackHoldUnit",
+    category = "Mapping and Control",
     keywords = "effect, modulate"
   },
   {
     title = "Bump Scanner",
     moduleName = "BumpMap",
+    category = "Mapping and Control",
     keywords = "effect"
   },
   {
     title = "Sample Scanner",
     moduleName = "SampleScanner",
+    category = "Mapping and Control",
     keywords = "effect, sampling"
   },
   {
     title = "Rectify",
     moduleName = "RectifierUnit",
+    category = "Mapping and Control",
     keywords = ""
   },
   {
     title = "Fold",
     moduleName = "FoldUnit",
+    category = "Mapping and Control",
     keywords = "effect"
   },
   {
     title = "Rational VCA",
     moduleName = "VCA.Rational",
+    category = "Mapping and Control",
     keywords = "modulate",
     aliases = {
       "RationalVcaUnit"
@@ -376,45 +396,46 @@ local units = {
   {
     title = "Counter",
     moduleName = "CounterUnit",
+    category = "Mapping and Control",
     keywords = ""
-  },
-  {
-    category = "Timing"
   },
   {
     title = "Clock (sec)",
     moduleName = "Timing.ClockInSeconds",
+    category = "Timing",
     keywords = "source, timing"
   },
   {
     title = "Clock (BPM)",
     moduleName = "Timing.ClockInBPM",
+    category = "Timing",
     keywords = "source, timing"
   },
   {
     title = "Clock (Hz)",
     moduleName = "Timing.ClockInHertz",
+    category = "Timing",
     keywords = "source, timing"
   },
   {
     title = "Quantize to Clock",
     moduleName = "Timing.QuantizeToClock",
+    category = "Timing",
     keywords = "effect, timing"
   },
   {
     title = "Tap Tempo",
     moduleName = "Timing.TapTempoUnit",
+    category = "Timing",
     keywords = "measure, source, timing",
     aliases = {
       "TapTempoUnit"
     }
   },
   {
-    category = "Measurement and Conversion"
-  },
-  {
     title = "Pulse to Seconds",
     moduleName = "Timing.PulseToSeconds",
+    category = "Measurement and Conversion",
     keywords = "measure, timing",
     aliases = {
       "PeriodMeterUnit"
@@ -423,6 +444,7 @@ local units = {
   {
     title = "Pulse to Hertz",
     moduleName = "Timing.PulseToFrequency",
+    category = "Measurement and Conversion",
     keywords = "measure, timing",
     aliases = {
       "PulseToFrequency"
@@ -431,29 +453,31 @@ local units = {
   {
     title = "V/oct to Seconds",
     moduleName = "Converters.VoltPerOctaveToSeconds",
+    category = "Measurement and Conversion",
     keywords = "pitch"
   },
   {
     title = "V/oct to Hertz",
     moduleName = "Converters.VoltPerOctaveToHertz",
+    category = "Measurement and Conversion",
     keywords = "pitch"
-  },
-  {
-    category = "Experimental"
   },
   {
     title = "Stress",
     moduleName = "StressUnit",
+    category = "Experimental",
     keywords = "debug"
   },
   {
     title = "Countdown",
     moduleName = "Research.Countdown",
+    category = "Experimental",
     keywords = "timing"
   },
   {
     title = "Schroeder Allpass",
     moduleName = "SchroederAllPass",
+    category = "Experimental",
     keywords = "filter"
   }
 }

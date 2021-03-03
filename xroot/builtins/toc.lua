@@ -1,36 +1,35 @@
 local units = {
   {
-    category = "Essentials"
-  },
-  {
     title = "Mix",
     moduleName = "MixerUnit",
+    category = "Essentials",
     keywords = "mixing, routing",
     channelCount = 1
   },
   {
     title = "Test Osc",
     moduleName = "TestOscillator",
+    category = "Experimental",
     keywords = "source, pitch, modulate",
   },
   {
     title = "Stereo Mix",
     moduleName = "MixerUnit",
+    category = "Essentials",
     keywords = "mixing, routing",
     channelCount = 2
   },
   {
     title = "Mono Mix",
     moduleName = "MonoToStereo",
+    category = "Essentials",
     keywords = "mixing, routing",
     channelCount = 2
   },
   {
-    category = "Containers"
-  },
-  {
     title = "Custom Effect",
     moduleName = "Container.Effect",
+    category = "Containers",
     keywords = "effect, container",
     aliases = {
       "Custom"
@@ -39,6 +38,7 @@ local units = {
   {
     title = "Custom Source",
     moduleName = "Container.Source",
+    category = "Containers",
     keywords = "source, container"
   }
 }
