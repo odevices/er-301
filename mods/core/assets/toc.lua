@@ -99,6 +99,7 @@ local units = {
   {
     title = "Clocked Player",
     moduleName = "Player.ClockedVariSpeed",
+    category = "Sample Playback",
     keywords = "sampling, source"
   },
   {
