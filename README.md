@@ -117,6 +117,12 @@ A good test of your build environment is to see if you can successfully build th
 make core teletype
 ```
 
+## USB Functions
+
+There is a USB port on the back of the ER-301.  As of v0.6.00 of the firmware, the ER-301 can enumerate as a mass storage device (which provides access to the front SD card) or a virtual serial port device (the ER-301 will output console messages here when connected).  The settings for USB are located in **admin > General Settings**.  However, I would think of the USB functionality as more developer-targeted for because...
+
+:warning: There is a gotcha with having the ER-301 plugged into a USB host.  It will not boot because it will be waiting for the USB host to give it firmware via BOOTP/TFTP.  This is baked into the AM335x ROM unfortunately.  The solution is to have a BOOTP server always running on your host that either gives it the firmware or tells the ER-301 to give up and boot from the SD card.
+
 ## Build Profiles and Target Architectures
 
 All build outputs are placed in a sub folder composed of the build profile and the target architecture.  There are 3 build profiles:
