@@ -183,7 +183,6 @@ function Package:getLibrary()
     local status, ret = xpcall(instantiate, debug.traceback)
     if status then
       self.library = ret
-      return ret
     else
       app.logInfo("%s: Failed to instantiate.", self)
       app.logInfo("Traceback:%s", ret)
@@ -192,10 +191,14 @@ function Package:getLibrary()
     app.logInfo("%s: No 'init.lua' to execute.", self)
   end
   -- Package cannot provide a valid library, so create the default one.
-  local Library = require "Package.Library"
-  self.library = Library {
-    package = self
-  }
+  if self.library == nil then
+    local Library = require "Package.Library"
+    self.library = Library {
+      package = self
+    }
+  end
+  -- Make sure all calls to 'require(self:getName())' return this instance.
+  package.loaded[self:getName()] = self.library
   return self.library
 end
 

@@ -4,7 +4,6 @@ local Library = require "Package.Library"
 local Header = require "Package.Menu.Header"
 local Choices = require "Package.Menu.Choices"
 local Task = require "Package.Menu.Task"
-app.logInfo("teletype/init.lua: requiring libteletype.so")
 local libteletype = require "teletype.libteletype"
 
 local Teletype = Class {
@@ -15,7 +14,6 @@ Teletype:include(Library)
 
 function Teletype:init(args)
   Library.init(self, args)
-  app.logInfo("%s:init()", self)
   self.enabled = false
   if self:uartInUse() then
     self.defaults["autoEnable"] = "no"
@@ -119,4 +117,8 @@ function Teletype:onShowMenu()
   return controls, order, "Teletype Library"
 end
 
+-- WARNING: We return the class definition here BUT,
+-- the Package Manager will instantiate this class and save it
+-- in the package.loaded table so that further calls to require
+-- will receive the same instance of this class.
 return Teletype

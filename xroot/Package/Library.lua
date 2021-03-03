@@ -29,6 +29,10 @@ function Library:safeCall(method, ...)
   end
 end
 
+function Library:getInstallationPath()
+  return self.package:getInstallationPath()
+end
+
 function Library:setDefaultConfiguration(t)
   self.defaults = t
 end
