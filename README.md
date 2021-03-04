@@ -73,8 +73,6 @@ If you run the emulator and it cannot find a valid configuration file then the p
 ```bash
 ## ER-301 Emulator Configuration
 
-## Uncomment lines below to set your own values.
-
 ## Root for the Lua interpreter
 XROOT ./xroot
 
