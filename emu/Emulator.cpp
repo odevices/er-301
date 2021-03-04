@@ -654,7 +654,7 @@ namespace emu
       printf("\n");
       printf("  -h, --help         Show this help.\n");
       printf("  -c, --config FILE  Use the given configuration file.\n");
-      printf("                     (Default: ~/.od/emu.cfg)\n");
+      printf("                     (Default: ~/.od/emu.config)\n");
       return 0;
     }
 
