@@ -60,7 +60,7 @@ Examples:
 
   -h, --help         Show this help.
   -c, --config FILE  Use the given configuration file.
-                     (Default: ~/.od/emu.cfg)
+                     (Default: ~/.od/emu.config)
 
 ```
 
