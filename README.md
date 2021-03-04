@@ -5,6 +5,7 @@
   * [Introduction](#introduction)
   * [Emulator](#emulator)
     + [Running the emulator](#running-the-emulator)
+    + [Configuring the emulator](#configuring-the-emulator)
     + [Installing packages](#installing-packages)
     + [Limitations](#limitations)
   * [Creating your own mods](#creating-your-own-mods)
