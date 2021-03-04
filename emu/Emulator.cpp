@@ -1,5 +1,7 @@
 #include <emu/Emulator.h>
+#include <emu/CommandLine.h>
 #include <emu/tls.h>
+#include <emu/KeyValueStore.h>
 #include <od/glue/AppInterpreter.h>
 #include <od/extras/Random.h>
 //#define BUILDOPT_VERBOSE
@@ -23,6 +25,9 @@
 #include <hal/ops.h>
 #include <hal/pump.h>
 #include <od/config.h>
+#include <limits.h>
+#include <iostream>
+#include <fstream>
 
 using namespace od;
 
@@ -124,14 +129,24 @@ namespace emu
     {
       switchDown(TOGGLE_MODE_A, TOGGLE_MODE_B);
     }
-    else if (keysym.scancode == SDL_SCANCODE_LEFT || keysym.scancode == SDL_SCANCODE_UP)
+    else if (keysym.scancode == SDL_SCANCODE_LEFT)
     {
-      encoderValue -= ENCODER_SPEED;
+      encoderValue -= leftRightToKnobFactor * ENCODER_SPEED;
       window->knob.rotate(-KNOB_SPEED);
     }
-    else if (keysym.scancode == SDL_SCANCODE_RIGHT || keysym.scancode == SDL_SCANCODE_DOWN)
+    else if (keysym.scancode == SDL_SCANCODE_RIGHT)
     {
-      encoderValue += ENCODER_SPEED;
+      encoderValue += leftRightToKnobFactor * ENCODER_SPEED;
+      window->knob.rotate(KNOB_SPEED);
+    }
+    else if (keysym.scancode == SDL_SCANCODE_UP)
+    {
+      encoderValue += upDownToKnobFactor * ENCODER_SPEED;
+      window->knob.rotate(-KNOB_SPEED);
+    }
+    else if (keysym.scancode == SDL_SCANCODE_DOWN)
+    {
+      encoderValue -= upDownToKnobFactor * ENCODER_SPEED;
       window->knob.rotate(KNOB_SPEED);
     }
     else
@@ -265,7 +280,7 @@ namespace emu
             handleMouseButton(e.button);
             break;
           case SDL_MOUSEWHEEL:
-            encoderValue += e.wheel.y * KNOB_SPEED;
+            encoderValue += mouseWheelToKnobFactor * e.wheel.y * KNOB_SPEED;
             window->knob.rotate(e.wheel.y * KNOB_SPEED);
             break;
           case SDL_WINDOWEVENT:
@@ -318,51 +333,198 @@ namespace emu
 
   int Emulator::getEncoderValue()
   {
-    return encoderValue;
+    return encoderValue + INT32_MAX / 2;
   }
 
-  std::string Emulator::getDBFilename()
+  // Grrr. The realpath function doesn't handle the tilde.
+  static char *realpathEx(const char *path, char *buff)
   {
-    std::string dbFilename = globalConfig.rearRoot;
-    dbFilename += "/emu.db";
-    return dbFilename;
+    char *home;
+    if (*path == '~' && (home = getenv("HOME")))
+    {
+      char s[PATH_MAX];
+      return realpath(strcat(strcpy(s, home), path + 1), buff);
+    }
+    else
+    {
+      return realpath(path, buff);
+    }
+  }
+
+  bool Emulator::writeDefaultConfiguration(const std::string &filename)
+  {
+    std::ofstream f;
+    f.open(filename);
+    if (!f.is_open())
+      return false;
+
+    f << "## ER-301 Emulator Configuration\n";
+    f << '\n';
+    f << "## Uncomment lines below to set your own values.\n";
+    f << '\n';
+    f << "## Root for the Lua interpreter\n";
+    f << "# XROOT ./xroot\n";
+    f << '\n';
+    f << "## Use this root for the rear SD card.\n";
+    f << "# REAR_ROOT ~/.od/rear\n";
+    f << '\n';
+    f << "## Use this root for the front SD card.\n";
+    f << "# FRONT_ROOT ~/.od/front\n";
+    f << '\n';
+    f << "## Key mapping\n";
+    f << '\n';
+    f << "# BUTTON_MAIN1_KEY " << gpioKeyMap[BUTTON_MAIN1] << '\n';
+    f << "# BUTTON_MAIN2_KEY " << gpioKeyMap[BUTTON_MAIN2] << '\n';
+    f << "# BUTTON_MAIN3_KEY " << gpioKeyMap[BUTTON_MAIN3] << '\n';
+    f << "# BUTTON_MAIN4_KEY " << gpioKeyMap[BUTTON_MAIN4] << '\n';
+    f << "# BUTTON_MAIN5_KEY " << gpioKeyMap[BUTTON_MAIN5] << '\n';
+    f << "# BUTTON_MAIN6_KEY " << gpioKeyMap[BUTTON_MAIN6] << '\n';
+    f << "# BUTTON_DIAL1_KEY " << gpioKeyMap[BUTTON_DIAL1] << '\n';
+    f << "# BUTTON_DIAL2_KEY " << gpioKeyMap[BUTTON_DIAL2] << '\n';
+    f << "# BUTTON_DIAL3_KEY " << gpioKeyMap[BUTTON_DIAL3] << '\n';
+    f << "# BUTTON_SUB1_KEY " << gpioKeyMap[BUTTON_SUB1] << '\n';
+    f << "# BUTTON_SUB2_KEY " << gpioKeyMap[BUTTON_SUB2] << '\n';
+    f << "# BUTTON_SUB3_KEY " << gpioKeyMap[BUTTON_SUB3] << '\n';
+    f << "# BUTTON_ENTER_KEY " << gpioKeyMap[BUTTON_ENTER] << '\n';
+    f << "# BUTTON_UP_KEY " << gpioKeyMap[BUTTON_UP] << '\n';
+    f << "# BUTTON_SHIFT_KEY " << gpioKeyMap[BUTTON_SHIFT] << '\n';
+    f << "# BUTTON_SELECT1_KEY " << gpioKeyMap[BUTTON_SELECT1] << '\n';
+    f << "# BUTTON_SELECT2_KEY " << gpioKeyMap[BUTTON_SELECT2] << '\n';
+    f << "# BUTTON_SELECT3_KEY " << gpioKeyMap[BUTTON_SELECT3] << '\n';
+    f << "# BUTTON_SELECT4_KEY " << gpioKeyMap[BUTTON_SELECT4] << '\n';
+    f << "# STORAGE_FOCUS_KEY " << storageToggleFocusKey << '\n';
+    f << "# MODE_FOCUS_KEY " << modeToggleFocusKey << '\n';
+    f << "# ZOOM_IN_KEY " << zoomInKey << '\n';
+    f << "# ZOOM_OUT_KEY " << zoomOutKey << '\n';
+    f << "# QUIT_KEY " << quitKey << '\n';
+    f << '\n';
+    f << "## Knob mapping\n";
+    f << '\n';
+    f << "##  Scale factor for mouse wheel. Negate to invert.\n";
+    f << "# MOUSE_WHEEL_FACTOR " << mouseWheelToKnobFactor << "\n";
+    f << '\n';
+    f << "##  Scale factor for LEFT/RIGHT arrow keys. Negate to invert.\n";
+    f << "# LEFT_RIGHT_ARROWS_FACTOR " << leftRightToKnobFactor << "\n";
+    f << '\n';
+    f << "##  Scale factor for UP/DOWN arrow keys. Negate to invert.\n";
+    f << "# UP_DOWN_ARROWS_FACTOR " << upDownToKnobFactor << '\n';
+    f << '\n';
+
+    f.close();
+    return true;
+  }
+
+  void Emulator::loadDefaultConfiguration()
+  {
+    char tmp[PATH_MAX];
+
+    // Set default paths
+    realpathEx("~/.od", tmp);
+    configRoot = tmp;
+    createDirectory(tmp);
+    rearRoot = configRoot + "/rear";
+    frontRoot = configRoot + "/front";
+    sessionFilename = configRoot + "/emu.session";
+    configFilename = configRoot + "/emu.config";
+    realpathEx("./xroot", tmp);
+    xRoot = tmp;
+
+    // Set default key map
+    mapButtonToKey(BUTTON_MAIN1, "Q");
+    mapButtonToKey(BUTTON_MAIN2, "W");
+    mapButtonToKey(BUTTON_MAIN3, "E");
+    mapButtonToKey(BUTTON_MAIN4, "R");
+    mapButtonToKey(BUTTON_MAIN5, "T");
+    mapButtonToKey(BUTTON_MAIN6, "Y");
+    mapButtonToKey(BUTTON_DIAL1, "A");
+    mapButtonToKey(BUTTON_DIAL2, "S");
+    mapButtonToKey(BUTTON_DIAL3, "D");
+    mapButtonToKey(BUTTON_SUB1, "F");
+    mapButtonToKey(BUTTON_SUB2, "G");
+    mapButtonToKey(BUTTON_SUB3, "H");
+    mapButtonToKey(BUTTON_ENTER, "V");
+    mapButtonToKey(BUTTON_UP, "B");
+    mapButtonToKey(BUTTON_SHIFT, "N");
+    mapButtonToKey(BUTTON_SELECT1, "1");
+    mapButtonToKey(BUTTON_SELECT2, "2");
+    mapButtonToKey(BUTTON_SELECT3, "3");
+    mapButtonToKey(BUTTON_SELECT4, "4");
+    storageToggleFocusKey = "Z";
+    modeToggleFocusKey = "X";
+    zoomInKey = "=";
+    zoomOutKey = "-";
+    quitKey = "Q";
+
+    // Set default knob mapping
+    mouseWheelToKnobFactor = 0.5;
+    leftRightToKnobFactor = 1;
+    upDownToKnobFactor = 0.25;
+  }
+
+  bool Emulator::loadConfiguration(const std::string &filename)
+  {
+    KeyValueStore db;
+    if (db.load(filename))
+    {
+      // Override default key map
+      mapButtonToKey(BUTTON_MAIN1, db.get("BUTTON_MAIN1_KEY", gpioKeyMap[BUTTON_MAIN1]));
+      mapButtonToKey(BUTTON_MAIN2, db.get("BUTTON_MAIN2_KEY", gpioKeyMap[BUTTON_MAIN2]));
+      mapButtonToKey(BUTTON_MAIN3, db.get("BUTTON_MAIN3_KEY", gpioKeyMap[BUTTON_MAIN3]));
+      mapButtonToKey(BUTTON_MAIN4, db.get("BUTTON_MAIN4_KEY", gpioKeyMap[BUTTON_MAIN4]));
+      mapButtonToKey(BUTTON_MAIN5, db.get("BUTTON_MAIN5_KEY", gpioKeyMap[BUTTON_MAIN5]));
+      mapButtonToKey(BUTTON_MAIN6, db.get("BUTTON_MAIN6_KEY", gpioKeyMap[BUTTON_MAIN6]));
+      mapButtonToKey(BUTTON_DIAL1, db.get("BUTTON_DIAL1_KEY", gpioKeyMap[BUTTON_DIAL1]));
+      mapButtonToKey(BUTTON_DIAL2, db.get("BUTTON_DIAL2_KEY", gpioKeyMap[BUTTON_DIAL2]));
+      mapButtonToKey(BUTTON_DIAL3, db.get("BUTTON_DIAL3_KEY", gpioKeyMap[BUTTON_DIAL3]));
+      mapButtonToKey(BUTTON_SUB1, db.get("BUTTON_SUB1_KEY", gpioKeyMap[BUTTON_SUB1]));
+      mapButtonToKey(BUTTON_SUB2, db.get("BUTTON_SUB2_KEY", gpioKeyMap[BUTTON_SUB2]));
+      mapButtonToKey(BUTTON_SUB3, db.get("BUTTON_SUB3_KEY", gpioKeyMap[BUTTON_SUB3]));
+      mapButtonToKey(BUTTON_ENTER, db.get("BUTTON_ENTER_KEY", gpioKeyMap[BUTTON_ENTER]));
+      mapButtonToKey(BUTTON_UP, db.get("BUTTON_UP_KEY", gpioKeyMap[BUTTON_UP]));
+      mapButtonToKey(BUTTON_SHIFT, db.get("BUTTON_SHIFT_KEY", gpioKeyMap[BUTTON_SHIFT]));
+      mapButtonToKey(BUTTON_SELECT1, db.get("BUTTON_SELECT1_KEY", gpioKeyMap[BUTTON_SELECT1]));
+      mapButtonToKey(BUTTON_SELECT2, db.get("BUTTON_SELECT2_KEY", gpioKeyMap[BUTTON_SELECT2]));
+      mapButtonToKey(BUTTON_SELECT3, db.get("BUTTON_SELECT3_KEY", gpioKeyMap[BUTTON_SELECT3]));
+      mapButtonToKey(BUTTON_SELECT4, db.get("BUTTON_SELECT4_KEY", gpioKeyMap[BUTTON_SELECT4]));
+      storageToggleFocusKey = db.get("STORAGE_FOCUS_KEY", storageToggleFocusKey);
+      modeToggleFocusKey = db.get("MODE_FOCUS_KEY", modeToggleFocusKey);
+      zoomInKey = db.get("ZOOM_IN_KEY", zoomInKey);
+      zoomOutKey = db.get("ZOOM_OUT_KEY", zoomOutKey);
+      quitKey = db.get("QUIT_KEY", quitKey);
+
+      // Override knob settings
+      mouseWheelToKnobFactor = db.getFloat("MOUSE_WHEEL_FACTOR", mouseWheelToKnobFactor);
+      leftRightToKnobFactor = db.getFloat("LEFT_RIGHT_ARROWS_FACTOR", leftRightToKnobFactor);
+      upDownToKnobFactor = db.getFloat("UP_DOWN_ARROWS_FACTOR", upDownToKnobFactor);
+
+      // Override default paths
+      char tmp[PATH_MAX];
+
+      realpath(db.get("XROOT", xRoot).c_str(), tmp);
+      xRoot = tmp;
+
+      realpath(db.get("REAR_ROOT", rearRoot).c_str(), tmp);
+      rearRoot = tmp;
+
+      realpath(db.get("FRONT_ROOT", frontRoot).c_str(), tmp);
+      frontRoot = tmp;
+
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 
   void Emulator::restoreState()
   {
     // Restore emulator state.
-    std::string dbFilename = getDBFilename();
-    if (pathExists(dbFilename.c_str()))
+    if (pathExists(sessionFilename.c_str()))
     {
-      if (db.load(dbFilename))
+      KeyValueStore db;
+      if (db.load(sessionFilename))
       {
-
-        // Load key map
-        mapButtonToKey(BUTTON_MAIN1, db.get("BUTTON_MAIN1_KEY", "Q"));
-        mapButtonToKey(BUTTON_MAIN2, db.get("BUTTON_MAIN2_KEY", "W"));
-        mapButtonToKey(BUTTON_MAIN3, db.get("BUTTON_MAIN3_KEY", "E"));
-        mapButtonToKey(BUTTON_MAIN4, db.get("BUTTON_MAIN4_KEY", "R"));
-        mapButtonToKey(BUTTON_MAIN5, db.get("BUTTON_MAIN5_KEY", "T"));
-        mapButtonToKey(BUTTON_MAIN6, db.get("BUTTON_MAIN6_KEY", "Y"));
-        mapButtonToKey(BUTTON_DIAL1, db.get("BUTTON_DIAL1_KEY", "A"));
-        mapButtonToKey(BUTTON_DIAL2, db.get("BUTTON_DIAL2_KEY", "S"));
-        mapButtonToKey(BUTTON_DIAL3, db.get("BUTTON_DIAL3_KEY", "D"));
-        mapButtonToKey(BUTTON_SUB1, db.get("BUTTON_SUB1_KEY", "F"));
-        mapButtonToKey(BUTTON_SUB2, db.get("BUTTON_SUB2_KEY", "G"));
-        mapButtonToKey(BUTTON_SUB3, db.get("BUTTON_SUB3_KEY", "H"));
-        mapButtonToKey(BUTTON_ENTER, db.get("BUTTON_ENTER_KEY", "V"));
-        mapButtonToKey(BUTTON_UP, db.get("BUTTON_UP_KEY", "B"));
-        mapButtonToKey(BUTTON_SHIFT, db.get("BUTTON_SHIFT_KEY", "N"));
-        mapButtonToKey(BUTTON_SELECT1, db.get("BUTTON_SELECT1_KEY", "1"));
-        mapButtonToKey(BUTTON_SELECT2, db.get("BUTTON_SELECT2_KEY", "2"));
-        mapButtonToKey(BUTTON_SELECT3, db.get("BUTTON_SELECT3_KEY", "3"));
-        mapButtonToKey(BUTTON_SELECT4, db.get("BUTTON_SELECT4_KEY", "4"));
-        storageToggleFocusKey = db.get("STORAGE_FOCUS_KEY", storageToggleFocusKey);
-        modeToggleFocusKey = db.get("MODE_FOCUS_KEY", modeToggleFocusKey);
-        zoomInKey = db.get("ZOOM_IN_KEY", zoomInKey);
-        zoomOutKey = db.get("ZOOM_OUT_KEY", zoomOutKey);
-        quitKey = db.get("QUIT_KEY", quitKey);
-
         Gpio_write(TOGGLE_STORAGE_A, db["TOGGLE_STORAGE_A"] == "1");
         Gpio_write(TOGGLE_STORAGE_B, db["TOGGLE_STORAGE_B"] == "1");
         Gpio_write(TOGGLE_MODE_A, db["TOGGLE_MODE_A"] == "1");
@@ -385,17 +547,19 @@ namespace emu
           }
         }
 
-        logInfo("Restored emulator state from %s.", dbFilename.c_str());
+        logInfo("Restored emulator state from %s.", sessionFilename.c_str());
       }
       else
       {
-        logWarn("Failed to load from %s.", dbFilename.c_str());
+        logWarn("Failed to load from %s.", sessionFilename.c_str());
       }
     }
   }
 
   void Emulator::saveState()
   {
+    KeyValueStore db;
+
     // Save emulator state.
     if (Gpio_read(TOGGLE_STORAGE_A))
     {
@@ -441,43 +605,17 @@ namespace emu
     db.setInteger("WINDOW_Y", y);
     db.setInteger("WINDOW_CORRECTION", window->getTitleBarHeight());
 
-    db["BUTTON_MAIN1_KEY"] = gpioKeyMap[BUTTON_MAIN1];
-    db["BUTTON_MAIN2_KEY"] = gpioKeyMap[BUTTON_MAIN2];
-    db["BUTTON_MAIN3_KEY"] = gpioKeyMap[BUTTON_MAIN3];
-    db["BUTTON_MAIN4_KEY"] = gpioKeyMap[BUTTON_MAIN4];
-    db["BUTTON_MAIN5_KEY"] = gpioKeyMap[BUTTON_MAIN5];
-    db["BUTTON_MAIN6_KEY"] = gpioKeyMap[BUTTON_MAIN6];
-    db["BUTTON_DIAL1_KEY"] = gpioKeyMap[BUTTON_DIAL1];
-    db["BUTTON_DIAL2_KEY"] = gpioKeyMap[BUTTON_DIAL2];
-    db["BUTTON_DIAL3_KEY"] = gpioKeyMap[BUTTON_DIAL3];
-    db["BUTTON_SUB1_KEY"] = gpioKeyMap[BUTTON_SUB1];
-    db["BUTTON_SUB2_KEY"] = gpioKeyMap[BUTTON_SUB2];
-    db["BUTTON_SUB3_KEY"] = gpioKeyMap[BUTTON_SUB3];
-    db["BUTTON_ENTER_KEY"] = gpioKeyMap[BUTTON_ENTER];
-    db["BUTTON_UP_KEY"] = gpioKeyMap[BUTTON_UP];
-    db["BUTTON_SHIFT_KEY"] = gpioKeyMap[BUTTON_SHIFT];
-    db["BUTTON_SELECT1_KEY"] = gpioKeyMap[BUTTON_SELECT1];
-    db["BUTTON_SELECT2_KEY"] = gpioKeyMap[BUTTON_SELECT2];
-    db["BUTTON_SELECT3_KEY"] = gpioKeyMap[BUTTON_SELECT3];
-    db["BUTTON_SELECT4_KEY"] = gpioKeyMap[BUTTON_SELECT4];
-    db["STORAGE_FOCUS_KEY"] = storageToggleFocusKey;
-    db["MODE_FOCUS_KEY"] = modeToggleFocusKey;
-    db["ZOOM_IN_KEY"] = zoomInKey;
-    db["ZOOM_OUT_KEY"] = zoomOutKey;
-    db["QUIT_KEY"] = quitKey;
-
-    std::string dbFilename = getDBFilename();
-    if (db.save(dbFilename))
+    if (db.save(sessionFilename))
     {
-      logInfo("Saved emulator state to %s.", dbFilename.c_str());
+      logInfo("Saved emulator state to %s.", sessionFilename.c_str());
     }
     else
     {
-      logWarn("Failed to save to %s.", dbFilename.c_str());
+      logWarn("Failed to save to %s.", sessionFilename.c_str());
     }
   }
 
-  void Emulator::mapButtonToKey(uint32_t id, const std::string & key)
+  void Emulator::mapButtonToKey(uint32_t id, const std::string &key)
   {
     keyGpioMap[key] = id;
     gpioKeyMap[id] = key;
@@ -503,12 +641,24 @@ namespace emu
     return 0;
   }
 
-  int Emulator::run(const char *xRoot, const char *rearRoot, const char *frontRoot)
+  int Emulator::run(int argc, char **argv)
   {
+    CommandLine cmdLine(argc, argv);
+    if (cmdLine.optionExists("-h") || cmdLine.optionExists("--help"))
+    {
+      printf("ER-301 Emulator (v" FIRMWARE_VERSION ")\n");
+      printf("Usage: emu [OPTIONS]\n\n");
+      printf("Examples:\n");
+      printf("  emu              # Start emulator with default configuration file.\n");
+      printf("  emu -c foo.cfg   # Start emulator with 'foo.cfg'.\n");
+      printf("\n");
+      printf("  -h, --help         Show this help.\n");
+      printf("  -c, --config FILE  Use the given configuration file.\n");
+      printf("                     (Default: ~/.od/emu.cfg)\n");
+      return 0;
+    }
+
     TLS_setName("main");
-
-    logInfo("starting ER-301 Emulator");
-
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS | SDL_INIT_TIMER) < 0)
     {
       logFatal("SDL could not initialize! SDL_Error: %s", SDL_GetError());
@@ -517,16 +667,38 @@ namespace emu
     customEventType = SDL_RegisterEvents(1);
     window = new Window();
 
-    std::string configFilename = rearRoot;
-    configFilename += "/firmware.cfg";
+    loadDefaultConfiguration();
+    // Optionally override configuration file with cmdline.
+    if (cmdLine.optionExists("-c"))
+    {
+      configFilename = cmdLine.getOption("-c");
+    }
+    if (cmdLine.optionExists("--config"))
+    {
+      configFilename = cmdLine.getOption("--config");
+    }
+
+    if (!pathExists(configFilename.c_str()))
+    {
+      logWarn("%s does not exist, creating a default one.", configFilename.c_str());
+      writeDefaultConfiguration(configFilename);
+    }
+    else if (!loadConfiguration(configFilename))
+    {
+      logWarn("There was a problem loading %s.  Using default emulator configuration.", configFilename.c_str());
+    }
 
     Heap_init();
     Timing_init();
     Uart_init();
     Card_init();
-    Config_init(configFilename.c_str(), xRoot, rearRoot, frontRoot);
     Uart_enable();
     Log_init();
+
+    std::string firmwareCfg = rearRoot;
+    firmwareCfg += "/firmware.cfg";
+    Config_init(firmwareCfg.c_str(), xRoot.c_str(), rearRoot.c_str(), frontRoot.c_str());
+
     Pump_init();
     Rng_init();
     Gpio_init();

@@ -4,11 +4,6 @@
 namespace emu {
   static Emulator emulator;
 
-  int run(const char * xRoot, const char * rearRoot, const char * frontRoot)
-  {
-    return emulator.run(xRoot, rearRoot, frontRoot);
-  }
-
   DisplayBuffer *getDisplayBuffer()
   {
     return emulator.getDisplayBuffer();
@@ -23,4 +18,9 @@ namespace emu {
   {
     return emulator.getEncoderValue();
   }
+}
+
+int main(int argc, char **argv)
+{
+  return emu::emulator.run(argc, argv);
 }

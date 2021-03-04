@@ -52,7 +52,7 @@ void Config_init(const char *filename, const char * xRoot, const char * rearRoot
     fp = fopen(globalConfig.filename, "r");
     if (fp == NULL)
     {
-      logWarn("Failed to read %s.", globalConfig.filename);
+      logWarn("%s does not exist. Using default firmware configuration.", globalConfig.filename);
     }
     else
     {

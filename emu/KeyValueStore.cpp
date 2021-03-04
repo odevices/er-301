@@ -1,59 +1,76 @@
 #include <emu/KeyValueStore.h>
-#include <stdio.h>
-#include <string.h>
+#include <od/extras/Utils.h>
+#define BUILDOPT_VERBOSE
+#define BUILDOPT_DEBUG_LEVEL 10
+#include <hal/log.h>
+#include <iostream>
+#include <fstream>
 
 namespace emu
 {
 
   bool KeyValueStore::load(const std::string &fname)
   {
-    FILE *fp = fopen(fname.c_str(), "r");
-    if (!fp)
+    std::ifstream f;
+    f.open(fname);
+    if (!f.is_open())
       return false;
 
     clear();
 
-    char *buf = 0;
-    size_t buflen = 0;
-
-    while (getline(&buf, &buflen, fp) > 0)
+    int lineCount = 0;
+    std::string line;
+    std::vector<std::string> tokens;
+    while (std::getline(f, line))
     {
-      char *nl = strchr(buf, '\n');
-      if (nl == NULL)
+      lineCount++;
+      tokens.clear();
+      od::split(line, ' ', tokens);
+      if (tokens.size() == 0)
+      {
+        // skip empty lines
         continue;
-      *nl = 0;
-
-      char *sep = strchr(buf, '=');
-      if (sep == NULL)
+      }
+      else if (tokens.size() > 0 && od::startsWith(tokens[0], "#"))
+      {
+        // ignore commented lines
         continue;
-      *sep = 0;
-      sep++;
-
-      std::string s1 = buf;
-      std::string s2 = sep;
-
-      (*this)[s1] = s2;
+      }
+      else if (tokens.size() == 1)
+      {
+        logWarn("%s:%d: found only 1 token '%s'", fname.c_str(), lineCount, line.c_str());
+        continue;
+      }
+      else if (tokens.size() == 2)
+      {
+        logDebug(1, "%s:%d: %s = %s",
+                 fname.c_str(), lineCount, tokens[0].c_str(), tokens[1].c_str());
+        (*this)[tokens[0]] = tokens[1];
+      }
+      else
+      {
+        logWarn("%s:%d: too many tokens '%s'", fname.c_str(), lineCount, line.c_str());
+        continue;
+      }
     }
 
-    if (buf)
-      free(buf);
-
-    fclose(fp);
+    f.close();
     return true;
   }
 
   bool KeyValueStore::save(const std::string &fname)
   {
-    FILE *fp = fopen(fname.c_str(), "w");
-    if (!fp)
+    std::ofstream f;
+    f.open(fname);
+    if (!f.is_open())
       return false;
 
     for (auto &kv : *this)
     {
-      fprintf(fp, "%s=%s\n", kv.first.c_str(), kv.second.c_str());
+      f << kv.first << " " << kv.second << '\n';
     }
 
-    fclose(fp);
+    f.close();
     return true;
   }
 

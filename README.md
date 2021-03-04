@@ -42,17 +42,88 @@ make emu
 
 ### Running the emulator
 
-To run the emulator, execute the following from the top directory:
+Just executing the emulator without arguments will start it up with default settings from the top of the project tree:
 ```bash
-testing/linux/emu/emu.elf ./xroot ~/.od/rear ~/.od/front
+testing/linux/emu/emu.elf
 ```
 
-In the above, you are telling the emulator the location of the following 3 required directories:
-* lua scripts file tree (Usually the xroot folder of this project.)
-* file tree for the rear SD card (This will be created if it doesn't exist.)
-* file tree for the front SD card (This will be created if it doesn't exist.)
+This will typically be enough to get started.  If you want to dive in deeper execute with '-h' or --help' to get help on the commandline configuration options:
+```bash
+> testing/linux/emu/emu.elf --help
+ER-301 Emulator (v0.6.02)
+Usage: emu [OPTIONS]
 
-Since you are essentially booting up the ER-301 with empty (virtual) SD cards, it will populate the file trees with the default files but you will not have the core mod installed.  
+Examples:
+  emu              # Start emulator with default configuration file.
+  emu -c foo.cfg   # Start emulator with 'foo.cfg'.
+
+  -h, --help         Show this help.
+  -c, --config FILE  Use the given configuration file.
+                     (Default: ~/.od/emu.cfg)
+
+```
+
+:warning: If you do not want to execute the emulator from top of the project tree then you will have to configure the path to the lua scripts file tree (XROOT) before starting the emulator.
+
+### Configuring the emulator
+
+If you run the emulator and it cannot find a valid configuration file then the program will create a default one similar to this in ```~/.od/emu.config```:
+
+```bash
+## ER-301 Emulator Configuration
+
+## Uncomment lines below to set your own values.
+
+## Root for the Lua interpreter
+XROOT ./xroot
+
+## Use this root for the rear SD card.
+REAR_ROOT ~/.od/rear
+
+## Use this root for the front SD card.
+FRONT_ROOT ~/.od/front
+
+## Key mapping
+
+BUTTON_MAIN1_KEY Q
+BUTTON_MAIN2_KEY W
+BUTTON_MAIN3_KEY E
+BUTTON_MAIN4_KEY R
+BUTTON_MAIN5_KEY T
+BUTTON_MAIN6_KEY Y
+BUTTON_DIAL1_KEY A
+BUTTON_DIAL2_KEY S
+BUTTON_DIAL3_KEY D
+BUTTON_SUB1_KEY F
+BUTTON_SUB2_KEY G
+BUTTON_SUB3_KEY H
+BUTTON_ENTER_KEY V
+BUTTON_UP_KEY B
+BUTTON_SHIFT_KEY N
+BUTTON_SELECT1_KEY 1
+BUTTON_SELECT2_KEY 2
+BUTTON_SELECT3_KEY 3
+BUTTON_SELECT4_KEY 4
+STORAGE_FOCUS_KEY Z
+MODE_FOCUS_KEY X
+ZOOM_IN_KEY =
+ZOOM_OUT_KEY -
+QUIT_KEY Q
+
+## Knob mapping
+
+##  Scale factor for mouse wheel. Negate to invert.
+MOUSE_WHEEL_FACTOR 0.5
+
+##  Scale factor for LEFT/RIGHT arrow keys. Negate to invert.
+LEFT_RIGHT_ARROWS_FACTOR 1
+
+##  Scale factor for UP/DOWN arrow keys. Negate to invert.
+UP_DOWN_ARROWS_FACTOR 0.25
+
+```
+
+Edit this file with your own values to configure various items like key mappings, knob speed, and paths for lua scripts and file trees.
 
 ### Installing packages
 

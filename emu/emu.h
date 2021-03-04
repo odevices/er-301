@@ -8,7 +8,4 @@ namespace emu
   void putDisplayBuffer(DisplayBuffer *buffer);
   DisplayBuffer *getDisplayBuffer();
   int getEncoderValue();
-
-  // Only call on main thread.
-  int run(const char * xRoot, const char * rearRoot, const char * frontRoot);
 }
