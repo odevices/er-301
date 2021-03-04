@@ -11,6 +11,7 @@ namespace emu
     bool save(const std::string& filename);
     
     bool has(const std::string & key);
+    const std::string & get(const std::string & key, const std::string & defaultValue);
     int getInteger(const std::string & key, int defaultValue = 0);
     float getFloat(const std::string & key, float defaultValue = 0.0f);
     void setInteger(const std::string & key, int value);

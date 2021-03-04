@@ -75,6 +75,19 @@ namespace emu
     }
   }
 
+  const std::string &KeyValueStore::get(const std::string &key, const std::string &defaultValue)
+  {
+    auto i = (*this).find(key);
+    if (i == end())
+    {
+      return defaultValue;
+    }
+    else
+    {
+      return i->second;
+    }
+  }
+
   float KeyValueStore::getFloat(const std::string &key, float defaultValue)
   {
     auto i = (*this).find(key);

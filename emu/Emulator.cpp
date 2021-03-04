@@ -63,40 +63,29 @@ namespace emu
       Gpio_write(idA, true);
   }
 
-  void Emulator::handleKeyUp(SDL_Keycode key)
+  void Emulator::handleKeyUp(SDL_Keysym keysym)
   {
-    if (key == SDLK_z)
+    std::string name = SDL_GetKeyName(keysym.sym);
+    if (name == storageToggleFocusKey)
     {
-      zDown = false;
+      storageToggleFocused = false;
     }
-    else if (key == SDLK_x)
+    else if (name == modeToggleFocusKey)
     {
-      xDown = false;
+      modeToggleFocused = false;
     }
-    else if (key == SDLK_LCTRL)
-    {
-      lctrl = false;
-    }
-    else if (key == SDLK_RCTRL)
-    {
-      rctrl = false;
-    }
-    if (lctrl || rctrl)
-    {
-      // do nothing
-    }
-    else if (key == SDLK_EQUALS)
+    else if (name == zoomInKey)
     {
       window->setScale(window->scale + 0.05f);
     }
-    else if (key == SDLK_MINUS)
+    else if (name == zoomOutKey)
     {
       window->setScale(window->scale - 0.05f);
     }
     else
     {
-      auto i = keyMap.find(key);
-      if (i != keyMap.end())
+      auto i = keyGpioMap.find(name);
+      if (i != keyGpioMap.end())
       {
         uint id = (*i).second;
         Gpio_write(id, true);
@@ -104,62 +93,51 @@ namespace emu
     }
   }
 
-  void Emulator::handleKeyDown(SDL_Keycode key)
+  void Emulator::handleKeyDown(SDL_Keysym keysym)
   {
-    if (key == SDLK_z)
+    std::string name = SDL_GetKeyName(keysym.sym);
+    if (name == storageToggleFocusKey)
     {
-      zDown = true;
+      storageToggleFocused = true;
     }
-    else if (key == SDLK_x)
+    else if (name == modeToggleFocusKey)
     {
-      xDown = true;
+      modeToggleFocused = true;
     }
-    else if (key == SDLK_LCTRL)
+    else if (name == quitKey && (keysym.mod & KMOD_CTRL))
     {
-      lctrl = true;
+      quit = true;
     }
-    else if (key == SDLK_RCTRL)
-    {
-      rctrl = true;
-    }
-    else if (lctrl || rctrl)
-    {
-      if (key == SDLK_q)
-      {
-        quit = true;
-      }
-    }
-
-    if (key == SDLK_UP && zDown)
+    else if (keysym.scancode == SDL_SCANCODE_UP && storageToggleFocused)
     {
       switchUp(TOGGLE_STORAGE_A, TOGGLE_STORAGE_B);
     }
-    else if (key == SDLK_UP && xDown)
+    else if (keysym.scancode == SDL_SCANCODE_UP && modeToggleFocused)
     {
       switchUp(TOGGLE_MODE_A, TOGGLE_MODE_B);
     }
-    else if (key == SDLK_DOWN && zDown)
+    else if (keysym.scancode == SDL_SCANCODE_DOWN && storageToggleFocused)
     {
       switchDown(TOGGLE_STORAGE_A, TOGGLE_STORAGE_B);
     }
-    else if (key == SDLK_DOWN && xDown)
+    else if (keysym.scancode == SDL_SCANCODE_DOWN && modeToggleFocused)
     {
       switchDown(TOGGLE_MODE_A, TOGGLE_MODE_B);
     }
-    else if (key == SDLK_LEFT || key == SDLK_UP)
+    else if (keysym.scancode == SDL_SCANCODE_LEFT || keysym.scancode == SDL_SCANCODE_UP)
     {
       encoderValue -= ENCODER_SPEED;
       window->knob.rotate(-KNOB_SPEED);
     }
-    else if (key == SDLK_RIGHT || key == SDLK_DOWN)
+    else if (keysym.scancode == SDL_SCANCODE_RIGHT || keysym.scancode == SDL_SCANCODE_DOWN)
     {
       encoderValue += ENCODER_SPEED;
       window->knob.rotate(KNOB_SPEED);
     }
     else
     {
-      auto i = keyMap.find(key);
-      if (i != keyMap.end())
+      auto i = keyGpioMap.find(name);
+      if (i != keyGpioMap.end())
       {
         uint id = (*i).second;
         Gpio_write(id, false);
@@ -214,7 +192,7 @@ namespace emu
 
   void Emulator::handleMouseButton(SDL_MouseButtonEvent &e)
   {
-    for (auto &kv : buttonMap)
+    for (auto &kv : buttonHitMap)
     {
       uint32_t id = kv.first;
       SDL_Rect &rect = kv.second;
@@ -274,11 +252,11 @@ namespace emu
             break;
           case SDL_KEYDOWN:
             logDebug(2, "Key Down: [%s]", SDL_GetKeyName(e.key.keysym.sym));
-            handleKeyDown(e.key.keysym.sym);
+            handleKeyDown(e.key.keysym);
             break;
           case SDL_KEYUP:
             logDebug(2, "Key Up: [%s]", SDL_GetKeyName(e.key.keysym.sym));
-            handleKeyUp(e.key.keysym.sym);
+            handleKeyUp(e.key.keysym);
             break;
           case SDL_MOUSEBUTTONDOWN:
           case SDL_MOUSEBUTTONUP:
@@ -358,6 +336,33 @@ namespace emu
     {
       if (db.load(dbFilename))
       {
+
+        // Load key map
+        mapButtonToKey(BUTTON_MAIN1, db.get("BUTTON_MAIN1_KEY", "Q"));
+        mapButtonToKey(BUTTON_MAIN2, db.get("BUTTON_MAIN2_KEY", "W"));
+        mapButtonToKey(BUTTON_MAIN3, db.get("BUTTON_MAIN3_KEY", "E"));
+        mapButtonToKey(BUTTON_MAIN4, db.get("BUTTON_MAIN4_KEY", "R"));
+        mapButtonToKey(BUTTON_MAIN5, db.get("BUTTON_MAIN5_KEY", "T"));
+        mapButtonToKey(BUTTON_MAIN6, db.get("BUTTON_MAIN6_KEY", "Y"));
+        mapButtonToKey(BUTTON_DIAL1, db.get("BUTTON_DIAL1_KEY", "A"));
+        mapButtonToKey(BUTTON_DIAL2, db.get("BUTTON_DIAL2_KEY", "S"));
+        mapButtonToKey(BUTTON_DIAL3, db.get("BUTTON_DIAL3_KEY", "D"));
+        mapButtonToKey(BUTTON_SUB1, db.get("BUTTON_SUB1_KEY", "F"));
+        mapButtonToKey(BUTTON_SUB2, db.get("BUTTON_SUB2_KEY", "G"));
+        mapButtonToKey(BUTTON_SUB3, db.get("BUTTON_SUB3_KEY", "H"));
+        mapButtonToKey(BUTTON_ENTER, db.get("BUTTON_ENTER_KEY", "V"));
+        mapButtonToKey(BUTTON_UP, db.get("BUTTON_UP_KEY", "B"));
+        mapButtonToKey(BUTTON_SHIFT, db.get("BUTTON_SHIFT_KEY", "N"));
+        mapButtonToKey(BUTTON_SELECT1, db.get("BUTTON_SELECT1_KEY", "1"));
+        mapButtonToKey(BUTTON_SELECT2, db.get("BUTTON_SELECT2_KEY", "2"));
+        mapButtonToKey(BUTTON_SELECT3, db.get("BUTTON_SELECT3_KEY", "3"));
+        mapButtonToKey(BUTTON_SELECT4, db.get("BUTTON_SELECT4_KEY", "4"));
+        storageToggleFocusKey = db.get("STORAGE_FOCUS_KEY", storageToggleFocusKey);
+        modeToggleFocusKey = db.get("MODE_FOCUS_KEY", modeToggleFocusKey);
+        zoomInKey = db.get("ZOOM_IN_KEY", zoomInKey);
+        zoomOutKey = db.get("ZOOM_OUT_KEY", zoomOutKey);
+        quitKey = db.get("QUIT_KEY", quitKey);
+
         Gpio_write(TOGGLE_STORAGE_A, db["TOGGLE_STORAGE_A"] == "1");
         Gpio_write(TOGGLE_STORAGE_B, db["TOGGLE_STORAGE_B"] == "1");
         Gpio_write(TOGGLE_MODE_A, db["TOGGLE_MODE_A"] == "1");
@@ -436,6 +441,31 @@ namespace emu
     db.setInteger("WINDOW_Y", y);
     db.setInteger("WINDOW_CORRECTION", window->getTitleBarHeight());
 
+    db["BUTTON_MAIN1_KEY"] = gpioKeyMap[BUTTON_MAIN1];
+    db["BUTTON_MAIN2_KEY"] = gpioKeyMap[BUTTON_MAIN2];
+    db["BUTTON_MAIN3_KEY"] = gpioKeyMap[BUTTON_MAIN3];
+    db["BUTTON_MAIN4_KEY"] = gpioKeyMap[BUTTON_MAIN4];
+    db["BUTTON_MAIN5_KEY"] = gpioKeyMap[BUTTON_MAIN5];
+    db["BUTTON_MAIN6_KEY"] = gpioKeyMap[BUTTON_MAIN6];
+    db["BUTTON_DIAL1_KEY"] = gpioKeyMap[BUTTON_DIAL1];
+    db["BUTTON_DIAL2_KEY"] = gpioKeyMap[BUTTON_DIAL2];
+    db["BUTTON_DIAL3_KEY"] = gpioKeyMap[BUTTON_DIAL3];
+    db["BUTTON_SUB1_KEY"] = gpioKeyMap[BUTTON_SUB1];
+    db["BUTTON_SUB2_KEY"] = gpioKeyMap[BUTTON_SUB2];
+    db["BUTTON_SUB3_KEY"] = gpioKeyMap[BUTTON_SUB3];
+    db["BUTTON_ENTER_KEY"] = gpioKeyMap[BUTTON_ENTER];
+    db["BUTTON_UP_KEY"] = gpioKeyMap[BUTTON_UP];
+    db["BUTTON_SHIFT_KEY"] = gpioKeyMap[BUTTON_SHIFT];
+    db["BUTTON_SELECT1_KEY"] = gpioKeyMap[BUTTON_SELECT1];
+    db["BUTTON_SELECT2_KEY"] = gpioKeyMap[BUTTON_SELECT2];
+    db["BUTTON_SELECT3_KEY"] = gpioKeyMap[BUTTON_SELECT3];
+    db["BUTTON_SELECT4_KEY"] = gpioKeyMap[BUTTON_SELECT4];
+    db["STORAGE_FOCUS_KEY"] = storageToggleFocusKey;
+    db["MODE_FOCUS_KEY"] = modeToggleFocusKey;
+    db["ZOOM_IN_KEY"] = zoomInKey;
+    db["ZOOM_OUT_KEY"] = zoomOutKey;
+    db["QUIT_KEY"] = quitKey;
+
     std::string dbFilename = getDBFilename();
     if (db.save(dbFilename))
     {
@@ -444,6 +474,19 @@ namespace emu
     else
     {
       logWarn("Failed to save to %s.", dbFilename.c_str());
+    }
+  }
+
+  void Emulator::mapButtonToKey(uint32_t id, const std::string & key)
+  {
+    keyGpioMap[key] = id;
+    gpioKeyMap[id] = key;
+    for (Button &b : window->buttons)
+    {
+      if (id == b.id)
+      {
+        b.key = key;
+      }
     }
   }
 
@@ -506,49 +549,25 @@ namespace emu
     readyQ.push(&pong);
     Events_push(EVENT_DISPLAY_READY);
 
-    keyMap[SDLK_q] = BUTTON_MAIN1;
-    keyMap[SDLK_w] = BUTTON_MAIN2;
-    keyMap[SDLK_e] = BUTTON_MAIN3;
-    keyMap[SDLK_r] = BUTTON_MAIN4;
-    keyMap[SDLK_t] = BUTTON_MAIN5;
-    keyMap[SDLK_y] = BUTTON_MAIN6;
-    keyMap[SDLK_a] = BUTTON_DIAL1;
-    keyMap[SDLK_s] = BUTTON_DIAL2;
-    keyMap[SDLK_d] = BUTTON_DIAL3;
-    keyMap[SDLK_f] = BUTTON_SUB1;
-    keyMap[SDLK_g] = BUTTON_SUB2;
-    keyMap[SDLK_h] = BUTTON_SUB3;
-    keyMap[SDLK_v] = BUTTON_ENTER;
-    keyMap[SDLK_b] = BUTTON_UP;
-    keyMap[SDLK_n] = BUTTON_SHIFT;
-    keyMap[SDLK_1] = BUTTON_SELECT1;
-    keyMap[SDLK_2] = BUTTON_SELECT2;
-    keyMap[SDLK_3] = BUTTON_SELECT3;
-    keyMap[SDLK_4] = BUTTON_SELECT4;
-    keyMap[SDLK_KP_1] = BUTTON_SELECT1;
-    keyMap[SDLK_KP_2] = BUTTON_SELECT2;
-    keyMap[SDLK_KP_3] = BUTTON_SELECT3;
-    keyMap[SDLK_KP_4] = BUTTON_SELECT4;
-
-    buttonMap[BUTTON_MAIN1] = {.x = MB1_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_MAIN2] = {.x = MB2_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_MAIN3] = {.x = MB3_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_MAIN4] = {.x = MB4_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_MAIN5] = {.x = MB5_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_MAIN6] = {.x = MB6_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_DIAL1] = {.x = MB1_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_DIAL2] = {.x = MB2_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_DIAL3] = {.x = MB3_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_SUB1] = {.x = MB4_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_SUB2] = {.x = MB5_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_SUB3] = {.x = MB6_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_ENTER] = {.x = MB4_X, .y = HB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_UP] = {.x = MB5_X, .y = HB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_SHIFT] = {.x = MB6_X, .y = HB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_SELECT1] = {.x = JB1_X, .y = JB1_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_SELECT2] = {.x = JB1_X, .y = JB2_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_SELECT3] = {.x = JB1_X, .y = JB3_Y, .w = BUTTON_W, .h = BUTTON_H};
-    buttonMap[BUTTON_SELECT4] = {.x = JB1_X, .y = JB4_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_MAIN1] = {.x = MB1_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_MAIN2] = {.x = MB2_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_MAIN3] = {.x = MB3_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_MAIN4] = {.x = MB4_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_MAIN5] = {.x = MB5_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_MAIN6] = {.x = MB6_X, .y = MB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_DIAL1] = {.x = MB1_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_DIAL2] = {.x = MB2_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_DIAL3] = {.x = MB3_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_SUB1] = {.x = MB4_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_SUB2] = {.x = MB5_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_SUB3] = {.x = MB6_X, .y = SB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_ENTER] = {.x = MB4_X, .y = HB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_UP] = {.x = MB5_X, .y = HB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_SHIFT] = {.x = MB6_X, .y = HB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_SELECT1] = {.x = JB1_X, .y = JB1_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_SELECT2] = {.x = JB1_X, .y = JB2_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_SELECT3] = {.x = JB1_X, .y = JB3_Y, .w = BUTTON_W, .h = BUTTON_H};
+    buttonHitMap[BUTTON_SELECT4] = {.x = JB1_X, .y = JB4_Y, .w = BUTTON_W, .h = BUTTON_H};
 
     restoreState();
 

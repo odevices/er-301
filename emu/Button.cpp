@@ -4,7 +4,7 @@
 
 namespace emu
 {
-  Button::Button(const char *label, uint32_t id, int x, int y, int r, int g, int b, const char *key) : label(label), id(id), key(key)
+  Button::Button(const char *label, uint32_t id, int x, int y, int r, int g, int b) : label(label), id(id)
   {
     rect.x = x;
     rect.y = y;
@@ -33,10 +33,7 @@ namespace emu
     SDL_RenderFillRect(window->renderer, &rect);
     SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, 255);
     SDL_RenderDrawRect(window->renderer, &rect);
-    window->drawText(rect.x + B_SPACING, rect.y + B_SPACING, 16, key);
-    if (label)
-    {
-      window->drawTextAligned(FC_ALIGN_CENTER, rect.x + BUTTON_W / 2, rect.y - 12, 10, label);
-    }
+    window->drawText(rect.x + B_SPACING, rect.y + B_SPACING, 16, key.c_str());
+    window->drawTextAligned(FC_ALIGN_CENTER, rect.x + BUTTON_W / 2, rect.y - 12, 10, label.c_str());
   }
 } // namespace emu
