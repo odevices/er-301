@@ -647,10 +647,10 @@ namespace emu
     if (cmdLine.optionExists("-h") || cmdLine.optionExists("--help"))
     {
       printf("ER-301 Emulator (v" FIRMWARE_VERSION ")\n");
-      printf("Usage: emu [OPTIONS]\n\n");
+      printf("Usage: emu.elf [OPTIONS]\n\n");
       printf("Examples:\n");
-      printf("  emu              # Start emulator with default configuration file.\n");
-      printf("  emu -c foo.cfg   # Start emulator with 'foo.cfg'.\n");
+      printf("  emu.elf              # Start emulator with default configuration file.\n");
+      printf("  emu.elf -c foo.cfg   # Start emulator with 'foo.cfg'.\n");
       printf("\n");
       printf("  -h, --help         Show this help.\n");
       printf("  -c, --config FILE  Use the given configuration file.\n");

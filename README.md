@@ -52,11 +52,11 @@ This will typically be enough to get started.  If you want to dive in deeper exe
 ```bash
 > testing/linux/emu/emu.elf --help
 ER-301 Emulator (v0.6.02)
-Usage: emu [OPTIONS]
+Usage: emu.elf [OPTIONS]
 
 Examples:
-  emu              # Start emulator with default configuration file.
-  emu -c foo.cfg   # Start emulator with 'foo.cfg'.
+  emu.elf              # Start emulator with default configuration file.
+  emu.elf -c foo.cfg   # Start emulator with 'foo.cfg'.
 
   -h, --help         Show this help.
   -c, --config FILE  Use the given configuration file.
