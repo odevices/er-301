@@ -13,7 +13,8 @@
     + [Other required dependencies](#other-required-dependencies)
     + [Test your build environment](#test-your-build-environment)
   * [USB Functions](#usb-functions)
-  * [Build Profiles and Target Architectures](#build-profiles-and-target-architectures)
+  * [Build profiles and Target architectures](#build-profiles-and-target-architectures)
+  * [Glossary](#glossary)
 
 ## Introduction
 
@@ -215,7 +216,7 @@ There is a USB port on the back of the ER-301.  As of v0.6.00 of the firmware, t
 
 :warning: There is a gotcha with having the ER-301 plugged into a USB host.  It will not boot because it will be waiting for the USB host to give it firmware via BOOTP/TFTP.  This is baked into the AM335x ROM unfortunately.  The solution is to have a BOOTP server always running on your host that either gives it the firmware or tells the ER-301 to give up and boot from the SD card.
 
-## Build Profiles and Target Architectures
+## Build profiles and Target architectures
 
 All build outputs are placed in a sub folder composed of the build profile and the target architecture.  There are 3 build profiles:
 
@@ -241,3 +242,11 @@ make core
 ```
 
 Then the build outputs will appear in the ```testing/am335x``` directory of the project root.  See the [top-level Makefile](Makefile) for more details.
+
+## Glossary
+
+### Package
+A package is an archive of files along with meta data that allows it to be recognized and manipulated (i.e. installed, uninstalled, loaded, unloaded) by the package manager.
+
+### Mod
+A mod is any collection of code that is to be executed by the base firmware and is not part of of the base firmware. So a package containing scripts (.lua) and/or shared libraries (.so) is a packaged mod. A package containing only presets is not a packaged mod, it is just a package of presets.
