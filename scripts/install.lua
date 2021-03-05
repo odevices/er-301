@@ -21,10 +21,6 @@ local function join(...)
   return table.concat(arg, '/')
 end
 
-local function endsWith(String, End)
-  return End == '' or string.sub(String, -string.len(End)) == End
-end
-
 local function split(s, delimiter)
   local result = {}
   for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
@@ -34,7 +30,7 @@ local function split(s, delimiter)
 end
 
 -- creates all folders in the given path string
-function createAll(x, skipLast)
+local function createAll(x, skipLast)
   local sep = '/'
   local dirs = split(x, sep)
   local sofar = dirs[1]
@@ -67,7 +63,7 @@ local function extract(self, archive, filename, destination, description)
   return true
 end
 
-function install(self, archive)
+local function install(self, archive)
   local assets = {
     {
       filename = "MLO",
@@ -85,12 +81,12 @@ function install(self, archive)
       description = "kernel binary"
     },
     {
-      filename = "core-0.6.01.pkg",
+      filename = "core-0.6.02.pkg",
       destination = "0:",
       description = "package"
     },
     {
-      filename = "teletype-0.6.01.pkg",
+      filename = "teletype-0.6.02.pkg",
       destination = "0:",
       description = "package"
     }
@@ -100,19 +96,6 @@ function install(self, archive)
     if asset.filename then
       if not extract(self, archive, asset.filename, asset.destination,
                      asset.description) then return false end
-    elseif asset.extension then
-      if archive.getFileCount==nil or archive.getFilename==nil then
-        msg(self, "This installation script is incompatible with the current firmware.")
-        return false
-      end
-      local n = archive:getFileCount()
-      for i = 1, n do
-        local filename = archive:getFilename(i - 1)
-        if endsWith(filename, asset.extension) then
-          if not extract(self, archive, filename, asset.destination,
-                         asset.description) then return false end
-        end
-      end
     end
   end
 
