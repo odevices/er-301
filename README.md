@@ -246,4 +246,3 @@ A package is an archive of files along with meta data that allows it to be recog
 
 ### Mod
 A mod is any collection of code that is to be executed by the base firmware and is not part of of the base firmware. So a package containing scripts (.lua) and/or shared libraries (.so) is a packaged mod. A package containing only presets is not a packaged mod, it is just a package of presets.
-
