@@ -132,13 +132,32 @@ To compile and create the installation package for the core mod, execute:
 make core ARCH=linux
 ```
 
-Next, copy the resulting package file to the ```ER-301/packages``` directory of the emulator's front SD card.  You will need to change the command below to match the correct version.
+**Manual Package Install**
+
+This method mirrors exactly what an end-user would do to install a package.  Copy the resulting package file to ```front/ER-301/packages```.  You will need to change the command below to match the correct version.
 
 ```bash
 cp testing/linux/mods/core-<version>.pkg ~/.od/front/ER-301/packages
 ```
 
 Finally, run the emulator again using the same command-line as before and install the core mod package from the Package Manager screen.  Now you will have access to all of the core units in the emulator.
+
+**Auto Package Install**
+
+This method is used by the firmware installer and can be useful for development also.  You simply copy the *.pkg file to the rear root:
+
+```bash
+cp testing/linux/mods/core-<version>.pkg ~/.od/rear
+```
+
+Then the next time you boot up the emulator, it will move over packages found in ```rear``` to ```front/ER-301/packages```.  This makes the package show  up in the Package Manager.  Finally, depending on the following conditions the package may or may not be automatically installed:
+
+| Condition | Action |
+| --- | ----------- |
+| There is no previous version of the package. | Install the package. |
+| There is a previous version of the package but it is not installed. | Do not install the package. |
+| There is a previous version of the package and it is installed. | Uninstall the previous version and install the newer version. |
+
 
 ### Limitations
 
