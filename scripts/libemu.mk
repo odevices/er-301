@@ -1,4 +1,3 @@
-ARCH=linux
 include scripts/env.mk
 include scripts/utils.mk
 
@@ -40,13 +39,13 @@ clean:
 
 # WARNING. This will overwrite the shared lib build dir.  Needs to be fixed.
 libs: 
-	+CFLAGS=-fpic $(MAKE) -f lua.mk ARCH=linux
-	+CFLAGS=-fpic $(MAKE) -f miniz.mk ARCH=linux
-	+CFLAGS=-fpic $(MAKE) -f lodepng.mk ARCH=linux
+	+CFLAGS=-fpic $(MAKE) -f lua.mk
+	+CFLAGS=-fpic $(MAKE) -f miniz.mk
+	+CFLAGS=-fpic $(MAKE) -f lodepng.mk
 
 clean-libs: 
-	+$(MAKE) -f lua.mk clean ARCH=linux
-	+$(MAKE) -f miniz.mk clean ARCH=linux
-	+$(MAKE) -f lodepng.mk clean ARCH=linux
+	+$(MAKE) -f lua.mk clean
+	+$(MAKE) -f miniz.mk clean
+	+$(MAKE) -f lodepng.mk clean
 
 include scripts/rules.mk

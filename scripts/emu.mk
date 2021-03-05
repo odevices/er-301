@@ -1,4 +1,3 @@
-ARCH=linux
 include scripts/env.mk
 include scripts/utils.mk
 
@@ -61,13 +60,13 @@ missing: $(objects) $(libraries)
 	@$(PYTHON) list-undefined.py $(out_dir)/error.log > $(out_dir)/missing.log	
 
 libs: 
-	+$(MAKE) -f lua.mk ARCH=linux
-	+$(MAKE) -f miniz.mk ARCH=linux
-	+$(MAKE) -f lodepng.mk ARCH=linux
+	+$(MAKE) -f lua.mk
+	+$(MAKE) -f miniz.mk
+	+$(MAKE) -f lodepng.mk
 
 clean-libs: 
-	+$(MAKE) -f lua.mk clean ARCH=linux
-	+$(MAKE) -f miniz.mk clean ARCH=linux
-	+$(MAKE) -f lodepng.mk clean ARCH=linux
+	+$(MAKE) -f lua.mk clean
+	+$(MAKE) -f miniz.mk clean
+	+$(MAKE) -f lodepng.mk clean
 
 include scripts/rules.mk
