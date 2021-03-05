@@ -29,6 +29,16 @@ CFLAGS += -DFIRMWARE_NAME=\"$(FIRMWARE_NAME)\"
 CFLAGS += -DFIRMWARE_STATUS=\"$(FIRMWARE_STATUS)\"
 LFLAGS = -Wl,--export-dynamic -Wl,--gc-sections -lSDL2 -lSDL2_ttf -lfftw3f -lm -ldl -lstdc++ 
 
+ifeq ($(ARCH),darwin)
+# Locate our deps using brew
+sdl2 := $(shell brew --prefix sdl2)
+sdl2_ttf := $(shell brew --prefix sdl2_ttf)
+fftw := $(shell brew --prefix fftw)
+
+CFLAGS += -I$(sdl2)/include -I$(sdl2)/include/SDL2 -I$(sdl2_ttf)/include
+LFLAGS += -L$(sdl2)/lib -L$(sdl2_ttf)/lib -L$(fftw)/lib
+endif
+
 all: $(out_dir)/$(program_name).elf
 
 $(objects): scripts/env.mk scripts/emu.mk
@@ -36,7 +46,7 @@ $(objects): scripts/env.mk scripts/emu.mk
 $(out_dir)/$(program_name).elf: $(objects) $(libraries)
 	@mkdir -p $(@D)	
 	@echo $(describe_env) LINK $(describe_target)
-	@$(CC) $(CFLAGS) -o $@ $(objects) $(libraries) $(LFLAGS)
+	@$(LD) -o $@ $(objects) $(libraries) $(LFLAGS)
 
 clean:
 	rm -rf $(out_dir)

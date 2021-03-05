@@ -60,15 +60,15 @@ pbl-clean:
 	+$(MAKE) -f scripts/pbl.mk clean
 
 emu: 
-	+$(MAKE) -f scripts/lua.mk ARCH=linux
-	+$(MAKE) -f scripts/miniz.mk ARCH=linux
-	+$(MAKE) -f scripts/lodepng.mk ARCH=linux
+	+$(MAKE) -f scripts/lua.mk
+	+$(MAKE) -f scripts/miniz.mk
+	+$(MAKE) -f scripts/lodepng.mk
 	+$(MAKE) -f scripts/emu.mk
 
 emu-clean: 
-	+$(MAKE) -f scripts/lua.mk ARCH=linux clean
-	+$(MAKE) -f scripts/miniz.mk ARCH=linux clean
-	+$(MAKE) -f scripts/lodepng.mk ARCH=linux clean
+	+$(MAKE) -f scripts/lua.mk clean
+	+$(MAKE) -f scripts/miniz.mk clean
+	+$(MAKE) -f scripts/lodepng.mk clean
 	+$(MAKE) -f scripts/emu.mk clean
 
 dist-clean:
