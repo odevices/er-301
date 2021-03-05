@@ -130,7 +130,7 @@ Edit this file with your own values to configure various items like key mappings
 Packages encapsulate unit presets (*.unit), unit definitions (*.lua), and shared libraries (*.so) into one shareable bundle along with any necessary assets (e.g. sound files and so on). The core units are also distributed as a package, so let's use the core package as an example.  First, to compile and create the core package, execute:
 
 ```bash
-make core ARCH=linux
+make core
 ```
 
 Next, let's go over the two main methods for installing packages.
@@ -189,7 +189,7 @@ First, you will need to install the TI-RTOS development tools for the AM335x.
 4. ***When asked, please set the destination folder to ```~/ti```.***  This is the path assumed by the project makefiles.  If instead you install to a different folder then before executing any cross-compilation commands, you will need to set the TI_INSTALL_DIR shell environment variable to the actual path that you used.  If you don't want to change your shell environment then you can also pass the path on the commandline like this:
 
 ```bash
-make core TI_INSTALL_DIR=~/your-path-to-ti-sdk
+make core TI_INSTALL_DIR=~/your-path-to-ti-sdk ARCH=am355x
 ```
 
 This documentation will assume that you used the default location.
@@ -207,7 +207,7 @@ sudo apt install swig python3 zip gcc-multilib
 A good test of your build environment is to see if you can successfully build the factory mods:
 
 ```bash
-make core teletype
+make core teletype ARCH=am355x
 ```
 
 ## USB Functions
@@ -224,10 +224,11 @@ All build outputs are placed in a sub folder composed of the build profile and t
 * debug: No optimizations.  Logging enabled.
 * release: All optimizations enabled.  Logging disabled.
 
-And here are the 2 supported target architectures:
+And here are the 3 supported target architectures:
 
 * am335x
 * linux
+* darwin (OSX)
 
 So for example, if I execute the following make command:
 
@@ -235,13 +236,8 @@ So for example, if I execute the following make command:
 make core PROFILE=debug ARCH=linux
 ```
 
-Then the build outputs will be placed in the ```debug/linux``` directory of the project root.  Generally, the default profile is **testing** and the default architecture for everything except the emulator is **am335x**.  So if you execute just:
 
-```bash
-make core
-```
-
-Then the build outputs will appear in the ```testing/am335x``` directory of the project root.  See the [top-level Makefile](Makefile) for more details.
+Then the build outputs will be placed in the ```debug/linux``` directory of the project root.  Generally, the default profile is **testing** and the default architecture is determined by your OS (`uname -s`).  See the [top-level Makefile](Makefile) for more details.
 
 ## Glossary
 
