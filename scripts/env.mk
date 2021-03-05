@@ -68,6 +68,7 @@ rear_card_dir = ~/.od/$(rear_card_label)
 
 #### am335x-specific
 ifeq ($(ARCH),am335x)
+
 CFLAGS.release ?= $(CFLAGS.speed) -Wno-unused
 CFLAGS.testing ?= $(CFLAGS.speed) -DBUILDOPT_TESTING
 CFLAGS.debug ?= -g -DBUILDOPT_TESTING
@@ -89,6 +90,7 @@ endif
 
 #### linux-specific
 ifeq ($(ARCH),linux)
+
 CFLAGS.release ?= $(CFLAGS.speed) -Wno-unused
 CFLAGS.testing ?= -g -DBUILDOPT_TESTING
 CFLAGS.debug ?= -g -DBUILDOPT_TESTING
@@ -97,10 +99,12 @@ include scripts/linux.mk
 
 # symbols += BUILDOPT_LUA_USE_REALLOC
 CFLAGS.linux = -Wno-deprecated-declarations -msse4 -fPIC
+
 endif
 
 ### darwin-specific
 ifeq ($(ARCH),darwin)
+
 CFLAGS.release ?= $(CFLAGS.speed) -Wno-unused
 CFLAGS.testing ?= -g -DBUILDOPT_TESTING
 CFLAGS.debug ?= -g -DBUILDOPT_TESTING
