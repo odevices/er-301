@@ -77,7 +77,7 @@ $(objects): scripts/env.mk scripts/mod-builder.mk
 $(lib_file): $(objects)
 	@echo $(describe_env) LINK $(describe_target)
 	@mkdir -p $(@D)
-	@$(LD) -o $@ $(objects) $(LFLAGS)
+	@$(CC) $(CFLAGS) -o $@ $(objects) $(LFLAGS)
 	@$(SIZE) $@	
 
 $(package_file): $(lib_file) $(assets)

@@ -23,9 +23,23 @@ objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)
 objects += $(out_dir)/od/glue/app_swig.o
 objects += $(out_dir)/emu/emu_swig.o
 objects += $(out_dir)/libs/SDL_FontCache/SDL_FontCache.o
- 
+
+ifeq ($(ARCH),linux)
+LFLAGS += --gc-sections
+endif
+
+ifeq ($(ARCH),darwin)
+# Locate our deps using brew
+sdl2 := $(shell brew --prefix sdl2)
+sdl2_ttf := $(shell brew --prefix sdl2_ttf)
+fftw := $(shell brew --prefix fftw)
+
+CFLAGS += -I$(sdl2)/include -I$(sdl2)/include/SDL2 -I$(sdl2_ttf)/include
+LFLAGS += -L$(sdl2)/lib -L$(sdl2_ttf)/lib -L$(fftw)/lib
+endif
+
 CFLAGS += -fpic
-LFLAGS = -shared -Wl,--gc-sections -lSDL2 -lSDL2_ttf -lfftw3f -lm -ldl -lstdc++ 
+LFLAGS += -lSDL2 -lSDL2_ttf -lfftw3f -lm -ldl -lstdc++ 
 
 all: $(out_dir)/$(program_name).so
 

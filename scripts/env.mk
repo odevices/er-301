@@ -107,7 +107,7 @@ CFLAGS.debug ?= -g -DBUILDOPT_TESTING
 
 include scripts/darwin.mk
 
-CFLAGS.darwin = -Wno-deprecated-declarations -fPIC
+CFLAGS.darwin = -Wno-deprecated-declarations -msse4 -fPIC
 endif
 
 ###########################
