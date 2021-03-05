@@ -4,17 +4,23 @@ FIRMWARE_STATUS ?= unstable
 
 # Determine ARCH if it's not provided...
 # linux | darwin | am335x
-SYSTEM_NAME := $(shell uname -s)
-ifeq ($(SYSTEM_NAME),Linux)
-ARCH ?= linux
-arch_source ?= linux
+ifndef ARCH
+  SYSTEM_NAME := $(shell uname -s)
+  ifeq ($(SYSTEM_NAME),Linux)
+    ARCH = linux
+  else ifeq ($(SYSTEM_NAME),Darwin)
+    ARCH = darwin
+  else
+    $(error Unsupported system $(SYSTEM_NAME))
+  endif
 endif
-ifeq ($(SYSTEM_NAME),Darwin)
-ARCH ?= darwin
-arch_source ?= linux
+
+# Use the linux source files unless we're building am335x
+arch_source = linux
+ifeq ($(ARCH),am335x)
+  arch_source = am335x
 endif
-ARCH ?= am335x
-arch_source ?= am335x
+
 
 # Determine PROFILE if it's not provided...
 # testing | release | debug
