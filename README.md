@@ -126,11 +126,13 @@ Edit this file with your own values to configure various items like key mappings
 
 ### Installing packages
 
-To compile and create the installation package for the core mod, execute:
+Packages encapsulate unit presets (*.unit), unit definitions (*.lua), and shared libraries (*.so) into one shareable bundle along with any necessary assets (e.g. sound files and so on). The core units are also distributed as a package, so let's use the core package as an example.  First, to compile and create the core package, execute:
 
 ```bash
 make core ARCH=linux
 ```
+
+Next, let's go over the two main methods for installing packages.
 
 **Manual Package Install**
 
