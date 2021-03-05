@@ -237,7 +237,7 @@ make core PROFILE=debug ARCH=linux
 ```
 
 
-Then the build outputs will be placed in the ```debug/linux``` directory of the project root.  Generally, the default profile is **testing** and the default architecture is determined by your OS (`uname -s`).  See the [top-level Makefile](Makefile) for more details.
+Then the build outputs will appear in the ```debug/linux``` directory of the project root.  Generally, the default profile is **testing** and the default architecture is determined by your OS (`uname -s`).  See the [top-level Makefile](Makefile) for more details.
 
 ## Glossary
 
@@ -246,3 +246,4 @@ A package is an archive of files along with meta data that allows it to be recog
 
 ### Mod
 A mod is any collection of code that is to be executed by the base firmware and is not part of of the base firmware. So a package containing scripts (.lua) and/or shared libraries (.so) is a packaged mod. A package containing only presets is not a packaged mod, it is just a package of presets.
+
