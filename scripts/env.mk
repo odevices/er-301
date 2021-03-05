@@ -86,6 +86,7 @@ include scripts/am335x.mk
 
 symbols += gcc am335x am3359 evmAM335x
 CFLAGS.am335x = -mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard -mabi=aapcs -Dfar= -D__DYNAMIC_REENT__ 
+
 endif
 
 #### linux-specific
