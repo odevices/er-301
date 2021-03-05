@@ -1,6 +1,6 @@
 # Build Tools for OSX
-CC := gcc-10 -fdiagnostics-color -fmax-errors=5 -rdynamic
-CPP := g++-10 -fdiagnostics-color -fmax-errors=5 -lm
+CC := gcc-10 -fdiagnostics-color -fmax-errors=5
+CPP := g++-10 -fdiagnostics-color -fmax-errors=5
 OBJCOPY := objcopy
 OBJDUMP := objdump
 ADDR2LINE := addr2line

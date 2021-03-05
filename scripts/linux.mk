@@ -4,7 +4,7 @@ CPP := g++ -fdiagnostics-color -fmax-errors=5
 OBJCOPY := objcopy
 OBJDUMP := objdump
 ADDR2LINE := addr2line
-LD := ld
+LD := gcc -fdiagnostics-color
 AR := gcc-ar
 SIZE := size
 STRIP := strip
