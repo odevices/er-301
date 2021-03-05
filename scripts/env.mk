@@ -7,11 +7,14 @@ FIRMWARE_STATUS ?= unstable
 SYSTEM_NAME := $(shell uname -s)
 ifeq ($(SYSTEM_NAME),Linux)
 ARCH ?= linux
+arch_source ?= linux
 endif
 ifeq ($(SYSTEM_NAME),Darwin)
 ARCH ?= darwin
+arch_source ?= linux
 endif
 ARCH ?= am335x
+arch_source ?= am335x
 
 # Determine PROFILE if it's not provided...
 # testing | release | debug
@@ -32,7 +35,7 @@ describe_env = $(blueON)[$(scriptname) $(ARCH) $(PROFILE)]$(blueOFF)
 # Frequently used paths
 build_dir = $(PROFILE)/$(ARCH)
 libs_build_dir = $(build_dir)/libs
-arch_dir = arch/$(ARCH)
+arch_dir = arch/$(arch_source)
 mods_dir = mods
 od_dir = od
 libs_dir = libs
