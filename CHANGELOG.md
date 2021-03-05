@@ -8,8 +8,7 @@
 
 * FIX: Unit Browser > Categories were not being display in a consistent order.
 * SYS: Package toc.lua > Deprecate category entries in the units table.  Add a category field to each unit entry instead.
-* SYS:  
-
+* SYS: Emulator > Simplify command-line options and make emulator configurable via the ~/.od/emu.config file.  See README.md.
 
 # v0.6.01
 * FIX: All Delay Units > Configuring the max delay time to anything less than 1s resulted in a 0s delay buffer and loss of audio in that chain.
