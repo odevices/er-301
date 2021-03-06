@@ -6,6 +6,7 @@
   * [Step 1: Make your first unit](#step-1-make-your-first-unit)
   * [Step 2: Add custom DSP code](#step-2-add-custom-dsp-code)
   * [Step 3: Add custom graphics](#step-3-add-custom-graphics)
+  * [Advanced Topics](#advanced-topics)
 
 ## Introduction
 
@@ -65,3 +66,15 @@ Finally, we add our own custom graphics to the [EuclidsCatsUnit.lua](step3/Eucli
 This project will generate a file called **tutorial-0.0.3.pkg** in the build directory.  All the build and install commands are the same as in Step 2.
 
 Take a look at the [Makefile](step3/Makefile) for further options.
+
+## Advanced Topics
+
+There is still plenty to learn outside of the above 3 examples.  Here are some along with pointers to examples in the source tree to get you started:
+
+| Topic | Where |
+| --- | ----------- |
+| Playing from a sample buffer. | core: [Raw Player Unit](../mods/core/assets/Player/Raw.lua) |
+| Streaming from a sample file. | core: [Card Player Unit](../mods/core/assets/File/CardPlayerUnit.lua) |
+| Using the Task class to scheduling code to run on the audio thread. | teletype: [Dispatcher.h](../mods/teletype/Dispatcher.h), [Dispatcher.cpp](../mods/teletype/Dispatcher.cpp) |
+| Optimizing DSP code with NEON intrinsics. | builtin: [Comparator.h](../od/objects/timing/Comparator.h), [Comparator.cpp](../od/objects/timing/Comparator.cpp) |
+| Adding a configuration menu to your package. | teletype: [init.lua](../mods/teletype/assets/init.lua) |
