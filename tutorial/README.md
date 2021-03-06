@@ -71,7 +71,7 @@ Take a look at the [Makefile](step3/Makefile) for further options.
 
 There is still plenty to learn outside of the above 3 examples.  Here are some topics along with pointers to examples in the source tree to get you started:
 
-| Topic | Where |
+| Topic | Code Example |
 | --- | ----------- |
 | Playing from a sample buffer. | core: [Raw Player Unit](../mods/core/assets/Player/Raw.lua) |
 | Streaming from a sample file. | core: [Card Player Unit](../mods/core/assets/File/CardPlayerUnit.lua) |
