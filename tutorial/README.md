@@ -69,7 +69,7 @@ Take a look at the [Makefile](step3/Makefile) for further options.
 
 ## Further Reading
 
-There is still plenty to learn outside of the above 3 examples.  Here are some along with pointers to examples in the source tree to get you started:
+There is still plenty to learn outside of the above 3 examples.  Here are some topics along with pointers to examples in the source tree to get you started:
 
 | Topic | Where |
 | --- | ----------- |
