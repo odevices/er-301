@@ -31,9 +31,12 @@ void EuclideanSequencer::simulateCatsInBoxes(int cats, int boxes)
     // Recalculate and cache the results.
     logDebug(1, "cats=%d, boxes=%d", cats, boxes);
     bjorklund(cats, boxes, mSpace.data(), mScratch.data());
+    if (boxes != mCachedBoxes)
+    {
+      mPhase = 0;
+    }
     mCachedBoxes = boxes;
     mCachedCats = cats;
-    mPhase = 0;
   }
 }
 
