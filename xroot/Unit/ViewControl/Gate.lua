@@ -60,14 +60,15 @@ Gate:include(Base)
 
 function Gate:init(args)
   -- required arguments
-  local button = args.button or app.logError("%s.init: button is missing.", self)
+  local button = args.button or app.logError("Gate.init: button is missing.")
+  Base.init(self, button)
+  self:setClassName("Unit.ViewControl.Gate")
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
   local branch = args.branch or app.logError("%s.init: branch is missing.", self)
   local comparator = args.comparator or
                          app.logError("%s.init: comparator is missing.", self)
-  Base.init(self, button)
-  self:setClassName("Unit.ViewControl.Gate")
+  
   self.branch = branch
   self.comparator = comparator
   -- optional arguments

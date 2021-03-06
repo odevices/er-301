@@ -7,6 +7,9 @@
 testing/
 release/
 debug/
+tutorial/*/testing
+tutorial/*/release
+tutorial/*/debug
 
 tmp/
 
@@ -37,3 +40,6 @@ tmp/
 *.out
 *.app
 *.elf
+
+# Packages
+*.pkg

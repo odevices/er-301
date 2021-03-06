@@ -61,7 +61,7 @@ function ChooserItem:init(loadInfo, suppressLibraryName)
     graphic = app.FittedTextBox(loadInfo.title)
     graphic:setCornerRadius(0, 5, 5, 0)
   else
-    local x = Utils.shorten(loadInfo.libraryName, 8)
+    local x = Utils.shorten(loadInfo.libraryName, 40)
     graphic = app.FittedTextBox(x .. ": " .. loadInfo.title)
     graphic:setCornerRadius(0, 5, 5, 0)
   end
