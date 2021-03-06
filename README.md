@@ -12,6 +12,7 @@
     + [Install the TI Processor SDK for AM335x](#install-the-ti-processor-sdk-for-am335x)
     + [Other required dependencies](#other-required-dependencies)
     + [Test your build environment](#test-your-build-environment)
+    + [Work through the tutorials](#work-through-the-tutorials)
   * [USB Functions](#usb-functions)
   * [Build profiles and Target architectures](#build-profiles-and-target-architectures)
   * [Glossary](#glossary)
@@ -209,6 +210,10 @@ A good test of your build environment is to see if you can successfully build th
 ```bash
 make core teletype
 ```
+
+### Work through the tutorials
+
+This [tutorial](tutorial) folder contains 3 example projects that progressively increase in complexity and sophistication.  These projects also show how you can work completely outside of this source tree.
 
 ## USB Functions
 
