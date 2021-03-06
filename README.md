@@ -45,7 +45,7 @@ make emu
 
 ### Running the emulator
 
-Just executing the emulator without arguments will start it up with default settings from the top of the project tree:
+Executing the emulator from the root of the project tree without arguments will start it up with default settings:
 ```bash
 testing/linux/emu/emu.elf
 ```
