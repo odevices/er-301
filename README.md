@@ -213,7 +213,7 @@ make core teletype
 
 ### Work through the tutorials
 
-This [tutorial](tutorial) folder contains 3 example projects that progressively increase in complexity and sophistication.  These projects also show how you can work completely outside of this source tree.
+The [tutorial](tutorial) directory contains 3 example projects that progressively increase in complexity and sophistication.  These projects also show how you can work completely outside of this source tree.
 
 ## USB Functions
 
