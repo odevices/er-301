@@ -2,13 +2,16 @@
 
 ## Table of Contents
 
+  * [Introduction](#introduction)
   * [Step 1: Make your first unit](#step-1-make-your-first-unit)
   * [Step 2: Add custom DSP code](#step-2-add-custom-dsp-code)
   * [Step 3: Add custom graphics](#step-3-add-custom-graphics)
 
-This folder contains example projects broken up into 3 steps that progressively increase in complexity and sophistication.  In each step, you create a package (called tutorial) containing one or more units.
+## Introduction
 
-:warning: You have a choice to either use these tutorial projects in-place OR you can copy them and work on them outside of this source tree.  If you choose to copy them then make sure to edit the **SDKPATH** variable in each step's Makefile to point to the er-301 source tree.
+This folder contains 3 example projects that progressively increase in complexity and sophistication.  In each step, you create a package (called tutorial) containing one or more units.  First you will create a unit (called FM Operator) using only lua scripting.  Next, you will create yet another unit (call Euclid's Cats) that has your C++ DSP code.  Finally, you will enhance the Euclid's Cats unit with your own custom graphics.
+
+:warning: You have a choice to either use these tutorial projects in-place OR you can copy them out and work on them outside of this source tree.  If you choose to copy them then make sure to edit the **SDKPATH** variable in each step's Makefile to point to the er-301 source tree.
 
 ## Step 1: Make your first unit
 
