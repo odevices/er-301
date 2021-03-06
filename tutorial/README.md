@@ -24,10 +24,10 @@ make
 This will generate a file called **tutorial-0.0.1.pkg** in this directory.  To try it out, manually copy this pkg to the packages folder of the emulator or your SD card.  Since this package has only lua scripts, there is no need for cross-compilation.  Alternatively, you can use the make install targets:
 
 ```bash
-# To install to the emulator
+# To install to the emulator's package folder:
 make emu-install
 
-# To install to the front SD card (assuming it is mounted)
+# To install to the front SD card (assuming it is mounted):
 make card-install
 ```
 
@@ -39,20 +39,20 @@ Now we add your own custom C++ [Object](../od/objects/Object.h) (implemented by 
 
 To compile:
 ```bash
-# Compile for default architecture (linux) and default build profile (testing):
+# Compile a testing build for linux:
 make
 
-# Compile for am335x architecture for release:
+# Compile a release build for am335x architecture:
 make ARCH=am335x PROFILE=release
 ```
 
-This will generate a file called **tutorial-0.0.2.pkg** in the build directory.  The build directory is constructed from build profile and architecture.  For example, the default build profile is **testing** and the default architecture is **linux**, so the default build directory is **testing/linux**.  To try out the new units, manually copy the tutorial package to the packages folder of the emulator or your SD card.  Alternatively, you can use the make install targets:
+This will generate a file called **tutorial-0.0.2.pkg** in the build directory.  The build directory is constructed from build profile and target architecture.  For example, the default build profile is **testing** and the default target architecture is **linux**, so the default build directory is **testing/linux**.  To try out the new units, manually copy the tutorial package to the packages folder of the emulator or your SD card.  Alternatively, you can use the make install targets:
 
 ```bash
-# To install to the emulator
+# To install to the emulator's package folder:
 make install
 
-# To install to the front SD card (assuming it is mounted)
+# To install to the front SD card (assuming it is mounted):
 make install PROFILE=release ARCH=am335x
 ```
 
