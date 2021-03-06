@@ -1,12 +1,8 @@
 local app = app
-local libcore = require "core.libcore"
-local Env = require "Env"
 local Class = require "Base.Class"
 local Signal = require "Signal"
 local Unit = require "Unit"
-local Slices = require "Sample.Slices"
 local Encoder = require "Encoder"
-local Fader = require "Unit.ViewControl.Fader"
 local GainBias = require "Unit.ViewControl.GainBias"
 local Gate = require "Unit.ViewControl.Gate"
 local FileTransport = require "Unit.ViewControl.FileTransport"
