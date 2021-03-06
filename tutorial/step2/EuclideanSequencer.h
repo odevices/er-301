@@ -10,6 +10,7 @@ public:
   ~EuclideanSequencer();
 
 #ifndef SWIGLUA
+  // These declarations are omitted from the swig wrapper thus reducing code size.
   virtual void process();
   od::Inlet mTrigger{"Trigger"};
   od::Inlet mReset{"Reset"};
@@ -19,6 +20,7 @@ public:
 #endif
 
 protected:
+  // Protected declarations are also omitted from the swig wrapper.  
   std::vector<float> mSpace;
   std::vector<float> mScratch;
   int mPhase = 0;

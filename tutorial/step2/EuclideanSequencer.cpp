@@ -8,8 +8,10 @@
 
 EuclideanSequencer::EuclideanSequencer(int space)
 {
+  // Reserve space for the Bjorklund algorithm.
   mSpace.reserve(space);
   mScratch.reserve(2 * space);
+  // Register inlets, outlets, and parameters.
   addInput(mTrigger);
   addInput(mReset);
   addOutput(mOutput);
@@ -17,6 +19,7 @@ EuclideanSequencer::EuclideanSequencer(int space)
   mBoxes.enableSerialization();
   addParameter(mCats);
   mCats.enableSerialization();
+  // Initialize the cats and boxes.
   simulateCatsInBoxes(0, 1);
 }
 
@@ -40,16 +43,23 @@ void EuclideanSequencer::simulateCatsInBoxes(int cats, int boxes)
   }
 }
 
+// This method is called every audio frame.
+// You are expected to process one frame of input and produce one frame of output.
 void EuclideanSequencer::process()
 {
+  // Read the parameters to see if they have changed.
   int N = (int)mSpace.capacity();
   int boxes = CLAMP(1, N, mBoxes.roundTarget());
   int cats = CLAMP(0, boxes, mCats.roundTarget());
   simulateCatsInBoxes(cats, boxes);
 
+  // Each inlet's buffer is filled with 1 frame of samples.
   float *trig = mTrigger.buffer();
   float *reset = mReset.buffer();
+  // The output buffer that needs to be filled.
   float *out = mOutput.buffer();
+
+  // FRAMELENGTH is a macro that signals to the compiler that it should try to vectorize the loop.
   for (int i = 0; i < FRAMELENGTH; i++)
   {
     if (reset[i] > 0.0f)
