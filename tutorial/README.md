@@ -8,6 +8,8 @@
 
 This folder contains example projects broken up into 3 steps that progressively increase in complexity and sophistication.  In each step, you create a package (called tutorial) containing one or more units.
 
+:warning: You have a choice to either use these tutorial projects in-place OR you can copy them and work on them outside of this source tree.  If you choose to copy them then make sure to edit the **SDKPATH** variable in each step's Makefile to point to the er-301 source tree.
+
 ## Step 1: Make your first unit
 
 There are no files to compile, so the makefile just zips up the *.lua files and names it appropriately with a version string:
