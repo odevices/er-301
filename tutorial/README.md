@@ -1,5 +1,7 @@
 # Tutorial
 
+![](tutorial-screenshot.png)
+
 ## Table of Contents
 
   * [Introduction](#introduction)
