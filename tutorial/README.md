@@ -32,7 +32,7 @@ make emu-install
 make card-install
 ```
 
-Take a look at the [Makefile](step1/Makefile) for further options.
+Take a look at the [Makefile](step1/Makefile) for more details.
 
 ## Step 2: Add custom DSP code
 
@@ -57,13 +57,13 @@ make install
 make install PROFILE=release ARCH=am335x
 ```
 
-Take a look at the [Makefile](step2/Makefile) for further details.
+Take a look at the [Makefile](step2/Makefile) for more details.
 
 ## Step 3: Add custom graphics
 
 Finally, we add our own custom graphics to the [EuclidsCatsUnit.lua](step3/EuclidsCatsUnit.lua) created in Step 2.  The C++ [Graphic](../od/graphics/Graphic.h) is implemented in [CatCircle.h](step3/CatCircle.h) and [CatCircle.cpp](step3/CatCircle.cpp).  To actually use this graphic in a unit, we must also wrap the C++ CatCircle in a lua ViewControl as done in [CatCircle.lua](step3/CatCircle.lua).
 
-This project will generate a file called **tutorial-0.0.3.pkg** in the build directory.  All the build and install commands are the same as in Step 2.  Have a look at the [Makefile](step3/Makefile) for further details.
+This project will generate a file called **tutorial-0.0.3.pkg** in the build directory.  All the build and install commands are the same as in Step 2.  Have a look at the [Makefile](step3/Makefile) for more details.
 
 ## Further Reading
 
