@@ -18,15 +18,18 @@ This folder contains 3 example projects that progressively increase in complexit
 
 ## Step 1: Make your first unit
 
-There are no files to compile, so the makefile just zips up the *.lua files and names it appropriately with a version string:
+Our first unit is 1-operator FM oscillator that is built entirely out of existing DSP objects that can be found in the firmware and the core library.  Since the implementation is pure Lua, there are no files to compile.  The *Step 1* makefile just zips up the *.lua files and names it appropriately with a version string.  
 
 ```bash
+cd step1
 make
 ```
 
 This will generate a file called **tutorial-0.0.1.pkg** in this directory.  To try it out, manually copy this pkg to the packages folder of the emulator or your SD card.  Since this package has only lua scripts, there is no need for cross-compilation.  Alternatively, you can use the make install targets:
 
 ```bash
+cd ../step2
+
 # To install to the emulator's package folder:
 make emu-install
 
@@ -42,6 +45,8 @@ Now we add your own custom C++ [Object](../od/objects/Object.h) (implemented by 
 
 To compile:
 ```bash
+cd ../step3
+
 # Compile a testing build for the emulator (linux):
 make
 

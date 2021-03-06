@@ -10,7 +10,7 @@ public:
   ~EuclideanSequencer();
 
 #ifndef SWIGLUA
-  // These declarations are omitted from the swig wrapper thus reducing code size.
+  // These declarations are omitted from the swig wrapper to reduce code size.
   virtual void process();
   od::Inlet mTrigger{"Trigger"};
   od::Inlet mReset{"Reset"};

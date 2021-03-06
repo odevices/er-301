@@ -1,3 +1,4 @@
+-- Return a table containing meta data that describes the package contents.
 return {
   title = "Tutorial",
   author = "O|D",
@@ -12,3 +13,5 @@ return {
     },
   }
 }
+
+-- All packages must have this file!
