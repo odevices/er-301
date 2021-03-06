@@ -70,7 +70,7 @@ Examples:
 
 ### Configuring the emulator
 
-If you run the emulator and it cannot find a valid configuration file then the program will create a default one similar to this in ```~/.od/emu.config```:
+If you run the emulator and it cannot find a valid configuration file then the program will create a default one in ```~/.od/emu.config``` that is similar to this:
 
 ```bash
 ## ER-301 Emulator Configuration
