@@ -6,7 +6,7 @@
   * [Step 1: Make your first unit](#step-1-make-your-first-unit)
   * [Step 2: Add custom DSP code](#step-2-add-custom-dsp-code)
   * [Step 3: Add custom graphics](#step-3-add-custom-graphics)
-  * [Advanced Topics](#advanced-topics)
+  * [Further Reading](#further-reading)
 
 ## Introduction
 
@@ -67,7 +67,7 @@ This project will generate a file called **tutorial-0.0.3.pkg** in the build dir
 
 Take a look at the [Makefile](step3/Makefile) for further options.
 
-## Advanced Topics
+## Further Reading
 
 There is still plenty to learn outside of the above 3 examples.  Here are some along with pointers to examples in the source tree to get you started:
 
