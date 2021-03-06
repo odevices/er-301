@@ -37,7 +37,7 @@ Take a look at the [Makefile](step1/Makefile) for further options.
 
 Now we add your own custom C++ [Object](../od/objects/Object.h) (implemented by [EuclideanSequencer.h](step2/EuclideanSequencer.h) and [EuclideanSequencer.cpp](step2/EuclideanSequencer.cpp)) and define a new unit (implemented in [EuclidsCatsUnit.lua](step3/EuclidsCatsUnit.lua)) that uses your custom Object in its DSP graph.
 
-As before to compile:
+To compile:
 ```bash
 # Compile for default architecture (linux) and default build profile (testing):
 make
@@ -46,7 +46,7 @@ make
 make ARCH=am335x PROFILE=release
 ```
 
-This will generate a file called **tutorial-0.0.2.pkg** in the build directory.  To try it out, manually copy this pkg to the packages folder of the emulator or your SD card.  Since this package has only lua scripts, there is no need for cross-compilation.  Alternatively, you can use the make install targets:
+This will generate a file called **tutorial-0.0.2.pkg** in the build directory.  To try it out, manually copy this pkg to the packages folder of the emulator or your SD card.  Alternatively, you can use the make install targets:
 
 ```bash
 # To install to the emulator
