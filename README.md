@@ -14,7 +14,7 @@
     + [Test your build environment](#test-your-build-environment)
     + [Work through the tutorials](#work-through-the-tutorials)
   * [USB Functions](#usb-functions)
-  * [Build profiles and Target architectures](#build-profiles-and-target-architectures)
+  * [Build profiles and target architectures](#build-profiles-and-target-architectures)
   * [Glossary](#glossary)
 
 ## Introduction
@@ -221,7 +221,7 @@ There is a USB port on the back of the ER-301.  As of v0.6.00 of the firmware, t
 
 :warning: There is a gotcha with having the ER-301 plugged into a USB host.  It will not boot because it will be waiting for the USB host to give it firmware via BOOTP/TFTP.  This is baked into the AM335x ROM unfortunately.  The solution is to have a BOOTP server always running on your host that either gives it the firmware or tells the ER-301 to give up and boot from the SD card.
 
-## Build profiles and Target architectures
+## Build profiles and target architectures
 
 All build outputs are placed in a sub folder composed of the build profile and the target architecture.  There are 3 build profiles:
 
