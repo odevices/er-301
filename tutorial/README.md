@@ -46,7 +46,7 @@ make
 make ARCH=am335x PROFILE=release
 ```
 
-This will generate a file called **tutorial-0.0.2.pkg** in the build directory.  To try it out, manually copy this pkg to the packages folder of the emulator or your SD card.  Alternatively, you can use the make install targets:
+This will generate a file called **tutorial-0.0.2.pkg** in the build directory.  The build directory is constructed from build profile and architecture.  For example, the default build profile is **testing** and the default architecture is **linux**, so the default build directory is **testing/linux**.  To try out the new units, manually copy the tutorial package to the packages folder of the emulator or your SD card.  Alternatively, you can use the make install targets:
 
 ```bash
 # To install to the emulator
