@@ -28,8 +28,6 @@ make
 This will generate a file called **tutorial-0.0.1.pkg** in this directory.  To try it out, manually copy this pkg to the packages folder of the emulator or your SD card.  Since this package has only lua scripts, there is no need for cross-compilation.  Alternatively, you can use the make install targets:
 
 ```bash
-cd ../step2
-
 # To install to the emulator's package folder:
 make emu-install
 
@@ -45,7 +43,7 @@ Now we add your own custom C++ [Object](../od/objects/Object.h) (implemented by 
 
 To compile:
 ```bash
-cd ../step3
+cd ../step2
 
 # Compile a testing build for the emulator (linux):
 make
