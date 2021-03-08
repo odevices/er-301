@@ -62,6 +62,11 @@ ifeq ($(ARCH),linux)
 LFLAGS = -shared
 endif
 
+ifeq ($(ARCH),darwin)
+# Do not try to resolve dynamic links when linking.
+LFLAGS = -dynamic -undefined dynamic_lookup -lSystem
+endif
+
 # Prevent swig from placing symbols exported by mods in the global namespace.
 SWIGFLAGS += -nomoduleglobal -small -fvirtual
 

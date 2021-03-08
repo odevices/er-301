@@ -1,13 +1,30 @@
-
-ARCH ?= am335x
-#ARCH = linux
-PROFILE ?= testing
-#PROFILE = release
-#PROFILE = debug
-
 FIRMWARE_NAME ?= Thoon
 FIRMWARE_VERSION ?= 0.6.02
 FIRMWARE_STATUS ?= unstable
+
+# Determine ARCH if it's not provided...
+# linux | darwin | am335x
+ifndef ARCH
+  SYSTEM_NAME := $(shell uname -s)
+  ifeq ($(SYSTEM_NAME),Linux)
+    ARCH = linux
+  else ifeq ($(SYSTEM_NAME),Darwin)
+    ARCH = darwin
+  else
+    $(error Unsupported system $(SYSTEM_NAME))
+  endif
+endif
+
+# Use the linux source files unless we're building am335x
+arch_source = linux
+ifeq ($(ARCH),am335x)
+  arch_source = am335x
+endif
+
+
+# Determine PROFILE if it's not provided...
+# testing | release | debug
+PROFILE ?= testing
 
 scriptname := $(word 1, $(MAKEFILE_LIST))
 scriptname := $(scriptname:scripts/%=%)
@@ -24,7 +41,7 @@ describe_env = $(blueON)[$(scriptname) $(ARCH) $(PROFILE)]$(blueOFF)
 # Frequently used paths
 build_dir = $(PROFILE)/$(ARCH)
 libs_build_dir = $(build_dir)/libs
-arch_dir = arch/$(ARCH)
+arch_dir = arch/$(arch_source)
 mods_dir = mods
 od_dir = od
 libs_dir = libs
@@ -46,6 +63,12 @@ CFLAGS.size = -Os
 
 symbols = 
 includes =
+
+# Default card locations
+front_card_label = front
+front_card_dir = ~/.od/$(front_card_label)
+rear_card_label = rear
+rear_card_dir = ~/.od/$(rear_card_label)
 
 ###########################
 
@@ -79,15 +102,23 @@ CFLAGS.release ?= $(CFLAGS.speed) -Wno-unused
 CFLAGS.testing ?= -g -DBUILDOPT_TESTING
 CFLAGS.debug ?= -g -DBUILDOPT_TESTING
 
-front_card_label = front
-front_card_dir = ~/.od/$(front_card_label)
-rear_card_label = rear
-rear_card_dir = ~/.od/$(rear_card_label)
-
 include scripts/linux.mk
 
 # symbols += BUILDOPT_LUA_USE_REALLOC
 CFLAGS.linux = -Wno-deprecated-declarations -msse4 -fPIC
+
+endif
+
+### darwin-specific
+ifeq ($(ARCH),darwin)
+
+CFLAGS.release ?= $(CFLAGS.speed) -Wno-unused
+CFLAGS.testing ?= -g -DBUILDOPT_TESTING
+CFLAGS.debug ?= -g -DBUILDOPT_TESTING
+
+include scripts/darwin.mk
+
+CFLAGS.darwin = -Wno-deprecated-declarations -msse4 -fPIC
 endif
 
 ###########################
