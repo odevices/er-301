@@ -21,6 +21,7 @@ asset_dir ?= $(src_dir)/assets
 lib_file = $(out_dir)/$(MODNAME)/$(LIBNAME).so
 all_imports_file = $(out_dir)/$(MODNAME)/imports.txt
 missing_imports_file = $(out_dir)/$(MODNAME)/missing.txt
+app_exports_file = $(build_dir)/app/exports.sym
 package_file = $(out_dir)/$(MODNAME)-$(MODVERSION).pkg
 
 # Get the parent of the src dir (without the trailing slash)
@@ -88,14 +89,18 @@ $(package_file): $(lib_file) $(assets)
 	@echo $(describe_env) + $(describe_input)
 	@$(ZIP) -jq $@ $<
 
-# Check for any undefined symbols that are not exported by app.
-missing: 
-	@echo $(describe_env) NM $(lib_file)
+$(all_imports_file): $(lib_file)
+	@echo $(describe_env) NM $<
 	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@
-	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}'
-	@sort -u $(build_dir)/app/exports.sym | comm -23 $< - > $@
-#	@[ ! -s $@ ] || echo "Missing Symbols:"
-#	@cat $@
+
+$(missing_imports_file): $(all_imports_file) $(app_exports_file)
+	@sort -u $(app_exports_file) | comm -23 $< - > $@
+
+# Check for any undefined symbols that are not exported by app.
+missing: $(missing_imports_file)
+	@[ ! -s $< ] || echo "Missing Symbols:"
+	@cat $<
+	@[ -s $< ] || echo "No missing symbols."
 
 list: $(package_file)
 	unzip -l $(package_file)
