@@ -146,3 +146,31 @@ $(out_dir)/%_swig.o: $(out_dir)/%_swig.cpp
 	@mkdir -p $(@D)
 	@$(CPP) $(CFLAGS.swig) -std=gnu++11 -c $< -o $@
 
+ifeq ($(ARCH),am335x)
+# Optional check for any missing symbols
+#
+# make missing ARCH=am335x
+#
+# Warning: This assumes that the firmware has been compiled in the SDK source tree already. 
+#
+
+all_imports_file = $(out_dir)/imports.txt
+missing_imports_file = $(out_dir)/missing.txt
+app_exports_file = $(SDKPATH)/$(PROFILE)/$(ARCH)/app/exports.sym
+
+$(all_imports_file): $(lib_file)
+	@echo $(describe_env) NM $<
+	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@
+
+$(missing_imports_file): $(all_imports_file) $(app_exports_file)
+	@sort -u $(app_exports_file) | comm -23 $< - > $@
+
+# Check for any undefined symbols that are not exported by app.
+missing: $(missing_imports_file)
+	@[ ! -s $< ] || echo "Missing Symbols:"
+	@cat $<
+	@[ -s $< ] || echo "No missing symbols."	
+
+.PHONY: missing
+
+endif
