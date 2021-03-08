@@ -73,7 +73,7 @@ objects = $(addprefix $(out_dir)/,$(c_sources:%.c=%.o))
 objects += $(addprefix $(out_dir)/,$(cpp_sources:%.cpp=%.o))
 objects += $(swig_object)
 
-includes += $(SDKPATH) $(SDKPATH)/arch/$(ARCH)
+includes += $(SDKPATH) $(SDKPATH)/arch/$(arch_source)
 
 ifeq ($(ARCH),am335x)
 INSTALLPATH.am335x = /media/$(USERNAME)/FRONT/ER-301/packages
