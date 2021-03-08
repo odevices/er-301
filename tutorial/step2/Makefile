@@ -24,7 +24,6 @@
 PKGNAME ?= tutorial
 PKGVERSION ?= 0.0.2
 LIBNAME ?= libFoo
-ARCH ?= linux
 PROFILE ?= testing
 SDKPATH ?= ../..
 
@@ -39,6 +38,25 @@ symbols =
 
 #######################################################
 # Edits are generally not needed beyond this point.
+
+# Determine ARCH if it's not provided...
+# linux | darwin | am335x
+ifndef ARCH
+  SYSTEM_NAME := $(shell uname -s)
+  ifeq ($(SYSTEM_NAME),Linux)
+    ARCH = linux
+  else ifeq ($(SYSTEM_NAME),Darwin)
+    ARCH = darwin
+  else
+    $(error Unsupported system $(SYSTEM_NAME))
+  endif
+endif
+
+# Use the linux source files unless we're building am335x
+arch_source = linux
+ifeq ($(ARCH),am335x)
+  arch_source = am335x
+endif
 
 out_dir = $(PROFILE)/$(ARCH)
 lib_file = $(out_dir)/$(LIBNAME).so
@@ -55,7 +73,7 @@ objects = $(addprefix $(out_dir)/,$(c_sources:%.c=%.o))
 objects += $(addprefix $(out_dir)/,$(cpp_sources:%.cpp=%.o))
 objects += $(swig_object)
 
-includes += $(SDKPATH) $(SDKPATH)/arch/$(ARCH)
+includes += $(SDKPATH) $(SDKPATH)/arch/$(arch_source)
 
 ifeq ($(ARCH),am335x)
 INSTALLPATH.am335x = /media/$(USERNAME)/FRONT/ER-301/packages
@@ -69,6 +87,13 @@ INSTALLPATH.linux = $(HOME)/.od/rear
 CFLAGS.linux = -Wno-deprecated-declarations -msse4 -fPIC
 LFLAGS = -shared
 include $(SDKPATH)/scripts/linux.mk
+endif
+
+ifeq ($(ARCH),darwin)
+INSTALLPATH.linux = $(HOME)/.od/rear
+CFLAGS.linux = -Wno-deprecated-declarations -msse4 -fPIC
+LFLAGS = -dynamic -undefined dynamic_lookup -lSystem
+include $(SDKPATH)/scripts/darwin.mk
 endif
 
 CFLAGS.common = -Wall -ffunction-sections -fdata-sections
