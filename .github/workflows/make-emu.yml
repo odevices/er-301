@@ -7,7 +7,7 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
+  ubuntu-build:
 
     runs-on: ubuntu-latest
 
@@ -17,3 +17,15 @@ jobs:
       run: sudo apt install build-essential libsdl2-dev libsdl2-ttf-dev libfftw3-dev swig python3 zip fonts-freefont-ttf
     - name: make emu
       run: make emu
+
+  darwin-build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: install dependencies
+      run: brew install sdl2 sdl2_ttf fftw swig
+    - name: make emu
+      run: make emu
+
