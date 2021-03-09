@@ -21,7 +21,6 @@ ifeq ($(ARCH),am335x)
   arch_source = am335x
 endif
 
-
 # Determine PROFILE if it's not provided...
 # testing | release | debug
 PROFILE ?= testing

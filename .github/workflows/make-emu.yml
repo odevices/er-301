@@ -25,7 +25,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: install dependencies
-      run: brew install sdl2 sdl2_ttf fftw swig
+      run: brew install gcc sdl2 sdl2_ttf fftw swig
     - name: make emu
       run: make emu
-

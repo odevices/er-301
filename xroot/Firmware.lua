@@ -74,8 +74,7 @@ function Firmware:update()
       self.rebootButton:hide()
       self.updateButton:hide()
       Busy.enable()
-      self:backup()
-      if not self:install(result.fullpath) then self:restore() end
+      self:install(result.fullpath)
       Busy.disable()
       self.rebootButton:show()
       self.updateButton:show()
@@ -91,53 +90,34 @@ function Firmware:update()
   chooser:show()
 end
 
-local function backup(orig, backup)
-  if app.pathExists(orig) then app.moveFile(orig, backup, true) end
-end
-
-local function restore(orig, backup)
-  if app.pathExists(backup) then app.moveFile(backup, orig, true) end
-end
-
-function Firmware:backup()
-  backup(app.roots.rear .. "/MLO", app.roots.rear .. "/MLO_backup")
-  backup(app.roots.rear .. "/SBL", app.roots.rear .. "/SBL_backup")
-  backup(app.roots.rear .. "/kernel.bin", app.roots.rear .. "/kernel_backup.bin")
-end
-
-function Firmware:restore()
-  restore(app.roots.rear .. "/MLO", app.roots.rear .. "/MLO_backup")
-  restore(app.roots.rear .. "/SBL", app.roots.rear .. "/SBL_backup")
-  restore(app.roots.rear .. "/kernel.bin",
-          app.roots.rear .. "/kernel_backup.bin")
-end
-
 function Firmware:defaultInstallation(archive)
-  local files = {
-    "MLO",
-    "SBL",
-    "kernel.bin"
-  }
-
-  local descriptions = {
-    "initial boot loader",
-    "secondary boot loader",
-    "kernel"
-  }
-
-  for i, filename in ipairs(files) do
+  -- First extract all files to a temporary location.
+  local renames = {}
+  local n = archive:getFileCount()
+  
+  for i =1,n do
+    local filename = archive:getFilename(i-1)
     app.logInfo("Trying to extract and copy %s.", filename)
-    self:msg("Installing %s...", descriptions[i])
+    self:msg("Installing %s...", filename)
     if not archive:exists(filename) then
       self:msg("Update failed: %s was not found.", filename)
       return false
     end
-    if archive:extract(filename, Path.join(app.roots.rear, filename)) then
+    local tmpFilename = "_"..filename
+    local tmpPath = Path.join(app.roots.rear, tmpFilename)
+    local actualPath = Path.join(app.roots.rear, filename)
+    if archive:extract(filename, tmpPath) then
       app.logInfo("%s copied successfully.", filename)
+      renames[#renames] = {tmpPath, actualPath}
     else
       self:msg("Update failed: could not copy %s.", filename)
       return false
     end
+  end
+
+  -- All files extracted successfully, so rename them to their required location.
+  for _, args in ipairs(renames) do
+    app.moveFile(args[1], args[2], true)
   end
 
   return true
