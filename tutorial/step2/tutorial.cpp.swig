@@ -6,9 +6,9 @@
 // Code between %{ and %} is inserted verbatim into the wrapper.
 %{
 
-// Add header files necessary for compilation of the interfaces added further down.
 #undef SWIGLUA
 
+// Add header files necessary for compilation of the interfaces added further down.
 #include <EuclideanSequencer.h>
 	
 #define SWIGLUA
