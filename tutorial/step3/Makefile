@@ -90,8 +90,8 @@ include $(SDKPATH)/scripts/linux.mk
 endif
 
 ifeq ($(ARCH),darwin)
-INSTALLPATH.linux = $(HOME)/.od/rear
-CFLAGS.linux = -Wno-deprecated-declarations -msse4 -fPIC
+INSTALLPATH.darwin = $(HOME)/.od/rear
+CFLAGS.darwin = -Wno-deprecated-declarations -msse4 -fPIC
 LFLAGS = -dynamic -undefined dynamic_lookup -lSystem
 include $(SDKPATH)/scripts/darwin.mk
 endif
