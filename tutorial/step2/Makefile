@@ -111,6 +111,7 @@ CFLAGS += $(addprefix -D,$(symbols))
 # swig-specific flags
 SWIGFLAGS = -lua -no-old-metatable-bindings -nomoduleglobal -small -fvirtual
 SWIGFLAGS += $(addprefix -I,$(includes)) 
+SWIGFLAGS += -module $(PKGNAME)_$(LIBNAME)
 CFLAGS.swig = $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.size)
 CFLAGS.swig += $(addprefix -I,$(includes)) -I$(SDKPATH)/libs/lua54
 CFLAGS.swig += $(addprefix -D,$(symbols))
