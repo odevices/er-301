@@ -184,10 +184,11 @@ missing_imports_file = $(out_dir)/missing.txt
 app_exports_file = $(SDKPATH)/$(PROFILE)/$(ARCH)/app/exports.sym
 
 $(all_imports_file): $(lib_file)
-	@echo $(describe_env) NM $<
+	@echo [NM $<]
 	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@
 
 $(missing_imports_file): $(all_imports_file) $(app_exports_file)
+	@echo [DIFF $(all_imports_file) $(app_exports_file)]
 	@sort -u $(app_exports_file) | comm -23 $< - > $@
 
 # Check for any undefined symbols that are not exported by app.
