@@ -1,6 +1,7 @@
 #include <hal/fileops.h>
 #include <sys/stat.h>
 #include <sys/param.h>
+#include <sys/mount.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
