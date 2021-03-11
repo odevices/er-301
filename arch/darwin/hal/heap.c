@@ -1,7 +1,6 @@
 #include <hal/heap.h>
 #include <hal/log.h>
 #include <stdlib.h>
-#include <malloc.h>
 
 typedef struct
 {
@@ -44,7 +43,9 @@ void Heap_init()
 
 void *Heap_memalign(size_t align, size_t size)
 {
-  return memalign(align, size);
+  uintptr_t ptr;
+  posix_memalign(&ptr, align, size);
+  return ptr;
 }
 
 void *Heap_malloc(size_t size)

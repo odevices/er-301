@@ -8,9 +8,9 @@ out_dir := $(build_dir)/$(program_name)
 exports_dir = $(out_dir)/exports
 exports_file := $(out_dir)/exports.sym
 
-src_dirs := $(program_dir) $(hal_dir) $(arch_hal_dir) $(od_dir) $(ti_dir)
+src_dirs := $(program_dir) $(hal_dir) $(arch_dir)/$(ARCH)/hal $(od_dir) $(ti_dir)
 
-includes += . $(arch_dir) $(lua_dir) $(ne10_dir)/inc $(lodepng_dir) $(miniz_dir)
+includes += $(lua_dir) $(ne10_dir)/inc $(lodepng_dir) $(miniz_dir)
 
 libraries :=
 libraries += $(libs_build_dir)/lib$(lua_name).a

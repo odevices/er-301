@@ -7,7 +7,7 @@
 ## Optional
 # MODVERSION := 1.0.0
 # asset_dir = $(src_dir)/assets
-# includes += . $(mods_dir) $(arch_dir) $(ne10_dir)/inc $(lua_dir)
+# includes += $(mods_dir) $(ne10_dir)/inc $(lua_dir)
 # symbols +=
 # excludes =
 

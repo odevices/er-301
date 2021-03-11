@@ -5,9 +5,9 @@ program_name := sbl
 program_dir := $(program_name)
 out_dir := $(build_dir)/$(program_name)
 
-src_dirs := $(program_dir) $(hal_dir) $(arch_hal_dir) $(ti_dir)
+src_dirs := $(program_dir) $(hal_dir) $(arch_dir)/$(ARCH)/hal $(ti_dir)
 
-includes += . $(arch_dir) $(ne10_dir)/inc
+includes += $(ne10_dir)/inc
 symbols += BUILDOPT_SBL
 libraries :=
 

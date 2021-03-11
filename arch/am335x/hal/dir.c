@@ -1,7 +1,7 @@
 #include <hal/dir.h>
 #include <hal/fatfs/ff.h>
 #include <hal/log.h>
-#include <malloc.h>
+#include <hal/heap.h>
 
 typedef struct
 {
@@ -11,7 +11,7 @@ typedef struct
 
 dir_t Dir_open(const char *path)
 {
-  internal_dir_t *d = (internal_dir_t *)calloc(1, sizeof(internal_dir_t));
+  internal_dir_t *d = (internal_dir_t *)Heap_calloc(1, sizeof(internal_dir_t));
   logAssert(d);
   if (f_opendir(&d->dir, path) != FR_OK)
   {
@@ -25,7 +25,7 @@ void Dir_close(dir_t dir)
   internal_dir_t *d = (internal_dir_t *)dir;
   logAssert(d);
   f_closedir(&d->dir);
-  free(d);
+  Heap_free(d);
 }
 
 bool Dir_read(dir_t dir, char **filename, uint32_t *attributes)

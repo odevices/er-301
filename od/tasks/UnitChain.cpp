@@ -2,8 +2,8 @@
 #include <od/extras/LookupTables.h>
 #include <hal/concurrency/Thread.h>
 #include <hal/audio.h>
-#define BUILDOPT_VERBOSE
-#define BUILDOPT_DEBUG_LEVEL 10
+//#define BUILDOPT_VERBOSE
+//#define BUILDOPT_DEBUG_LEVEL 10
 #include <hal/log.h>
 #include <algorithm>
 

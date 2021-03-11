@@ -3,8 +3,8 @@
 //#define BUILDOPT_DEBUG_LEVEL 10
 #include <hal/log.h>
 #include <hal/timing.h>
+#include <hal/heap.h>
 #include <string.h>
-#include <malloc.h>
 
 extern "C"
 {
@@ -163,15 +163,15 @@ namespace od
       return ptr;
     }
     mMisses++;
-    return ::malloc(size);
+    return Heap_malloc(size);
   }
 
   void Interpreter::releaseBuffer(void *ptr)
   {
     if (!mAllocator.release((uint8_t *)ptr))
     {
-      // Belongs to malloc.
-      ::free(ptr);
+      // Belongs to Heap_malloc.
+      Heap_free(ptr);
     }
   }
 
@@ -228,8 +228,8 @@ namespace od
         size_t asize = mAllocator.getActualSize((uint8_t *)ptr);
         if (asize == 0)
         {
-          // Belongs to malloc.
-          return ::realloc(ptr, nsize);
+          // Belongs to Heap_malloc.
+          return Heap_realloc(ptr, nsize);
         }
         if (osize > nsize)
         {

@@ -73,5 +73,8 @@ emu-clean:
 
 dist-clean:
 	rm -rf testing debug release
+	+$(MAKE) -C tutorial/step1 clean
+	+$(MAKE) -C tutorial/step2 dist-clean
+	+$(MAKE) -C tutorial/step3 dist-clean
 
 .PHONY: app sbl pbl emu

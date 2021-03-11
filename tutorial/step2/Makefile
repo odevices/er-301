@@ -52,12 +52,6 @@ ifndef ARCH
   endif
 endif
 
-# Use the linux source files unless we're building am335x
-arch_source = linux
-ifeq ($(ARCH),am335x)
-  arch_source = am335x
-endif
-
 out_dir = $(PROFILE)/$(ARCH)
 lib_file = $(out_dir)/$(LIBNAME).so
 package_file = $(out_dir)/$(PKGNAME)-$(PKGVERSION).pkg
@@ -73,7 +67,7 @@ objects = $(addprefix $(out_dir)/,$(c_sources:%.c=%.o))
 objects += $(addprefix $(out_dir)/,$(cpp_sources:%.cpp=%.o))
 objects += $(swig_object)
 
-includes += $(SDKPATH) $(SDKPATH)/arch/$(arch_source)
+includes += $(SDKPATH) $(SDKPATH)/arch/$(ARCH)
 
 ifeq ($(ARCH),am335x)
 INSTALLPATH.am335x = /media/$(USERNAME)/FRONT/ER-301/packages
@@ -86,6 +80,7 @@ ifeq ($(ARCH),linux)
 INSTALLPATH.linux = $(HOME)/.od/rear
 CFLAGS.linux = -Wno-deprecated-declarations -msse4 -fPIC
 LFLAGS = -shared
+includes += $(SDKPATH)/emu
 include $(SDKPATH)/scripts/linux.mk
 endif
 
@@ -93,6 +88,7 @@ ifeq ($(ARCH),darwin)
 INSTALLPATH.darwin = $(HOME)/.od/rear
 CFLAGS.darwin = -Wno-deprecated-declarations -msse4 -fPIC
 LFLAGS = -dynamic -undefined dynamic_lookup -lSystem
+includes += $(SDKPATH)/emu
 include $(SDKPATH)/scripts/darwin.mk
 endif
 
@@ -179,7 +175,6 @@ ifeq ($(ARCH),am335x)
 #
 # Warning: This assumes that the firmware has been compiled in the SDK source tree already. 
 #
-
 all_imports_file = $(out_dir)/imports.txt
 missing_imports_file = $(out_dir)/missing.txt
 app_exports_file = $(SDKPATH)/$(PROFILE)/$(ARCH)/app/exports.sym

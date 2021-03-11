@@ -5,8 +5,8 @@ program_name := emu
 program_dir := $(program_name)
 out_dir := $(build_dir)/$(program_name)
 
-src_dirs := $(program_dir) $(hal_dir) $(arch_hal_dir) $(od_dir) $(ti_dir)
-includes += . $(arch_dir) $(lua_dir) $(lodepng_dir) $(miniz_dir) $(libs_dir)/SDL_FontCache
+src_dirs := $(program_dir) $(hal_dir) $(arch_dir)/$(ARCH) $(od_dir) $(ti_dir)
+includes += $(program_dir) $(lua_dir) $(lodepng_dir) $(miniz_dir) $(libs_dir)/SDL_FontCache
 
 libraries :=
 libraries += $(libs_build_dir)/lib$(lua_name).a

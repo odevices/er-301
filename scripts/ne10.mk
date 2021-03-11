@@ -2,7 +2,7 @@ include scripts/env.mk
 
 LIBNAME := ne10
 src_dir = $(ne10_dir)
-includes += $(ne10_dir)/inc $(ne10_dir)/common $(arch_dir)
+includes += $(ne10_dir)/inc $(ne10_dir)/common
 symbols += NE10_ENABLE_MATH
 symbols += NE10_ENABLE_DSP
 symbols += NE10_ENABLE_HF

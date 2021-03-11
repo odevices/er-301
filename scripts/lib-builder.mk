@@ -5,7 +5,7 @@
 # src_dir = $(miniz_dir)
 
 ## Optional
-# includes += $(miniz_dir) $(arch_dir)
+# includes += $(miniz_dir)
 # symbols +=
 
 ###################################################

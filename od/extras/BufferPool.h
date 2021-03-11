@@ -1,7 +1,7 @@
 #pragma once
 
 #include <hal/constants.h>
-#include <malloc.h>
+#include <hal/heap.h>
 #include <string.h>
 #include <vector>
 #include <stdint.h>
@@ -27,7 +27,7 @@ namespace od
     {
       deallocate();
       uint32_t poolSizeInBytes = bufferCount * bufferSize * sizeof(T);
-      mPool = (T *)memalign(CACHELINE_SIZE_MAX, poolSizeInBytes);
+      mPool = (T *)Heap_memalign(CACHELINE_SIZE_MAX, poolSizeInBytes);
       if (mPool)
       {
         bzero(mPool, poolSizeInBytes);
@@ -54,7 +54,7 @@ namespace od
       if (mPool)
       {
         mFreeBuffers.clear();
-        free(mPool);
+        Heap_free(mPool);
         mPool = 0;
         mBufferSize = 0;
         mPoolSizeInBytes = 0;

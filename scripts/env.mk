@@ -15,12 +15,6 @@ ifndef ARCH
   endif
 endif
 
-# Use the linux source files unless we're building am335x
-arch_source = linux
-ifeq ($(ARCH),am335x)
-  arch_source = am335x
-endif
-
 # Determine PROFILE if it's not provided...
 # testing | release | debug
 PROFILE ?= testing
@@ -40,13 +34,11 @@ describe_env = $(blueON)[$(scriptname) $(ARCH) $(PROFILE)]$(blueOFF)
 # Frequently used paths
 build_dir = $(PROFILE)/$(ARCH)
 libs_build_dir = $(build_dir)/libs
-arch_dir = arch/$(arch_source)
+arch_dir = arch
 mods_dir = mods
 od_dir = od
 libs_dir = libs
 hal_dir = hal
-
-arch_hal_dir = $(arch_dir)/hal
 
 miniz_dir = $(libs_dir)/miniz
 lodepng_dir = $(libs_dir)/lodepng
@@ -61,7 +53,7 @@ CFLAGS.speed = -O3 -ftree-vectorize -ffast-math
 CFLAGS.size = -Os
 
 symbols = 
-includes =
+includes = . $(arch_dir)/$(ARCH)
 
 # Default card locations
 front_card_label = front
@@ -78,9 +70,9 @@ CFLAGS.release ?= $(CFLAGS.speed) -Wno-unused
 CFLAGS.testing ?= $(CFLAGS.speed) -DBUILDOPT_TESTING
 CFLAGS.debug ?= -g -DBUILDOPT_TESTING
 
-ti_dir = $(arch_dir)/ti
+ti_dir = $(arch_dir)/$(ARCH)/ti
 sysbios_build_dir = $(build_dir)/sysbios
-sysbios_dir = $(arch_dir)/sysbios
+sysbios_dir = $(arch_dir)/$(ARCH)/sysbios
 ne10_dir = $(libs_dir)/ne10
 front_card_label = FRONT
 front_card_dir = /media/$(shell whoami)/$(front_card_label)
@@ -104,6 +96,7 @@ CFLAGS.debug ?= -g -DBUILDOPT_TESTING
 include scripts/linux.mk
 
 # symbols += BUILDOPT_LUA_USE_REALLOC
+includes += emu
 CFLAGS.linux = -Wno-deprecated-declarations -msse4 -fPIC
 
 endif
@@ -117,6 +110,7 @@ CFLAGS.debug ?= -g -DBUILDOPT_TESTING
 
 include scripts/darwin.mk
 
+includes += emu
 CFLAGS.darwin = -Wno-deprecated-declarations -msse4 -fPIC
 endif
 

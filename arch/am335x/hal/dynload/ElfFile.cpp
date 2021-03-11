@@ -5,10 +5,10 @@
 #define BUILDOPT_DEBUG_LEVEL 10
 #include <hal/log.h>
 #include <hal/dma.h>
+#include <hal/heap.h>
 #include <hal/constants.h>
 #include <vector>
 #include <string.h>
-#include <malloc.h>
 #include "elf.h"
 #include "armv7a.h"
 #include "reflect.h"
@@ -37,7 +37,7 @@ namespace od
     if (bytes > 0)
     {
       logDebug(1, "%s: Allocating %d bytes for text/code.", mFilename.c_str(), bytes);
-      mpTextSpace = (uint8_t *)memalign(CACHELINE_SIZE_MAX, bytes);
+      mpTextSpace = (uint8_t *)Heap_memalign(CACHELINE_SIZE_MAX, bytes);
       if (mpTextSpace)
       {
         bzero(mpTextSpace, bytes);
@@ -59,7 +59,7 @@ namespace od
     if (bytes > 0)
     {
       logDebug(1, "%s: Allocating %d bytes for data.", mFilename.c_str(), bytes);
-      mpDataSpace = (uint8_t *)memalign(CACHELINE_SIZE_MAX, bytes);
+      mpDataSpace = (uint8_t *)Heap_memalign(CACHELINE_SIZE_MAX, bytes);
       if (mpDataSpace)
       {
         bzero(mpDataSpace, bytes);
@@ -80,7 +80,7 @@ namespace od
     if (mpTextSpace)
     {
       logDebug(1, "%s: freeing %d bytes of text/code memory.", mFilename.c_str(), mTextSize);
-      free(mpTextSpace);
+      Heap_free(mpTextSpace);
       mpTextSpace = 0;
       mTextSize = 0;
     }
@@ -91,7 +91,7 @@ namespace od
     if (mpDataSpace)
     {
       logDebug(1, "%s: freeing %d bytes of data memory.", mFilename.c_str(), mDataSize);
-      free(mpDataSpace);
+      Heap_free(mpDataSpace);
       mpDataSpace = 0;
       mDataSize = 0;
     }

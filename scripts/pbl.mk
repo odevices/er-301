@@ -8,11 +8,9 @@ include scripts/utils.mk
 program_name := pbl
 program_dir := $(program_name)
 out_dir := $(build_dir)/$(program_name)
-pbl_hal_dir = $(program_name)/hal
-
 src_dirs := $(program_dir)
 
-includes += . $(pbl_hal_dir) $(arch_dir)
+includes += $(program_dir)
 symbols += BUILDOPT_PBL
 libraries :=
 
@@ -33,7 +31,7 @@ c_sources += $(ti_dir)/am335x/gpio_lld.c
 c_sources += $(ti_dir)/am335x/mmcsd_lld.c
 c_sources += $(ti_dir)/am335x/uart.c
 c_sources += $(ti_dir)/am335x/wdt_lld.c
-c_sources += $(arch_hal_dir)/uart.c
+c_sources += $(arch_dir)/$(ARCH)/hal/uart.c
 
 objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)) 
 

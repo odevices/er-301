@@ -1,5 +1,6 @@
 #include <hal/log.h>
 #include <xdc/runtime/Memory.h>
+#include <malloc.h>
 
 // These symbols are defined in the linker script.
 extern uintptr_t __unused_memory_start__;
@@ -44,4 +45,29 @@ int Heap_getFreeSize(int units)
 
 void Heap_init()
 {
+}
+
+void *Heap_memalign(size_t align, size_t size)
+{
+  return memalign(align, size);
+}
+
+void *Heap_malloc(size_t size)
+{
+  return malloc(size);
+}
+
+void *Heap_calloc(size_t nmemb, size_t size)
+{
+  return calloc(nmemb, size);
+}
+
+void *Heap_realloc(void *ptr, size_t size)
+{
+  return realloc(ptr, size);
+}
+
+void Heap_free(void *ptr)
+{
+  free(ptr);
 }

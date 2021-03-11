@@ -1,10 +1,10 @@
 #include <hal/log.h>
+#include <hal/heap.h>
 #include "resource.h"
 #include <_ansi.h>
 #include <_syslist.h>
 #include <errno.h>
 #include "warning.h"
-#include <malloc.h>
 #include <fcntl.h>
 #include <string.h>
 
@@ -42,10 +42,10 @@ int createCardFileDescriptor(void)
   {
     if (entries[i].data == NULL)
     {
-      file_t *fp = (file_t *)calloc(1, sizeof(file_t));
+      file_t *fp = (file_t *)Heap_calloc(1, sizeof(file_t));
       logAssert(fp);
 #if FILE_READ_CACHE_ENABLED
-      fp->cache.data = (char *)malloc(FILE_READ_CACHE_LEN);
+      fp->cache.data = (char *)Heap_malloc(FILE_READ_CACHE_LEN);
 #endif
       entries[i].data = (void *)fp;
       entries[i].type = FILDES_CARD;
@@ -63,9 +63,9 @@ void destroyCardFileDescriptor(int fd)
     return;
   file_t *fp = (file_t *)(entries[i].data);
 #if FILE_READ_CACHE_ENABLED
-  free(fp->cache.data);
+  Heap_free(fp->cache.data);
 #endif
-  free(fp);
+  Heap_free(fp);
   entries[i].data = NULL;
 }
 
@@ -104,7 +104,7 @@ int createRamFileDescriptor(void)
   {
     if (entries[i].data == NULL)
     {
-      RamFile *file = (RamFile *)calloc(1, sizeof(RamFile));
+      RamFile *file = (RamFile *)Heap_calloc(1, sizeof(RamFile));
       logAssert(file);
       entries[i].data = (void *)file;
       entries[i].type = FILDES_RAM;
@@ -120,7 +120,7 @@ void destroyRamFileDescriptor(int fd)
   int i = indexFromRamFileDescriptor(fd);
   if (i < 0)
     return;
-  free(entries[i].data);
+  Heap_free(entries[i].data);
   entries[i].data = NULL;
 }
 
