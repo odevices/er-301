@@ -1,8 +1,8 @@
 #pragma once
 
 #include <stdlib.h>
-#include <malloc.h>
 #include <hal/constants.h>
+#include <hal/heap.h>
 #include <cstddef>
 
 namespace od
@@ -42,12 +42,12 @@ namespace od
 
     inline pointer allocate(size_type n)
     {
-      return (pointer)memalign(N, n * sizeof(value_type));
+      return (pointer)Heap_memalign(N, n * sizeof(value_type));
     }
 
     inline void deallocate(pointer p, size_type)
     {
-      free(p);
+      Heap_free(p);
     }
 
     inline void construct(pointer p, const value_type &wert)
