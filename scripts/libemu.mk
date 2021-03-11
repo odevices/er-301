@@ -51,15 +51,4 @@ $(out_dir)/$(program_name).so: $(objects) $(libraries)
 clean:
 	rm -rf $(out_dir)	
 
-# WARNING. This will overwrite the shared lib build dir.  Needs to be fixed.
-libs: 
-	+CFLAGS=-fpic $(MAKE) -f lua.mk
-	+CFLAGS=-fpic $(MAKE) -f miniz.mk
-	+CFLAGS=-fpic $(MAKE) -f lodepng.mk
-
-clean-libs: 
-	+$(MAKE) -f lua.mk clean
-	+$(MAKE) -f miniz.mk clean
-	+$(MAKE) -f lodepng.mk clean
-
 include scripts/rules.mk
