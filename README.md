@@ -239,7 +239,7 @@ And here are the 3 supported target architectures:
 
 * am335x
 * linux
-* darwin (OSX)
+* darwin (macOS)
 
 So for example, if I execute the following make command:
 
