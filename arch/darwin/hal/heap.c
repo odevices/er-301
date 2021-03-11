@@ -43,7 +43,7 @@ void Heap_init()
 
 void *Heap_memalign(size_t align, size_t size)
 {
-  uintptr_t ptr;
+  void * ptr;
   posix_memalign(&ptr, align, size);
   return ptr;
 }
