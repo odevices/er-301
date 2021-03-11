@@ -23,7 +23,7 @@ This project contains the source code for:
 * primary boot loader (MLO)
 * secondary boot loader (SBL)
 * firmware (kernel.bin)
-* emulator (Linux only)
+* emulator (Linux and macOS only)
 * factory mods (core, teletype)
 * SDK for building your own mods
 
@@ -44,6 +44,8 @@ make emu
 ```
 
 ### Running the emulator
+
+:warning: Replace 'linux' with 'darwin' when running on macOS.  
 
 Executing the emulator from the root of the project tree without arguments will start it up with default settings:
 ```bash
