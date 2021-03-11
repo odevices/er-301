@@ -56,38 +56,46 @@ all: $(out_dir)/kernel.bin $(exports)
 
 $(objects): $(sysbios_build_dir)/.timestamp scripts/env.mk
 
+# Configure and build the sysbios library
 $(sysbios_build_dir)/.timestamp: $(sysbios_objects)
 	@echo $(describe_env) XS $<
 	@$(XS) -t $(sysbios_target) -p $(sysbios_platform) -r $(sysbios_buildtype) -o $(sysbios_build_dir) $<
 	@touch $(sysbios_build_dir)/.timestamp
 
+# Collect files from xroot and embed in an object file.
 $(out_dir)/$(program_name)/xroot.S: $(xroot_files)
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
 	@$(PYTHON) scripts/ramdisk.py $@ $(xroot_dir)
 
+# Generate a listing of undefined symbols from object files.
 $(exports_dir)/%.sym: $(out_dir)/%.o
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@	
 
+# Generate a listing of undefined symbols from shared libraries in mods.
 $(exports_dir)/%.sym: $(build_dir)/mods/%.so
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@	
 
+# Sort and collect the symbol files into one big file.
 $(exports_file): $(exports)
 	@echo $(describe_env) GEN $(describe_target)
 	@sort -u $(exports) > $@
 
+# Generate symtab.cpp from the listing of exported symbols.
 $(out_dir)/$(program_name)/symtab.cpp: $(program_dir)/symtab.cpp.awk $(out_dir)/$(program_name)/symtab.h $(exports_file)
 	@echo $(describe_env) AWK $(describe_target)
 	@sort -u $(exports_file) | awk -f $< > $@
 
+# Generate symtab.h from the listing of exported symbols.
 $(out_dir)/$(program_name)/symtab.h: $(program_dir)/symtab.h.awk $(exports_file)
 	@echo $(describe_env) AWK $(describe_target)
 	@sort -u $(exports_file) | awk -f $< > $@
 
+# Final linking of the ELF executable.
 $(out_dir)/$(program_name).elf: $(objects) $(libraries)
 	@mkdir -p $(@D)	
 	@echo $(describe_env) LINK $(describe_target)
@@ -95,12 +103,14 @@ $(out_dir)/$(program_name).elf: $(objects) $(libraries)
 	@echo $(describe_env) NM $(program_name).sym
 	@$(NM) --extern-only --defined-only --format=posix $@ | awk '{print $$1;}' > $(out_dir)/$(program_name).sym
 
+# Strip the executable down to a memory-loadable binary.
 $(out_dir)/$(program_name).bin: $(out_dir)/$(program_name).elf
 	@echo $(describe_env) OBJCOPY $(describe_target)
 	@mkdir -p $(@D)
 	@$(SIZE) $<
 	@$(OBJCOPY) -O binary $< $@
 
+# Add the TI image header to the binary executable.
 $(out_dir)/kernel.bin: $(out_dir)/$(program_name).bin
 	@echo $(describe_env) TIIMAGE $(describe_target)
 	@$(TIIMAGE) 0x80000000 MMCSD $< $@	
@@ -108,10 +118,12 @@ $(out_dir)/kernel.bin: $(out_dir)/$(program_name).bin
 clean:
 	rm -rf $(out_dir)
 
+# Look up the source file and line that corresponds to an address in the binary exe.
 addr2line: $(out_dir)/$(program_name).elf
 	@echo $(describe_env) Find ${ADDRESS} in $(out_dir)/$(program_name).elf
 	@$(ADDR2LINE) -p -f -i -C -e $(out_dir)/$(program_name).elf -a $(ADDRESS)
 
+# Flash the binary using JTAG debugger.
 FLASHFILE ?= $(out_dir)/$(program_name).elf
 flash: all
 	@echo $(describe_env) Flashing $(FLASHFILE)
