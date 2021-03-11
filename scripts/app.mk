@@ -117,16 +117,4 @@ flash: all
 	@echo $(describe_env) Flashing $(FLASHFILE)
 	@$(uniflash_install_dir)/dslite.sh --config=scripts/uniflash/ER-301-USB560v2.ccxml --verbose --core=1 $(FLASHFILE)
 
-libs: 
-	+$(MAKE) -f lua.mk
-	+$(MAKE) -f miniz.mk
-	+$(MAKE) -f lodepng.mk
-	+$(MAKE) -f ne10.mk
-
-clean-libs: 
-	+$(MAKE) -f lua.mk clean
-	+$(MAKE) -f miniz.mk clean
-	+$(MAKE) -f lodepng.mk clean
-	+$(MAKE) -f ne10.mk clean
-
 include scripts/rules.mk

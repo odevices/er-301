@@ -11,23 +11,28 @@ firmware_contents += $(build_dir)/mods/core-$(FIRMWARE_VERSION).pkg
 firmware_contents += $(build_dir)/mods/teletype-$(FIRMWARE_VERSION).pkg
 firmware_contents += scripts/install.lua
 
-$(firmware_archive): $(firmware_contents)
+$(firmware_archive):
+	+$(MAKE) -f scripts/lua.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/miniz.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/lodepng.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/ne10.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/core.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/teletype.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/app.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/sbl.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/pbl.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
 	@echo $(describe_env) ZIP $(describe_target)
 	@rm -rf $(firmware_archive)
 	@$(ZIP) -j $(firmware_archive) $(firmware_contents)	
 
-$(firmware_contents): binaries
-
-binaries:
-	+$(MAKE) app PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) sbl PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) pbl PROFILE=$(PROFILE) ARCH=$(ARCH)
-
 clean:
 	rm -rf $(firmware_archive)
-	+$(MAKE) app PROFILE=$(PROFILE) ARCH=$(ARCH) clean
-	+$(MAKE) sbl PROFILE=$(PROFILE) ARCH=$(ARCH) clean
-	+$(MAKE) pbl PROFILE=$(PROFILE) ARCH=$(ARCH) clean
-
-# Force the rule to execute everytime.
-.PHONY: binaries
+	+$(MAKE) -f scripts/lua.mk PROFILE=$(PROFILE) ARCH=$(ARCH) clean
+	+$(MAKE) -f scripts/miniz.mk PROFILE=$(PROFILE) ARCH=$(ARCH) clean
+	+$(MAKE) -f scripts/lodepng.mk PROFILE=$(PROFILE) ARCH=$(ARCH) clean
+	+$(MAKE) -f scripts/ne10.mk PROFILE=$(PROFILE) ARCH=$(ARCH)	clean
+	+$(MAKE) -f scripts/core.mk PROFILE=$(PROFILE) ARCH=$(ARCH) clean
+	+$(MAKE) -f scripts/teletype.mk PROFILE=$(PROFILE) ARCH=$(ARCH) clean
+	+$(MAKE) -f scripts/app.mk PROFILE=$(PROFILE) ARCH=$(ARCH) clean
+	+$(MAKE) -f scripts/sbl.mk PROFILE=$(PROFILE) ARCH=$(ARCH) clean
+	+$(MAKE) -f scripts/pbl.mk PROFILE=$(PROFILE) ARCH=$(ARCH) clean

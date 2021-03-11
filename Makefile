@@ -1,7 +1,5 @@
 # top-level makefile
 
-all: firmware
-
 firmware:
 	+$(MAKE) -f scripts/firmware.mk
 

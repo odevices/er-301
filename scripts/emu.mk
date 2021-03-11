@@ -64,14 +64,4 @@ missing: $(objects) $(libraries)
 	-@$(CC) $(CFLAGS) -o $@ $(objects) $(libraries) $(LFLAGS) 2> $(out_dir)/error.log
 	@$(PYTHON) list-undefined.py $(out_dir)/error.log > $(out_dir)/missing.log	
 
-libs: 
-	+$(MAKE) -f lua.mk
-	+$(MAKE) -f miniz.mk
-	+$(MAKE) -f lodepng.mk
-
-clean-libs: 
-	+$(MAKE) -f lua.mk clean
-	+$(MAKE) -f miniz.mk clean
-	+$(MAKE) -f lodepng.mk clean
-
 include scripts/rules.mk
