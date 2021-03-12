@@ -5,6 +5,7 @@
 //#define BUILDOPT_VERBOSE
 //#define BUILDOPT_DEBUG_LEVEL 10
 #include <hal/log.h>
+#include <sstream>
 
 EuclideanSequencer::EuclideanSequencer(int space)
 {
@@ -19,6 +20,15 @@ EuclideanSequencer::EuclideanSequencer(int space)
   mBoxes.enableSerialization();
   addParameter(mCats);
   mCats.enableSerialization();
+
+  for (int i = 0; i < 4; i++) {
+    std::ostringstream ss;
+    ss << "Test" << i + 1;
+    od::Parameter *param = new od::Parameter(ss.str());
+    param->enableSerialization();
+    addParameterFromHeap(param);
+  }
+
   // Initialize the cats and boxes.
   simulateCatsInBoxes(0, 1);
 }
