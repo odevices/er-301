@@ -1,18 +1,8 @@
-#include <string.h>
 #include "reflect.h"
 
-struct sym_table_t gbl_sym_table[1] __attribute__((weak)) = {{0, 0}};
+extern uintptr_t gbl_sym_table_lookup(const char *name) __attribute__((weak));
 
 uintptr_t reflect_query_symbol(const char *name)
 {
-  struct sym_table_t *p = &gbl_sym_table[0];
-
-  for (; p->name; p++)
-  {
-    if (strcmp(p->name, name) == 0)
-    {
-      return p->addr;
-    }
-  }
-  return 0;
+  return gbl_sym_table_lookup(name);
 }

@@ -293,7 +293,7 @@ namespace od
         {
           const char *symbolName = stringTable.data() + sym.st_name;
           // Look for this symbol in the environment.
-          uintptr_t address = (uintptr_t)reflect_query_symbol(symbolName);
+          uintptr_t address = reflect_query_symbol(symbolName);
           if (address)
           {
             sym.st_value += address;
