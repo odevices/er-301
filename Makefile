@@ -18,13 +18,13 @@ app-libs-clean:
 	+$(MAKE) -f scripts/ne10.mk clean
 	+$(MAKE) -f scripts/lodepng.mk clean
 
-app: app-libs core teletype
+app: app-libs 
 	+$(MAKE) -f scripts/app.mk
 
-app-flash: app-libs core teletype
+app-flash: app-libs 
 	+$(MAKE) -f scripts/app.mk flash
 
-app-clean: app-libs-clean core-clean teletype-clean
+app-clean: app-libs-clean 
 	+$(MAKE) -f scripts/app.mk clean
 
 core:
