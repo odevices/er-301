@@ -24,7 +24,7 @@ app: app-libs core teletype
 app-flash: app-libs core teletype
 	+$(MAKE) -f scripts/app.mk flash
 
-app-clean: app-libs-clean
+app-clean: app-libs-clean core-clean teletype-clean
 	+$(MAKE) -f scripts/app.mk clean
 
 core:

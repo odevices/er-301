@@ -1,12 +1,20 @@
 BEGIN{ 
-  print "#include <hal/dynload/reflect.h>"; 
-  print "#include \"symtab.h\""; 
-  print "struct sym_table_t gbl_sym_table[]={" 
+  print "#include \"symtab.h\"" 
+  print ""
+  print "constexpr unsigned int hash(const char* str, int h = 0)"
+  print "{"
+  print "  return (!str[h]) ? 5381 : ((hash(str, h+1) * 33) ^ str[h]);"
+  print "}"
+  print ""
+  print "uintptr_t gbl_sym_table_lookup(const char * name) {"
+  print "  switch (hash(name)) {"
 } { 
   if(NF==1){
-    print "{\"" $1 "\", (uintptr_t)&" $1 "},"
+    print "    case hash(\"" $1 "\"): return (uintptr_t)&" $1 ";"
   }
 } 
 END{
-  print "{0,0} };"
+  print "    default: return 0;"
+  print "  }"
+  print "}"
 }

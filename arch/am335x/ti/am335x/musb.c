@@ -1111,6 +1111,8 @@ USBDevAddrGet(uint32_t ulBase)
  *
  * \return None.
  */
+
+#ifdef ENABLE_HOST_FUNCTIONS
 void USBHostEndpointConfig(uint32_t ulBase, uint32_t ulEndpoint,
                            uint32_t ulMaxPayload,
                            uint32_t ulNAKPollInterval,
@@ -1268,7 +1270,7 @@ void USBHostEndpointConfig(uint32_t ulBase, uint32_t ulEndpoint,
         }
     }
 }
-
+#endif
 /**
  * Sets the configuration for an endpoint.
  *

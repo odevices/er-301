@@ -5,8 +5,10 @@ program_name := app
 program_dir := $(program_name)
 xroot_dir := xroot
 out_dir := $(build_dir)/$(program_name)
-exports_dir = $(out_dir)/exports
 exports_file := $(out_dir)/exports.sym
+cleaned_exports_file := $(out_dir)/exports-clean.sym
+excluded_symbols_file := $(program_dir)/excluded.sym
+extra_symbols_file := $(program_dir)/extra.sym
 
 src_dirs := $(program_dir) $(hal_dir) $(arch_dir)/$(ARCH)/hal $(od_dir) $(ti_dir)
 
@@ -39,18 +41,23 @@ objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)
 # Manually add objects for swig wrappers and the ramdisk image.
 objects += $(out_dir)/od/glue/$(program_name)_swig.o
 objects += $(out_dir)/$(program_name)/xroot.o
-objects += $(out_dir)/$(program_name)/symtab.o
 
-# Extract exported symbols from the swig wrapper and all compiled mods
-mods = $(call rwildcard,$(build_dir)/mods,*.so)
-exports = $(exports_dir)/od/glue/$(program_name)_swig.sym
-exports += $(subst $(build_dir)/mods,$(exports_dir),$(mods:%.so=%.sym))
+gcc_std_libs_dir = $(gcc_install_dir)/arm-none-eabi/lib/fpu
+bios_std_libs_dir = $(bios_install_dir)/gnu/targets/arm/libs/install-native/arm-none-eabi/lib/fpu
+
+exports := $(objects:%.o=%.sym) 
+exports += $(libs_build_dir)/lib$(lua_name).sym
+exports += $(libs_build_dir)/bios-libm.sym
+exports += $(libs_build_dir)/gcc-libstdc++.sym
+
+# Add symtab.o after exports are calculated.
+objects += $(out_dir)/$(program_name)/symtab.o
 
 CFLAGS += $(sysbios_cflags)
 CFLAGS += -DFIRMWARE_VERSION=\"$(FIRMWARE_VERSION)\"
 CFLAGS += -DFIRMWARE_NAME=\"$(FIRMWARE_NAME)\"
 CFLAGS += -DFIRMWARE_STATUS=\"$(FIRMWARE_STATUS)\"
-LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lm -lstdc++ -lc -lnosys -u _printf_float 
+LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lm -lc -lnosys -u _printf_float 
 
 all: $(out_dir)/kernel.bin $(exports)
 
@@ -68,32 +75,55 @@ $(out_dir)/$(program_name)/xroot.S: $(xroot_files)
 	@mkdir -p $(@D)
 	@$(PYTHON) scripts/ramdisk.py $@ $(xroot_dir)
 
-# Generate a listing of undefined symbols from object files.
-$(exports_dir)/%.sym: $(out_dir)/%.o
+# Generate a listing of extern symbols from object files.
+$(out_dir)/%.sym: $(out_dir)/%.oa8fg
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
-	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@	
+	@$(NM) --extern-only --defined-only --format=posix $< | awk '{print $$1;}' > $@	
 
-# Generate a listing of undefined symbols from shared libraries in mods.
-$(exports_dir)/%.sym: $(build_dir)/mods/%.so
+# Generate a listing of extern symbols from object files.
+$(out_dir)/%.sym: $(out_dir)/%.o
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
-	@$(NM) --undefined-only --format=posix $< | awk '{print $$1;}' > $@	
+	@$(NM) --extern-only --defined-only --format=posix $< | awk '{print $$1;}' > $@	
+
+# Generate a listing of extern symbols from libraries.
+$(libs_build_dir)/%.sym: $(libs_build_dir)/%.a
+	@echo $(describe_env) GEN $(describe_target)
+	@mkdir -p $(@D)
+	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
+
+# Generate a listing of extern symbols from std libs in the gcc tree.
+$(libs_build_dir)/gcc-%.sym: $(gcc_std_libs_dir)/%.a
+	@echo $(describe_env) GEN $(describe_target)
+	@mkdir -p $(@D)
+	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
+
+# Generate a listing of extern symbols from std libs in the bios tree.
+$(libs_build_dir)/bios-%.sym: $(bios_std_libs_dir)/%.a
+	@echo $(describe_env) GEN $(describe_target)
+	@mkdir -p $(@D)
+	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
 
 # Sort and collect the symbol files into one big file.
-$(exports_file): $(exports)
+$(exports_file): $(exports) $(extra_symbols_file)
 	@echo $(describe_env) GEN $(describe_target)
-	@sort -u $(exports) > $@
+	@sort -u $(exports) $(extra_symbols_file) > $@
+
+# Filter out excluded symbols
+$(cleaned_exports_file): $(exports_file) $(excluded_symbols_file)
+	@echo $(describe_env) FILTER $(describe_target)
+	@sort -u $(excluded_symbols_file) | comm -23 $< - > $@
 
 # Generate symtab.cpp from the listing of exported symbols.
-$(out_dir)/$(program_name)/symtab.cpp: $(program_dir)/symtab.cpp.awk $(out_dir)/$(program_name)/symtab.h $(exports_file)
+$(out_dir)/$(program_name)/symtab.cpp: $(program_dir)/symtab.cpp.awk $(out_dir)/$(program_name)/symtab.h $(cleaned_exports_file)
 	@echo $(describe_env) AWK $(describe_target)
-	@sort -u $(exports_file) | awk -f $< > $@
+	@sort -u $(cleaned_exports_file) | awk -f $< > $@
 
 # Generate symtab.h from the listing of exported symbols.
-$(out_dir)/$(program_name)/symtab.h: $(program_dir)/symtab.h.awk $(exports_file)
+$(out_dir)/$(program_name)/symtab.h: $(program_dir)/symtab.h.awk $(cleaned_exports_file)
 	@echo $(describe_env) AWK $(describe_target)
-	@sort -u $(exports_file) | awk -f $< > $@
+	@sort -u $(cleaned_exports_file) | awk -f $< > $@
 
 # Final linking of the ELF executable.
 $(out_dir)/$(program_name).elf: $(objects) $(libraries)
@@ -117,6 +147,9 @@ $(out_dir)/kernel.bin: $(out_dir)/$(program_name).bin
 
 clean:
 	rm -rf $(out_dir)
+
+clean-syms:
+	@rm -rf $(exports)
 
 # Look up the source file and line that corresponds to an address in the binary exe.
 addr2line: $(out_dir)/$(program_name).elf

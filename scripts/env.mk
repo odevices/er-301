@@ -1,5 +1,5 @@
 FIRMWARE_NAME ?= Thoon
-FIRMWARE_VERSION ?= 0.6.02
+FIRMWARE_VERSION ?= 0.6.03
 FIRMWARE_STATUS ?= unstable
 
 # Determine ARCH if it's not provided...
