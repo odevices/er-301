@@ -41,18 +41,17 @@ objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)
 # Manually add objects for swig wrappers and the ramdisk image.
 objects += $(out_dir)/od/glue/$(program_name)_swig.o
 objects += $(out_dir)/$(program_name)/xroot.o
-exports := $(objects:%.o=%.sym) $(libs_build_dir)/lib$(lua_name).sym
-objects += $(out_dir)/$(program_name)/symtab.o
 
-libgcc_dir = $(gcc_install_dir)/lib/gcc/arm-none-eabi/4.9.3/fpu
 gcc_std_libs_dir = $(gcc_install_dir)/arm-none-eabi/lib/fpu
 bios_std_libs_dir = $(bios_install_dir)/gnu/targets/arm/libs/install-native/arm-none-eabi/lib/fpu
 
-#exports += $(libs_build_dir)/bios-libc.sym
+exports := $(objects:%.o=%.sym) 
+exports += $(libs_build_dir)/lib$(lua_name).sym
 exports += $(libs_build_dir)/bios-libm.sym
-#exports += $(libs_build_dir)/bios-libnosys.sym
 exports += $(libs_build_dir)/gcc-libstdc++.sym
-#exports += $(libs_build_dir)/libgcc.sym
+
+# Add symtab.o after exports are calculated.
+objects += $(out_dir)/$(program_name)/symtab.o
 
 CFLAGS += $(sysbios_cflags)
 CFLAGS += -DFIRMWARE_VERSION=\"$(FIRMWARE_VERSION)\"
@@ -76,7 +75,7 @@ $(out_dir)/$(program_name)/xroot.S: $(xroot_files)
 	@mkdir -p $(@D)
 	@$(PYTHON) scripts/ramdisk.py $@ $(xroot_dir)
 
-	# Generate a listing of extern symbols from object files.
+# Generate a listing of extern symbols from object files.
 $(out_dir)/%.sym: $(out_dir)/%.oa8fg
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
@@ -88,38 +87,23 @@ $(out_dir)/%.sym: $(out_dir)/%.o
 	@mkdir -p $(@D)
 	@$(NM) --extern-only --defined-only --format=posix $< | awk '{print $$1;}' > $@	
 
-# Generate a listing of extern symbols from object files.
+# Generate a listing of extern symbols from libraries.
 $(libs_build_dir)/%.sym: $(libs_build_dir)/%.a
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
 
-# Generate a listing of extern symbols from std libs in the gcc tree
+# Generate a listing of extern symbols from std libs in the gcc tree.
 $(libs_build_dir)/gcc-%.sym: $(gcc_std_libs_dir)/%.a
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
 
-# Generate a listing of extern symbols from std libs in the gcc tree
-$(libs_build_dir)/gcc-%.sym: $(gcc_std_libs_dir)/%.a
-	@echo $(describe_env) GEN $(describe_target)
-	@mkdir -p $(@D)
-	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
-
-# Generate a listing of extern symbols from std libs in the gcc tree
-$(libs_build_dir)/%.sym: $(libgcc_dir)/%.a
-	@echo $(describe_env) GEN $(describe_target)
-	@mkdir -p $(@D)
-	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
-	@$(NM) --extern-only --defined-only --print-file-name $< > $@.txt
-
-# Generate a listing of extern symbols from std libs in the bios tree
+# Generate a listing of extern symbols from std libs in the bios tree.
 $(libs_build_dir)/bios-%.sym: $(bios_std_libs_dir)/%.a
 	@echo $(describe_env) GEN $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
-	
-#@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '$$2!~/^_.*/ && $$2!~/^.*_r/{print $$2;}' > $@	
 
 # Sort and collect the symbol files into one big file.
 $(exports_file): $(exports) $(extra_symbols_file)
