@@ -4,8 +4,11 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
-# v0.6.02
+# v0.6.03
+FIX: A chain would sometimes stop producing audio when attaching a sample from the card to a unit. (issue #12)
+SYS: Major improvements to firmware's symbol table used for dynamic linking. (issue #13)
 
+# v0.6.02
 * FIX: Unit Browser > Categories were not being display in a consistent order.
 * SYS: Package toc.lua > Deprecate category entries in the units table.  Add a category field to each unit entry instead.
 * SYS: Emulator > Simplify command-line options and make emulator configurable via the ~/.od/emu.config file.  See README.md.
