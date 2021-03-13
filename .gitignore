@@ -43,3 +43,6 @@ tmp/
 
 # Packages
 *.pkg
+
+# OSX
+.DS_Store
