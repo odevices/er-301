@@ -108,17 +108,23 @@ function Firmware:defaultInstallation(archive)
     local actualPath = Path.join(app.roots.rear, filename)
     if archive:extract(filename, tmpPath) then
       app.logInfo("%s copied successfully.", filename)
-      renames[#renames] = {tmpPath, actualPath}
+      renames[#renames + 1] = {tmp=tmpPath, actual=actualPath}
     else
       self:msg("Update failed: could not copy %s.", filename)
+      for _, e in ipairs(renames) do
+        self:msg("Removing %s.", e.tmp)
+        app.deleteFile(e.tmp)
+      end
       return false
     end
   end
 
   -- All files extracted successfully, so rename them to their required location.
-  for _, args in ipairs(renames) do
-    app.moveFile(args[1], args[2], true)
+  self:msg("Commit newly installed files...")
+  for _, e in ipairs(renames) do
+    app.moveFile(e.tmp, e.actual, true)
   end
+  self:msg("Done.")
 
   return true
 end
@@ -135,8 +141,7 @@ function Firmware:install(filename)
   local archive = app.ZipArchiveReader()
   archive:setIgnorePath(true)
 
-  app.logInfo("Opening firmware archive: %s.", filename)
-  self:msg("Reading zip file...")
+  self:msg("Reading %s...", filename)
   if archive:open(filename) then
     app.logInfo("Opened archive: %s", filename)
   else
