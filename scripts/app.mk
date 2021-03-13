@@ -38,19 +38,21 @@ xroot_files := $(call rwildcard,$(xroot_dir),*)
 
 objects := $(addprefix $(out_dir)/,$(c_sources:%.c=%.o) $(cpp_sources:%.cpp=%.o)) 
 
-# Manually add objects for swig wrappers and the ramdisk image.
+# Manually add objects for swig wrappers
 objects += $(out_dir)/od/glue/$(program_name)_swig.o
-objects += $(out_dir)/$(program_name)/xroot.o
 
 gcc_std_libs_dir = $(gcc_install_dir)/arm-none-eabi/lib/fpu
 bios_std_libs_dir = $(bios_install_dir)/gnu/targets/arm/libs/install-native/arm-none-eabi/lib/fpu
 
+# Calculate exports based on objects added so far
 exports := $(objects:%.o=%.sym) 
+# Manually add lua, libm and libstc++ to the exported symbols list
 exports += $(libs_build_dir)/lib$(lua_name).sym
 exports += $(libs_build_dir)/bios-libm.sym
 exports += $(libs_build_dir)/gcc-libstdc++.sym
 
-# Add symtab.o after exports are calculated.
+# Add ramdisk object and symbol table after exports are calculated.
+objects += $(out_dir)/$(program_name)/xroot.o
 objects += $(out_dir)/$(program_name)/symtab.o
 
 CFLAGS += $(sysbios_cflags)

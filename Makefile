@@ -30,8 +30,14 @@ app-clean: app-libs-clean
 core:
 	+$(MAKE) -f scripts/core.mk
 
+core-install:
+	+$(MAKE) -f scripts/core.mk install
+
 teletype:
 	+$(MAKE) -f scripts/teletype.mk
+
+teletype-install:
+	+$(MAKE) -f scripts/teletype.mk install
 
 core-clean:
 	+$(MAKE) -f scripts/core.mk clean

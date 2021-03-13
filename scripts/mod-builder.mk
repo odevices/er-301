@@ -106,8 +106,8 @@ list: $(package_file)
 	unzip -l $(package_file)
 
 install: $(package_file)
-	@echo $(describe_env) INSTALL $(describe_input) to $(front_card_dir)
-	@cp -f $(package_file) $(front_card_dir)/ER-301/packages && sync
+	@echo $(describe_env) INSTALL $(describe_input) to $(pkg_install_dir)
+	@cp -f $(package_file) $(pkg_install_dir) && sync
 
 clean:
 	rm -rf $(out_dir)/$(MODNAME) $(package_file)
