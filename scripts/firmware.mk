@@ -9,6 +9,7 @@ firmware_contents += $(build_dir)/sbl/SBL
 firmware_contents += $(build_dir)/pbl/MLO
 firmware_contents += $(build_dir)/mods/core-$(FIRMWARE_VERSION).pkg
 firmware_contents += $(build_dir)/mods/teletype-$(FIRMWARE_VERSION).pkg
+firmware_contents += scripts/install.lua
 
 $(firmware_archive): $(firmware_contents)
 	@echo $(describe_env) ZIP $(describe_target)
