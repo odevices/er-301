@@ -1,6 +1,6 @@
-FIRMWARE_NAME ?= Thoon
-FIRMWARE_VERSION ?= 0.6.03
-FIRMWARE_STATUS ?= unstable
+# Determine PROFILE if it's not provided...
+# testing | release | debug
+PROFILE ?= testing
 
 # Determine ARCH if it's not provided...
 # linux | darwin | am335x
@@ -15,9 +15,14 @@ ifndef ARCH
   endif
 endif
 
-# Determine PROFILE if it's not provided...
-# testing | release | debug
-PROFILE ?= testing
+FIRMWARE_NAME = Thoon
+FIRMWARE_VERSION = 0.6.03
+
+FIRMWARE_STATUS.release = unstable
+FIRMWARE_STATUS.debug = debug
+FIRMWARE_STATUS.testing = testing
+
+FIRMWARE_STATUS = $(FIRMWARE_STATUS.$(PROFILE))
 
 scriptname := $(word 1, $(MAKEFILE_LIST))
 scriptname := $(scriptname:scripts/%=%)
@@ -74,10 +79,7 @@ ti_dir = $(arch_dir)/$(ARCH)/ti
 sysbios_build_dir = $(build_dir)/sysbios
 sysbios_dir = $(arch_dir)/$(ARCH)/sysbios
 ne10_dir = $(libs_dir)/ne10
-front_card_label = FRONT
-front_card_dir = /media/$(shell whoami)/$(front_card_label)
-rear_card_label = REAR
-rear_card_dir = /media/$(shell whoami)/$(rear_card_label)
+pkg_install_dir = /media/$(USERNAME)/FRONT/ER-301/packages
 
 include scripts/am335x.mk
 
@@ -93,6 +95,8 @@ CFLAGS.release ?= $(CFLAGS.speed) -Wno-unused
 CFLAGS.testing ?= -g -DBUILDOPT_TESTING
 CFLAGS.debug ?= -g -DBUILDOPT_TESTING
 
+pkg_install_dir = $(HOME)/.od/rear
+
 include scripts/linux.mk
 
 # symbols += BUILDOPT_LUA_USE_REALLOC
@@ -107,6 +111,8 @@ ifeq ($(ARCH),darwin)
 CFLAGS.release ?= $(CFLAGS.speed) -Wno-unused
 CFLAGS.testing ?= -g -DBUILDOPT_TESTING
 CFLAGS.debug ?= -g -DBUILDOPT_TESTING
+
+pkg_install_dir = $(HOME)/.od/rear
 
 include scripts/darwin.mk
 
