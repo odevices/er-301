@@ -18,7 +18,7 @@ namespace od
 
   Sample::Sample(float sampleRate, uint32_t Nc, uint32_t Ns) : mSampleRate(sampleRate)
   {
-    allocateBuffer(Nc, Ns, true);
+    allocateBuffer(Nc, Ns);
   }
 
   Sample::~Sample()
@@ -49,20 +49,12 @@ namespace od
     }
   }
 
-  bool Sample::allocateBuffer(uint32_t _Nc, uint32_t _Ns, bool zeroed)
+  bool Sample::allocateBuffer(uint32_t _Nc, uint32_t _Ns)
   {
     freeBuffer();
 
     int sizeInBytes = sizeof(float) * _Ns * _Nc;
-
-    if (zeroed)
-    {
-      mpData = (float *)BigHeap::allocateZeroed(sizeInBytes);
-    }
-    else
-    {
-      mpData = (float *)BigHeap::allocate(sizeInBytes);
-    }
+    mpData = (float *)BigHeap::allocateZeroed(sizeInBytes);
 
     if (mpData)
     {
@@ -85,7 +77,7 @@ namespace od
       return STATUS_ERROR_OPENING_FILE;
     }
 
-    if (!allocateBuffer(info.mChannelCount, info.mSampleCount, false))
+    if (!allocateBuffer(info.mChannelCount, info.mSampleCount))
     {
       return STATUS_OUT_OF_MEMORY;
     }
@@ -150,8 +142,7 @@ namespace od
       reader.describe();
     }
 
-    if (!allocateBuffer(reader.getChannelCount(), reader.getSampleCount(),
-                        false))
+    if (!allocateBuffer(reader.getChannelCount(), reader.getSampleCount()))
     {
       return false;
     }

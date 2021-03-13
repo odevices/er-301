@@ -14,7 +14,7 @@ namespace od
     Sample(float sampleRate, uint32_t Nc, uint32_t Ns);
     ~Sample();
 
-    bool allocateBuffer(uint32_t Nc, uint32_t Ns, bool zeroed = true);
+    bool allocateBuffer(uint32_t Nc, uint32_t Ns);
     int prepareForLoading(SampleLoadInfo &info);
     void setSampleRate(float rate);
     void zero();
