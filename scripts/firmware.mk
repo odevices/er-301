@@ -11,18 +11,30 @@ firmware_contents += $(build_dir)/mods/core-$(FIRMWARE_VERSION).pkg
 firmware_contents += $(build_dir)/mods/teletype-$(FIRMWARE_VERSION).pkg
 
 $(firmware_archive): $(firmware_contents)
-	+$(MAKE) -f scripts/lua.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) -f scripts/miniz.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) -f scripts/lodepng.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) -f scripts/ne10.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) -f scripts/core.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) -f scripts/teletype.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) -f scripts/app.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) -f scripts/sbl.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
-	+$(MAKE) -f scripts/pbl.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
 	@echo $(describe_env) ZIP $(describe_target)
 	@rm -rf $(firmware_archive)
 	@$(ZIP) -j $(firmware_archive) $(firmware_contents)	
+
+app-libs:
+	+$(MAKE) -f scripts/lua.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/miniz.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/lodepng.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	+$(MAKE) -f scripts/ne10.mk PROFILE=$(PROFILE) ARCH=$(ARCH)	
+
+$(build_dir)/app/kernel.bin: app-libs
+	+$(MAKE) -f scripts/app.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+
+$(build_dir)/mods/core-$(FIRMWARE_VERSION).pkg:
+	+$(MAKE) -f scripts/core.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+
+$(build_dir)/mods/teletype-$(FIRMWARE_VERSION).pkg:
+	+$(MAKE) -f scripts/teletype.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+	
+$(build_dir)/sbl/SBL:
+	+$(MAKE) -f scripts/sbl.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
+
+$(build_dir)/pbl/MLO:
+	+$(MAKE) -f scripts/pbl.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
 
 clean:
 	rm -rf $(firmware_archive)
