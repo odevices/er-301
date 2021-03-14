@@ -5,14 +5,14 @@
 * SYS: A system-level change.  Usually only relevant to developers.
 
 # v0.6.04
-FIX: Corrupted WAV files > Any WAV files created by the ER-301 had a corrupted header.
-FIX: Package Creator > Silently ignored missing WAV files.
-SYS: Mod error logs are now created in front:/ER-301/logs/(mod-name).log
+* FIX: Corrupted WAV files > Any WAV files created by the ER-301 had a corrupted header.
+* FIX: Package Creator > Silently ignored missing WAV files.
+* SYS: Mod error logs are now created in front:/ER-301/logs/(mod-name).log
 ENHANCED: Admin > Log History screen added.
 
 # v0.6.03
-FIX: A chain would sometimes stop producing audio when attaching a sample from the card to a unit. (issue #12)
-SYS: Major improvements to firmware's symbol table used for dynamic linking. (issue #13)
+* FIX: A chain would sometimes stop producing audio when attaching a sample from the card to a unit. (issue #12)
+* SYS: Major improvements to firmware's symbol table used for dynamic linking. (issue #13)
 
 # v0.6.02
 * FIX: Unit Browser > Categories were not being display in a consistent order.
