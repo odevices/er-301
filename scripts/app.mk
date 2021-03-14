@@ -79,37 +79,37 @@ $(out_dir)/$(program_name)/xroot.S: $(xroot_files)
 
 # Generate a listing of extern symbols from object files.
 $(out_dir)/%.sym: $(out_dir)/%.oa8fg
-	@echo $(describe_env) GEN $(describe_target)
+	@echo $(describe_env) NM $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --extern-only --defined-only --format=posix $< | awk '{print $$1;}' > $@	
 
 # Generate a listing of extern symbols from object files.
 $(out_dir)/%.sym: $(out_dir)/%.o
-	@echo $(describe_env) GEN $(describe_target)
+	@echo $(describe_env) NM $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --extern-only --defined-only --format=posix $< | awk '{print $$1;}' > $@	
 
 # Generate a listing of extern symbols from libraries.
 $(libs_build_dir)/%.sym: $(libs_build_dir)/%.a
-	@echo $(describe_env) GEN $(describe_target)
+	@echo $(describe_env) NM $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
 
 # Generate a listing of extern symbols from std libs in the gcc tree.
 $(libs_build_dir)/gcc-%.sym: $(gcc_std_libs_dir)/%.a
-	@echo $(describe_env) GEN $(describe_target)
+	@echo $(describe_env) NM $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
 
 # Generate a listing of extern symbols from std libs in the bios tree.
 $(libs_build_dir)/bios-%.sym: $(bios_std_libs_dir)/%.a
-	@echo $(describe_env) GEN $(describe_target)
+	@echo $(describe_env) NM $(describe_target)
 	@mkdir -p $(@D)
 	@$(NM) --extern-only --defined-only --print-file-name --format=posix $< | awk '{print $$2;}' > $@	
 
 # Sort and collect the symbol files into one big file.
 $(exports_file): $(exports) $(extra_symbols_file)
-	@echo $(describe_env) GEN $(describe_target)
+	@echo $(describe_env) SORT $(describe_target)
 	@sort -u $(exports) $(extra_symbols_file) > $@
 
 # Filter out excluded symbols
