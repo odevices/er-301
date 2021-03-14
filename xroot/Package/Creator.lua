@@ -33,18 +33,20 @@ function Creator:doneChoosing(srcPaths, dstPath, author)
   local Writer = require "Package.Writer"
   local Busy = require "Busy"
   local Serialization = require "Persist.Serialization"
+  local dstStem = Path.getStem(dstPath)
+  local dstFilename = Path.getFilename(dstPath)
   local writer = Writer()
+  Busy.start("Creating package...")
   if writer:open(dstPath) then
-    Busy.start()
     local tmpPath = Path.join(FileSystem.getRoot("tmp"), "toc.lua")
     local toc = io.open(tmpPath, "w")
     toc:write("return {\n")
-    toc:write("  name = ", quote(Path.getStem(dstPath)), ",\n")
+    toc:write("  name = ", quote(dstStem), ",\n")
     toc:write("  author = ", quote(author), ",\n")
     toc:write("  presets = {\n")
     for _, fullPath in ipairs(srcPaths) do
       local filename = Path.getFilename(fullPath)
-      app.logInfo("Packaging %s", filename)
+      Busy.status("Packaging %s", filename)
       local data = Serialization.readTable(fullPath)
       toc:write("    {\n")
       if data.hasUserTitle then
@@ -54,21 +56,30 @@ function Creator:doneChoosing(srcPaths, dstPath, author)
       end
       toc:write("      filename = ", quote(filename), ",\n")
       toc:write("    },\n")
-      writer:addFile(fullPath, filename)
+      if not writer:addFile(fullPath, filename) then
+        Busy.error("Failed to add %s", filename)
+      end
     end
     toc:write("  }\n")
     toc:write("}\n")
     toc:close()
-    writer:addFile(tmpPath, "toc.lua")
+    if not writer:addFile(tmpPath, "toc.lua") then
+      Busy.error("Failed to add toc.lua")
+    end
     app.deleteFile(tmpPath)
     writer:close()
-    Busy.stop()
     self:emitSignal("done", true)
   else
-    local Message = require "Message"
-    local dialog = Message.Main("Failed to create package.")
-    dialog:show()
+    Busy.error("Failed to create %s", dstFilename)
+  end
+  Busy.stop()
+  local history = require "LogHistory"
+  if history:hasErrors() then
+    history:showErrors("%s had problems.", dstFilename)
     self:emitSignal("done")
+  else
+    local Overlay = require "Overlay"
+    Overlay.mainFlashMessage("%s created.", dstFilename)
   end
 end
 
