@@ -74,7 +74,7 @@ local function saveErrorReport(msg, trace, logFile)
 end
 
 local function onErrorInExternal(library, origLoadInfo, usedLoadInfo, traceback)
-  local logFile = Path.join(FS.getRoot("libs"), library.name, "error.log")
+  local logFile = Path.join(FS.getRoot("logs"), library.name..".log")
   local msg = string.format("Failed to construct unit: %s",
                             origLoadInfo.moduleName)
   if saveErrorReport(msg, traceback, logFile) then

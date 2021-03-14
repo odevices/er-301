@@ -24,6 +24,7 @@ roots["libs"] = roots["rear-versioned"] .. "/libs"
 roots["package-configs"] = roots["rear-meta"] .. "/packages"
 
 roots["front"] = app.roots.front .. "/ER-301"
+roots["logs"] = roots["front"] .. "/logs"
 roots["tmp"] = roots["front"] .. "/tmp"
 roots["packages"] = roots["front"] .. "/packages"
 roots["recordings"] = roots["front"] .. "/recorded"
