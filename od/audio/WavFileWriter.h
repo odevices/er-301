@@ -32,7 +32,7 @@ namespace od
 		WavFileEncoding mWavFileEncoding = wav24bit;
 		uint32_t mCurrentSamplePosition = 0;
 
-		WavFormatData mFormat = {};
+		WavFormatData mFormat;
 
 		virtual bool prepare();
 		virtual bool finalize();

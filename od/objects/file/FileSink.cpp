@@ -54,10 +54,10 @@ namespace od
       deleteFile(mFilename.c_str());
     }
 
+    mWriter.init(globalConfig.sampleRate, mChannelCount, mEncoding);
     if (mWriter.open(mFilename))
     {
       logInfo("Opened %s", mFilename.c_str());
-      mWriter.init(globalConfig.sampleRate, mChannelCount, mEncoding);
       mError = false;
       return true;
     }

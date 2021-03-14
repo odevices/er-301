@@ -1,5 +1,3 @@
-/* Stub version of _exit.  */
-
 #include <limits.h>
 #include "resource.h"
 #include <_ansi.h>

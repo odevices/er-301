@@ -1,7 +1,3 @@
-/*
- * Stub version of read.
- */
-
 #include "resource.h"
 #include <unistd.h>
 #include <errno.h>
@@ -179,6 +175,7 @@ static int card_read(int fd, char *ptr, int len)
       }
     }
     res = f_read(&fp->fil, ptr, len, &br);
+    fp->pos = f_tell(&fp->fil);
   }
   else
   {

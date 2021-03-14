@@ -1,6 +1,9 @@
 #include <od/audio/WavFileWriter.h>
+#define BUILDOPT_VERBOSE
+#define BUILDOPT_DEBUG_LEVEL 10
 #include <hal/log.h>
 #include <vector>
+#include <string.h>
 
 #define MAX_WRITE_SIZE 4096
 #define OFFSET_TO_DATA (sizeof(FileTypeChunk) + sizeof(RiffChunk) * 2 + sizeof(WavFormatData))
@@ -10,6 +13,7 @@ namespace od
 
 	WavFileWriter::WavFileWriter()
 	{
+    bzero(&mFormat,sizeof(WavFormatData));
 	}
 
 	WavFileWriter::WavFileWriter(float sampleRate, uint32_t channelCount,
@@ -76,6 +80,13 @@ namespace od
 		FileTypeChunk firstChunk{{'R', 'I', 'F', 'F'}, fileSize - 8, {'W', 'A', 'V', 'E'}};
 		RiffChunk fmtChunk{{'f', 'm', 't', ' '}, sizeof(WavFormatData)};
 		RiffChunk dataChunk{{'d', 'a', 't', 'a'}, dataSize};
+
+    logAssert(mFormat.wFormatTag > 0);
+    logAssert(mFormat.nChannels > 0);
+    logAssert(mFormat.wBitsPerSample > 0);
+    logAssert(mFormat.nBlockAlign > 0);
+    logAssert(mFormat.nAvgBytesPerSec > 0);
+    logAssert(mFormat.nSamplesPerSec > 0);
 
 		logDebug(1, "WavFileWriter::writeHeader: %d samples %d bytes align", mSampleCount, mFormat.nBlockAlign);
 		logDebug(1, "  FileTypeChunk: cksize=%d", firstChunk.cksize);

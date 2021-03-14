@@ -1,7 +1,3 @@
-/*
- * Stub version of lseek.
- */
-
 #include "resource.h"
 #include <unistd.h>
 #include <errno.h>

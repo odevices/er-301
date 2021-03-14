@@ -25,7 +25,9 @@ namespace od
       close();
     mFilename = filename;
 #ifdef FILEWRITER_USE_SYS
-    mFileDescriptor = ::open(mFilename.c_str(), O_WRONLY | O_CREAT | O_TRUNC, 0);
+    mFileDescriptor = ::open(mFilename.c_str(),
+                             O_WRONLY | O_CREAT | O_TRUNC,
+                             S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP | S_IROTH);
     mIsOpen = mFileDescriptor != 0;
 #else
     mIsOpen = f_open(&mFileDescriptor, mFilename.c_str(),
