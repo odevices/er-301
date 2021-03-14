@@ -348,7 +348,7 @@ local function save()
   if not Persist.writeTable(settingsFile, t) then
     Busy.stop()
     Overlay.mainFlashMessage("Failed to save settings (>_<)")
-    app.logInfo("Failed to save settings.")
+    app.logError("Failed to save settings.")
   else
     Busy.stop()
     Overlay.mainFlashMessage("Settings saved.")

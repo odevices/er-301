@@ -1,6 +1,7 @@
 local app = app
 local Context = require "Base.Context"
 local Mode = require "Base.Mode"
+
 local Menu = require "AdminMode.Menu"
 local Settings = require "Settings"
 local SamplePoolInterface = require "Sample.Pool.Interface"
@@ -30,10 +31,8 @@ menu:add("Install Firmware", firmware)
 menu:add("Package Manager", packages)
 menu:add("Card Console", card)
 
--- local files = require "FileManager"
--- local logs = require "LogViewer"
--- menu:add("Log Viewer",logs)
--- menu:add("File Browser",files)
+local history = require "LogHistory"
+menu:add("Log History", history)
 
 if app.TESTING and Settings.get("enableDevMode") then
   local tests = require "Tests.Console"

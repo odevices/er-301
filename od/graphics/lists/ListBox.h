@@ -128,6 +128,11 @@ namespace od
     bool mShowCheck = false;
     bool mShowHighlight = false;
 
+    int mLongTextSlideClock = 0;
+    int mLongTextSlideDirection = 1;
+    int mLongTextSlide = 0;
+    void resetLongTextSlide();
+
     void resetPositionAndIndices();
   };
 

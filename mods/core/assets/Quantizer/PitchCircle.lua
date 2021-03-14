@@ -84,7 +84,7 @@ function PitchCircle:deserialize(t)
       self.notesList:select(self.scaleList:selectedIndex())
       self:loadBuiltinScale(t.selectedScale)
     else
-      app.logInfo("%s.deserialize:invalid scale:%s ", self, t.selectedScale)
+      app.logError("%s.deserialize:invalid scale:%s ", self, t.selectedScale)
     end
   else
     app.logInfo("%s.deserialize:selectedScale missing", self)

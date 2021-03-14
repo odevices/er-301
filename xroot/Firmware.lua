@@ -145,7 +145,7 @@ function Firmware:install(filename)
   if archive:open(filename) then
     app.logInfo("Opened archive: %s", filename)
   else
-    app.logInfo("Failed to open archive: %s", filename)
+    app.logError("Failed to open archive: %s", filename)
     self:msg("Failed to open zip file.")
     return false
   end
@@ -160,7 +160,7 @@ function Firmware:install(filename)
       app.logInfo("Install script copied successfully.")
       local script, err = loadfile(installScriptPath)
       if script == nil then
-        app.logInfo("Error loading script: %s", err)
+        app.logError("Error loading script: %s", err)
         success = false
       else
         local ok, result = xpcall(script, onError)
@@ -179,7 +179,7 @@ function Firmware:install(filename)
         end
       end
     else
-      app.logInfo("Install script failed to copy.")
+      app.logError("Install script failed to copy.")
       self:msg("Update failed: could not extract install script.")
       success = false
     end

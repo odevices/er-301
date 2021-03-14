@@ -1,33 +1,47 @@
 local Overlay = require "Overlay"
-
+local LogHistory = require "LogHistory"
 local busyThread = app.Busy()
 busyThread:start()
 
-local log = false
+local logStart = false
+local logStatus = true
+local logError = true
 local refCount = 0
 
 local function start(...)
   local text
   if ... == nil then
-    text = "Working..."
+    text = "Busy..."
   else
     text = string.format(...)
+    if logStart then
+      app.logInfo(text)
+    end
   end
-  if log then
-    app.logInfo("Busy(%d):start: %s", refCount, text)
-    -- local trace = debug.traceback(nil,2)
-    -- print(trace)
-  end
+
   Overlay.startMainMessage(text)
 
   refCount = refCount + 1
-  if refCount == 1 then busyThread:enable() end
+  if refCount == 1 then 
+    busyThread:enable() 
+    LogHistory:clearErrors()
+  end
 end
 
 local function status(...)
-  if log then app.logInfo("Busy(%d):status: %s", refCount, string.format(...)) end
+  if refCount > 0 then
+    local msg = string.format(...)
+    if logStatus then app.logInfo(msg) end
+    Overlay.startMainMessage(msg)
+  end
+end
 
-  if refCount > 0 then Overlay.startMainMessage(string.format(...)) end
+local function error(...)
+  if refCount > 0 then
+    local msg = string.format(...)
+    if logError then app.logError(msg) end
+    Overlay.startMainMessage(msg)
+  end
 end
 
 local function stop(force)
@@ -39,9 +53,6 @@ local function stop(force)
   elseif refCount < 0 then
     refCount = 0
   end
-
-  if log then app.logInfo("Busy(%d):stop", refCount) end
-
 end
 
 local function enable()
@@ -64,6 +75,7 @@ return {
   stop = stop,
   kill = kill,
   status = status,
+  error = error,
   enable = enable,
   disable = disable
 }

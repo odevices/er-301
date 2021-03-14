@@ -18,7 +18,7 @@ function Writer:open(fullpath)
   self:close()
   local archive = app.ZipArchiveWriter()
   if not archive:open(fullpath, true) then
-    app.logInfo("Failed to create zip archive at %s.", fullpath)
+    app.logInfo("Failed to create zip archive at %s", fullpath)
     return false
   end
   self.archive = archive
@@ -30,13 +30,18 @@ function Writer:open(fullpath)
 end
 
 function Writer:addFile(srcPath, dstPath)
-  local ext = Path.getExtension(srcPath)
-  local f = ext and Writer.packagers[ext]
-  if f then
-    f(self, srcPath, dstPath)
+  if not Path.exists(srcPath) then
+    app.logError("%s not found!", dstPath)
+    return false
   else
-    Busy.status("%s: adding %s", self.id, Utils.shortenPath(dstPath, 25))
-    self.archive:add(srcPath, dstPath)
+    local ext = Path.getExtension(srcPath)
+    local f = ext and Writer.packagers[ext]
+    if f then
+      return f(self, srcPath, dstPath)
+    else
+      Busy.status("%s: adding %s", self.id, Utils.shortenPath(dstPath, 25))
+      return self.archive:add(srcPath, dstPath)
+    end
   end
 end
 
@@ -72,8 +77,7 @@ local function packagePreset(writer, srcPath, dstPath)
   end
   local data = Serialization.readTable(srcPath)
   Serialization.writeTable(tmpPath, data, hooks)
-  Busy.status("%s: adding %s", writer.id, filename)
-  writer.archive:add(tmpPath, dstPath)
+  if not writer.archive:add(tmpPath, dstPath) then return false end
   app.deleteFile(tmpPath)
   -- Collect assets that were found while walking the preset table.
   for k, v in pairs(replaced) do

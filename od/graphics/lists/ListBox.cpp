@@ -1,5 +1,6 @@
 #include <od/graphics/lists/ListBox.h>
 #include <od/graphics/fonts.h>
+#include <hal/constants.h>
 #include <algorithm>
 
 namespace od
@@ -96,16 +97,40 @@ namespace od
          i++, j++, y -= family.line_height)
     {
       const ListBoxItem &item = getItem(i);
+      int textWidth, textHeight;
+      getTextSize(item.name.c_str(), &textWidth, &textHeight, mTextSize);
       switch (mJustification)
       {
       case justifyLeft:
-        fb.text(mForeground, textLeft, y, item.name.c_str(), mTextSize,
-                ALIGN_MIDDLE);
+        if (mSelectIndex == i && textLeft + textWidth > right)
+        {
+          mLongTextSlideClock++;
+          if (mLongTextSlideClock >= GRAPHICS_REFRESH_RATE / 5)
+          {
+            mLongTextSlideClock = 0;
+            mLongTextSlide += mLongTextSlideDirection;
+            if (mLongTextSlide < 1)
+            {
+              mLongTextSlideDirection = 1;
+            }
+            getTextSize(item.name.c_str() + mLongTextSlide, &textWidth, &textHeight, mTextSize);
+            if (textLeft + textWidth < right)
+            {
+              mLongTextSlideDirection = -1;
+            }
+          }
+          fb.text(mForeground, textLeft, y, item.name.c_str() + mLongTextSlide, mTextSize,
+                  ALIGN_MIDDLE);
+        }
+        else
+        {
+          fb.text(mForeground, textLeft, y, item.name.c_str(), mTextSize,
+                  ALIGN_MIDDLE);
+        }
+
         break;
       case justifyCenter:
       {
-        int textWidth, textHeight;
-        getTextSize(item.name.c_str(), &textWidth, &textHeight, mTextSize);
         fb.text(mForeground, mWorldLeft + (mWidth - textWidth) / 2, y,
                 item.name.c_str(), mTextSize,
                 ALIGN_MIDDLE);
@@ -113,8 +138,6 @@ namespace od
       break;
       case justifyRight:
       {
-        int textWidth, textHeight;
-        getTextSize(item.name.c_str(), &textWidth, &textHeight, mTextSize);
         fb.text(mForeground, mWorldLeft + mWidth - textWidth - mMargin - 2,
                 y, item.name.c_str(), mTextSize,
                 ALIGN_MIDDLE);
@@ -168,6 +191,7 @@ namespace od
 
   bool ListBox::scrollUp()
   {
+    resetLongTextSlide();
     if (mContents.size() == 0)
       return false;
 
@@ -191,6 +215,7 @@ namespace od
 
   bool ListBox::scrollDown()
   {
+    resetLongTextSlide();
     if (mContents.size() == 0)
       return false;
 
@@ -215,6 +240,7 @@ namespace od
 
   void ListBox::scrollToBottom()
   {
+    resetLongTextSlide();
     if (mContents.size() == 0)
       return;
 
@@ -226,6 +252,7 @@ namespace od
 
   void ListBox::scrollToTop()
   {
+    resetLongTextSlide();
     if (mContents.size() == 0)
       return;
 
@@ -712,6 +739,13 @@ namespace od
     ListBoxItem *p = mContents[i];
     mContents[i] = mContents[j];
     mContents[j] = p;
+  }
+
+  void ListBox::resetLongTextSlide()
+  {
+    mLongTextSlideClock = 0;
+    mLongTextSlideDirection = 1;
+    mLongTextSlide = 0;
   }
 
 } /* namespace od */

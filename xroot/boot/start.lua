@@ -1,6 +1,5 @@
 local app = app
 app.logInfo("Entering start.lua...")
-package.path = app.roots.x .. "/?.lua;" .. app.roots.x .. "/?/init.lua"
 
 app.logInfo("X Root:"..app.roots.x)
 app.logInfo("Front Root:"..app.roots.front)

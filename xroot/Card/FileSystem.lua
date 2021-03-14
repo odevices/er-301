@@ -54,7 +54,8 @@ local extensions = {
   ["control-preset"] = "control",
   ["scala"] = "scl",
   ["package"] = "pkg",
-  ["linkable"] = "so"
+  ["linkable"] = "so",
+  ["log"] = "log"
 }
 
 local patterns = {

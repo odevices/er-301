@@ -1,5 +1,6 @@
 function app.enableLogging()
   local app = app
+  local Signal = require "Signal"
 
   if not app.loggingEnabled then
     app.loggingEnabled = true
@@ -9,6 +10,7 @@ function app.enableLogging()
     local infoLabel = "\27[32mINFO\27[0m"
     local warnLabel = "\27[33mWARN\27[0m"
     local errorLabel = "\27[31mERROR\27[0m"
+    local fatalLabel = "\27[31mFATAL\27[0m"
 
     local function logPrefix(label)
       return string.format("\27[34m[#%d %0.4fs lua]\27[0m %s", logCount(),
@@ -18,28 +20,25 @@ function app.enableLogging()
     function app.logInfo(...)
       local text = string.format(...)
       print(string.format("%s %s", logPrefix(infoLabel), text))
-      if app.logDebug then
-        local Signal = require "Signal"
-        Signal.emit("log", text)
-      end
+      Signal.emit("logInfo", text)
     end
 
     function app.logWarn(...)
       local text = string.format(...)
       print(string.format("%s %s", logPrefix(warnLabel), text))
-      if app.logDebug then
-        local Signal = require "Signal"
-        Signal.emit("warn", text)
-      end
+      Signal.emit("logWarn", text)
     end
 
     function app.logError(...)
       local text = string.format(...)
-      error(string.format("%s %s", logPrefix(errorLabel), text), 2)
-      if app.logDebug then
-        local Signal = require "Signal"
-        Signal.emit("error", text)
-      end
+      print(string.format("%s %s", logPrefix(errorLabel), text))
+      Signal.emit("logError", text)
+    end
+
+    function app.logFatal(...)
+      local text = string.format(...)
+      error(string.format("%s %s", logPrefix(fatalLabel), text), 2)
+      Signal.emit("logFatal", text)
     end
 
     -- support legacy logging
@@ -47,12 +46,13 @@ function app.enableLogging()
   end
 end
 
-if app.TESTING then
-  app.enableLogging()
+app.enableLogging()
 
-  function app.disableLogging()
-    -- do nothing
-  end
+function app.disableLogging()
+  -- do nothing
+end
+
+if app.TESTING then
 
   function app.enableDevMode()
     app.Uart_enable()
@@ -70,25 +70,6 @@ if app.TESTING then
   end
 
 else
-  local f = function()
-    -- do nothing
-  end
-  app.logInfo = f
-  app.logWarn = f
-  app.logError = f
-  -- support legacy logging
-  app.log = app.logInfo
-
-  function app.disableLogging()
-    if app.loggingEnabled then
-      app.loggingEnabled = false
-      app.logInfo = f
-      app.logWarn = f
-      app.logError = f
-      -- support legacy logging
-      app.log = app.logInfo
-    end
-  end
 
   function app.enableDevMode()
     -- do nothing

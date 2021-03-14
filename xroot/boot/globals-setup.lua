@@ -12,11 +12,11 @@ local unitInputNames = {
 local function connectUnitInput(unit, inputName, toObject, toPortName)
   local channel = unitInputNames[inputName]
   if channel == nil then
-    app.logInfo("connect: Unit(%s) has no input named %s", unit:name(),
-                inputName)
+    app.logError("connect: Unit(%s) has no input named %s", unit:name(),
+                 inputName)
   elseif not unit:addInput(channel, toObject, toPortName) then
-    app.logInfo("connect: Object(%s) has no port named '%s'.", toObject:name(),
-                toPortName)
+    app.logError("connect: Object(%s) has no port named '%s'.", toObject:name(),
+                 toPortName)
   end
 end
 
@@ -30,23 +30,23 @@ local unitOutputNames = {
 local function connectUnitOutput(fromObject, fromPortName, unit, outputName)
   local channel = unitOutputNames[outputName]
   if channel == nil then
-    app.logInfo("connect: Unit(%s) has no output named %s", unit:name(),
-                outputName)
+    app.logError("connect: Unit(%s) has no output named %s", unit:name(),
+                 outputName)
   elseif not unit:setOutput(channel, fromObject, fromPortName) then
-    app.logInfo("connect: Object(%s) has no port named '%s'.",
-                fromObject:name(), fromPortName)
+    app.logError("connect: Object(%s) has no port named '%s'.",
+                 fromObject:name(), fromPortName)
   end
 end
 
 local function connectObjects(fromObject, fromPortName, toObject, toPortName)
   if not app.connect(fromObject, fromPortName, toObject, toPortName) then
-    app.logInfo("connect: Failed to connect %s(%s) to %s(%s)",
-                fromObject:name(), fromPortName, toObject:name(), toPortName)
+    app.logError("connect: Failed to connect %s(%s) to %s(%s)",
+                 fromObject:name(), fromPortName, toObject:name(), toPortName)
   end
 end
 
 function connect(fromObject, fromPortName, toObject, toPortName)
-  --app.logInfo("connect: [%s].%s to [%s].%s", swig_type(fromObject),
+  -- app.logInfo("connect: [%s].%s to [%s].%s", swig_type(fromObject),
   --            fromPortName, swig_type(toObject), toPortName)
   if fromObject.pUnit then
     connectUnitInput(fromObject.pUnit, fromPortName, toObject, toPortName)
@@ -62,13 +62,13 @@ local function tieExpression(slaveObj, slaveParamName, expression, ...)
   local slave = slaveObj:getParameter(slaveParamName) or
                     slaveObj:getOption(slaveParamName)
   if slave == nil then
-    app.logInfo("tie: Object(%s) has no parameter/option named '%s'.",
-                slaveObj:name(), slaveParamName)
+    app.logError("tie: Object(%s) has no parameter/option named '%s'.",
+                 slaveObj:name(), slaveParamName)
     return
   end
   local E = app.Expression()
   if not E:setFunction(expression) then
-    app.logInfo("Invalid expression: %s", expression)
+    app.logError("Invalid expression: %s", expression)
     return
   end
   local args = {
@@ -79,8 +79,8 @@ local function tieExpression(slaveObj, slaveParamName, expression, ...)
     local name = args[i + 1]
     local param = obj:getParameter(name)
     if param == nil then
-      app.logInfo("tie: Object(%s) has no parameter/option named '%s'.",
-                  obj:name(), name)
+      app.logError("tie: Object(%s) has no parameter/option named '%s'.",
+                   obj:name(), name)
       return
     end
     E:addParameter(param)
@@ -90,20 +90,20 @@ local function tieExpression(slaveObj, slaveParamName, expression, ...)
 end
 
 local function tieParameter(slaveObj, slaveParamName, masterObj, masterParamName)
-  --app.logInfo("tie: [%s].%s to [%s].%s", swig_type(slaveObj), slaveParamName,
+  -- app.logInfo("tie: [%s].%s to [%s].%s", swig_type(slaveObj), slaveParamName,
   --            swig_type(masterObj), masterParamName)
   local slave = slaveObj:getParameter(slaveParamName) or
                     slaveObj:getOption(slaveParamName)
   local master = masterObj:getParameter(masterParamName) or
                      masterObj:getOption(masterParamName)
   if master == nil then
-    app.logInfo("tie: Object(%s) has no parameter/option named '%s'.",
-                masterObj:name(), masterParamName)
+    app.logError("tie: Object(%s) has no parameter/option named '%s'.",
+                 masterObj:name(), masterParamName)
     return
   end
   if slave == nil then
-    app.logInfo("tie: Object(%s) has no parameter/option named '%s'.",
-                slaveObj:name(), slaveParamName)
+    app.logError("tie: Object(%s) has no parameter/option named '%s'.",
+                 slaveObj:name(), slaveParamName)
     return
   end
   slave:tie(master)

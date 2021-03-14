@@ -46,12 +46,9 @@ local function refreshPackageCache()
   if Card.mounted() then
     -- Refresh packages with package archives.
     local repoPath = FS.getRoot("packages")
-    app.logInfo(repoPath)
     for filename in dir(repoPath) do
-      app.logInfo(filename)
       if FS.isType("package", filename) then
         Busy.status("Refreshing repository: " .. filename)
-        app.logInfo("Refreshing repository: found " .. filename)
         local package = Package(filename)
         if package.id then
           keep[package.id] = true
@@ -174,12 +171,12 @@ local function load(package)
       local otherPackage = findCompatiblePackage(dep, true)
       if otherPackage then
         if not load(otherPackage) then
-          app.logInfo("%s: failed to load dependency, %s.", package.id,
+          app.logError("%s: failed to load dependency, %s.", package.id,
                       otherPackage.id)
           return false
         end
       else
-        app.logInfo("%s: required package (%s) not found.", package.id,
+        app.logError("%s: required package (%s) not found.", package.id,
                     dependencyToPrettyString(dep))
         return false
       end

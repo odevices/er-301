@@ -633,6 +633,7 @@ namespace emu
     TLS_setName("lua");
     AppInterpreter interp;
     interp.init();
+    interp.execute("package.path = '%s/?.lua;%s/?/init.lua'", globalConfig.xRoot, globalConfig.xRoot);
     interp.execute("app.EMULATION = true");
     interp.execute("app.roots = {x='%s',rear='%s',front='%s'}",
                    globalConfig.xRoot, globalConfig.rearRoot, globalConfig.frontRoot);

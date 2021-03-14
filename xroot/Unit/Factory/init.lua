@@ -56,22 +56,18 @@ local function saveErrorReport(msg, trace, logFile)
       f:write("Error Message: ")
       f:write(msg .. "\n")
       f:write(trace .. "\n")
-      local LogViewer = require "LogViewer"
-      local count = LogViewer:count()
+      local LogHistory = require "LogHistory"
+      local count = LogHistory:count()
       if count > 0 then
         f:write("Recent Log Messages:\n")
-        LogViewer:scrollToTop()
-        for i = 1, count do
-          f:write(LogViewer:get() .. "\n")
-          LogViewer:scrollDown()
-        end
+        for i = 1, count do f:write(LogHistory:get(i), "\n") end
       end
       f:write("---ERROR REPORT END\n")
       f:close()
       app.logInfo("Error report appended to '%s'.", logFile)
       reportSaved = true
     else
-      app.logInfo("Failed to write '%s'.", logFile)
+      app.logError("Failed to write '%s'.", logFile)
     end
   end
   return reportSaved
@@ -103,14 +99,15 @@ local function instantiateFromLibrary(library, loadInfo, args)
     if status2 then
       return retval2
     else
-      app.logInfo("Factory.instantiate(%s):construction failed", loadInfo.moduleName)
+      app.logError("Factory.instantiate(%s):construction failed",
+                   loadInfo.moduleName)
       app.logInfo("Traceback of unit construction:%s", retval2)
       if library.external then
         onErrorInExternal(library, loadInfo, loadInfoFound, retval2)
       end
     end
   else
-    app.logInfo("Factory.instantiate(%s):require failed", loadInfo.moduleName)
+    app.logError("Factory.instantiate(%s):require failed", loadInfo.moduleName)
     app.logInfo("Traceback of call to 'require(%s)':%s", modulePath, retval)
     if library.external then
       onErrorInExternal(library, loadInfo, loadInfoFound, retval)
@@ -125,7 +122,7 @@ local librarySearchOrder = {
 
 local function instantiate(loadInfo, args)
   if loadInfo == nil then
-    app.logInfo("Factory.instantiate(nil): invalid loadInfo.")
+    app.logError("Factory.instantiate(nil): invalid loadInfo.")
     return
   end
   -- First try the library given in the loadInfo.
@@ -134,15 +131,16 @@ local function instantiate(loadInfo, args)
     return instantiateFromLibrary(library, loadInfo, args)
   else
     -- Then try searching other libraries for a match.
-    app.logInfo("Factory.instantiate(%s.%s): not found, trying other libraries.",
-           loadInfo.libraryName, loadInfo.moduleName)
+    app.logWarn(
+        "Factory.instantiate(%s.%s): not found, trying other libraries.",
+        loadInfo.libraryName, loadInfo.moduleName)
     for _, libraryName in ipairs(librarySearchOrder) do
       local library = LoadedLibraryHash[libraryName]
       if library and library:find(loadInfo.moduleName) then
         local unit = instantiateFromLibrary(library, loadInfo, args)
         if unit then
           app.logInfo("Factory.instantiate(%s.%s): found replacement in %s.",
-                 loadInfo.libraryName, loadInfo.moduleName, library.name)
+                      loadInfo.libraryName, loadInfo.moduleName, library.name)
           return unit
         end
       end
@@ -210,7 +208,7 @@ local function getBuiltin(name)
   if loadInfo then
     return loadInfo
   else
-    app.logInfo("Unit.Factory.getBuiltin: Unable to find [%s].", name)
+    app.logError("Unit.Factory.getBuiltin: Unable to find [%s].", name)
   end
 end
 
@@ -280,11 +278,11 @@ local function registerExternalLibrary(folderName, verbose)
       end
     elseif verbose then
       local logFile = Path.join(libRoot, folderName, "error.log")
-      app.logInfo("UnitLibrary(%s): Failed to load toc.lua.", folderName)
+      app.logError("UnitLibrary(%s): Failed to load toc.lua.", folderName)
       saveErrorReport("Failed to register.", result, logFile)
     end
   elseif verbose then
-    app.logInfo("UnitLibrary(%s): Failed to open toc.lua.", folderName)
+    app.logError("UnitLibrary(%s): Failed to open toc.lua.", folderName)
     app.logInfo(errorMessage)
   end
 end
@@ -301,7 +299,7 @@ local function reloadLibraries()
           if registerExternalLibrary(folderName, true) then
             app.logInfo("Unit library found: %s", folderName)
           else
-            app.logInfo("Unit library failed to register: %s", folderName)
+            app.logError("Unit library failed to register: %s", folderName)
           end
         end
       end

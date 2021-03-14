@@ -3,7 +3,7 @@ local Card = require "Card"
 local function saveCrashReport(msg, trace)
   local reportSaved = false
   if Card.mounted() then
-    local f = io.open(app.roots.front.."/crash.log", "a+")
+    local f = io.open(app.roots.front .. "/crash.log", "a+")
     if f then
       local Persist = require "Persist"
       f:write("---CRASH REPORT BEGIN\n")
@@ -16,13 +16,9 @@ local function saveCrashReport(msg, trace)
       f:write(msg .. "\n")
       f:write(trace .. "\n")
       f:write("Recent Log Messages:\n")
-      local LogViewer = require "LogViewer"
-      local count = LogViewer:count()
-      LogViewer:scrollToTop()
-      for i = 1, count do
-        f:write(LogViewer:get() .. "\n")
-        LogViewer:scrollDown()
-      end
+      local LogHistory = require "LogHistory"
+      local count = LogHistory:count()
+      for i = 1, count do f:write(LogHistory:get(i), "\n") end
       f:write("---CRASH REPORT END\n")
       f:close()
       print("Crash report appended to 'crash.log'.")

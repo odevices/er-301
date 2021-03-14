@@ -77,12 +77,12 @@ local function updateQueue()
     elseif saver.mStatus < 0 then
       -- error happened
       local reason = getErrorString(saver.mStatus)
-      app.logInfo("Sample(%s):error saving:%s.", savingSample.name, reason)
+      app.logError("Sample(%s):error saving:%s.", savingSample.name, reason)
       savingSample:setError(reason)
       Signal.emit("sampleStatusChanged", savingSample)
       savingSample = nil
     else
-      app.logInfo("Sample(%s):unknown status:%d", savingSample.name,
+      app.logError("Sample(%s):unknown status:%d", savingSample.name,
                   saver.mStatus)
       savingSample = nil
     end
@@ -104,12 +104,12 @@ local function updateQueue()
     elseif loader.mStatus < 0 then
       -- error happened
       local reason = getErrorString(saver.mStatus)
-      app.logInfo("Sample(%s):error loading:%s", loadingSample.name, reason)
+      app.logError("Sample(%s):error loading:%s", loadingSample.name, reason)
       loadingSample:setError(reason)
       Signal.emit("sampleStatusChanged", loadingSample)
       loadingSample = nil
     else
-      app.logInfo("Sample(%s):unknown status:%d", loadingSample.name,
+      app.logError("Sample(%s):unknown status:%d", loadingSample.name,
                   saver.mStatus)
       loadingSample = nil
     end
@@ -124,7 +124,7 @@ local function updateQueue()
         jobQ:push(saver)
         Signal.emit("sampleStatusChanged", savingSample)
       else
-        app.logInfo("Sample(%s): unable to save to %s.", savingSample.name,
+        app.logError("Sample(%s): unable to save to %s.", savingSample.name,
                     savingSample.path)
         savingSample:setError("Unable to start saving.")
         Signal.emit("sampleStatusChanged", savingSample)
@@ -164,7 +164,7 @@ local function addToSaveQueue(sample)
     end
     return true
   else
-    app.logInfo("Sample(%s):failed to add to save queue: %s", sample.name,
+    app.logError("Sample(%s):failed to add to save queue: %s", sample.name,
                 sample.path)
     return false
   end
@@ -182,7 +182,7 @@ local function addToLoadQueue(sample)
   else
     local reason = getErrorString(status)
     sample:setError(reason)
-    app.logInfo("Sample(%s): failed to prepare %s (%s)", sample.name,
+    app.logError("Sample(%s): failed to prepare %s (%s)", sample.name,
                 sample.path, reason)
     local msg = Message.Main("Failed to load " .. Path.getFilename(sample.path),
                              reason)
@@ -232,7 +232,7 @@ local function load(path, slicesInfo)
     Signal.emit("newSample", sample)
     return sample
   else
-    app.logInfo("SamplePool.load:Failed to enqueue: %s", path)
+    app.logError("SamplePool.load:Failed to enqueue: %s", path)
     samples[path] = nil
     return false, status
   end
@@ -264,7 +264,7 @@ local function loadMulti(paths, id, slicesInfo)
     Signal.emit("newSample", sample)
     return sample
   else
-    app.logInfo("SamplePool.load:Failed to enqueue: %s", id)
+    app.logError("SamplePool.load:Failed to enqueue: %s", id)
     samples[id] = nil
     return false, status
   end
@@ -281,7 +281,7 @@ end
 local function clone(sample, Ns)
   local newSample = sample:clone(Ns)
   if not newSample then
-    app.logInfo("SamplePool.clone:Failed to clone %s with %d samples.",
+    app.logError("SamplePool.clone:Failed to clone %s with %d samples.",
                 sample.path, Ns)
     return false, "Insufficient memory."
   end
@@ -529,12 +529,12 @@ local function deserializeSample(t)
     if sample then
       return sample
     else
-      app.logInfo("SamplePool.deserializeSample:failed to create buffer (%s).",
+      app.logError("SamplePool.deserializeSample:failed to create buffer (%s).",
                   status)
       return
     end
   else
-    app.logInfo("SamplePool.deserializeSample: unsupported opts")
+    app.logError("SamplePool.deserializeSample: unsupported opts")
     return
   end
 end

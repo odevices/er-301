@@ -50,27 +50,21 @@ function QuickSavePreset:populate()
     firmwareVersion = app.FIRMWARE_VERSION
   }
 
-  app.logInfo("%s:serialize: serializing sample pool", self)
   Busy.status("Serializing sample pool...")
   data.pool = Pool.serialize()
 
-  app.logInfo("%s:serialize: serializing globals", self)
   Busy.status("Serializing global chains...")
   data.globals = GlobalChains.serialize()
 
-  app.logInfo("%s:serialize: serializing preamp", self)
   Busy.status("Serializing preamp settings...")
   data.preamp = Preamp.serialize()
 
-  app.logInfo("%s:serialize: serializing recorder", self)
   Busy.status("Serializing multitrack recorder...")
   data.recorder = recorder:serialize()
 
-  app.logInfo("%s:serialize: serializing clipboard", self)
   Busy.status("Serializing clipboard...")
   data.clipboard = Clipboard.serialize()
 
-  app.logInfo("%s:serialize: serializing channels", self)
   Busy.status("Serializing channels...")
   data.channels = Channels.serialize()
 

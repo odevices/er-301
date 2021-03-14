@@ -126,7 +126,7 @@ function Path.recursiveCopy(fromPath, toPath, excludes)
       if app.copyFile(srcPath, dstPath, true) then
         app.logInfo("Copied %s to %s", srcPath, dstPath)
       else
-        app.logInfo("Failed: %s to %s", srcPath, dstPath)
+        app.logError("Failed: %s to %s", srcPath, dstPath)
       end
     end
   end
@@ -142,13 +142,13 @@ function Path.recursiveDelete(path)
       if Path.recursiveDelete(path2) then
         app.logInfo("Deleted folder %s", path2)
       else
-        app.logInfo("Failed to delete %s", path2)
+        app.logError("Failed to delete %s", path2)
       end
     else
       if app.deleteFile(path2) then
         app.logInfo("Deleted %s", path2)
       else
-        app.logInfo("Failed to delete %s", path2)
+        app.logError("Failed to delete %s", path2)
       end
     end
   end
@@ -156,7 +156,7 @@ function Path.recursiveDelete(path)
   if app.deleteDirectory(path) then
     app.logInfo("Deleted %s", path)
   else
-    app.logInfo("Failed to delete %s", path)
+    app.logError("Failed to delete %s", path)
   end
 
   return true

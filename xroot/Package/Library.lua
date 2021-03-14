@@ -21,7 +21,7 @@ function Library:safeCall(method, ...)
     if status then
       return ret
     else
-      app.logInfo("%s: error calling %s().", self, method)
+      app.logError("%s: error calling %s().", self, method)
       app.logInfo("Traceback:%s", ret)
     end
   else

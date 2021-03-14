@@ -76,7 +76,7 @@ extern "C"
 
     Timing_init();
     Card_init();
-    Config_init("0:/firmware.cfg", "1:", "0:", "x:");
+    Config_init("0:/firmware.cfg", "x:", "0:", "1:");
     Pump_init();
     USB_init();
     Encoder_init();
@@ -85,8 +85,9 @@ extern "C"
     Modulation_init();
     Audio_init();
     Display_init();
-    
+
     local.appInterp.init();
+    local.appInterp.execute("package.path = 'x:/?.lua;x:/?/init.lua'");
     local.appInterp.execute("app.roots = {x='x:',front='1:',rear='0:'}");
     local.appInterp.execute("dofile('x:/boot/logging.lua')");
     local.appInterp.execute("dofile('x:/boot/start.lua')");
@@ -112,7 +113,7 @@ extern "C"
       Task_Params_init(&params);
       params.priority = TASK_PRIORITY_MAIN;
       params.stackSize = 32 * 1024;
-      params.env = (Ptr)"app";
+      params.env = (Ptr) "app";
       local.appTaskHandle = Task_create(app_task, &params, NULL);
     }
 

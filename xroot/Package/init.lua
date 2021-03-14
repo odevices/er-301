@@ -50,7 +50,7 @@ function Package:getTOC()
 
   local archive = app.ZipArchiveReader()
   if not archive:open(pathToArchive) then
-    app.logInfo("%s: Failed to open package archive: %s", self, pathToArchive)
+    app.logError("%s: Failed to open package archive: %s", self, pathToArchive)
     return
   end
 
@@ -59,7 +59,7 @@ function Package:getTOC()
   archive:close()
 
   if chunk == "" then
-    app.logInfo("%s: Failed to extract 'toc.lua' from %s.", self, pathToArchive)
+    app.logError("%s: Failed to extract 'toc.lua' from %s.", self, pathToArchive)
     return
   end
 
@@ -75,11 +75,11 @@ function Package:getTOC()
       self.toc = ret
       return ret
     else
-      app.logInfo("Failed to execute 'toc.lua' from %s.", pathToArchive)
+      app.logError("Failed to execute 'toc.lua' from %s.", pathToArchive)
       app.logInfo("Traceback of 'toc.lua':%s", ret)
     end
   else
-    app.logInfo("Failed to load 'toc.lua' from %s.", pathToArchive)
+    app.logError("Failed to load 'toc.lua' from %s.", pathToArchive)
     app.logInfo(e)
   end
 end

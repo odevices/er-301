@@ -80,14 +80,26 @@ function Console:homeReleased()
   return true
 end
 
-function Console:log(text)
+function Console:logInfo(text)
   self.console:addItem(text)
+  self.console:scrollToBottom()
+end
+
+function Console:logWarn(text)
+  self.console:addItem("WARN "..text)
+  self.console:scrollToBottom()
+end
+
+function Console:logError(text)
+  self.console:addItem("ERROR "..text)
   self.console:scrollToBottom()
 end
 
 function Console:enterReleased()
   local i = self.list:selectedIndex()
-  Signal.weakRegister("log", self)
+  Signal.weakRegister("logInfo", self)
+  Signal.weakRegister("logWarn", self)
+  Signal.weakRegister("logError", self)
   local saveVerbose = app.logDebug
   app.logDebug = true
   Busy.start()
@@ -98,7 +110,9 @@ function Console:enterReleased()
   end
   Busy.stop()
   app.logDebug = saveVerbose
-  Signal.remove("log", self)
+  Signal.remove("logInfo", self)
+  Signal.remove("logWarn", self)
+  Signal.remove("logError", self)
 end
 
 return Console

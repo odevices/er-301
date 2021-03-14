@@ -147,7 +147,7 @@ function FileRecorder:startRecording()
           self.thread:add(sink)
           Card.claim("Recording to", self.paths[i])
         else
-          app.logInfo("%s.startRecording: Failed to open track %d: %s.", self, i,
+          app.logError("%s.startRecording: Failed to open track %d: %s.", self, i,
                   self.paths[i])
         end
       end

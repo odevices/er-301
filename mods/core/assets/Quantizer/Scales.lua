@@ -224,22 +224,18 @@ local function saveErrorReport(msg, trace, logFile)
       f:write("Error Message: ")
       f:write(msg .. "\n")
       f:write(trace .. "\n")
-      local LogViewer = require "LogViewer"
-      local count = LogViewer:count()
+      local LogHistory = require "LogHistory"
+      local count = LogHistory:count()
       if count > 0 then
         f:write("Recent Log Messages:\n")
-        LogViewer:scrollToTop()
-        for i = 1, count do
-          f:write(LogViewer:get() .. "\n")
-          LogViewer:scrollDown()
-        end
+        for i = 1, count do f:write(LogHistory:get(i), "\n") end
       end
       f:write("---ERROR REPORT END\n")
       f:close()
       app.logInfo("Error report written to '%s'.", logFile)
       reportSaved = true
     else
-      app.logInfo("Failed to write '%s'.", logFile)
+      app.logError("Failed to write '%s'.", logFile)
     end
   end
   return reportSaved

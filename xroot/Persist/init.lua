@@ -671,7 +671,7 @@ local function quickSaveToSlot(slot, checkForUnsavedBuffers, after)
     app.logInfo("Quicksave:done")
     Overlay.mainFlashMessage("Quicksaved to slot %d.", slot)
   else
-    app.logInfo("Quicksave:failed")
+    app.logError("Quicksave:failed")
     Overlay.mainFlashMessage("Quicksave to slot %d failed.", slot)
   end
   if after then after() end
@@ -704,8 +704,9 @@ local function getQuickSavePreset(slot)
         preset = QuickSavePreset(data, true)
         quickSaveCache[slot] = preset
       else
-        app.logInfo("Persist:getQuickSavePreset(%d):Invalid quicksave file: %s",
-                    slot, filename)
+        app.logError(
+            "Persist:getQuickSavePreset(%d):Invalid quicksave file: %s", slot,
+            filename)
       end
     end
   end

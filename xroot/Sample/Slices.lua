@@ -41,7 +41,7 @@ function Slices:save(path)
   if result then
     -- app.logInfo("%s:saved:%s",self,path)
   else
-    app.logInfo("%s:failed to save:%s", self, path)
+    app.logError("%s:failed to save:%s", self, path)
   end
   return result
 end
@@ -64,7 +64,7 @@ function Slices:serialize()
   t.path = self.path
   t.rate = self.rate
   if not self:save() then
-    app.logInfo("%s:serialize: unable to save slices to %s.", self, self.path)
+    app.logError("%s:serialize: unable to save slices to %s.", self, self.path)
   end
   return t
 end
@@ -72,7 +72,7 @@ end
 function Slices:deserialize(t)
   if t.path then
     if not self:load(t.path) then
-      app.logInfo("%s:deserialize: unable to load slices from %s.", self,
+      app.logError("%s:deserialize: unable to load slices from %s.", self,
                   self.path)
     end
   end

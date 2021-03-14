@@ -7,6 +7,7 @@ local Path = require "Path"
 local Window = require "Base.Window"
 local Verification = require "Verification"
 local Message = require "Message"
+local LogHistory = require "LogHistory"
 local Card = require "Card"
 local Pool = require "Sample.Pool"
 local Creator = require "Sample.Pool.Creator"
@@ -451,7 +452,6 @@ function Interface:doneChoosing(selectedPaths)
   local Busy = require "Busy"
   Busy.start()
   selectedPaths = selectedPaths or {}
-  app.logInfo("SamplePool: loading %d paths", #selectedPaths)
   local failed = {}
   local outOfMemory = false
   for _, fullPath in ipairs(selectedPaths) do
@@ -459,7 +459,6 @@ function Interface:doneChoosing(selectedPaths)
     local filename = Path.getFilename(fullPath)
     local ext = Path.getExtension(filename)
     if FS.isValidExtension("audio", ext) then
-      Busy.status(filename)
       local row = self.sampleColumn:findByData(fullPath)
       if row < self.sampleColumn:size() then
         -- already loaded, select it
@@ -475,7 +474,7 @@ function Interface:doneChoosing(selectedPaths)
         end
       end
     else
-      app.logInfo("SamplePool: unsupported file type (%s) ignored.", filename)
+      app.logWarn("SamplePool: unsupported file type (%s) ignored.", filename)
     end
   end
   Busy.stop()
@@ -485,8 +484,7 @@ function Interface:doneChoosing(selectedPaths)
       dialog = Message.Main("Failed to load: " .. failed[1],
                             "Insufficient memory.")
     else
-      dialog = Message.Main("Failed to load: " .. failed[1],
-                            "Failed to parse. Please send this file to me for analysis.")
+      LogHistory:showErrors("Failed to load: " .. failed[1])
     end
   elseif #failed > 1 then
     local msg1
@@ -498,10 +496,10 @@ function Interface:doneChoosing(selectedPaths)
     end
     if outOfMemory then
       msg2 = "Insufficient memory."
+      dialog = Message.Main(msg1, msg2)
     else
-      msg2 = "Failed to parse. Please send one to me for analysis."
+      LogHistory:showErrors(msg1)
     end
-    dialog = Message.Main(msg1, msg2)
   end
   if dialog then
     dialog:show()

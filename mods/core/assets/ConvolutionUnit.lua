@@ -104,7 +104,7 @@ function ConvolutionUnit:deserialize(t)
       self:setSample(sample)
     else
       local Utils = require "Utils"
-      app.logInfo("%s:deserialize: failed to load sample.", self)
+      app.logError("%s:deserialize: failed to load sample.", self)
       Utils.pp(t.sample)
     end
   end
