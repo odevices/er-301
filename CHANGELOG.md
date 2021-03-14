@@ -4,6 +4,12 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
+# v0.6.04
+FIX: Corrupted WAV files > Any WAV files created by the ER-301 had a corrupted header.
+FIX: Package Creator > Silently ignored missing WAV files.
+SYS: Mod error logs are now created in front:/ER-301/logs/(mod-name).log
+ENHANCED: Admin > Log History screen added.
+
 # v0.6.03
 FIX: A chain would sometimes stop producing audio when attaching a sample from the card to a unit. (issue #12)
 SYS: Major improvements to firmware's symbol table used for dynamic linking. (issue #13)
@@ -20,7 +26,7 @@ SYS: Major improvements to firmware's symbol table used for dynamic linking. (is
 * FIX: Soft Keyboard > History was not being saved in some cases.
 * FIX: Doppler Delay unit > Maximum delay length can now be configured just like the vanilla Delay unit.
 * FIX: Pressing an unrelated button while a long-press menu is showing would result in a crash.
-* FIX: The suggested save folder for unit presets has been simplified to ER-301/<version>/presets instead of the now unnecessary ER-301/<version>/presets/<unit-type-name>.
+* FIX: The suggested save folder for unit presets has been simplified to ER-301/(version)/presets instead of the now unnecessary ER-301/(version)/presets/(unit-type-name).
 * FIX: Teletype CV Unit > Slew limiting is enabled by default with a 2ms rate.
 * FIX: Quicksaving when there are unsaved buffers > If you pressed UP or HOME when in the Sample Pool saving buffers, the quicksave was being canceled.  The quicksave should only be canceled if you press CANCEL.
 * FIX: G inputs > ADC driver will now reset the ADC hardware when it detects that it is no longer getting interrupts (i.e. timeout).
