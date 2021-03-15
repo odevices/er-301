@@ -4,6 +4,9 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
+# v0.6.05
+* FIX: Installer fails on pre-v0.v6 firmware.  This is fixed now but in order to get the core and teletype packages installed you will need to run the installer one more time after booting into v0.6 firmware.
+
 # v0.6.04
 * FIX: Corrupted WAV files > Any WAV files created by the ER-301 had a corrupted header.
 * FIX: Package Creator > Silently ignored missing WAV files.
