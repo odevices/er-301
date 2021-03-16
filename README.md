@@ -35,10 +35,10 @@ Since cross-compilation has its own complexities, it is probably easier to first
 
 ```bash
 # ubuntu
-sudo apt install build-essential libsdl2-dev libsdl2-ttf-dev libfftw3-dev swig python3 zip fonts-freefont-ttf
+sudo apt install build-essential libsdl2-dev libsdl2-ttf-dev libfftw3-dev swig zip fonts-freefont-ttf
 
 # macOS
-brew install gcc sdl2 sdl2_ttf fftw swig python3 zip fonts-freefont-ttf
+brew install gcc sdl2 sdl2_ttf fftw swig zip
 ```
 
 To compile, execute this in the top directory:
