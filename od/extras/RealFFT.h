@@ -8,7 +8,7 @@ namespace od
 {
 
   typedef std::vector<float, AlignmentAllocator<float>> RealBuffer;
-  typedef std::vector<complex_float_t, AlignmentAllocator<float>> ComplexBuffer;
+  typedef std::vector<complex_float_t, AlignmentAllocator<complex_float_t>> ComplexBuffer;
 
   class RealFFT
   {
