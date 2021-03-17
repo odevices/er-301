@@ -34,7 +34,7 @@ sdl2_ttf := $(shell brew --prefix sdl2_ttf)
 fftw := $(shell brew --prefix fftw)
 
 CFLAGS += -rdynamic
-CFLAGS += -I$(sdl2)/include -I$(sdl2)/include/SDL2 -I$(sdl2_ttf)/include
+CFLAGS += -I$(sdl2)/include -I$(sdl2)/include/SDL2 -I$(sdl2_ttf)/include -I$(fftw)/include
 LFLAGS += -L$(sdl2)/lib -L$(sdl2_ttf)/lib -L$(fftw)/lib
 endif
 
