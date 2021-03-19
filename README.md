@@ -36,7 +36,7 @@ The purpose of this emulator is to make writing code for the ER-301 just a littl
 
 :warning: **The following instructions have been tested on Ubuntu 20.xx.**
 
-Since cross-compilation has its own complexities, it is probably easier to first start with getting the emulator running on your development machine.  To compile and run the emulator you will need the following dependencies installed:
+To compile and run the emulator you will need the following dependencies installed:
 
 ```bash
 # ubuntu
