@@ -4,6 +4,7 @@
 
   * [Introduction](#introduction)
   * [Emulator](#emulator)
+    + [Compiling the emulator](#compiling-the-emulator)
     + [Running the emulator](#running-the-emulator)
     + [Configuring the emulator](#configuring-the-emulator)
     + [Installing packages](#installing-packages)
