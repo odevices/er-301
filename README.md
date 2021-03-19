@@ -29,6 +29,10 @@ This project contains the source code for:
 
 ## Emulator
 
+The purpose of this emulator is to make writing code for the ER-301 just a little bit easier and fun.  Although you could, the emulator is not designed for making music.  I can see also see the emulator being useful to someone who just wants to know more about the ER-301 before buying one.
+
+### Compiling the emulator
+
 :warning: **The following instructions have been tested on Ubuntu 20.xx.**
 
 Since cross-compilation has its own complexities, it is probably easier to first start with getting the emulator running on your development machine.  To compile and run the emulator you will need the following dependencies installed:
@@ -170,6 +174,8 @@ Then the next time you boot up the emulator, it will move over packages found in
 
 
 ### Limitations
+
+The emulator can load and execute any mod that the real ER-301 can load and execute.  No porting of source code is necessary (even those written using NEON instrinsics), just recompilation for the target host on which you will run the emulator.  However, there are a few differences when it comes to the inputs and outputs.
 
 **Outputs are mixed down to stereo**
 
