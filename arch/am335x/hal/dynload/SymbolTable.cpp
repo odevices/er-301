@@ -80,6 +80,17 @@ namespace od
     logDebug(1, "SymbolTable(%s):add(%s,0x%x)", mFilename.c_str(), symbolName.c_str(), address);
   }
 
+  bool SymbolTable::update(const std::string &symbolName, uintptr_t address)
+  {
+    if (contains(symbolName))
+    {
+      logDebug(1, "SymbolTable(%s):update(%s,0x%x)", mFilename.c_str(), symbolName.c_str(), address);
+      mMap[symbolName] = address;
+      return true;
+    }
+    return false;
+  }
+
   void SymbolTable::clear()
   {
     mMap.clear();
@@ -101,6 +112,11 @@ namespace od
     }
 
     return 0;
+  }
+
+  bool SymbolTable::contains(const std::string &symbolName)
+  {
+    return mMap.find(symbolName) != mMap.end();
   }
 
   std::vector<std::string> SymbolTable::glob(const std::string &pattern)

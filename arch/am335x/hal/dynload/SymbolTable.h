@@ -19,7 +19,9 @@ namespace od
 
     int loadFromFile(const std::string &path);
     uintptr_t lookup(const std::string &name);
+    bool contains(const std::string &name);
     void add(const std::string &name, uintptr_t address);
+    bool update(const std::string &name, uintptr_t address);
     void clear();
     std::vector<std::string> glob(const std::string &pattern);
 

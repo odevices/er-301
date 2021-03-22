@@ -221,6 +221,16 @@ namespace od
       *pptr += ELF_ALIGNUP(shdr.sh_size);
     }
 
+#if 0
+    // read section name string table
+    std::vector<char> sectionNames;
+    {
+      Elf32_Shdr &shdr = sectionHeaders[elfHeader.e_shstrndx];
+      sectionNames.resize(shdr.sh_size);
+      reader.readBytes(sectionNames.data(), shdr.sh_size, shdr.sh_offset);
+    }
+#endif
+
     // Load the symbol and string tables.
     std::vector<Elf32_Sym> symbolTable;
     std::vector<char> stringTable;
@@ -271,6 +281,8 @@ namespace od
     }
 
     // Resolve all symbols in the symbol table.
+    uint32_t init_array_start = 0;
+    uint32_t init_array_size = 0;
     logDebug(1, "Resolving undefined symbols...");
     int unresolved = 0;
     for (Elf32_Sym &sym : symbolTable)
@@ -312,12 +324,19 @@ namespace od
         }
       default:
       {
-        sym.st_value += sectionHeaders[sym.st_shndx].sh_addr;
+        Elf32_Shdr &shdr = sectionHeaders[sym.st_shndx];
+        sym.st_value += shdr.sh_addr;
         if (ELF32_ST_BIND(sym.st_info) == STB_GLOBAL && ELF32_ST_TYPE(sym.st_info) == STT_FUNC)
         {
           const char *symbolName = stringTable.data() + sym.st_name;
-          logDebug(11, "export %s @ 0x%08x", symbolName, sym.st_value);
+          logDebug(1, "export %s @ 0x%08x", symbolName, sym.st_value);
           mSymbols.add(symbolName, sym.st_value);
+        }
+        else if (shdr.sh_type == SHT_INIT_ARRAY && ELF32_ST_TYPE(sym.st_info) == STT_SECTION)
+        {
+          logDebug(1, "INIT_ARRAY @ 0x%08x, st_info=%d, size = %d", sym.st_value, sym.st_info, shdr.sh_size / sizeof(uintptr_t));
+          init_array_start = sym.st_value;
+          init_array_size = shdr.sh_size / sizeof(uintptr_t);
         }
         break;
       }
@@ -389,6 +408,18 @@ namespace od
               logError("%s: Relocation failed.", symbolName);
               failedRelocations++;
             }
+            else if (dstsec.sh_type == SHT_INIT_ARRAY)
+            {
+              logDebug(1, "%s @ 0x%08x: init_array relocated.", symbolName, sym->st_value);
+              init_array_start = sym->st_value;
+            }
+            else
+            {
+              if(mSymbols.update(symbolName, sym->st_value))
+              {
+                logDebug(1, "update %s @ 0x%08x", symbolName, sym->st_value);
+              }
+            }
           }
         }
       }
@@ -405,7 +436,21 @@ namespace od
     Edma3_CacheInvalidate((uint32_t)mpTextSpace, mTextSize);
 
     mFilename = filename;
-    return failedRelocations == 0;
+    if (failedRelocations == 0)
+    {
+      for (uint32_t i = 0; i < init_array_size; i++)
+      {
+        void (*func)();
+        func = (void (*)(void))(init_array_start + i * sizeof(func));
+        logDebug(1, "Executing INIT_ARRAY[%d] @ 0x%08x", i, func);
+        (*func)();
+      }
+      return true;
+    }
+    else
+    {
+      return false;
+    }
   }
 
   bool ElfFile::unload()
