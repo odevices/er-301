@@ -40,6 +40,7 @@ To compile and run the emulator you will need the following dependencies install
 
 ```bash
 # ubuntu
+sudo apt update
 sudo apt install build-essential libsdl2-dev libsdl2-ttf-dev libfftw3-dev swig zip fonts-freefont-ttf
 
 # macOS
