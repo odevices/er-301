@@ -41,11 +41,19 @@ namespace od
       SDL_UnlockMutex(mMutex);
     }
 
-    uint32_t mPosted = 0;
+    uint32_t getPosted()
+    {
+      uint32_t posted;
+      SDL_LockMutex(mMutex);
+      posted = mPosted;
+      SDL_UnlockMutex(mMutex);
+      return posted;
+    }
 
   private:
     SDL_mutex *mMutex;
     SDL_cond *mCond;
+    uint32_t mPosted = 0;
 
     uint32_t check(uint32_t andMask, uint32_t orMask)
     {
@@ -93,7 +101,7 @@ namespace od
   uint32_t EventFlags::getPosted()
   {
     Pimp *pimp = (Pimp *)mHandle;
-    return pimp->mPosted;
+    return pimp->getPosted();
   }
 
   uint32_t EventFlags::waitForAny(uint32_t flags)
