@@ -79,5 +79,5 @@ There is still plenty to learn outside of the above 3 examples.  Here are some t
 | Playing from a sample buffer. | core: [Raw Player Unit](../mods/core/assets/Player/Raw.lua) |
 | Streaming from a sample file. | core: [Card Player Unit](../mods/core/assets/File/CardPlayerUnit.lua) |
 | Using the Task class to scheduling code to run on the audio thread. | teletype: [Dispatcher.h](../mods/teletype/Dispatcher.h), [Dispatcher.cpp](../mods/teletype/Dispatcher.cpp) |
-| Optimizing DSP code with NEON intrinsics. | builtin: [Comparator.h](../od/objects/timing/Comparator.h), [Comparator.cpp](../od/objects/timing/Comparator.cpp) |
+| Optimizing DSP code with NEON intrinsics. | builtin: [SawtoothOscillator.h](../mods/core/objects/oscillators/SawtoothOscillator.h), [Comparator.cpp](../mods/core/objects/oscillators/SawtoothOscillator.cpp) |
 | Adding a configuration menu to your package. | teletype: [init.lua](../mods/teletype/assets/init.lua) |
