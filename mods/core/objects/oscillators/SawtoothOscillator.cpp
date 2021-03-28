@@ -79,11 +79,11 @@ namespace od
       //// 2. Wrap to [0,1] without branching.
 
       // q is in [-inf, inf]
-      q = vsubq_f32(q, vcvtq_f32_s32(vcvtq_s32_f32(q)));
+      q = vsubq_f32(q, vcvtq_f32_s32(vcvtq_s32_f32(q))); // q = q - (int)q;
       // q is in [-1, 1]
       q += one;
       // q is in [0, 2]
-      q = vsubq_f32(q, vcvtq_f32_s32(vcvtq_s32_f32(q)));
+      q = vsubq_f32(q, vcvtq_f32_s32(vcvtq_s32_f32(q))); // q = q - (int)q;
       // q is finally in [0,1]
 
       //// 3. Calculate unbiased ramp.
