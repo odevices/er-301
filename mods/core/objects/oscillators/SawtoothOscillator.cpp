@@ -59,7 +59,7 @@ namespace od
       // Load the sync signal into a SIMD vector.
       float32x4_t s = vld1q_f32(sync + i);
       // Compare sync vector to zero. 
-      vst1q_u32(syncTrue, vcgtq_f32(s, zero));
+      vst1q_u32(syncTrue, vcgtq_f32(s, zero)); // syncTrue = s > 0
       // Load phase increment vector into regular array for element-wise access.
       vst1q_f32(tmp, q);
       for (int j = 0; j < 4; j++)
@@ -87,7 +87,7 @@ namespace od
       // q is finally in [0,1]
 
       //// 3. Calculate unbiased ramp.
-      q = vsubq_f32(two * q, one);
+      q = vsubq_f32(two * q, one); // q = 2*q - 1
 
       // Store the result in the out buffer.
       vst1q_f32(out + i, q);
