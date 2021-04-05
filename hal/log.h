@@ -40,7 +40,7 @@ extern "C"
 
 #if BUILDOPT_DEBUG_LEVEL
 #define logDebug(level, fmt, ...)                                                                   \
-  if (level < BUILDOPT_DEBUG_LEVEL)                                                                 \
+  if (level <= BUILDOPT_DEBUG_LEVEL)                                                                 \
   {                                                                                                 \
     _logCompleteNice(LOG_LABEL_DEBUG #level, __FILE__, __FUNCTION__, __LINE__, fmt, ##__VA_ARGS__); \
   }                                                                                                 \
@@ -60,7 +60,7 @@ extern "C"
 
 #if BUILDOPT_DEBUG_LEVEL
 #define logDebug(level, fmt, ...)                              \
-  if (level < BUILDOPT_DEBUG_LEVEL)                            \
+  if (level <= BUILDOPT_DEBUG_LEVEL)                            \
   {                                                            \
     _logBriefNice(LOG_LABEL_DEBUG #level, fmt, ##__VA_ARGS__); \
   }                                                            \
