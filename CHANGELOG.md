@@ -4,6 +4,9 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
+# v0.6.07
+* FIX: The Fixed HPF Unit implementation was broken by some changes to the NEON calculations that were introduced in v0.6.00.
+
 # v0.6.06
 * SYS: Constructors for static objects were not being called during runtime linking.
 
