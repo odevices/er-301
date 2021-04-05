@@ -101,6 +101,7 @@ namespace od
     bool mIsInput = false;
     bool mIsOutput = false;
 
+    // Is this object scheduled to be processed?
     bool mIsScheduled = false;
 
     friend Task;

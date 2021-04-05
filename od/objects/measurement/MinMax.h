@@ -1,13 +1,4 @@
-/*
- * MinMax.h
- *
- *  Created on: 29 Sep 2016
- *      Author: clarkson
- */
-
-#ifndef APP_OBJECTS_MEASUREMENT_MINMAX_H_
-#define APP_OBJECTS_MEASUREMENT_MINMAX_H_
-
+#pragma once
 #include <od/objects/Object.h>
 
 namespace od
@@ -35,5 +26,3 @@ namespace od
   };
 
 } /* namespace od */
-
-#endif /* APP_OBJECTS_MEASUREMENT_MINMAX_H_ */

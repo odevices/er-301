@@ -1,10 +1,3 @@
-/*
- * MinMax.cpp
- *
- *  Created on: 29 Sep 2016
- *      Author: clarkson
- */
-
 #include <od/objects/measurement/MinMax.h>
 #include <od/config.h>
 #include <hal/simd.h>
