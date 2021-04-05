@@ -34,7 +34,8 @@ namespace od
     {
       x1 = vld1_lane_f32(leftIn++, x1, 0);
       x1 = vld1_lane_f32(rightIn++, x1, 1);
-      y = vsub_f32(x1, vadd_f32(x0, vmul_f32(r, y)));
+      y = vsub_f32(x1, vsub_f32(x0, vmul_f32(r, y)));
+      x0 = x1;
       vst1_lane_f32(leftOut++, y, 0);
       vst1_lane_f32(rightOut++, y, 1);
     }
