@@ -1,12 +1,4 @@
-/*
- * Equalizer3.h
- *
- *  Created on: 12 Oct 2016
- *      Author: clarkson
- */
-
-#ifndef APP_OBJECTS_FILTERS_EQUALIZER3_H_
-#define APP_OBJECTS_FILTERS_EQUALIZER3_H_
+#pragma once
 
 #include <od/objects/Object.h>
 #include <hal/simd.h>
@@ -62,5 +54,3 @@ namespace od
   };
 
 } /* namespace od */
-
-#endif /* APP_OBJECTS_FILTERS_EQUALIZER3_H_ */

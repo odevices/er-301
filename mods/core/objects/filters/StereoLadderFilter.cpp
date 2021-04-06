@@ -11,6 +11,14 @@
 #include <hal/ops.h>
 #include <math.h>
 
+// band-limited saturation
+#define SATURATE(x)                                   \
+  {                                                   \
+    x = vmin_f32(x, max);                             \
+    x = vmax_f32(x, min);                             \
+    x = vmla_f32(x, c9, vmul_f32(x, vmul_f32(x, x))); \
+  }
+
 namespace od
 {
 
@@ -35,11 +43,6 @@ namespace od
 
   StereoLadderFilter::~StereoLadderFilter()
   {
-  }
-
-  static inline float triangle(float x)
-  {
-    return MAX(1 - fabs(x), 0.0f);
   }
 
   // [Ladder Filter]: 1.2840% (34388 ticks, 373 Hz)
@@ -76,7 +79,6 @@ namespace od
     for (int i = 0; i < FRAMELENGTH; i += 4)
     {
       float32x4_t q = vld1q_f32(octave + i);
-
       float32x4_t f0 = sr * vld1q_f32(freq + i);
 
       q = f0 * simd_exp(q * glog2);
@@ -130,14 +132,6 @@ namespace od
     float32x2_t delay2 = mDelay2;
     float32x2_t delay3 = mDelay3;
 
-    // band-limited saturation
-#define SATURATE(x)                                   \
-  {                                                   \
-    x = vmin_f32(x, max);                             \
-    x = vmax_f32(x, min);                             \
-    x = vmla_f32(x, c9, vmul_f32(x, vmul_f32(x, x))); \
-  }
-
     for (int i = 0; i < FRAMELENGTH; i++)
     {
       float32x2_t pd = vdup_n_f32(P[i]);
@@ -186,4 +180,3 @@ namespace od
   }
 
 } // namespace od
-/* namespace od */

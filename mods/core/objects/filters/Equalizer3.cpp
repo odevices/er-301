@@ -1,10 +1,3 @@
-/*
- * Equalizer3.cpp
- *
- *  Created on: 12 Oct 2016
- *      Author: clarkson
- */
-
 // Adapted from: http://www.musicdsp.org/showArchiveComment.php?ArchiveID=236
 //----------------------------------------------------------------------------
 //
@@ -70,7 +63,6 @@ namespace od
   {
     float *in = mInput.buffer();
     float *out = mOutput.buffer();
-    float *end = out + globalConfig.frameLength;
 
     // Calculate filter cutoff frequencies
 
@@ -92,12 +84,11 @@ namespace od
     float *hg = mHighGain.buffer();
     float32x2_t z = vld1_f32(lhf);
 
-    while (out < end)
+    for (int i = 0; i < FRAMELENGTH; i++)
     {
       float l, m, h; // Low / Mid / High - Sample Values
       float p[2];
-      float sample = *(in++);
-      float32x2_t s = vdup_n_f32(sample);
+      float32x2_t s = vdup_n_f32(in[i]);
       float32x2_t x;
 
       // compute the two LPF simultaneously
@@ -118,15 +109,15 @@ namespace od
       m = sdm3 - (h + l);
 
       // Scale, Combine and store
-      l *= *(lg++);
-      m *= *(mg++);
-      h *= *(hg++);
-      *(out++) = l + m + h;
+      l *= lg[i];
+      m *= mg[i];
+      h *= hg[i];
+      out[i] = l + m + h;
 
       // Shuffle history buffer
       sdm3 = sdm2;
       sdm2 = sdm1;
-      sdm1 = sample;
+      sdm1 = in[i];
     }
   }
 #else

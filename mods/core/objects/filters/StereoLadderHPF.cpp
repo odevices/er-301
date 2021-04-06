@@ -10,6 +10,14 @@
 #include <od/config.h>
 #include <math.h>
 
+// band-limited saturation
+#define SATURATE(x)                                   \
+  {                                                   \
+    x = vmin_f32(x, max);                             \
+    x = vmax_f32(x, min);                             \
+    x = vmla_f32(x, c9, vmul_f32(x, vmul_f32(x, x))); \
+  }
+
 namespace od
 {
 
@@ -36,33 +44,22 @@ namespace od
   {
   }
 
-  static inline float triangle(float x)
-  {
-    return MAX(1 - fabs(x), 0.0f);
-  }
-
   // [Ladder HPF]: 1.2840% (34388 ticks, 373 Hz)
   void StereoLadderHPF::process()
   {
     float *leftOut = mLeftOutput.buffer();
     float *rightOut = mRightOutput.buffer();
-    float *end;
     float *leftIn = mLeftInput.buffer();
     float *rightIn = mRightInput.buffer();
     float *octave = mVoltPerOctave.buffer();
     float *res = mResonance.buffer();
     float *freq = mFundamental.buffer();
     float minNormF = 2.0f * globalConfig.samplePeriod;
-    double r, k, p;
 
     float *P = AudioThread::getFrame();
     float *K = AudioThread::getFrame();
     float *R = AudioThread::getFrame();
 
-    float *pp = P;
-    float *kk = K;
-    float *rr = R;
-    end = res + globalConfig.frameLength;
     float32x4_t glog2 = vdupq_n_f32(FULLSCALE_IN_VOLTS * logf(2.0f));
     float32x4_t maxf = vdupq_n_f32(0.9999f);
     float32x4_t minf = vdupq_n_f32(minNormF);
@@ -78,13 +75,10 @@ namespace od
     float32x4_t c8 = vdupq_n_f32(6.0f);
 
     // calculate filter coefficients (sample-by-sample)
-    while (res < end)
+    for (int i = 0; i < FRAMELENGTH; i += 4)
     {
-      float32x4_t q = vld1q_f32(octave);
-      octave += 4;
-
-      float32x4_t f0 = sr * vld1q_f32(freq);
-      freq += 4;
+      float32x4_t q = vld1q_f32(octave + i);
+      float32x4_t f0 = sr * vld1q_f32(freq + i);
 
       q = f0 * simd_exp(q * glog2);
       q = vminq_f32(maxf, q);
@@ -114,22 +108,13 @@ namespace od
       invb = vmulq_f32(invb, vrecpsq_f32(b, invb));
       invb = vmulq_f32(invb, vrecpsq_f32(b, invb));
 
-      float32x4_t rq = vmulq_f32(vld1q_f32(res), a * invb);
-      res += 4;
+      float32x4_t rq = vmulq_f32(vld1q_f32(res + i), a * invb);
       //r = *(res++) * (t2 + 6.0f * t1) / (t2 - 6.0f * t1);
 
-      vst1q_f32(rr, rq);
-      vst1q_f32(pp, pq);
-      vst1q_f32(kk, kq);
-
-      rr += 4;
-      pp += 4;
-      kk += 4;
+      vst1q_f32(R + i, rq);
+      vst1q_f32(P + i, pq);
+      vst1q_f32(K + i, kq);
     }
-
-    pp = P;
-    kk = K;
-    rr = R;
 
     float32x2_t c9 = vdup_n_f32(-1.0f / 6.0f);
     float32x2_t max = vdup_n_f32(1.4142135623730951f);
@@ -146,28 +131,15 @@ namespace od
     float32x2_t delay2 = mDelay2;
     float32x2_t delay3 = mDelay3;
 
-    // band-limited saturation
-#define SATURATE(x)                                   \
-  {                                                   \
-    x = vmin_f32(x, max);                             \
-    x = vmax_f32(x, min);                             \
-    x = vmla_f32(x, c9, vmul_f32(x, vmul_f32(x, x))); \
-  }
-
-    end = leftOut + globalConfig.frameLength;
-    while (leftOut < end)
+    for (int i = 0; i < FRAMELENGTH; i++)
     {
-      p = *(pp++);
-      k = *(kk++);
-      r = *(rr++);
-
-      float32x2_t pd = vdup_n_f32(p);
-      float32x2_t kd = vdup_n_f32(k);
-      float32x2_t rd = vdup_n_f32(r);
+      float32x2_t pd = vdup_n_f32(P[i]);
+      float32x2_t kd = vdup_n_f32(K[i]);
+      float32x2_t rd = vdup_n_f32(R[i]);
 
       float32x2_t xd;
-      xd = vld1_lane_f32(leftIn++, xd, 0);
-      xd = vld1_lane_f32(rightIn++, xd, 1);
+      xd = vld1_lane_f32(leftIn + i, xd, 0);
+      xd = vld1_lane_f32(rightIn + i, xd, 1);
       xd = vadd_f32(xd, noise);      // add regularization noise
       xd = vmls_f32(xd, rd, stage3); // feedback
 
@@ -190,8 +162,8 @@ namespace od
       float32x2_t result = vsub_f32(xd, stage3);
       SATURATE(result);
 
-      vst1_lane_f32(leftOut++, result, 0);
-      vst1_lane_f32(rightOut++, result, 1);
+      vst1_lane_f32(leftOut + i, result, 0);
+      vst1_lane_f32(rightOut + i, result, 1);
     }
 
     mStage0 = stage0;
@@ -210,4 +182,3 @@ namespace od
   }
 
 } // namespace od
-/* namespace od */
