@@ -12,6 +12,8 @@ namespace od
     addOutput(mLeftOutput);
     addOutput(mRightOutput);
     addParameter(mCutoff);
+    mY = vdup_n_f32(0);
+    mPrevX = vdup_n_f32(0);
   }
 
   StereoFixedHPF::~StereoFixedHPF()
@@ -29,15 +31,14 @@ namespace od
     float32x2_t y = mY;
     float32x2_t x1, x0 = mPrevX;
 
-    float *end = leftOut + globalConfig.frameLength;
-    while (leftOut < end)
+    for (int i = 0; i < FRAMELENGTH; i++)
     {
-      x1 = vld1_lane_f32(leftIn++, x1, 0);
-      x1 = vld1_lane_f32(rightIn++, x1, 1);
+      x1 = vld1_lane_f32(leftIn + i, x1, 0);
+      x1 = vld1_lane_f32(rightIn + i, x1, 1);
       y = vsub_f32(x1, vsub_f32(x0, vmul_f32(r, y)));
       x0 = x1;
-      vst1_lane_f32(leftOut++, y, 0);
-      vst1_lane_f32(rightOut++, y, 1);
+      vst1_lane_f32(leftOut + i, y, 0);
+      vst1_lane_f32(rightOut + i, y, 1);
     }
 
     mY = y;
