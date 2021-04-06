@@ -388,7 +388,11 @@ end
 function Interface:cancelReleased(shifted)
   if not shifted then
     self:hide()
-    self:emitSignal("done", self.purpose ~= "save")
+    if self.purpose=="save" then
+      self:emitSignal("done", false)
+    else
+      self:emitSignal("done")
+    end
   end
   return true
 end
@@ -396,14 +400,22 @@ end
 function Interface:upReleased(shifted)
   if not shifted then
     self:hide()
-    self:emitSignal("done", self.purpose == "save")
+    if self.purpose=="save" then
+      self:emitSignal("done", true)
+    else
+      self:emitSignal("done")
+    end
   end
   return true
 end
 
 function Interface:homeReleased()
   self:hide()
-  self:emitSignal("done", self.purpose == "save")
+  if self.purpose=="save" then
+    self:emitSignal("done", true)
+  else
+    self:emitSignal("done")
+  end
   return true
 end
 
