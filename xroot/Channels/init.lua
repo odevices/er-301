@@ -1,5 +1,4 @@
 local app = app
-local Env = require "Env"
 local Signal = require "Signal"
 local ChannelGroup = require "Channels.Group"
 local Busy = require "Busy"

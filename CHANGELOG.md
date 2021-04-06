@@ -4,6 +4,10 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
+# v0.6.08
+* FIX: The Fixed HPF Unit had some unitialized variables that might be causing loss of audio in random cases.
+* FIX: Pressing CANCEL in the **Select from Pool** menu was causing a crash.
+
 # v0.6.07
 * FIX: The Fixed HPF Unit implementation was broken by some changes to the NEON calculations that were introduced in v0.6.00.
 
