@@ -16,13 +16,14 @@
 #include <od/objects/Object.h>  
 #include <od/objects/heads/Head.h> 
 #include <od/objects/heads/TapeHead.h>
-#include <od/objects/heads/RecordHead.h> 
 #include <od/objects/heads/SliceHead.h> 
 
 #include <od/tasks/Task.h> 
 
 #include <od/graphics/Graphic.h> 
 #include <od/graphics/sampling/HeadDisplay.h> 
+#include <od/graphics/sampling/TapeHeadDisplay.h> 
+#include <od/graphics/sampling/SliceHeadDisplay.h> 
 
 #define SWIGLUA
 %}
@@ -45,7 +46,6 @@
 %import(module="app") <od/objects/Object.h>  
 %import(module="app") <od/objects/heads/Head.h> 
 %import(module="app") <od/objects/heads/TapeHead.h>
-%import(module="app") <od/objects/heads/RecordHead.h> 
 %import(module="app") <od/objects/heads/SliceHead.h> 
 
 %import(module="app") <od/units/Unit.h>
@@ -54,3 +54,5 @@
 
 %import(module="app") <od/graphics/Graphic.h> 
 %import(module="app") <od/graphics/sampling/HeadDisplay.h> 
+%import(module="app") <od/graphics/sampling/TapeHeadDisplay.h> 
+%import(module="app") <od/graphics/sampling/SliceHeadDisplay.h> 

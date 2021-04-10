@@ -1,4 +1,5 @@
 local app = app
+local libcore = require "core.libcore"
 local Class = require "Base.Class"
 local Zoomable = require "Unit.ViewControl.Zoomable"
 local Channels = require "Channels"
@@ -18,7 +19,7 @@ function RecordingView:init(args)
 
   local graphic
   graphic = app.Graphic(0, 0, width, 64)
-  self.mainDisplay = app.RecordHeadDisplay(head, 0, 0, width, 64)
+  self.mainDisplay = libcore.RecordHeadDisplay(head, 0, 0, width, 64)
   graphic:addChild(self.mainDisplay)
   self:setMainCursorController(self.mainDisplay)
   self:setControlGraphic(graphic)

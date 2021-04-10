@@ -40,6 +40,7 @@
 #include <core/objects/heads/RawHead.h>
 #include <core/objects/heads/LoopHead.h>
 #include <core/objects/heads/VariSpeedHead.h>
+#include <core/objects/heads/RecordHead.h> 
 
 #include <core/objects/control/BumpMap.h>
 
@@ -83,6 +84,7 @@
 
 #include <core/graphics/PitchCircle.h>
 #include <core/graphics/GranularHeadDisplay.h>
+#include <core/graphics/RecordHeadDisplay.h>
 	
 #define SWIGLUA
 
@@ -121,6 +123,7 @@
 %include <core/objects/heads/RawHead.h>
 %include <core/objects/heads/LoopHead.h>
 %include <core/objects/heads/VariSpeedHead.h>
+%include <core/objects/heads/RecordHead.h> 
 
 %include <core/objects/looping/PedalLooper.h>
 %include <core/objects/looping/FeedbackLooper.h>
@@ -165,7 +168,7 @@
 
 %include <core/graphics/PitchCircle.h>
 %include <core/graphics/GranularHeadDisplay.h>
-
+%include <core/graphics/RecordHeadDisplay.h>
 
 
 

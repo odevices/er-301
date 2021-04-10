@@ -1,14 +1,5 @@
-/*
- * RecordHeadDisplay.h
- *
- *  Created on: 18 Nov 2017
- *      Author: clarkson
- */
-
-#ifndef APP_GRAPHICS_RECORDHEADDISPLAY_H_
-#define APP_GRAPHICS_RECORDHEADDISPLAY_H_
-
-#include <od/objects/heads/RecordHead.h>
+#pragma once
+#include <core/objects/heads/RecordHead.h>
 #include <od/graphics/sampling/TapeHeadDisplay.h>
 
 namespace od
@@ -35,4 +26,3 @@ namespace od
 
 } /* namespace od */
 
-#endif /* APP_GRAPHICS_RECORDHEADDISPLAY_H_ */

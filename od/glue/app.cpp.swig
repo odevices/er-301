@@ -101,7 +101,6 @@
 
 #include <od/objects/heads/Head.h> 
 #include <od/objects/heads/TapeHead.h>
-#include <od/objects/heads/RecordHead.h> 
 #include <od/objects/heads/SliceHead.h> 
 
 #include <od/objects/file/FileSinkThread.h>
@@ -169,7 +168,6 @@
 #include <od/graphics/sampling/HeadDisplay.h>
 #include <od/graphics/sampling/HeadSubDisplay.h>
 #include <od/graphics/sampling/TapeHeadDisplay.h>
-#include <od/graphics/sampling/RecordHeadDisplay.h>
 #include <od/graphics/sampling/SliceHeadDisplay.h>
 #include <od/graphics/sampling/SliceHeadSubDisplay.h>
 
@@ -327,7 +325,6 @@ bool Uart_isEnabled();
 
 %include <od/objects/heads/Head.h> 
 %include <od/objects/heads/TapeHead.h>
-%include <od/objects/heads/RecordHead.h> 
 %include <od/objects/heads/SliceHead.h> 
 
 %include <od/objects/file/FileSinkThread.h>
@@ -394,7 +391,6 @@ bool Uart_isEnabled();
 %include <od/graphics/sampling/HeadDisplay.h>
 %include <od/graphics/sampling/HeadSubDisplay.h>
 %include <od/graphics/sampling/TapeHeadDisplay.h>
-%include <od/graphics/sampling/RecordHeadDisplay.h>
 %include <od/graphics/sampling/SliceHeadDisplay.h>
 %include <od/graphics/sampling/SliceHeadSubDisplay.h>
 

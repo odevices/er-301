@@ -1,11 +1,4 @@
-/*
- * RecordHeadDisplay.cpp
- *
- *  Created on: 18 Nov 2017
- *      Author: clarkson
- */
-
-#include <od/graphics/sampling/RecordHeadDisplay.h>
+#include <core/graphics/RecordHeadDisplay.h>
 
 namespace od
 {

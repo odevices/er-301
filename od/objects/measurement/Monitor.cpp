@@ -1,10 +1,3 @@
-/*
- * Monitor.cpp
- *
- *  Created on: 7 Aug 2016
- *      Author: clarkson
- */
-
 #include <od/objects/measurement/Monitor.h>
 #include <hal/simd.h>
 #include <od/config.h>
