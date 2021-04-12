@@ -4,6 +4,9 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
+# v0.6.09
+* FIX: File Browser > Make listing order of files/folders more consistent. Folders then files, all in case-insensitive dictionary order.
+
 # v0.6.08
 * FIX: The Fixed HPF Unit had some unitialized variables that might be causing loss of audio in random cases.
 * FIX: Pressing CANCEL in the **Select from Pool** menu was causing a crash.
