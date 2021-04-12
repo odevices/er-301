@@ -7,6 +7,7 @@ local Player = Class {}
 Player:include(Object)
 
 function Player:init()
+  self:setClassName("Card.Player")
   self.state = "Stopped"
 
   self.monoUnit = app.Unit("Card.Player.MonoUnit", 1)

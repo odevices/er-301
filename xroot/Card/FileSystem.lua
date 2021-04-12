@@ -50,6 +50,7 @@ local extensions = {
   ["globals-preset"] = "globals",
   ["preamp-preset"] = "preamp",
   ["quicksave"] = "save",
+  ["audio"] = "wav",
   ["slices"] = "slc",
   ["multi"] = "multi",
   ["control-preset"] = "control",
@@ -124,7 +125,10 @@ end
 
 local function isType(key, path)
   local ext = extensions[key]
-  if ext == nil then app.logError("Uknown file type: " .. key) end
+  if ext == nil then
+    app.logError("Uknown file type: " .. key)
+    return false
+  end
   return Utils.endsWith(string.lower(path), "." .. ext)
 end
 
@@ -176,8 +180,8 @@ local function checkPath(key, mode, fullpath)
 end
 
 local function findPreviousRoot()
-  local currentVersion = Utils.convertVersionStringToNumber(
-                             app.FIRMWARE_VERSION)
+  local currentVersion =
+      Utils.convertVersionStringToNumber(app.FIRMWARE_VERSION)
   local previousVersion = 0
   local previousRoot
   -- Find the most recent version that is less than the current version.

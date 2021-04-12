@@ -9,6 +9,7 @@ local Utils = require "Utils"
 local Signal = require "Signal"
 local Timer = require "Timer"
 local Settings = require "Settings"
+local FS = require "Card.FileSystem"
 local threshold = Env.EncoderThreshold.Default
 
 local FileChooser = Class {}
@@ -390,7 +391,7 @@ function FileChooser:doPreview()
   else
     local path = self.browser:getSelectedFullPath()
     local player = self:getPlayer()
-    if player:play(path, nil, self.previewLoop) then
+    if FS.isType("audio", path) and player:play(path, nil, self.previewLoop) then
       local sticky = Settings.get("samplePreviewStop") == "no"
       self.browser:setFileSource(player:getFileSource(), sticky)
       self:startUpdateTimer()
@@ -415,7 +416,7 @@ function FileChooser:updatePreview()
       if playing ~= selected then
         player:stop()
         self.browser:setFileSource(nil)
-        if player:play(selected, nil, self.previewLoop) then
+        if FS.isType("audio", selected) and player:play(selected, nil, self.previewLoop) then
           self.browser:setFileSource(player:getFileSource(), true)
         else
           self:stopUpdateTimer()
