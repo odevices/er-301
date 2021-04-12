@@ -6,6 +6,7 @@
 
 # v0.6.09
 * FIX: File Browser > Make listing order of files/folders more consistent. Folders then files, all in case-insensitive dictionary order.
+* FIX: File Browser > Crash when changing focus to folder during audio preview (issue #23).
 
 # v0.6.08
 * FIX: The Fixed HPF Unit had some unitialized variables that might be causing loss of audio in random cases.
