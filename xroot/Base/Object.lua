@@ -1,6 +1,7 @@
 local Object = {
   __class__ = "Object",
-  __instance__ = nil
+  __instance__ = nil,
+  __className__ = "Unknown"
 }
 
 function Object:__tostring()
