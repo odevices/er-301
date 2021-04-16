@@ -39,7 +39,7 @@ function OptionControl:init(args)
   graphic:setBorder(1)
   graphic:setBorderColor(app.GRAY7)
   graphic:setCornerRadius(3, 3, 3, 3)
-  graphic:setMargins(3, 1, (3 + descWidth - 1) * ply, 1)
+  graphic:setMargins(3, 1, 3 * ply, 1)
   graphic:fitHeight((3 + descWidth) * ply - 2)
   local h = graphic.mHeight // 2
   local labels = {}

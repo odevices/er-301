@@ -30,7 +30,7 @@ function FlagSelect:init(args)
   graphic:setBorder(1)
   graphic:setBorderColor(app.GRAY7)
   graphic:setCornerRadius(3, 3, 3, 3)
-  graphic:setMargins(3, 1, (#flags + descWidth - 1) * ply, 1)
+  graphic:setMargins(3, 1, #flags * ply, 1)
   graphic:fitHeight((#flags + descWidth) * ply - 2)
 
   local h = graphic.mHeight // 2
