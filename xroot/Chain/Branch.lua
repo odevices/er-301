@@ -12,15 +12,16 @@ function Branch:init(args)
   self:setClassName("Chain.Branch")
   self.unit = args.unit
   local leftOutObject = args.leftOutObject or
-                            app.logError("%s.init: leftOutObject is missing.", self)
+                            app.logError("%s.init: leftOutObject is missing.",
+                                         self)
   local leftOutletName = args.leftOutletName or
                              app.logError("%s.init: leftOutletName is missing.",
-                                       self)
+                                          self)
   self.leftOutlet = leftOutObject:getOutput(leftOutletName)
   if self.channelCount > 1 then
     local rightOutObject = args.rightOutObject or
-                               app.logError("%s.init: rightOutObject is missing.",
-                                         self)
+                               app.logError(
+                                   "%s.init: rightOutObject is missing.", self)
     local rightOutletName = args.rightOutletName or
                                 app.logError(
                                     "%s.init: rightOutletName is missing.", self)
@@ -77,7 +78,12 @@ function Branch:homeReleased()
 end
 
 function Branch:isSerializationNeeded()
-  return self:length() > 0 or self.leftInputSource or self.rightInputSource
+  -- Serialization is needed if this branch has any units, or any inputs, or its output is connected to another chain.
+  return self:length() > 0 or self.leftInputSource or self.rightInputSource or
+             (self.leftOutputSource and
+                 self.leftOutputSource:getConnectionCount()) or
+             (self.rightInputSource and
+                 self.rightInputSource:getConnectionCount())
 end
 
 return Branch

@@ -108,8 +108,8 @@ function Chain:navigateToXPath(xpath)
     else
       local control = unit:getControlRaw("expanded", nodeIndex)
       if control == nil then
-        app.logInfo("%s:navigateToXPath:%s has no control at index=%d", self, unit,
-               nodeIndex)
+        app.logInfo("%s:navigateToXPath:%s has no control at index=%d", self,
+                    unit, nodeIndex)
         return
       end
       -- focus the first spot of the control
@@ -133,7 +133,8 @@ function Chain:navigateToXPath(xpath)
         chain = branch
         chain:setSelection(chain.headerSection, nil, 0)
       else
-        app.logInfo("%s:navigateToXPath: %s has no patch or branch", self, control)
+        app.logInfo("%s:navigateToXPath: %s has no patch or branch", self,
+                    control)
         return
       end
       type = "unit"
@@ -176,9 +177,13 @@ function Chain:setInputSource(i, src)
     local prev = self:getInputSource(i)
     if prev then prev:unsubscribe(self) end
     if i == 1 or self.channelCount == 1 then
+      if self.leftInputSource then self.leftInputSource:release() end
       self.leftInputSource = src
+      src:claim()
     else
+      if self.rightInputSource then self.rightInputSource:release() end
       self.rightInputSource = src
+      src:claim()
     end
     self.pChain:lock()
     self.pChain:setInput(i - 1, src:getOutlet())
@@ -200,9 +205,15 @@ function Chain:clearInputSource(i)
     self.pChain:unlock()
     src:unsubscribe(self)
     if i == 1 then
-      self.leftInputSource = nil
+      if self.leftInputSource then
+        self.leftInputSource:release()
+        self.leftInputSource = nil
+      end
     elseif i == 2 then
-      self.rightInputSource = nil
+      if self.rightInputSource then
+        self.rightInputSource:release()
+        self.rightInputSource = nil
+      end
     end
     self:emitSignal("contentChanged", self)
   end

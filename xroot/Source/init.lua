@@ -9,6 +9,19 @@ function Source:init(type)
   Observable.init(self)
   self:setClassName("Source")
   self.type = type
+  self.refCount = 0
+end
+
+function Source:claim()
+  self.refCount = self.refCount + 1
+end
+
+function Source:release()
+  self.refCount = self.refCount - 1
+end
+
+function Source:getConnectionCount()
+  return self.refCount
 end
 
 function Source:getDisplayName()
