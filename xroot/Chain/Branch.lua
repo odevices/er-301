@@ -81,9 +81,9 @@ function Branch:isSerializationNeeded()
   -- Serialization is needed if this branch has any units, or any inputs, or its output is connected to another chain.
   return self:length() > 0 or self.leftInputSource or self.rightInputSource or
              (self.leftOutputSource and
-                 self.leftOutputSource:getConnectionCount()) or
+                 self.leftOutputSource:getConnectionCount() > 0) or
              (self.rightInputSource and
-                 self.rightInputSource:getConnectionCount())
+                 self.rightInputSource:getConnectionCount() > 0)
 end
 
 return Branch

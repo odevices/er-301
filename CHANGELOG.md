@@ -4,6 +4,9 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
+# v0.6.10
+FIX: Local connections to the output of an empty branch were not being restored.
+
 # v0.6.09
 * FIX: File Browser > Make listing order of files/folders more consistent. Folders then files, all in case-insensitive dictionary order.
 * FIX: File Browser > Crash when changing focus to folder during audio preview (issue #23).
