@@ -65,9 +65,9 @@ function LocalChooser:getXPath()
 end
 
 function LocalChooser:loadUnitHelper(unit)
-  -- Traverse each control in the expanded view
+  -- Traverse each control in the scope or expanded view
   --app.logInfo("%s:loadUnitHelper(%s)",self,unit)
-  local view = unit:getView("expanded")
+  local view = unit:getView("scope") or unit:getView("expanded")
   if view==nil then return end
   local overview = self.ptr
   for i,control in ipairs(view.controls) do
