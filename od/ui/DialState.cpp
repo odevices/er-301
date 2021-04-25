@@ -1,10 +1,3 @@
-/*
- * DialState.cpp
- *
- *  Created on: Oct 9, 2016
- *      Author: clarkson
- */
-
 #include <od/ui/DialState.h>
 
 namespace od

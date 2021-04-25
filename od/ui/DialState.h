@@ -1,12 +1,4 @@
-/*
- * DialState.h
- *
- *  Created on: Oct 9, 2016
- *      Author: clarkson
- */
-
-#ifndef APP_UTILS_DIALSTATE_H_
-#define APP_UTILS_DIALSTATE_H_
+#pragma once
 
 #include <od/ui/DialMap.h>
 #include <od/ui/EncoderHysteresis.h>
@@ -46,5 +38,3 @@ namespace od
   };
 
 } /* namespace od */
-
-#endif /* APP_UTILS_DIALSTATE_H_ */

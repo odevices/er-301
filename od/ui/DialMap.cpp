@@ -1,10 +1,3 @@
-/*
- * DialMap.cpp
- *
- *  Created on: Oct 9, 2016
- *      Author: clarkson
- */
-
 #include <od/ui/DialMap.h>
 #include <hal/ops.h>
 #include <od/extras/Utils.h>
