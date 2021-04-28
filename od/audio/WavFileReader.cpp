@@ -76,6 +76,7 @@ namespace od
     FileTypeChunk riff;
     bool fmt_found = false;
     bool data_found = false;
+    bool cue_found = false;
 
     // clear previous data
     memset(&mFormat, 0, sizeof(mFormat));
@@ -114,7 +115,7 @@ namespace od
 
     // iterate through all the subchunks
     next = sizeof(FileTypeChunk);
-    while (!(fmt_found && data_found))
+    while (!(fmt_found && data_found && cue_found))
     {
 
       if (seekBytes(next) != next)
@@ -216,6 +217,21 @@ namespace od
         mDataPosition = sizeof(RiffChunk) + next;
         mSampleCount = header.cksize / mChannelCount / mBytesPerChannel;
         data_found = mSampleCount > 0;
+      }
+      else if ((header.ckID[0] == 'c' && header.ckID[1] == 'u' && header.ckID[2] == 'e' && header.ckID[3] == ' ') || (header.ckID[0] == 'C' && header.ckID[1] == 'U' && header.ckID[2] == 'E' && header.ckID[3] == ' '))
+      {
+        uint32_t extraHeaderSize = sizeof(CueChunkData);
+        uint32_t len = MIN(header.cksize, extraHeaderSize);
+
+        CueChunkData cueHeader;
+        br = readBytes(&cueHeader, len);
+        if (br != len) return false;
+
+        mCueDataSize = header.cksize;
+        mCuePointsPosition = sizeof(RiffChunk) + extraHeaderSize + next;
+        mCuePointsCount = cueHeader.numCuePoints;
+
+        cue_found = true;
       }
 
       next += sizeof(RiffChunk) + header.cksize;
@@ -340,6 +356,30 @@ namespace od
     return mCurrentSamplePosition;
   }
 
+  bool WavFileReader::readCuePositions(std::vector<uint32_t> &positions)
+  {
+    uint32_t br, pr = 0;
+
+    if (seekBytes(mCuePointsPosition) != mCuePointsPosition)
+    {
+      logError(
+          "WavFileReader::readCuePositions: could not seek to cue position (%d).",
+          mCuePointsPosition);
+      return false;
+    }
+
+    for (int i = 0; i < mCuePointsCount; i++) {
+      CueFormatData data;
+      uint32_t size = sizeof(CueFormatData);
+      br = readBytes(&data, size);
+      if (br != size) return false;
+
+      positions.push_back(data.position);
+    }
+
+    return true;
+  }
+
   void WavFileReader::describe()
   {
     logInfo("-- %s -- ", mFilename.c_str());
@@ -349,11 +389,18 @@ namespace od
     logInfo("  Bytes/Channel: %d bytes", mBytesPerChannel);
     logInfo("  Data Position: %d", mDataPosition);
     logInfo("  Number of Samples: %d samples", mSampleCount);
+    logInfo("  Cue Position: %d", mCuePointsPosition);
+    logInfo("  Number of Cue Points: %d", mCuePointsCount);
 
     if (mDataIsFloat)
       logInfo("  Format: float");
     else
       logInfo("  Format: signed int");
+  }
+
+  uint32_t WavFileReader::getCueCount()
+  {
+    return mCuePointsCount;
   }
 
   void WavFileReader::printFormat()

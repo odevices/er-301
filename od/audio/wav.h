@@ -55,4 +55,18 @@ namespace od
 		uint8_t WAVEID[4];
 	} FileTypeChunk;
 
+	typedef struct {
+		uint32_t numCuePoints;
+	} CueChunkData;
+
+	typedef struct
+	{
+		uint8_t id[4];
+		uint32_t position;
+		uint8_t dataChunkId[4];
+		uint32_t chunkStart;
+		uint32_t blockStart;
+		uint32_t sampleOffset;
+	} CueFormatData;
+
 } /* namespace od */

@@ -6,12 +6,14 @@
  */
 
 #include <od/audio/Slices.h>
+#include <od/audio/WavFileReader.h>
 #include <od/extras/FileWriter.h>
 #include <od/extras/FileReader.h>
 #include <hal/simd.h>
 #include <od/config.h>
 #include <hal/log.h>
 #include <algorithm>
+#include <vector>
 
 namespace od
 {
@@ -107,6 +109,37 @@ namespace od
       }
 
       mSorted.push_back(slice);
+    }
+
+    sort();
+
+    return true;
+  }
+
+  bool Slices::loadWavFileCues(const char *filename)
+  {
+    WavFileReader reader;
+
+    if (!reader.open(filename))
+    {
+      return false;
+    }
+
+    std::vector<uint32_t> positions;
+    positions.reserve(reader.getCueCount());
+
+    if (!reader.readCuePositions(positions))
+    {
+      return false;
+    }
+
+    mSorted.clear();
+    mIntervalsNeedRefresh = true;
+    mSorted.reserve(positions.size());
+
+    for (uint32_t position : positions)
+    {
+      mSorted.push_back(Slice { (int)position });
     }
 
     sort();

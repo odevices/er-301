@@ -18,13 +18,21 @@ namespace od
 		virtual uint32_t seekSamples(uint32_t offset);
 		virtual uint32_t tellSamples();
 
+		bool readCuePositions(std::vector<uint32_t> &positions);
+
 		void describe();
+
+		uint32_t getCueCount();
 
 	protected:
 		uint32_t mCurrentSamplePosition = 0;
 		int mBytesPerChannel = 0;
 		bool mDataIsFloat = false;
 		uint32_t mDataPosition = 0;
+
+		uint32_t mCueDataSize = 0;
+		uint32_t mCuePointsPosition = 0;
+		uint32_t mCuePointsCount = 0;
 
 		WavFormatExData mFormat = {};
 

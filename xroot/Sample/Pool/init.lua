@@ -225,7 +225,10 @@ local function load(path, slicesInfo)
     if slicesInfo then
       sample.slices:deserialize(slicesInfo)
     else
-      sample.slices:load(sample:defaultSlicesPath())
+      local fromPath = sample.slices:load(sample:defaultSlicesPath())
+      if not fromPath then
+        sample.slices:loadWavFileCues(path);
+      end
     end
     Signal.emit("memoryUsageChanged")
     sample:setEnqueuedToLoad()
