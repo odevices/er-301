@@ -99,7 +99,6 @@ namespace od
     float mSampleRate = 48000.0f;
     float mSamplePeriod = 1.0 / 48000.0f;
     int mOriginalBitDepth = 32;
-    char *mpWavOriginFilename = 0;
 
     float mTotalSeconds = 0;
     // MM:SS.XXX
