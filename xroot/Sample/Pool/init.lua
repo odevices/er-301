@@ -225,8 +225,7 @@ local function load(path, slicesInfo)
     if slicesInfo then
       sample.slices:deserialize(slicesInfo)
     else
-      local fromPath = sample.slices:load(sample:defaultSlicesPath())
-      if not fromPath then
+      if not sample.slices:load(sample:defaultSlicesPath()) then
         sample.slices:loadWavFileCues(path);
       end
     end
