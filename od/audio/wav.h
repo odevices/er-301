@@ -67,6 +67,6 @@ namespace od
 		uint32_t chunkStart;
 		uint32_t blockStart;
 		uint32_t sampleOffset;
-	} CueFormatData;
+	} CuePointData;
 
 } /* namespace od */

@@ -18,7 +18,7 @@ namespace od
 		virtual uint32_t seekSamples(uint32_t offset);
 		virtual uint32_t tellSamples();
 
-		bool readCuePositions(std::vector<uint32_t> &positions);
+		bool readCues(std::vector<uint32_t> &positions);
 
 		void describe();
 

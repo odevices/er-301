@@ -356,21 +356,21 @@ namespace od
     return mCurrentSamplePosition;
   }
 
-  bool WavFileReader::readCuePositions(std::vector<uint32_t> &positions)
+  bool WavFileReader::readCues(std::vector<uint32_t> &positions)
   {
-    uint32_t br, pr = 0;
+    uint32_t br;
 
     if (seekBytes(mCuePointsPosition) != mCuePointsPosition)
     {
       logError(
-          "WavFileReader::readCuePositions: could not seek to cue position (%d).",
+          "WavFileReader::readCues: could not seek to cue position (%d).",
           mCuePointsPosition);
       return false;
     }
 
-    for (int i = 0; i < mCuePointsCount; i++) {
-      CueFormatData data;
-      uint32_t size = sizeof(CueFormatData);
+    for (int i = 0; i < (int)mCuePointsCount; i++) {
+      CuePointData data;
+      uint32_t size = sizeof(CuePointData);
       br = readBytes(&data, size);
       if (br != size) return false;
 

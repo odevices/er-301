@@ -128,7 +128,7 @@ namespace od
     std::vector<uint32_t> positions;
     positions.reserve(reader.getCueCount());
 
-    if (!reader.readCuePositions(positions))
+    if (!reader.readCues(positions))
     {
       return false;
     }
