@@ -27,6 +27,7 @@ namespace od
 
         bool save(const char *filename);
         bool load(const char *filename);
+        bool loadWavFileCues(const char *filename);
 
         void setSampleRate(float rate);
         void copyFrom(int from, int to, Slices *slices, int sourceStart);

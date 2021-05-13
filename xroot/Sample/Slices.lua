@@ -30,6 +30,25 @@ function Slices:load(path)
   end
 end
 
+function Slices:loadWavFileCues(path)
+  if path then
+    path = Path.checkRelativePath(path)
+    self.path = path
+  end
+  if path == nil then return false end
+  if app.pathExists(path) then
+    if self.pSlices:loadWavFileCues(path) then
+      app.logInfo("%s: loaded from wav %s.", self, path)
+      return true
+    else
+      app.logInfo("%s: failed to load from wav %s.", self, path)
+      return false
+    end
+  else
+    return false
+  end
+end
+
 function Slices:save(path)
   if path then
     self.path = path
