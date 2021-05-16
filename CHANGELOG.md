@@ -7,6 +7,7 @@
 * FIX: Local connections to the output of an empty branch were not being restored.
 * FIX: Unload temporary buffers from the Sample Pool once they are no longer in use.
 * FIX: Temporary buffers that are created by presets will be stereo for stereo chains and mono otherwise.  This is useful when you load an originally mono preset into a stereo chain and vice versa.
+* NEW: Unit Chooser > Recent unit choices are now saved and restored with quicksaves. 
 * NEW: If a WAV file has CUE markers, those will be used to initialize its slices.  Thank you to [tmfset](https://github.com/tmfset) for the [pull request](https://github.com/odevices/er-301/pull/29).
 
 

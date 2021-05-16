@@ -46,6 +46,7 @@ function QuickSavePreset:populate()
   local GlobalChains = require "GlobalChains"
   local Preamp = require "Preamp"
   local Clipboard = require "Chain.Clipboard"
+  local UnitChooser = require "Unit.Chooser"
   local data = {
     firmwareVersion = app.FIRMWARE_VERSION
   }
@@ -67,6 +68,9 @@ function QuickSavePreset:populate()
 
   Busy.status("Serializing channels...")
   data.channels = Channels.serialize()
+
+  Busy.status("Serializing unit chooser...")
+  data.unitChooser = UnitChooser.serialize()
 
   self.data = data
 end
@@ -138,6 +142,13 @@ function QuickSavePreset:apply()
   else
     app.logInfo("%s:apply: no sample pool data.", self)
     result = false
+  end
+
+  if data.unitChooser then
+    local UnitChooser = require "Unit.Chooser"
+    UnitChooser.deserialize(data.unitChooser)
+  else
+    app.logInfo("%s:apply: no unit chooser data.", self)
   end
 
   -- Channels.start()

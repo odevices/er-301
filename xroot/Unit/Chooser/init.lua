@@ -1,3 +1,4 @@
+local Utils = require "Utils"
 local app = app
 local Class = require "Base.Class"
 local Observable = require "Base.Observable"
@@ -306,6 +307,20 @@ end
 function Chooser:homeReleased()
   self.current:hide()
   return true
+end
+
+function Chooser.serialize()
+  local ChooserDefault = require "Unit.Chooser.Default"
+  local t = {}
+  t.recent = Utils.deepCopy(ChooserDefault.recent)
+  return t
+end
+
+function Chooser.deserialize(t)
+  if t.recent then
+    local ChooserDefault = require "Unit.Chooser.Default"
+    ChooserDefault.recent = Utils.deepCopy(t.recent)
+  end
 end
 
 return Chooser

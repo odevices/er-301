@@ -75,10 +75,8 @@ end
 
 ------
 
-local Chooser = Class {}
+local Chooser = Class {recent={}}
 Chooser:include(MondrianMenu)
-
-local recent = {}
 
 local function allFromSameExternalLibrary(units)
   local name
@@ -126,9 +124,9 @@ function Chooser:refresh()
   self:clear()
 
   if ordering == "category" then
-    if #recent > 0 then
+    if #Chooser.recent > 0 then
       self:addCategory("Recent:")
-      for _, u in ipairs(recent) do
+      for _, u in ipairs(Chooser.recent) do
         if u.channelCount then
           if ring.chain and ring.chain.channelCount == u.channelCount then
             self:addUnit(u)
@@ -213,13 +211,13 @@ function Chooser:updateRecent(loadInfo)
   local t = {
     loadInfo
   }
-  for i, u in ipairs(recent) do
+  for i, u in ipairs(Chooser.recent) do
     if u.title ~= loadInfo.title then
       t[#t + 1] = u
       if #t > 5 then break end
     end
   end
-  recent = t
+  Chooser.recent = t
 end
 
 function Chooser:choose(loadInfo)
