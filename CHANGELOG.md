@@ -1,18 +1,21 @@
 # Legend
-
 * FIX: A bug fix.  Relevant to users and developers.
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
 # v0.6.10
-FIX: Local connections to the output of an empty branch were not being restored.
+* FIX: Local connections to the output of an empty branch were not being restored.
+* FIX: Unload temporary buffers from the Sample Pool once they are no longer in use.
+* FIX: Temporary buffers that are created by presets will be stereo for stereo chains and mono otherwise.  This is useful when you load an originally mono preset into a stereo chain and vice versa.
+* NEW: If a WAV file has CUE markers, those will be used to initialize its slices.  Thank you to [tmfset](https://github.com/tmfset) for the [pull request](https://github.com/odevices/er-301/pull/29).
+
 
 # v0.6.09
 * FIX: File Browser > Make listing order of files/folders more consistent. Folders then files, all in case-insensitive dictionary order.
 * FIX: File Browser > Crash when changing focus to folder during audio preview (issue #23).
 
 # v0.6.08
-* FIX: The Fixed HPF Unit had some unitialized variables that might be causing loss of audio in random cases.
+* FIX: The Fixed HPF Unit had some uninitialized variables that might be causing loss of audio in random cases.
 * FIX: Pressing CANCEL in the **Select from Pool** menu was causing a crash.
 
 # v0.6.07

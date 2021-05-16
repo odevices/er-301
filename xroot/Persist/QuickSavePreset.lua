@@ -83,14 +83,9 @@ function QuickSavePreset:apply()
   Channels.mute()
   Channels.stop()
   Channels.clear()
-
-  if data.pool then
-    local Pool = require "Sample.Pool"
-    Pool.deserialize(data.pool)
-  else
-    app.logInfo("%s:apply: no sample pool data.", self)
-    result = false
-  end
+  
+  local Pool = require "Sample.Pool"
+  Pool.clear()
 
   if data.preamp then
     local Preamp = require "Preamp"
@@ -133,6 +128,15 @@ function QuickSavePreset:apply()
     Channels.deserialize(data.channels)
   else
     app.logInfo("%s:apply: no channels data.", self)
+    result = false
+  end
+
+  -- Sample Pool deserialization should be after Channels deserialization
+  -- because buffers should deserialized in the chain context.
+  if data.pool then
+    Pool.deserialize(data.pool)
+  else
+    app.logInfo("%s:apply: no sample pool data.", self)
     result = false
   end
 

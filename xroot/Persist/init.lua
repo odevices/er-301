@@ -376,6 +376,7 @@ local function loadPoolPreset(filename)
     local SamplePool = require "Sample.Pool"
     local preset = Preset()
     if preset:read(filename) then
+      SamplePool.clear()
       SamplePool.deserialize(preset.data)
     else
       showMessage("Failed to load Pool Preset.")

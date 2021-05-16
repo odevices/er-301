@@ -371,7 +371,7 @@ end
 function FeedbackLooper:deserialize(t)
   Unit.deserialize(self, t)
   if t.sample then
-    local sample = SamplePool.deserializeSample(t.sample)
+    local sample = SamplePool.deserializeSample(t.sample, self.chain)
     if sample then
       self:setSample(sample)
     else

@@ -96,6 +96,15 @@ function Sample:release(user)
       self.users[user] = nil
     end
   end
+  if self.userCount == 0 then
+    if self:isBuffer() then
+      -- Automatically unload buffer (i.e. temporary) samples 
+      -- when no one is using it any longer.
+      app.logInfo("%s: no longer used, unloading.", self)
+      local Pool = require "Sample.Pool"
+      Pool.unload(self)
+    end
+  end
 end
 
 function Sample:getUsers()
@@ -120,6 +129,7 @@ function Sample:setPath(fullPath)
                  self.path)
   end
   self.path = fullPath
+  self:setInstanceName(fullPath)
   if self.slices then self.slices.path = self:defaultSlicesPath() end
   if self:isFileBased() then self.opts.type = "single" end
   self.name = self:getLastFolderAndFilenameForDisplay(22)
@@ -196,8 +206,12 @@ function Sample:setClean()
 end
 
 function Sample:isFileBased()
+  if self.path then
   return Utils.startsWith(self.path, app.roots.front) or
              Utils.startsWith(self.path, app.roots.rear)
+  else
+    return false
+  end
 end
 
 function Sample:isBuffer()

@@ -82,11 +82,11 @@ local function trim(s)
 end
 
 local function startsWith(String, Start)
-  return string.sub(String, 1, string.len(Start)) == Start
+  return String and Start and (string.sub(String, 1, string.len(Start)) == Start)
 end
 
 local function endsWith(String, End)
-  return End == '' or string.sub(String, -string.len(End)) == End
+  return String and End and (End == '' or string.sub(String, -string.len(End)) == End)
 end
 
 local function firstToUpper(str)

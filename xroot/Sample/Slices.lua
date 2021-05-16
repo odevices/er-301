@@ -63,8 +63,10 @@ function Slices:serialize()
   local t = {}
   t.path = self.path
   t.rate = self.rate
-  if not self:save() then
-    app.logError("%s:serialize: unable to save slices to %s.", self, self.path)
+  if self.path then
+    if not self:save() then
+      app.logError("%s:serialize: unable to save slices to %s.", self, self.path)
+    end
   end
   return t
 end
@@ -73,7 +75,7 @@ function Slices:deserialize(t)
   if t.path then
     if not self:load(t.path) then
       app.logError("%s:deserialize: unable to load slices from %s.", self,
-                  self.path)
+                   self.path)
     end
   end
   if t.rate then self:setSampleRate(t.rate) end

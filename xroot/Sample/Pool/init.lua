@@ -83,7 +83,7 @@ local function updateQueue()
       savingSample = nil
     else
       app.logError("Sample(%s):unknown status:%d", savingSample.name,
-                  saver.mStatus)
+                   saver.mStatus)
       savingSample = nil
     end
   end
@@ -110,7 +110,7 @@ local function updateQueue()
       loadingSample = nil
     else
       app.logError("Sample(%s):unknown status:%d", loadingSample.name,
-                  saver.mStatus)
+                   saver.mStatus)
       loadingSample = nil
     end
   end
@@ -125,7 +125,7 @@ local function updateQueue()
         Signal.emit("sampleStatusChanged", savingSample)
       else
         app.logError("Sample(%s): unable to save to %s.", savingSample.name,
-                    savingSample.path)
+                     savingSample.path)
         savingSample:setError("Unable to start saving.")
         Signal.emit("sampleStatusChanged", savingSample)
         savingSample = nil
@@ -165,7 +165,7 @@ local function addToSaveQueue(sample)
     return true
   else
     app.logError("Sample(%s):failed to add to save queue: %s", sample.name,
-                sample.path)
+                 sample.path)
     return false
   end
 end
@@ -183,7 +183,7 @@ local function addToLoadQueue(sample)
     local reason = getErrorString(status)
     sample:setError(reason)
     app.logError("Sample(%s): failed to prepare %s (%s)", sample.name,
-                sample.path, reason)
+                 sample.path, reason)
     local msg = Message.Main("Failed to load " .. Path.getFilename(sample.path),
                              reason)
     msg:show()
@@ -282,7 +282,7 @@ local function clone(sample, Ns)
   local newSample = sample:clone(Ns)
   if not newSample then
     app.logError("SamplePool.clone:Failed to clone %s with %d samples.",
-                sample.path, Ns)
+                 sample.path, Ns)
     return false, "Insufficient memory."
   end
   if sample:isFileBased() then
@@ -308,17 +308,21 @@ local function clone(sample, Ns)
   return newSample
 end
 
--- A buffer is temporary sample at the system sampling rate.
-local function create(opts, path, slicesInfo)
+-- Only 'opts' or 'path' is required.
+local function createInternal(opts, path, slicesInfo)
+  if path then
+    local sample = samples[path]
+    if sample then 
+      -- Found a sample with the same path, 
+      -- so use that regardless of whether the other opts are matching or not.
+      return sample
+    end
+  end
+  -- Sample does not already exist, so try to create it based on the given opts.
   local channelCount = opts.channels or 1
   local totalSeconds = opts.secs
   local sampleCount = opts.samples
-  local root = opts.root or "buffer"
-
-  if path then
-    local sample = samples[path]
-    if sample then return sample end
-  end
+  local root = opts.root or "buffer"  
   path = path or generateUniqueName(root)
 
   if sampleCount then
@@ -356,6 +360,11 @@ local function create(opts, path, slicesInfo)
       return false, "Insufficient memory."
     end
   end
+end
+
+-- Creates a temporary sample at the system sampling rate.
+local function create(opts)
+  return createInternal(opts)
 end
 
 local function rename(sample, newPath)
@@ -506,13 +515,18 @@ end
 
 local function serializeSample(sample)
   local t = {}
-  t.path = sample.path
+  if Sample:isFileBased() or sample:isShared() then t.path = sample.path end
   t.opts = Utils.deepCopy(sample.opts)
+  if t.opts.type == "buffer" then
+    -- Buffers do not persist their channelCount because it depends on the chain/serialization context.
+    t.opts.channels = nil
+  end
   t.slices = sample.slices:serialize()
   return t
 end
 
-local function deserializeSample(t)
+-- The chain parameter is optional.
+local function deserializeSample(t, chain)
   -- Compatibility with old presets
   if t.opts == nil then
     t.opts = {}
@@ -525,12 +539,17 @@ local function deserializeSample(t)
   elseif t.opts.type == "multi" then
     return loadMulti(t.opts.paths, t.path, t.slices)
   elseif t.opts.type == "buffer" then
-    local sample, status = create(t.opts, t.path, t.slices)
+    if chain then
+      -- Override the channel count with the chain's channel count.
+      app.logInfo("SamplePool.deserializeSample: using chain's channelCount (%d)", chain.channelCount)
+      t.opts.channels = chain.channelCount
+    end
+    local sample, status = createInternal(t.opts, t.path, t.slices)
     if sample then
       return sample
     else
       app.logError("SamplePool.deserializeSample:failed to create buffer (%s).",
-                  status)
+                   status)
       return
     end
   else
@@ -545,7 +564,7 @@ local function serialize()
   return t
 end
 
-local function deserialize(t)
+local function clear()
   -- clear out pool and defrag for efficient memory usage
   for _, sample in pairs(samples) do
     local found = false
@@ -559,6 +578,9 @@ local function deserialize(t)
     if not found then unload(sample, true) end
   end
   defrag()
+end
+
+local function deserialize(t)
   for _, data in ipairs(t) do
     if data.path then
       deserializeSample(data)
@@ -617,6 +639,7 @@ return {
   rename = rename,
   serialize = serialize,
   deserialize = deserialize,
+  clear = clear,
   serializeSample = serializeSample,
   deserializeSample = deserializeSample,
   hasDirtySamples = hasDirtySamples
