@@ -178,9 +178,13 @@ function Path.popWorkingDirectory()
   app.logInfo("cwd: %s", Path.getWorkingDirectory())
 end
 
-function Path.checkRelativePath(path)
-  if Path.isAbsolute(path) then return path end
-  return Path.join(Path.getWorkingDirectory(), path)
+function Path.expandRelativePath(path)
+  if path then
+    if Path.isAbsolute(path) then return path end
+    return Path.join(Path.getWorkingDirectory(), path)
+  else
+    app.logError("Path.expandRelativePath: path is nil")
+  end
 end
 
 return Path

@@ -57,7 +57,6 @@ namespace od
 
     SliceHead *pHead = mpMainDisplay->sliceHead();
     Sample *pSample = pHead->getSample();
-    mSliceList.setSlices(pHead->mpSlices);
 
     if (pSample == 0)
     {
@@ -65,12 +64,15 @@ namespace od
       return;
     }
 
-    float sampleRate = pSample->mSampleRate;
+    float samplePeriod = pSample->mSamplePeriod;
+    mSliceList.setSlices(pHead->mpSlices);
+    mSliceList.setSamplePeriod(samplePeriod);
+
     n = pHead->getPosition();
     if (n != mLastHeadPosition)
     {
       mLastHeadPosition = n;
-      float totalSecs = ((double)n) / (double)sampleRate;
+      float totalSecs = ((double)n) * (double)samplePeriod;
       timeString(totalSecs, mHeadText);
     }
 
@@ -78,7 +80,7 @@ namespace od
     if (n != mLastCursorPosition)
     {
       mLastCursorPosition = n;
-      float totalSecs = ((double)n) / (double)sampleRate;
+      float totalSecs = ((double)n) * (double)samplePeriod;
       timeString(totalSecs, mCursorText);
     }
 

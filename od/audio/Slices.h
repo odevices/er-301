@@ -1,12 +1,4 @@
-/*
- * Slices.h
- *
- *  Created on: 4 Jul 2016
- *      Author: clarkson
- */
-
-#ifndef APP_AUDIO_SLICES_H_
-#define APP_AUDIO_SLICES_H_
+#pragma once
 
 #include <od/extras/ReferenceCounted.h>
 #include <od/extras/Lockable.h>
@@ -29,7 +21,6 @@ namespace od
         bool load(const char *filename);
         bool loadWavFileCues(const char *filename);
 
-        void setSampleRate(float rate);
         void copyFrom(int from, int to, Slices *slices, int sourceStart);
         void initFromLoadInfo(SampleLoadInfo &info);
 
@@ -46,7 +37,6 @@ namespace od
         bool isIndexValid(int index);
         Slice *get(int index);
         int getPosition(int index);
-        float getPositionInSeconds(int index);
 
         SlicesIterator findNearestNoCheck(int sample);
         SlicesIterator findNearest(int sample);
@@ -64,13 +54,11 @@ namespace od
         int getIntervalCount();
         int getIntervalLength(int index);
         int getIntervalStart(int index);
-
 #endif
 
     private:
         // Slices are sorted in increasing slice.mStart order.
         std::vector<Slice> mSorted;
-        float mSamplePeriod;
 
         // Intervals
         std::vector<int> mIntervalStarts;
@@ -80,5 +68,3 @@ namespace od
     };
 
 } /* namespace od */
-
-#endif /* APP_AUDIO_SLICES_H_ */

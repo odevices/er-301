@@ -78,7 +78,9 @@ function Sample:prepareForLoading()
 end
 
 function Sample:prepareForSaving()
-  if self:isFileBased() then self.slices:save() end
+  if self:isFileBased() then
+    self.slices:save(self:defaultSlicesPath())
+  end
 end
 
 function Sample:claim(user)
@@ -130,7 +132,6 @@ function Sample:setPath(fullPath)
   end
   self.path = fullPath
   self:setInstanceName(fullPath)
-  if self.slices then self.slices.path = self:defaultSlicesPath() end
   if self:isFileBased() then self.opts.type = "single" end
   self.name = self:getLastFolderAndFilenameForDisplay(22)
 end
@@ -207,8 +208,8 @@ end
 
 function Sample:isFileBased()
   if self.path then
-  return Utils.startsWith(self.path, app.roots.front) or
-             Utils.startsWith(self.path, app.roots.rear)
+    return Utils.startsWith(self.path, app.roots.front) or
+               Utils.startsWith(self.path, app.roots.rear)
   else
     return false
   end
@@ -238,7 +239,9 @@ function Sample:writePaths()
   local f = io.open(self.path, "w")
   if f then
     f:write("return {\n")
-    for _, path in ipairs(self.opts.paths) do f:write("  ", quote(path), ",\n") end
+    for _, path in ipairs(self.opts.paths) do
+      f:write("  ", quote(path), ",\n")
+    end
     f:write("}\n")
     f:close()
     self.opts.paths = nil
@@ -330,7 +333,6 @@ function Sample:setGood()
   self.description = nil
   self.reason = nil
   Card.release(self.path)
-  if self.pSample then self.slices:setSampleRate(self.pSample.mSampleRate) end
 end
 
 function Sample:setError(reason)

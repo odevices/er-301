@@ -212,8 +212,9 @@ local function unload(sample, detach)
   Signal.emit("memoryUsageChanged")
 end
 
-local function load(path, slicesInfo)
-  path = Path.checkRelativePath(path)
+local function load(path)
+  if path == nil then app.logFatal("Sample.Pool.load called on nil path.") end
+  path = Path.expandRelativePath(path)
   local sample = samples[path]
   if sample then return sample end
   sample = Sample(path, {
@@ -222,12 +223,8 @@ local function load(path, slicesInfo)
   samples[path] = sample
   local success, status = addToLoadQueue(sample)
   if success then
-    if slicesInfo then
-      sample.slices:deserialize(slicesInfo)
-    else
-      if not sample.slices:load(sample:defaultSlicesPath()) then
-        sample.slices:loadWavFileCues(path);
-      end
+    if not sample.slices:load(sample:defaultSlicesPath()) then
+      sample.slices:loadWavFileCues(path);
     end
     Signal.emit("memoryUsageChanged")
     sample:setEnqueuedToLoad()
@@ -240,7 +237,7 @@ local function load(path, slicesInfo)
   end
 end
 
-local function loadMulti(paths, id, slicesInfo)
+local function loadMulti(paths, id)
   if id then
     local sample = samples[id]
     if sample then return sample end
@@ -260,7 +257,7 @@ local function loadMulti(paths, id, slicesInfo)
   samples[id] = sample
   local success, status = addToLoadQueue(sample)
   if success then
-    if slicesInfo then sample.slices:deserialize(slicesInfo) end
+    sample.slices:load(sample:defaultSlicesPath())
     Signal.emit("memoryUsageChanged")
     sample:setEnqueuedToLoad()
     Signal.emit("newSample", sample)
@@ -311,10 +308,10 @@ local function clone(sample, Ns)
 end
 
 -- Only 'opts' or 'path' is required.
-local function createInternal(opts, path, slicesInfo)
+local function createInternal(opts, path)
   if path then
     local sample = samples[path]
-    if sample then 
+    if sample then
       -- Found a sample with the same path, 
       -- so use that regardless of whether the other opts are matching or not.
       return sample
@@ -324,7 +321,7 @@ local function createInternal(opts, path, slicesInfo)
   local channelCount = opts.channels or 1
   local totalSeconds = opts.secs
   local sampleCount = opts.samples
-  local root = opts.root or "buffer"  
+  local root = opts.root or "buffer"
   path = path or generateUniqueName(root)
 
   if sampleCount then
@@ -335,7 +332,6 @@ local function createInternal(opts, path, slicesInfo)
       samples = sampleCount
     })
     if sample:allocateBySamples(channelCount, sampleCount) then
-      if slicesInfo then sample.slices:deserialize(slicesInfo) end
       sample:setGood()
       samples[path] = sample
       Signal.emit("newSample", sample)
@@ -352,7 +348,6 @@ local function createInternal(opts, path, slicesInfo)
       secs = totalSeconds
     })
     if sample:allocateBySeconds(channelCount, totalSeconds) then
-      if slicesInfo then sample.slices:deserialize(slicesInfo) end
       sample:setGood()
       samples[path] = sample
       Signal.emit("newSample", sample)
@@ -516,37 +511,51 @@ local function defrag()
 end
 
 local function serializeSample(sample)
+  app.logInfo("Serializing sample: %s", sample.path)
   local t = {}
-  if Sample:isFileBased() or sample:isShared() then t.path = sample.path end
+  if sample:isFileBased() or sample:isShared() then 
+    t.path = sample.path
+  end
+  if sample:isFileBased() then
+    sample.slices:save(sample:defaultSlicesPath())
+  end
   t.opts = Utils.deepCopy(sample.opts)
   if t.opts.type == "buffer" then
     -- Buffers do not persist their channelCount because it depends on the chain/serialization context.
     t.opts.channels = nil
   end
-  t.slices = sample.slices:serialize()
   return t
 end
 
--- The chain parameter is optional.
-local function deserializeSample(t, chain)
-  -- Compatibility with old presets
+local function fixLegacySamplePreset(t)
   if t.opts == nil then
     t.opts = {}
     if t.path then t.opts.type = "single" end
   end
   if t.opts.type == nil or t.opts.type == "file" then t.opts.type = "single" end
-  --
+  return t
+end
+
+-- The chain parameter is optional.
+local function deserializeSample(t, chain)
+  t = fixLegacySamplePreset(t)
   if t.opts.type == "single" then
-    return load(t.path, t.slices)
+    if t.path then
+      return load(t.path)
+    else
+      app.logError("SamplePool.deserializeSample: path is nil")
+    end
   elseif t.opts.type == "multi" then
-    return loadMulti(t.opts.paths, t.path, t.slices)
+    return loadMulti(t.opts.paths, t.path)
   elseif t.opts.type == "buffer" then
     if chain then
       -- Override the channel count with the chain's channel count.
-      app.logInfo("SamplePool.deserializeSample: using chain's channelCount (%d)", chain.channelCount)
+      app.logInfo(
+          "SamplePool.deserializeSample: using chain's channelCount (%d)",
+          chain.channelCount)
       t.opts.channels = chain.channelCount
     end
-    local sample, status = createInternal(t.opts, t.path, t.slices)
+    local sample, status = createInternal(t.opts, t.path)
     if sample then
       return sample
     else
@@ -568,17 +577,7 @@ end
 
 local function clear()
   -- clear out pool and defrag for efficient memory usage
-  for _, sample in pairs(samples) do
-    local found = false
-    for _, data in ipairs(t) do
-      local path = data.path or data[2]
-      if path == sample.path then
-        found = true
-        break
-      end
-    end
-    if not found then unload(sample, true) end
-  end
+  for _, sample in pairs(samples) do unload(sample, true) end
   defrag()
 end
 

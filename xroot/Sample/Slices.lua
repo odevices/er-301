@@ -12,17 +12,14 @@ function Slices:init()
 end
 
 function Slices:load(path)
-  if path then
-    path = Path.checkRelativePath(path)
-    self.path = path
-  end
+  path = Path.expandRelativePath(path)
   if path == nil then return false end
   if app.pathExists(path) then
     if self.pSlices:load(path) then
-      app.logInfo("%s: loaded %s.", self, path)
+      app.logInfo("%s:load(%s):success", self, path)
       return true
     else
-      app.logInfo("%s: failed to load %s.", self, path)
+      app.logInfo("%s:load(%s):failed", self, path)
       return false
     end
   else
@@ -31,17 +28,17 @@ function Slices:load(path)
 end
 
 function Slices:loadWavFileCues(path)
-  if path then
-    path = Path.checkRelativePath(path)
-    self.path = path
+  path = Path.expandRelativePath(path)
+  if path == nil then
+    app.logError("%s:loadWavFileCues: path is nil", self)
+    return false
   end
-  if path == nil then return false end
   if app.pathExists(path) then
     if self.pSlices:loadWavFileCues(path) then
-      app.logInfo("%s: loaded from wav %s.", self, path)
+      app.logInfo("%s:loadWavFileCues(%s):success", self, path)
       return true
     else
-      app.logInfo("%s: failed to load from wav %s.", self, path)
+      app.logInfo("%s:loadWavFileCues(%s):failed", self, path)
       return false
     end
   else
@@ -50,24 +47,18 @@ function Slices:loadWavFileCues(path)
 end
 
 function Slices:save(path)
-  if path then
-    self.path = path
-  else
-    path = self.path
+  path = Path.expandRelativePath(path)
+  if path == nil then
+    app.logError("%s:save: failed, path is nil", self)
+    return false
   end
-  if path == nil then return false end
   local result = self.pSlices:save(path)
   if result then
-    -- app.logInfo("%s:saved:%s",self,path)
+    app.logInfo("%s:save(%s):success", self, path)
   else
-    app.logError("%s:failed to save:%s", self, path)
+    app.logError("%s:save(%s):failed", self, path)
   end
   return result
-end
-
-function Slices:setSampleRate(rate)
-  self.pSlices:setSampleRate(rate)
-  self.rate = rate
 end
 
 function Slices:getCount()
@@ -76,28 +67,6 @@ end
 
 function Slices:initFromLoadInfo(info)
   self.pSlices:initFromLoadInfo(info)
-end
-
-function Slices:serialize()
-  local t = {}
-  t.path = self.path
-  t.rate = self.rate
-  if self.path then
-    if not self:save() then
-      app.logError("%s:serialize: unable to save slices to %s.", self, self.path)
-    end
-  end
-  return t
-end
-
-function Slices:deserialize(t)
-  if t.path then
-    if not self:load(t.path) then
-      app.logError("%s:deserialize: unable to load slices from %s.", self,
-                   self.path)
-    end
-  end
-  if t.rate then self:setSampleRate(t.rate) end
 end
 
 function Slices:copyFrom(from, to, slices, sourceStart)

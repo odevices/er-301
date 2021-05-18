@@ -651,7 +651,6 @@ local function quickSaveToSlot(slot, checkForUnsavedBuffers, after)
   end
   local name = getQuickSaveName(slot) or string.format("Slot %d", slot)
   Busy.start("Quicksaving to '%s'...", name)
-  app.logInfo("Quicksave:start")
   quickSaveCache[slot] = nil
   -- from oldest to newest
   for i = maxQuickSaves - 1, 1, -1 do
@@ -669,7 +668,7 @@ local function quickSaveToSlot(slot, checkForUnsavedBuffers, after)
   Busy.stop()
   local Overlay = require "Overlay"
   if result then
-    app.logInfo("Quicksave:done")
+    app.logInfo("Quicksaved to %s", filename)
     Overlay.mainFlashMessage("Quicksaved to slot %d.", slot)
   else
     app.logError("Quicksave:failed")

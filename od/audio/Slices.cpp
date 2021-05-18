@@ -1,16 +1,8 @@
-/*
- * Slices.cpp
- *
- *  Created on: 4 Jul 2016
- *      Author: clarkson
- */
-
 #include <od/audio/Slices.h>
 #include <od/audio/WavFileReader.h>
 #include <od/extras/FileWriter.h>
 #include <od/extras/FileReader.h>
 #include <hal/simd.h>
-#include <od/config.h>
 #include <hal/log.h>
 #include <algorithm>
 #include <vector>
@@ -20,7 +12,6 @@ namespace od
 
   Slices::Slices()
   {
-    mSamplePeriod = globalConfig.samplePeriod;
   }
 
   Slices::~Slices()
@@ -258,19 +249,6 @@ namespace od
     std::sort(mSorted.begin(), mSorted.end());
   }
 
-  float Slices::getPositionInSeconds(int index)
-  {
-    Slice *slice = get(index);
-    if (slice)
-    {
-      return ((double)slice->mStart) * mSamplePeriod;
-    }
-    else
-    {
-      return 0.0f;
-    }
-  }
-
   // Starting at sourceStart, copy slices from 'srcSlices' to the interval [from, to].
   void Slices::copyFrom(int from, int to, Slices *srcSlices, int sourceStart)
   {
@@ -367,14 +345,6 @@ namespace od
   int Slices::size()
   {
     return mSorted.size();
-  }
-
-  void Slices::setSampleRate(float rate)
-  {
-    if (rate > 0.001f)
-    {
-      mSamplePeriod = 1.0f / rate;
-    }
   }
 
   void Slices::refreshIntervals()

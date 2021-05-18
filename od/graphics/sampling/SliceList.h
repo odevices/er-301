@@ -1,13 +1,4 @@
-/*
- * SliceList.h
- *
- *  Created on: 22 Oct 2016
- *      Author: clarkson
- */
-
-#ifndef APP_GRAPHICS_SLICELIST_H_
-#define APP_GRAPHICS_SLICELIST_H_
-
+#pragma once
 #include <od/graphics/Graphic.h>
 #include <od/audio/Slices.h>
 #include <string>
@@ -26,6 +17,7 @@ namespace od
 #endif
 
         void setSlices(Slices *slices);
+        void setSamplePeriod(float period);
         void scrollUp();
         void scrollDown();
         void scrollToBottom();
@@ -70,10 +62,10 @@ namespace od
         int mEncoderSum = 0;
         bool mShowSelection = true;
         bool mHasFocus = true;
+        float mSamplePeriod;
 
         void sync();
+        float getPositionInSeconds(int index);
     };
 
 } /* namespace od */
-
-#endif /* APP_GRAPHICS_SLICELIST_H_ */

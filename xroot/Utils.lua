@@ -81,16 +81,16 @@ local function trim(s)
   return s:match '^()%s*$' and '' or s:match '^%s*(.*%S)'
 end
 
-local function startsWith(String, Start)
-  return String and Start and (string.sub(String, 1, string.len(Start)) == Start)
+local function startsWith(s, pattern)
+  return s and pattern and (string.sub(s, 1, string.len(pattern)) == pattern)
 end
 
-local function endsWith(String, End)
-  return String and End and (End == '' or string.sub(String, -string.len(End)) == End)
+local function endsWith(s, pattern)
+  return s and pattern and (pattern == '' or string.sub(s, -string.len(pattern)) == pattern)
 end
 
-local function firstToUpper(str)
-  return (str:gsub("^%l", string.upper))
+local function firstToUpper(s)
+  return (s:gsub("^%l", string.upper))
 end
 
 local function removeExtension(text)
