@@ -4,7 +4,7 @@
 * SYS: A system-level change.  Usually only relevant to developers.
 
 # v0.6.11
-* FIX: WAV files with CUE markers were be overwritten with ER-301 format slice data (*.slc) when saving.  [Issue #30](https://github.com/odevices/er-301/issues/30).
+* FIX: WAV files with CUE markers were being overwritten with ER-301 format slice data (*.slc) when saving.  [Issue #30](https://github.com/odevices/er-301/issues/30).
 
 # v0.6.10
 * FIX: Local connections to the output of an empty branch were not being restored.
