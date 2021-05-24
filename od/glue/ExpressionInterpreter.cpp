@@ -1,9 +1,5 @@
 #include <od/glue/ExpressionInterpreter.h>
 #include <od/objects/Parameter.h>
-#define BUILDOPT_VERBOSE
-#define BUILDOPT_DEBUG_LEVEL 10
-#include <hal/log.h>
-#include <hal/breakpoint.h>
 
 extern "C"
 {
@@ -113,7 +109,6 @@ namespace od
       lua_rawgeti(L, mFunctionTable, key);
       if (lua_isnil(L, -1))
       {
-        logDebug(1, "Storing %s @ %d", e.mFunction.c_str(), key);
         break;
       }
       lua_pop(L, 1);
@@ -141,10 +136,6 @@ namespace od
     Lock lock(mMutex);
     if (mEnabled)
     {
-      if (lua_gettop(L) > 1)
-      {
-        Breakpoint();
-      }
       // Push function on the stack.
       lua_rawgeti(L, mFunctionTable, e.mFunctionKey);
       // Push arguments on the stack.
@@ -167,10 +158,6 @@ namespace od
     Lock lock(mMutex);
     if (mEnabled)
     {
-      if (lua_gettop(L) > 1)
-      {
-        Breakpoint();
-      }
       // Push function on the stack.
       lua_rawgeti(L, mFunctionTable, e.mFunctionKey);
       // Push arguments on the stack.
