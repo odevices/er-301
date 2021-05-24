@@ -30,7 +30,8 @@ namespace od
     void init(void);
     
     void printMemoryStats();
-    void measureSpeed(void);
+    void measureSpeed();
+    void dumpStack(const char * label);
 
     bool execute(const char *code);
     template <typename... Args>

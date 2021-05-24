@@ -1,5 +1,9 @@
 #include <od/glue/ExpressionInterpreter.h>
 #include <od/objects/Parameter.h>
+#define BUILDOPT_VERBOSE
+#define BUILDOPT_DEBUG_LEVEL 10
+#include <hal/log.h>
+#include <hal/breakpoint.h>
 
 extern "C"
 {
@@ -33,7 +37,6 @@ namespace od
   ExpressionInterpreter::ExpressionInterpreter()
   {
     Interpreter::init();
-    openStandardlibs(L);
   }
 
   ExpressionInterpreter::~ExpressionInterpreter()
@@ -44,6 +47,8 @@ namespace od
   {
     if (!mPrepared)
     {
+      lua_gc(L, LUA_GCGEN, 0, 0);
+
 #ifndef BUILDOPT_LUA_USE_REALLOC
       const int multiplier = 2;
       mAllocator.add(16, 1500 * multiplier);
@@ -56,9 +61,13 @@ namespace od
       mAllocator.add(2048, 15 * multiplier);
 #endif
 
+      openStandardlibs(L);
+
       // A table to hold functions.  Pre-allocate 64 entries.
       // (Should never be popped and thus always at the bottom of the stack)
       lua_createtable(L, 64, 0);
+      lua_setglobal(L, "TheFunctionTable");
+      lua_getglobal(L, "TheFunctionTable");
       mFunctionTable = lua_gettop(L);
       mPrepared = true;
     }
@@ -104,17 +113,18 @@ namespace od
       lua_rawgeti(L, mFunctionTable, key);
       if (lua_isnil(L, -1))
       {
+        logDebug(1, "Storing %s @ %d", e.mFunction.c_str(), key);
         break;
       }
+      lua_pop(L, 1);
       key++;
     }
     lua_pop(L, 1);
 
     // Save the function object in the function table.
     lua_rawseti(L, mFunctionTable, key);
-
-    enable();
     e.mFunctionKey = key;
+    enable();
     return true;
   }
 
@@ -128,8 +138,13 @@ namespace od
 
   float ExpressionInterpreter::value(Expression &e)
   {
+    Lock lock(mMutex);
     if (mEnabled)
     {
+      if (lua_gettop(L) > 1)
+      {
+        Breakpoint();
+      }
       // Push function on the stack.
       lua_rawgeti(L, mFunctionTable, e.mFunctionKey);
       // Push arguments on the stack.
@@ -149,8 +164,13 @@ namespace od
 
   float ExpressionInterpreter::target(Expression &e)
   {
+    Lock lock(mMutex);
     if (mEnabled)
     {
+      if (lua_gettop(L) > 1)
+      {
+        Breakpoint();
+      }
       // Push function on the stack.
       lua_rawgeti(L, mFunctionTable, e.mFunctionKey);
       // Push arguments on the stack.
@@ -158,7 +178,6 @@ namespace od
       {
         lua_pushnumber(L, param->target());
       }
-
       lua_pcall(L, e.mParameters.size(), 1, 0);
       // Ignoring potential error condition on purpose, since it will just be converted to a 0 and returned.
 
@@ -166,6 +185,18 @@ namespace od
       lua_pop(L, 1);
     }
     return e.mCachedTarget;
+  }
+
+  void ExpressionInterpreter::enable()
+  {
+    Lock lock(mMutex);
+    mEnabled = true;
+  }
+
+  void ExpressionInterpreter::disable()
+  {
+    Lock lock(mMutex);
+    mEnabled = true;
   }
 
   /*

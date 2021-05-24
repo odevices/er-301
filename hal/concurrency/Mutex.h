@@ -20,6 +20,7 @@ namespace od
 
   class Lock
   {
+  public:
     Lock(Mutex &mutex) : mMutex(mutex)
     {
       mMutex.enter();

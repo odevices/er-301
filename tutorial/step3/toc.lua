@@ -15,5 +15,10 @@ return {
       category = "Learning",
       moduleName = "EuclidsCatsUnit",
     },
+    {
+      title = "Tie Expression Test",
+      category = "Learning",
+      moduleName = "TieExpression",
+    },
   }
 }
