@@ -9,6 +9,7 @@
   * [Step 2: Add custom DSP code](#step-2-add-custom-dsp-code)
   * [Step 3: Add custom graphics](#step-3-add-custom-graphics)
   * [Further Reading](#further-reading)
+  * [Tips for coding with NEON intrinsics](#tips-for-coding-with-neon-intrinsics)
 
 ## Introduction
 
