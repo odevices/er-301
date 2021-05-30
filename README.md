@@ -204,7 +204,7 @@ First, you will need to install the TI-RTOS development tools for the AM335x.
 4. ***When asked, please set the destination folder to ```~/ti```.***  This is the path assumed by the project makefiles.  If instead you install to a different folder then before executing any cross-compilation commands, you will need to set the TI_INSTALL_DIR shell environment variable to the actual path that you used.  If you don't want to change your shell environment then you can also pass the path on the commandline like this:
 
 ```bash
-make core TI_INSTALL_DIR=~/your-path-to-ti-sdk ARCH=am355x
+make core TI_INSTALL_DIR=~/your-path-to-ti-sdk ARCH=am335x
 ```
 
 This documentation will assume that you used the default location.
@@ -222,7 +222,7 @@ sudo apt install swig python3 zip gcc-multilib
 A good test of your build environment is to see if you can successfully build the factory mods:
 
 ```bash
-make core teletype ARCH=am355x
+make core teletype ARCH=am335x
 ```
 
 ### Work through the tutorials
