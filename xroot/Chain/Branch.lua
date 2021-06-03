@@ -47,7 +47,7 @@ function Branch:getOutputDisplayName(channel)
 end
 
 function Branch:getMonitoringOutput(ch)
-  return Chain.getOutput(self, ch)
+  return self:getOutput(ch)
 end
 
 function Branch:getOutput(ch)
