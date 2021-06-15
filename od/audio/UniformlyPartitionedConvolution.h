@@ -1,12 +1,4 @@
-/*
- * UniformlyPartitionedConvolution.h
- *
- *  Created on: 13 Sep 2017
- *      Author: clarkson
- */
-
-#ifndef APP_AUDIO_UNIFORMLYPARTITIONEDCONVOLUTION_H_
-#define APP_AUDIO_UNIFORMLYPARTITIONEDCONVOLUTION_H_
+#pragma once
 
 #include <od/extras/RealFFT.h>
 #define MAXPARTS 512
@@ -43,5 +35,3 @@ namespace od
 	};
 
 } /* namespace od */
-
-#endif /* APP_AUDIO_UNIFORMLYPARTITIONEDCONVOLUTION_H_ */

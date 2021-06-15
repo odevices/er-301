@@ -1,10 +1,3 @@
-/*
- * UniformlyPartitionedConvolution.cpp
- *
- *  Created on: 13 Sep 2017
- *      Author: clarkson
- */
-
 #include <od/audio/UniformlyPartitionedConvolution.h>
 #include <od/config.h>
 

@@ -1,10 +1,3 @@
-/*
- * SampleLoader.cpp
- *
- *  Created on: 8 Jun 2016
- *      Author: clarkson
- */
-
 #include <od/audio/SampleLoader.h>
 #include <od/audio/WavFileReader.h>
 

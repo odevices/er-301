@@ -1,10 +1,3 @@
-/*
- * StereoResampler.cpp
- *
- *  Created on: 10 May 2017
- *      Author: clarkson
- */
-
 #include <od/audio/StereoResampler.h>
 #include <hal/simd.h>
 #include <od/config.h>

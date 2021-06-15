@@ -1,12 +1,4 @@
-/*
- * Resampler.h
- *
- *  Created on: 10 May 2017
- *      Author: clarkson
- */
-
-#ifndef APP_AUDIO_RESAMPLER_H_
-#define APP_AUDIO_RESAMPLER_H_
+#pragma once
 
 namespace od
 {
@@ -31,12 +23,10 @@ namespace od
 	protected:
 		float mSpeed = 1.0f;
 		float mSpeedAdjustment = 1.0f;
-		float mPhaseDelta;
+		float mPhaseDelta = 0.0f;
 		float mPhase = 0.0f;
 
 		void updatePhaseDelta();
 	};
 
 } /* namespace od */
-
-#endif /* APP_AUDIO_RESAMPLER_H_ */

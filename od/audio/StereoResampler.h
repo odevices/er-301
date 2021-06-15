@@ -1,12 +1,4 @@
-/*
- * StereoResampler.h
- *
- *  Created on: 10 May 2017
- *      Author: clarkson
- */
-
-#ifndef APP_AUDIO_STEREORESAMPLER_H_
-#define APP_AUDIO_STEREORESAMPLER_H_
+#pragma once
 
 #include <od/audio/Resampler.h>
 
@@ -34,5 +26,3 @@ namespace od
 	};
 
 } /* namespace od */
-
-#endif /* APP_AUDIO_STEREORESAMPLER_H_ */

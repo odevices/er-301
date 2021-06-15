@@ -1,10 +1,3 @@
-/*
- * Resampler.cpp
- *
- *  Created on: 10 May 2017
- *      Author: clarkson
- */
-
 #include <od/audio/Resampler.h>
 #include <od/config.h>
 #include <hal/ops.h>

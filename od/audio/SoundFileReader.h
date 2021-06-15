@@ -1,12 +1,4 @@
-/*
- * SoundFileReader.h
- *
- *  Created on: 18 May 2016
- *      Author: clarkson
- */
-
-#ifndef APP_AUDIO_SOUNDFILEREADER_H_
-#define APP_AUDIO_SOUNDFILEREADER_H_
+#pragma once
 
 #include <od/extras/FileReader.h>
 
@@ -57,5 +49,3 @@ namespace od
 	};
 
 } /* namespace od */
-
-#endif /* APP_AUDIO_SOUNDFILEREADER_H_ */

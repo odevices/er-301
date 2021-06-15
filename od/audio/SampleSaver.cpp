@@ -1,10 +1,3 @@
-/*
- * SampleSaver.cpp
- *
- *  Created on: 24 Oct 2016
- *      Author: clarkson
- */
-
 #include <od/audio/SampleSaver.h>
 #include <od/audio/WavFileWriter.h>
 

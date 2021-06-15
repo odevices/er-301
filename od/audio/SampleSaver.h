@@ -1,12 +1,4 @@
-/*
- * SampleSaver.h
- *
- *  Created on: 24 Oct 2016
- *      Author: clarkson
- */
-
-#ifndef APP_AUDIO_SAMPLESAVER_H_
-#define APP_AUDIO_SAMPLESAVER_H_
+#pragma once
 
 #include <od/audio/Sample.h>
 #include <od/constants.h>
@@ -38,5 +30,3 @@ namespace od
   };
 
 } /* namespace od */
-
-#endif /* APP_AUDIO_SAMPLESAVER_H_ */
