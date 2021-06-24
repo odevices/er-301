@@ -11,7 +11,7 @@
 * FIX: Tying parameters to lua expressions was broken. [Issue #31](https://github.com/odevices/er-301/issues/31)
 
 # v0.6.12
-* Did not publically release.
+* Did not release.
 
 # v0.6.11
 * FIX: WAV files with CUE markers were being overwritten with ER-301 format slice data (*.slc) when saving.  [Issue #30](https://github.com/odevices/er-301/issues/30).
