@@ -231,4 +231,34 @@ namespace od
     }
   }
 
+    void Grain::setEnvelope(int type)
+    {
+      mEnvelopeType = type;
+      mFade = 0;
+    }
+
+    void Grain::setFade(int fade)
+    {
+      mFade = fade;
+    }
+
+    void Grain::setSquash(float squash)
+    {
+      mSquash = squash;
+    }
+
+    void Grain::setDelay(int samples)
+    {
+      // Positive delays only up to duration of grain.
+      mDelayInSamples = CLAMP(0, mDuration, samples);
+      // Enforce NEON alignment
+      mDelayInSamples /= 4;
+      mDelayInSamples *= 4;
+    }
+
+    int Grain::samplesRequired()
+    {
+      return mPhaseDelta * mRemaining;
+    }  
+
 } /* namespace od */

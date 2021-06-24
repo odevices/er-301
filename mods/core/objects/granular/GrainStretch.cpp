@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <string.h>
 
-
 namespace od
 {
 
@@ -332,7 +331,7 @@ namespace od
             }
 
             // Jitter the grain's render location.
-            int jitter = duration * (mGrainJitter.value() * Random::generateFloat(0.0f, 1.0f));
+            int jitter = grain->mDuration * mGrainJitter.value() * Random::generateFloat(0.0f, 1.0f);
             grain->setDelay(jitter);
             grain->mPhase = mPhase;
 
