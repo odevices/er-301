@@ -4,6 +4,7 @@
 * SYS: A system-level change.  Usually only relevant to developers.
 
 # v0.6.13
+* FIX: Package installation was broken when upgrading from pre-v0.6 firmware.
 * FIX: Crash when modulating GrainStretch jitter to negative values. [Issue #36](https://github.com/odevices/er-301/issues/36)
 * FIX: Teletype units from pre-v0.6 quicksaves/presets were not being loaded. [Issue #37](https://github.com/odevices/er-301/issues/37)
 * FIX: Show post-control signal in the scope view. Thank you to [tmfset](https://github.com/tmfset) for the [pull request](https://github.com/odevices/er-301/pull/34).
