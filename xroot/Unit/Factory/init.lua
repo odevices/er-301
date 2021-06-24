@@ -74,7 +74,7 @@ local function saveErrorReport(msg, trace, logFile)
 end
 
 local function onErrorInExternal(library, origLoadInfo, usedLoadInfo, traceback)
-  local logFile = Path.join(FS.getRoot("logs"), library.name..".log")
+  local logFile = Path.join(FS.getRoot("logs"), library.name .. ".log")
   local msg = string.format("Failed to construct unit: %s",
                             origLoadInfo.moduleName)
   if saveErrorReport(msg, traceback, logFile) then
@@ -117,12 +117,13 @@ end
 
 local librarySearchOrder = {
   "builtins",
-  "core"
+  "core",
+  "teletype"
 }
 
 local function instantiate(loadInfo, args)
   if loadInfo == nil then
-    app.logError("Factory.instantiate(nil): invalid loadInfo.")
+    app.logError("Factory.instantiate: invalid loadInfo.")
     return
   end
   -- First try the library given in the loadInfo.
@@ -132,25 +133,34 @@ local function instantiate(loadInfo, args)
   else
     -- Then try searching other libraries for a match.
     app.logWarn(
-        "Factory.instantiate(%s.%s): not found, trying other libraries.",
-        loadInfo.libraryName, loadInfo.moduleName)
+        "Factory.instantiate: %s not found in %s, trying other libraries.",
+        loadInfo.moduleName, loadInfo.libraryName)
     for _, libraryName in ipairs(librarySearchOrder) do
       local library = LoadedLibraryHash[libraryName]
       if library and library:find(loadInfo.moduleName) then
         local unit = instantiateFromLibrary(library, loadInfo, args)
         if unit then
-          app.logInfo("Factory.instantiate(%s.%s): found replacement in %s.",
-                      loadInfo.libraryName, loadInfo.moduleName, library.name)
+          app.logInfo("Factory.instantiate: %s found replacement in %s.",
+                      loadInfo.moduleName, library.name)
           return unit
+        else
+          app.logInfo("Factory.instantiate: %s not found in %s.",
+          loadInfo.moduleName, library.name)
         end
       end
     end
+    app.logError("Factory.instantiate: Failed to find %s.", loadInfo.moduleName)
   end
 end
 
 local function load(library)
   LoadedLibraryList[#LoadedLibraryList + 1] = library
   LoadedLibraryHash[library.name] = library
+  for _, alias in ipairs(library.aliases) do
+    if LoadedLibraryHash[alias] == nil then
+      LoadedLibraryHash[alias] = library
+    end
+  end
   for _, category in ipairs(library.categoryList) do
     if not CategoryHash[category] then
       CategoryHash[category] = true

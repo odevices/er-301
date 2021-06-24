@@ -10,7 +10,7 @@ local CV = Class {}
 CV:include(Unit)
 
 function CV:init(args)
-  args.title = "CV (i2c)"
+  args.title = "SC.CV (i2c)"
   args.suppressTitleGeneration = true
   args.mnemonic = "CV"
   Unit.init(self, args)

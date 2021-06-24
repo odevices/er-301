@@ -10,7 +10,7 @@ local TR = Class {}
 TR:include(Unit)
 
 function TR:init(args)
-  args.title = "TR (i2c)"
+  args.title = "SC.TR (i2c)"
   args.suppressTitleGeneration = true
   args.mnemonic = "TR"
   Unit.init(self, args)

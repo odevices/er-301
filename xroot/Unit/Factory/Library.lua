@@ -25,6 +25,7 @@ function Library:loadFromTable(t)
 
   self:setInstanceName(t.name)
   self.name = name
+  self.aliases = t.aliases or {}
   self.title = title
   self.contact = t.contact
   self.keyword = t.keyword
