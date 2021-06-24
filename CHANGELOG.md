@@ -3,6 +3,15 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
+# v0.6.13
+* FIX: Crash when modulating GrainStretch jitter to negative values. [Issue #36](https://github.com/odevices/er-301/issues/36)
+* FIX: Teletype units from pre-v0.6 quicksaves/presets were not being loaded. [Issue #37](https://github.com/odevices/er-301/issues/37)
+* FIX: Show post-control signal in the scope view. Thank you to [tmfset](https://github.com/tmfset) for the [pull request](https://github.com/odevices/er-301/pull/34).
+* FIX: Tying parameters to lua expressions was broken. [Issue #31](https://github.com/odevices/er-301/issues/31)
+
+# v0.6.12
+* Did not publically release.
+
 # v0.6.11
 * FIX: WAV files with CUE markers were being overwritten with ER-301 format slice data (*.slc) when saving.  [Issue #30](https://github.com/odevices/er-301/issues/30).
 

@@ -14,38 +14,18 @@ end
 
 local function install(self, archive)
   local failed = 0
-  -- First try to install MLO, SBL, kernel.bin by name.
+
   if not installFile(self, archive, "MLO") then failed = failed + 1 end
   if not installFile(self, archive, "SBL") then failed = failed + 1 end
   if not installFile(self, archive, "kernel.bin") then failed = failed + 1 end
-
-  -- Next install any other files found in the archive.
-  local skip = {}
-  skip["kernel.bin"] = true
-  skip["MLO"] = true
-  skip["SBL"] = true
-  skip["install.lua"] = true
-
-  if archive.getFileCount and archive.getFilename then
-
-    local n = archive:getFileCount()
-    for i = 1, n do
-      local filename = archive:getFilename(i - 1)
-      if not skip[filename] then
-        if not installFile(self, archive, filename) then
-          failed = failed + 1
-        end
-      end
+  if failed == 0 then
+    if not installFile(self, archive, "core-FIRMWARE_VERSION.pkg") then
+      failed = failed + 1
     end
-
-  else
-
-    self:msg("** Installing from pre-v0.6 firmware. **")
-    self:msg("Packages cannot be installed. Run this installer again")
-    self:msg("after booting into the new firmware.")
-
+    if not installFile(self, archive, "teletype-FIRMWARE_VERSION.pkg") then
+      failed = failed + 1
+    end
   end
-
   return failed == 0
 end
 

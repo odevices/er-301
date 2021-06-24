@@ -9,12 +9,16 @@ firmware_contents += $(build_dir)/sbl/SBL
 firmware_contents += $(build_dir)/pbl/MLO
 firmware_contents += $(build_dir)/mods/core-$(FIRMWARE_VERSION).pkg
 firmware_contents += $(build_dir)/mods/teletype-$(FIRMWARE_VERSION).pkg
-firmware_contents += scripts/install.lua
+firmware_contents += $(build_dir)/install.lua
 
 $(firmware_archive): $(firmware_contents)
 	@echo $(describe_env) ZIP $(describe_target)
 	@rm -rf $(firmware_archive)
 	@$(ZIP) -j $(firmware_archive) $(firmware_contents)	
+
+$(build_dir)/install.lua: scripts/install.lua
+	@echo $(describe_env) SED $(describe_target)
+	@sed 's/FIRMWARE_VERSION/$(FIRMWARE_VERSION)/g' $< > $@
 
 app-libs:
 	+$(MAKE) -f scripts/lua.mk PROFILE=$(PROFILE) ARCH=$(ARCH)
