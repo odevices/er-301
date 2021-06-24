@@ -16,9 +16,9 @@ ifndef ARCH
 endif
 
 FIRMWARE_NAME = Thoon
-FIRMWARE_VERSION = 0.6.11
+FIRMWARE_VERSION = 0.6.13
 
-FIRMWARE_STATUS.release = unstable
+FIRMWARE_STATUS.release = stable
 FIRMWARE_STATUS.debug = debug
 FIRMWARE_STATUS.testing = testing
 
