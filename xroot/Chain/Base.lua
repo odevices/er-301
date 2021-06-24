@@ -444,7 +444,6 @@ function ChainBase:removeMarkedUnits()
   self:emitSignal("contentChanged", self)
   self:start()
   Busy.stop()
-  return
 end
 
 function ChainBase:removeAllUnits()
@@ -466,7 +465,6 @@ function ChainBase:removeAllUnits()
   self:enableSelection()
   self:emitSignal("contentChanged", self)
   self:start()
-  return
 end
 
 function ChainBase:rebuildGraph()

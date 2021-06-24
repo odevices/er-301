@@ -44,8 +44,7 @@ local function error(...)
   end
 end
 
-local function stop(force)
-  if force then refCount = 1 end
+local function stop()
   refCount = refCount - 1
   if refCount == 0 then
     busyThread:disable()
@@ -53,6 +52,11 @@ local function stop(force)
   elseif refCount < 0 then
     refCount = 0
   end
+end
+
+local function reset()
+  refCount = 1
+  stop()
 end
 
 local function enable()
@@ -73,6 +77,7 @@ end
 return {
   start = start,
   stop = stop,
+  reset = reset,
   kill = kill,
   status = status,
   error = error,

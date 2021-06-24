@@ -220,7 +220,6 @@ local function loadUnitPreset(unit, fullpath)
     else
       showMessage("Failed to read unit preset:", filename)
     end
-    Busy.stop()
   end
 end
 

@@ -57,7 +57,7 @@ local function showDialog(reportSaved)
     dialog:addMainGraphic(label)
   end
 
-  Busy.stop(true)
+  Busy.reset()
   Overlay.clearAll()
   local Context = require "Base.Context"
   local context = Context("Crash", dialog)
