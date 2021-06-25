@@ -13,21 +13,19 @@ function SchroederAllPass:init(args)
   Unit.init(self, args)
 end
 
-function SchroederAllPass:onLoadGraph(channelCount)
-  local delay = self:addObject("delay", libcore.Delay(1))
+function SchroederAllPass:createChannel(i, delayAdapter, gainAdapter)
+  local delay = self:addObject("delay"..i, libcore.Delay(1))
   delay:allocateTimeUpTo(0.05)
-  local delayAdapter = self:addObject("delayAdapter", app.ParameterAdapter())
-  local gainAdapter = self:addObject("gainAdapter", app.ParameterAdapter())
-  local feedBackMix = self:addObject("feedBackMix", app.Sum())
-  local feedBackGain = self:addObject("feedBackGain", app.ConstantGain())
-  local feedForwardMix = self:addObject("feedForwardMix", app.Sum())
-  local feedForwardGain = self:addObject("feedForwardGain", app.ConstantGain())
-  local limiter = self:addObject("limiter", libcore.Limiter())
+  local feedBackMix = self:addObject("feedBackMix"..i, app.Sum())
+  local feedBackGain = self:addObject("feedBackGain"..i, app.ConstantGain())
+  local feedForwardMix = self:addObject("feedForwardMix"..i, app.Sum())
+  local feedForwardGain = self:addObject("feedForwardGain"..i, app.ConstantGain())
+  local limiter = self:addObject("limiter"..i, libcore.Limiter())
 
-  connect(self, "In1", feedBackMix, "Left")
+  connect(self, "In"..i, feedBackMix, "Left")
   connect(feedBackMix, "Out", delay, "Left In")
   connect(delay, "Left Out", feedForwardMix, "Left")
-  connect(feedForwardMix, "Out", self, "Out1")
+  connect(feedForwardMix, "Out", self, "Out"..i)
   connect(feedBackMix, "Out", feedForwardGain, "In")
   connect(feedForwardGain, "Out", feedForwardMix, "Right")
   connect(delay, "Left Out", feedBackGain, "In")
@@ -36,10 +34,20 @@ function SchroederAllPass:onLoadGraph(channelCount)
 
   tie(delay, "Left Delay", delayAdapter, "Out")
   tie(feedBackGain, "Gain", gainAdapter, "Out")
-  --tie(feedForwardGain, "Gain", "negate", gainAdapter, "Out")
+  tie(feedForwardGain, "Gain", "negate", gainAdapter, "Out")
+end
 
+function SchroederAllPass:onLoadGraph(channelCount)
+  local delayAdapter = self:addObject("delayAdapter", app.ParameterAdapter())
+  local gainAdapter = self:addObject("gainAdapter", app.ParameterAdapter())
+
+  for i = 1, channelCount do
+    self:createChannel(i, delayAdapter, gainAdapter)
+  end
+ 
   self:addMonoBranch("delay", delayAdapter, "In", delayAdapter, "Out")
   self:addMonoBranch("gain", gainAdapter, "In", gainAdapter, "Out")
+
 end
 
 local views = {
@@ -87,7 +95,10 @@ function SchroederAllPass:onLoadViews(objects, branches)
 end
 
 function SchroederAllPass:onRemove()
-  self.objects.delay:deallocate()
+  self.objects.delay1:deallocate()
+  if self.objects.delay2 then
+    self.objects.delay2:deallocate()
+  end
   Unit.onRemove(self)
 end
 
