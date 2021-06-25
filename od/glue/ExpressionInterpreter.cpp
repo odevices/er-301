@@ -1,5 +1,6 @@
 #include <od/glue/ExpressionInterpreter.h>
 #include <od/objects/Parameter.h>
+#include <hal/log.h>
 
 extern "C"
 {
@@ -30,19 +31,13 @@ extern "C"
 namespace od
 {
 
-  ExpressionInterpreter::ExpressionInterpreter()
+  ExpressionInterpreter::ExpressionInterpreter(bool init)
   {
-    Interpreter::init();
-  }
-
-  ExpressionInterpreter::~ExpressionInterpreter()
-  {
-  }
-
-  void ExpressionInterpreter::prepare()
-  {
-    if (!mPrepared)
+    if (init)
     {
+      logInfo("Initializing ExpressionInterpreter");
+      Interpreter::init();
+
       lua_gc(L, LUA_GCGEN, 0, 0);
 
 #ifndef BUILDOPT_LUA_USE_REALLOC
@@ -65,8 +60,11 @@ namespace od
       lua_setglobal(L, "TheFunctionTable");
       lua_getglobal(L, "TheFunctionTable");
       mFunctionTable = lua_gettop(L);
-      mPrepared = true;
     }
+  }
+
+  ExpressionInterpreter::~ExpressionInterpreter()
+  {
   }
 
   bool ExpressionInterpreter::compile(Expression &e)
@@ -77,7 +75,6 @@ namespace od
     size_t sz = tmp.length();
 
     disable();
-    prepare();
 
     // Compile the function string into a function object.
     if (luaL_loadbufferx(L, buff, sz, "expression", NULL))

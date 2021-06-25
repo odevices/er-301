@@ -10,7 +10,7 @@ namespace od
   class ExpressionInterpreter : public Interpreter
   {
   public:
-    ExpressionInterpreter();
+    ExpressionInterpreter(bool init = true);
     virtual ~ExpressionInterpreter();
 
     // Not OK to call in the audio thread.
@@ -30,8 +30,6 @@ namespace od
     int mFunctionTable = 1;
     bool mEnabled = true;
 
-    bool mPrepared = false;
-    void prepare();
     void enable();
     void disable();
   };

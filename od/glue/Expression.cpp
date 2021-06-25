@@ -18,7 +18,10 @@ namespace od
 
   Expression::~Expression()
   {
-    interpreter().remove(*this);
+    if (mOperation == Operation::function)
+    {
+      interpreter().remove(*this);
+    }
     clearParameters();
   }
 

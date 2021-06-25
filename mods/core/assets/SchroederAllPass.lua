@@ -36,7 +36,7 @@ function SchroederAllPass:onLoadGraph(channelCount)
 
   tie(delay, "Left Delay", delayAdapter, "Out")
   tie(feedBackGain, "Gain", gainAdapter, "Out")
-  tie(feedForwardGain, "Gain", "negate", gainAdapter, "Out")
+  --tie(feedForwardGain, "Gain", "negate", gainAdapter, "Out")
 
   self:addMonoBranch("delay", delayAdapter, "In", delayAdapter, "Out")
   self:addMonoBranch("gain", gainAdapter, "In", gainAdapter, "Out")
