@@ -9,12 +9,12 @@ local unitInputNames = {
   ["In4"] = 3
 }
 
-local function connectUnitInput(unit, inputName, toObject, toPortName)
+local function connectUnitInput(pUnit, inputName, toObject, toPortName)
   local channel = unitInputNames[inputName]
-  if channel == nil then
-    app.logError("connect: Unit(%s) has no input named %s", unit:name(),
+  if channel == nil or channel >= pUnit:getInputCount() then
+    app.logError("connect: Unit(%s) has no input named %s", pUnit:name(),
                  inputName)
-  elseif not unit:addInput(channel, toObject, toPortName) then
+  elseif not pUnit:addInput(channel, toObject, toPortName) then
     app.logError("connect: Object(%s) has no port named '%s'.", toObject:name(),
                  toPortName)
   end
@@ -27,12 +27,12 @@ local unitOutputNames = {
   ["Out4"] = 3
 }
 
-local function connectUnitOutput(fromObject, fromPortName, unit, outputName)
+local function connectUnitOutput(fromObject, fromPortName, pUnit, outputName)
   local channel = unitOutputNames[outputName]
-  if channel == nil then
-    app.logError("connect: Unit(%s) has no output named %s", unit:name(),
+  if channel == nil or channel >= pUnit:getOutputCount() then
+    app.logError("connect: Unit(%s) has no output named %s", pUnit:name(),
                  outputName)
-  elseif not unit:setOutput(channel, fromObject, fromPortName) then
+  elseif not pUnit:setOutput(channel, fromObject, fromPortName) then
     app.logError("connect: Object(%s) has no port named '%s'.",
                  fromObject:name(), fromPortName)
   end

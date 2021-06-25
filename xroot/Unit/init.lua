@@ -2,7 +2,6 @@ local app = app
 local Class = require "Base.Class"
 local Base = require "Unit.Section"
 local Branch = require "Chain.Branch"
-local Env = require "Env"
 local Persist = require "Persist"
 local Keyboard = require "Keyboard"
 local Utils = require "Utils"
