@@ -85,7 +85,7 @@ There is still plenty to learn outside of the above 3 examples.  Here are some t
 | Adding a configuration menu to your package. | teletype: [init.lua](../mods/teletype/assets/init.lua) |
 
 ## Failed to load ELF File
-You have a package that works in the emulator but fails to load on the actual device, so you inspect the error log and see that your package's shared library (*.so) has failed to load with the message **Failed to load ELF File**.  99% of the time the reason will be one or more symbols that your library is referencing but the dynamic code loader could not resolve.  You would then take this listing of unresolved symbols and try to figure out why they got compiled into your shared library.  Most likely, you have linked against a standard library that is available on Linux but not on the ER-301, something that can be triggered by an errant ```#include <iostream>``` statement in your code.
+You have a package that works in the emulator but fails to load on the actual device, so you inspect the error log and see that your package's shared library (*.so) has failed to load with the message **Failed to load ELF File**.  Most of the time the reason will be that one or more symbols referenced by your library could not be resolved by the dynamic loader.  To fix this problem, you need to determine what symbols are missing and try to figure out how they got compiled into your shared library.  Most likely, you have linked against a standard library that is available on Linux but not on the ER-301, something that can be triggered by an errant ```#include <iostream>``` statement in your code.
 
 So how should you proceed to debug this error?  Here are two options.
 
