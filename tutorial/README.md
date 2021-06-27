@@ -85,20 +85,35 @@ There is still plenty to learn outside of the above 3 examples.  Here are some t
 | Adding a configuration menu to your package. | teletype: [init.lua](../mods/teletype/assets/init.lua) |
 
 ## Failed to load ELF File
-You have a package that works in the emulator but fails to load on the actual device, so you inspect the error log and see that you package's shared library (*.so) has failed to load with the message "Failed to load ELF File".  How should you proceed to debug this error?  Here are two options.
+You have a package that works in the emulator but fails to load on the actual device, so you inspect the error log and see that your package's shared library (*.so) has failed to load with the message **Failed to load ELF File**.  99% of the time the reason will be one or more symbols that your library is referencing but the dynamic code loader could not resolve.  You would then take this listing of unresolved symbols and try to figure out why they got compiled into your shared library.  Most likely, you have linked against a standard library that is available on Linux but not on the ER-301, something that can be triggered by an errant ```#include <iostream>``` statement in your code.
+
+So how should you proceed to debug this error?  Here are two options.
 
 ### Inspect the system logs
-The ELF loader (and all other messages that originate in the C/C++ code) prints its error messages to the UART/USB console.  There you will supposedly see the reason for the failure.  99% of the time the reason will be one or more symbolst hat your library is referencing but the dynamic code loader could not resolve.  You would then take this listing of unresolved symbols and try to figure out they got compiled into your shared library.
+The ELF loader (and all other messages that originate in the C/C++ code) prints its error messages to the UART/USB serial console.  There you will see more detailed messages describing the reason for the load failure.  In the case of missing (unresolved) symbols, those will all be listed, one per line, like this:
+
+```
+WARN Unresolved symbol: __some_symbol_name__
+.
+.
+.
+WARN Unresolved symbol: __another_symbol_name__
+ERROR Aborting ELF load due to N unresolved symbol(s).
+```
+
+There are of course other reasons that the loader could fail.  The system log will help you debug those too.
 
 ### Check for missing symbols during compilation
-Compiling the base firmware for the ER-301 hardware:
+It is possible to check for any missing symbols when compiling your package.  However, you need to first compile the base firmware so that you have a reference listing of the symbols that the firmware exports.  
+
+To compile the base firmware for the ER-301 hardware:
 
 ```bash
 cd <top-of-er-301-source-tree>
 make app PROFILE=release ARCH=am335x
 ```
 
-will generate symbol listings (located at ```er-301/release/am335x/app/exports.sym```) that can be used to check for missing symbols.  Assuming this has completed successfully then thereafter whenever you want to check for missing symbols just run:
+This will generate symbol listings at ```er-301/release/am335x/app/exports.sym```.  Assuming this has completed successfully then thereafter whenever you want to check for missing symbols just run:
 
 ```bash
 cd <top-of-your-package-source-tree>
