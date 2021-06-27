@@ -83,6 +83,29 @@ There is still plenty to learn outside of the above 3 examples.  Here are some t
 | Optimizing DSP code with NEON intrinsics. | builtin: [SawtoothOscillator.h](../mods/core/objects/oscillators/SawtoothOscillator.h), [SawtoothOscillator.cpp](../mods/core/objects/oscillators/SawtoothOscillator.cpp) |
 | Adding a configuration menu to your package. | teletype: [init.lua](../mods/teletype/assets/init.lua) |
 
+## Failed to load ELF File
+You have a package that works in the emulator but fails to load on the actual device, so you inspect the error log and see that you package's shared library (*.so) has failed to load with the message "Failed to load ELF File".  How should you proceed to debug this error?  Here are two options.
+
+### Inspect the system logs
+The ELF loader (and all other messages that originate in the C/C++ code) prints its error messages to the UART/USB console.  There you will supposedly see the reason for the failure.  99% of the time the reason will be one or more symbolst hat your library is referencing but the dynamic code loader could not resolve.  You would then take this listing of unresolved symbols and try to figure out they got compiled into your shared library.
+
+### Check for missing symbols during compilation
+Compiling the base firmware for the ER-301 hardware:
+
+```bash
+cd <top-of-er-301-source-tree>
+make app PROFILE=release ARCH=am335x
+```
+
+will generate symbol listings (located at ```er-301/release/am335x/app/exports.sym```) that can be used to check for missing symbols.  Assuming this has completed successfully then thereafter whenever you want to check for missing symbols just run:
+
+```bash
+cd <top-of-your-package-source-tree>
+make missing
+```
+
+This of course assumes that your Makefile is based on the one provided with the tutorial projects.  If not, it is not hard to role your own ```missing``` target to your custom Makefile.  The procedure involves running ```nm --undefined-only``` on your shared library to generate a listing of imported symbols, and then comparing that to the exported symbols provided by the firmware (again located at ```er-301/release/am335x/app/exports.sym``` after a successful compilation of the firmware).
+
 ## Tips for coding with NEON intrinsics
 
 * You are basically telling the compiler that you want to take over (i.e. hold my beer/milk/tea while I show you how it is done) and thus many optimizations will not be attempted on code sections that use NEON intrinsics and/or data types.
