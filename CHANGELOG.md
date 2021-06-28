@@ -3,6 +3,9 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
+# v0.6.14
+* FIX: Crashes caused by particular units that used tied expressions in their DSP graphs.
+
 # v0.6.13
 * FIX: Package installation was broken when upgrading from pre-v0.6 firmware.
 * FIX: Crash when modulating GrainStretch jitter to negative values. [Issue #36](https://github.com/odevices/er-301/issues/36)
