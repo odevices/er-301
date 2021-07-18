@@ -153,7 +153,7 @@ A Graphic is any C++ class that derives from the abstract class defined in [Grap
 
 ### ViewControl
 
-A ViewControl represents a UI control on a Unit.  Here are a few common types of controls provided by the system:
+A ViewControl represents a UI element on a Unit.  Here are a few common types of controls provided by the system:
 
 * Fader: A simple fader with no modulation.
 * GainBias: An attenuverting (i.e. gain) control with offset (i.e. bias) fader that accepts modulation.
