@@ -136,7 +136,7 @@ This of course assumes that your Makefile is based on the one provided with the 
 
 ### Unit
 
-A Unit is any Lua class that inherits from [Unit/index.lua](../xroot/Unit/init.lua).  It encapsulates a custom DSP graph of [Objects](#objects) and the UI for interacting with it.  The UI implementation will optionally include menu commands as well as a list of [ViewControls](#viewcontrol) where each control exposes a part of the Unit's DSP graph for manipulation via fader or modulation.  The Unit implementation also defines any special preset saving/loading logic that the default system logic will not handle correctly.
+A Unit is any Lua class that inherits from [Unit/init.lua](../xroot/Unit/init.lua).  It encapsulates a custom DSP graph of [Objects](#objects) and the UI for interacting with it.  The UI implementation will optionally include menu commands as well as a list of [ViewControls](#viewcontrol) where each control exposes a part of the Unit's DSP graph for manipulation via fader or modulation.  The Unit implementation also defines any special preset saving/loading logic that the default system logic will not handle correctly.
 
 ### Object
 
@@ -160,4 +160,4 @@ A ViewControl represents a UI element on a Unit.  Here are a few common types of
 * GainBias: An attenuverting (i.e. gain) control with offset (i.e. bias) fader that accepts modulation.
 * Pitch: A control designed for accepting V/oct modulation with an offset in cents.
 
-More control types can be made by deriving from [Unit/ViewControl/index.lua](../xroot/Unit/ViewControl/init.lua).
+More control types can be made by deriving from [Unit/ViewControl/init.lua](../xroot/Unit/ViewControl/init.lua).
