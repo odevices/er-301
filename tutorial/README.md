@@ -140,13 +140,15 @@ A Unit is any Lua class that inherits from [Unit/init.lua](../xroot/Unit/init.lu
 
 ### Object
 
-An Object is any C++ class that derives from the abstract class defined in [Object.h](../od/objects/Object.h).  An Object defines some or all of the following:
+An Object is any C++ class that derives from the abstract class defined in [Object.h](../od/objects/Object.h).  The core purpose of any Object is encapsulate a DSP algorithm (written in C++), exposing inputs and outputs, so that it can be instantiated and utilized in a signal processing graph.  In order to accomplish this, an Object defines some or all of the following:
 
 * *Outlets*: Named audio-rate (float) outputs, typically audio or CV.
 * *Inlets*: Named audio-rate (float) inputs, typically audio or CV.
 * *Parameters*: Named (float) values that are updated at frame-rate, good for mapping to faders.
 * *Options*: Named (int) values are updated by the GUI, good for mapping to buttons.
 * *process()*: A callback that is called at frame-rate by the audio thread.  You should implement the Object's DSP algorithm here.  This typically, involves reading data from any Inlets, calculating the desired output based on values from any Parameters or Options, and then writing that output to Outlets.
+
+Yes, I know this is not the greatest name.  *Object* was meant to just be a place-holder until I could find a better name.  However, that has not happened yet.  Some candidates are: Node, Processor, Algorithm, GraphNode, DSPGraphNode, and so on.
 
 ### Graphic
 
