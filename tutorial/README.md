@@ -156,8 +156,10 @@ A Graphic is any C++ class that derives from the abstract class defined in [Grap
 
 A ViewControl represents a UI element on a Unit.  Here are a few common types of controls provided by the system:
 
-* Fader: A simple fader with no modulation.
-* GainBias: An attenuverting (i.e. gain) control with offset (i.e. bias) fader that accepts modulation.
-* Pitch: A control designed for accepting V/oct modulation with an offset in cents.
+* [Fader](../xroot/Unit/ViewControl/Fader.lua): A simple fader with no modulation.  This control simply wraps a Parameter.
+* [GainBias](../xroot/Unit/ViewControl/GainBias.lua): An attenuverting (i.e. gain) control with offset (i.e. bias) fader that accepts modulation.  You will almost always wrap a GainBias-like Object and a Branch with this control
+* [Pitch](../xroot/Unit/ViewControl/Pitch.lua): A control designed for accepting V/oct modulation with an offset in cents.  Wraps an Offset-like Object and a Branch.
+* [Gate](../xroot/Unit/ViewControl/Gate.lua): A control for wrapping a Comparator-like Object and a Branch.
+* [Clock](../xroot/Unit/ViewControl/Clock.lua): A control for wrapping a TapTempo-like Object and a Branch.
 
 More control types can be made by deriving from [Unit/ViewControl/init.lua](../xroot/Unit/ViewControl/init.lua).
