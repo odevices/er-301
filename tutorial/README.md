@@ -136,7 +136,7 @@ This of course assumes that your Makefile is based on the one provided with the 
 
 ### Unit
 
-A Unit is any Lua class that inherits from [Unit/index.lua](https://github.com/odevices/er-301/blob/master/xroot/Unit/init.lua).  It encapsulates a custom DSP graph of [Objects](#objects) and the UI for interacting with it.  The UI defined by the Unit implementating includes menu commands as well as a list of [ViewControls](#viewcontrol) where each control exposes a part of the Unit's DSP graph for manipulation via fader or modulation.  The Unit implementation also defines any special preset saving/loading logic that the default system logic will not handle correctly.
+A Unit is any Lua class that inherits from [Unit/index.lua](https://github.com/odevices/er-301/blob/master/xroot/Unit/init.lua).  It encapsulates a custom DSP graph of [Objects](#objects) and the UI for interacting with it.  The UI implementation will optionally include menu commands as well as a list of [ViewControls](#viewcontrol) where each control exposes a part of the Unit's DSP graph for manipulation via fader or modulation.  The Unit implementation also defines any special preset saving/loading logic that the default system logic will not handle correctly.
 
 ### Object
 
