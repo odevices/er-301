@@ -164,4 +164,4 @@ A ViewControl represents a UI element on a Unit.  Here are a few common types of
 * [Gate](../xroot/Unit/ViewControl/Gate.lua): A control for wrapping a Comparator-like Object and a Branch.
 * [Clock](../xroot/Unit/ViewControl/Clock.lua): A control for wrapping a TapTempo-like Object and a Branch.
 
-More control types can be made by deriving from [Unit/ViewControl/init.lua](../xroot/Unit/ViewControl/init.lua).
+More control types can be made by deriving from [Unit/ViewControl/init.lua](../xroot/Unit/ViewControl/init.lua).  ViewControls are derived from [Observable](../xroot/Base/Observable.lua) and [Widget](../xroot/Base/Widget.lua), which means they can consume signals (e.g. card ejected, USB cable unplugged, unit renamed, etc.) and events (button presses, encoder movement, etc.).  The look of a ViewControl is controlled by one or more instances of [Graphics](#graphic).
