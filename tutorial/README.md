@@ -11,6 +11,7 @@
   * [Further Reading](#further-reading)
   * [Failed to load ELF File](#failed-to-load-elf-file)
   * [Tips for coding with NEON intrinsics](#tips-for-coding-with-neon-intrinsics)
+  * [Glossary](#glossary)
 
 ## Introduction
 
