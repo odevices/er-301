@@ -130,3 +130,33 @@ This of course assumes that your Makefile is based on the one provided with the 
 * If that fails, then replace the smallest (most contained) section possible with your own vectorization via NEON intrinsics. If you can turn your optimization on and off with a simple set of #ifdef/#endif statements then you know you have done it right.
 * In other words, the ideal coding style for NEON intrinsics is to treat it like inline assembly: make the smallest surgical strike as possible.
 * NEON (and in fact all SIMD) data types are not proper citizens of high-level language design. They have special requirements (memory alignment, special registers, timing constraints) and sometimes do not (and can not) fit neatly within language standards (especially C++). The correct level of abstraction is to think of them as simple macros for assembly.
+
+## Glossary
+
+### Unit
+
+A Unit is any Lua class that inherits from [Unit/index.lua](https://github.com/odevices/er-301/blob/master/xroot/Unit/init.lua).  It encapsulates a custom DSP graph of [Objects](#objects) and the UI for interacting with it.  It also defines any special preset saving/loading logic that the builtin logic will not handle.
+
+### Object
+
+An Object is any C++ class that derives from the abstract class defined in [Object.h](https://github.com/odevices/er-301/blob/master/od/objects/Object.h).  An Object defines some or all of the following:
+
+* *Outlets*: Named audio-rate (float) outputs, typically audio or CV.
+* *Inlets*: Named audio-rate (float) inputs, typically audio or CV.
+* *Parameters*: Named (float) values that are updated at frame-rate, good for mapping to faders.
+* *Options*: Named (int) values are updated by the GUI, good for mapping to buttons.
+* *process()*: A callback that is called at frame-rate by the audio thread.  You should implement the Object's DSP algorithm here.  This typically, involves reading data from any Inlets, calculating the desired output based on values from any Parameters or Options, and then writing that output to Outlets.
+
+### Graphic
+
+A Graphic is any C++ class that derives from the abstract class defined in [Graphic.h](https://github.com/odevices/er-301/blob/master/od/graphics/Graphic.h).  A Graphic is responsible for drawing to the screen (via its *draw()* callback) as well as managing any of its children Graphics.  Any Graphic's local coordinate system is defined by a Graphic's parent Graphic.  A Graphic does not respond to user input.  That is instead handled by the Lua-implemented event engine.
+
+### ViewControl
+
+A ViewControl represents a UI control on a Unit.  Here are a few common types of controls provided by the system:
+
+* Fader: A simple fader with no modulation.
+* GainBias: An attenuverting (i.e. gain) control with offset (i.e. bias) fader that accepts modulation.
+* Pitch: A control designed for accepting V/oct modulation with an offset in cents.
+
+More control types can be made by deriving from [Unit/ViewControl/index.lua](https://github.com/odevices/er-301/blob/master/xroot/Unit/ViewControl/init.lua).
