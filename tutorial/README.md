@@ -140,7 +140,7 @@ A Unit is any Lua class that inherits from [Unit/init.lua](../xroot/Unit/init.lu
 
 ### Object
 
-An Object is any C++ class that derives from the abstract class defined in [Object.h](../od/objects/Object.h).  The core purpose of any Object is encapsulate a DSP algorithm (written in C++), exposing inputs and outputs, so that it can be instantiated and utilized in a signal processing graph.  In order to accomplish this, an Object defines some or all of the following:
+An Object is any C++ class that derives from the abstract class defined in [Object.h](../od/objects/Object.h).  The core purpose of any Object is to encapsulate a DSP algorithm (written in C++), exposing inputs and outputs, so that it can be instantiated and utilized in a signal processing graph.  In order to accomplish this, an Object will define some of the following:
 
 * *Outlets*: Named audio-rate (float) outputs, typically audio or CV.
 * *Inlets*: Named audio-rate (float) inputs, typically audio or CV.
@@ -152,7 +152,7 @@ Yes, I know this is not the greatest name.  *Object* was meant to just be a plac
 
 ### Graphic
 
-A Graphic is any C++ class that derives from the abstract class defined in [Graphic.h](../od/graphics/Graphic.h).  A Graphic is responsible for drawing to the screen (via its *draw()* callback) as well as managing any of its children Graphics.  Any Graphic's local coordinate system is defined by a Graphic's parent Graphic.  A Graphic does not respond to user input.  That is instead handled by the Lua-implemented event engine.
+A Graphic is any C++ class that derives from the abstract class defined in [Graphic.h](../od/graphics/Graphic.h).  A Graphic is responsible for drawing to the screen (via its *draw()* callback) as well as managing any of its children Graphics.  A Graphic's local coordinate system is defined by its parent Graphic.  A Graphic does not respond to user input.  User events are instead handled by the Lua-implemented event engine.
 
 ### ViewControl
 
