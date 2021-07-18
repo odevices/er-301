@@ -21,7 +21,7 @@ This folder contains 3 example projects that progressively increase in complexit
 
 ## Step 1: Make your first unit
 
-Our first unit is 1-operator FM oscillator that is built entirely out of existing DSP objects that can be found in the firmware and the core library.  Since the implementation is pure Lua, there are no files to compile.  The *Step 1* makefile just zips up the *.lua files and names it appropriately with a version string.  
+Our first [unit](#unit) is 1-operator FM oscillator that is built entirely out of existing DSP objects that can be found in the firmware and the core library.  Since the implementation is pure Lua, there are no files to compile.  The *Step 1* makefile just zips up the *.lua files and names it appropriately with a version string.  
 
 ```bash
 cd step1
@@ -42,7 +42,7 @@ Take a look at the [Makefile](step1/Makefile) for more details.
 
 ## Step 2: Add custom DSP code
 
-Now we add your own custom C++ [Object](../od/objects/Object.h) (implemented by [EuclideanSequencer.h](step2/EuclideanSequencer.h) and [EuclideanSequencer.cpp](step2/EuclideanSequencer.cpp)) and define a new unit (implemented in [EuclidsCatsUnit.lua](step3/EuclidsCatsUnit.lua)) that uses your custom Object in its DSP graph.
+Now we add your own custom C++ [Object](#object) (implemented by [EuclideanSequencer.h](step2/EuclideanSequencer.h) and [EuclideanSequencer.cpp](step2/EuclideanSequencer.cpp)) and define a new unit (implemented in [EuclidsCatsUnit.lua](step3/EuclidsCatsUnit.lua)) that uses your custom Object in its DSP graph.
 
 To compile:
 ```bash
@@ -69,7 +69,7 @@ Take a look at the [Makefile](step2/Makefile) for more details.
 
 ## Step 3: Add custom graphics
 
-Finally, we add our own custom graphics to the [EuclidsCatsUnit.lua](step3/EuclidsCatsUnit.lua) created in Step 2.  The C++ [Graphic](../od/graphics/Graphic.h) is implemented in [CatCircle.h](step3/CatCircle.h) and [CatCircle.cpp](step3/CatCircle.cpp).  To actually use this graphic in a unit, we must also wrap the C++ CatCircle in a lua ViewControl as done in [CatCircle.lua](step3/CatCircle.lua).
+Finally, we add our own custom graphics to the [EuclidsCatsUnit.lua](step3/EuclidsCatsUnit.lua) created in Step 2.  The C++ [Graphic](#graphic) is implemented in [CatCircle.h](step3/CatCircle.h) and [CatCircle.cpp](step3/CatCircle.cpp).  To actually use this graphic in a unit, we must also wrap the C++ CatCircle in a lua [ViewControl](#viewcontrol) as done in [CatCircle.lua](step3/CatCircle.lua).
 
 This project will generate a file called **tutorial-0.0.3.pkg** in the build directory.  All the build and install commands are the same as in Step 2.  Have a look at the [Makefile](step3/Makefile) for more details.
 
@@ -136,11 +136,11 @@ This of course assumes that your Makefile is based on the one provided with the 
 
 ### Unit
 
-A Unit is any Lua class that inherits from [Unit/index.lua](https://github.com/odevices/er-301/blob/master/xroot/Unit/init.lua).  It encapsulates a custom DSP graph of [Objects](#objects) and the UI for interacting with it.  The UI implementation will optionally include menu commands as well as a list of [ViewControls](#viewcontrol) where each control exposes a part of the Unit's DSP graph for manipulation via fader or modulation.  The Unit implementation also defines any special preset saving/loading logic that the default system logic will not handle correctly.
+A Unit is any Lua class that inherits from [Unit/index.lua](../xroot/Unit/init.lua).  It encapsulates a custom DSP graph of [Objects](#objects) and the UI for interacting with it.  The UI implementation will optionally include menu commands as well as a list of [ViewControls](#viewcontrol) where each control exposes a part of the Unit's DSP graph for manipulation via fader or modulation.  The Unit implementation also defines any special preset saving/loading logic that the default system logic will not handle correctly.
 
 ### Object
 
-An Object is any C++ class that derives from the abstract class defined in [Object.h](https://github.com/odevices/er-301/blob/master/od/objects/Object.h).  An Object defines some or all of the following:
+An Object is any C++ class that derives from the abstract class defined in [Object.h](../od/objects/Object.h).  An Object defines some or all of the following:
 
 * *Outlets*: Named audio-rate (float) outputs, typically audio or CV.
 * *Inlets*: Named audio-rate (float) inputs, typically audio or CV.
@@ -150,7 +150,7 @@ An Object is any C++ class that derives from the abstract class defined in [Obje
 
 ### Graphic
 
-A Graphic is any C++ class that derives from the abstract class defined in [Graphic.h](https://github.com/odevices/er-301/blob/master/od/graphics/Graphic.h).  A Graphic is responsible for drawing to the screen (via its *draw()* callback) as well as managing any of its children Graphics.  Any Graphic's local coordinate system is defined by a Graphic's parent Graphic.  A Graphic does not respond to user input.  That is instead handled by the Lua-implemented event engine.
+A Graphic is any C++ class that derives from the abstract class defined in [Graphic.h](../od/graphics/Graphic.h).  A Graphic is responsible for drawing to the screen (via its *draw()* callback) as well as managing any of its children Graphics.  Any Graphic's local coordinate system is defined by a Graphic's parent Graphic.  A Graphic does not respond to user input.  That is instead handled by the Lua-implemented event engine.
 
 ### ViewControl
 
@@ -160,4 +160,4 @@ A ViewControl represents a UI element on a Unit.  Here are a few common types of
 * GainBias: An attenuverting (i.e. gain) control with offset (i.e. bias) fader that accepts modulation.
 * Pitch: A control designed for accepting V/oct modulation with an offset in cents.
 
-More control types can be made by deriving from [Unit/ViewControl/index.lua](https://github.com/odevices/er-301/blob/master/xroot/Unit/ViewControl/init.lua).
+More control types can be made by deriving from [Unit/ViewControl/index.lua](../xroot/Unit/ViewControl/init.lua).
