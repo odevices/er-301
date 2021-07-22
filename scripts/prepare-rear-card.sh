@@ -6,7 +6,7 @@
 # > prepare-rear-card 0.6.12 /dev/mmcblk0 /dev/mmcblk0p1
 
 # Defaults
-DEFAULT_VERSION="0.6.13"
+DEFAULT_VERSION="0.6.14"
 #DEFAULT_CARD_DEVICE="/dev/sda"
 #DEFAULT_CARD_PARTITION="/dev/sda1"
 DEFAULT_CARD_DEVICE="/dev/mmcblk0"

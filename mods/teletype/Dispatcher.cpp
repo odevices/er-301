@@ -280,7 +280,7 @@ namespace teletype
       switch (msg.data[0])
       {
       case TO_TR:
-        // SC.TR 1-n �� --> Set TR value to �� (0/1)
+        // SC.TR 1-n α --> Set TR value to α (0/1)
         commandTRSet(delay, getPort(msg), getValue(msg));
         break;
       case TO_TR_TOG:
@@ -288,15 +288,15 @@ namespace teletype
         commandTRToggle(delay, getPort(msg));
         break;
       case TO_TR_TIME:
-        // SC.TR.TIME 1-n �� -->  time for TR.PULSE; �� in milliseconds
+        // SC.TR.TIME 1-n α -->  time for TR.PULSE; α in milliseconds
         commandTRPulseTime(getPort(msg), getValue(msg));
         break;
       case TO_TR_TIME_S:
-        // SC.TR.TIME.S 1-n �� -->  time for TR.PULSE; �� in seconds
+        // SC.TR.TIME.S 1-n α -->  time for TR.PULSE; α in seconds
         commandTRPulseTime(getPort(msg), getValue(msg) * 1000);
         break;
       case TO_TR_TIME_M:
-        // SC.TR.TIME.M 1-n �� --> time for TR.PULSE; �� in minutes
+        // SC.TR.TIME.M 1-n α --> time for TR.PULSE; α in minutes
         commandTRPulseTime(getPort(msg), getValue(msg) * 60000);
         break;
       case TO_TR_PULSE:
@@ -304,32 +304,32 @@ namespace teletype
         commandTRPulse(delay, getPort(msg));
         break;
       case TO_TR_POL:
-        // SC.TR.POL 1-n �� --> polarity for TO.TR.PULSE set to �� (0-1)
+        // SC.TR.POL 1-n α --> polarity for TO.TR.PULSE set to α (0-1)
         commandTRPolarity(delay, getPort(msg), getValue(msg));
         break;
 
       case TO_CV:
-        // SC.CV 1-n �� --> CV target �� (bipolar)
+        // SC.CV 1-n α --> CV target α (bipolar)
         commandCV(delay, getPort(msg), getValue(msg));
         break;
       case TO_CV_SET:
-        // SC.CV.SET 1-n �� --> set CV to �� (bipolar); ignoring SLEW
+        // SC.CV.SET 1-n α --> set CV to α (bipolar); ignoring SLEW
         commandCVSet(delay, getPort(msg), getValue(msg));
         break;
       case TO_CV_SLEW:
-        // SC.CV.SLEW 1-n �� --> CV slew time; �� in milliseconds
+        // SC.CV.SLEW 1-n α --> CV slew time; α in milliseconds
         commandCVSlew(getPort(msg), getValue(msg));
         break;
       case TO_CV_SLEW_S:
-        // SC.CV.SLEW.S 1-n �� --> CV slew time; �� in seconds
+        // SC.CV.SLEW.S 1-n α --> CV slew time; α in seconds
         commandCVSlew(getPort(msg), getValue(msg) * 1000);
         break;
       case TO_CV_SLEW_M:
-        // SC.CV.SLEW.M 1-n �� --> CV slew time; �� in minutes
+        // SC.CV.SLEW.M 1-n α --> CV slew time; α in minutes
         commandCVSlew(getPort(msg), getValue(msg) * 60000);
         break;
       case TO_CV_OFF:
-        // SC.CV.OFF 1-n �� --> CV offset; �� added at final stage
+        // SC.CV.OFF 1-n α --> CV offset; α added at final stage
         commandCVOffset(delay, getPort(msg), getValue(msg));
         break;
 

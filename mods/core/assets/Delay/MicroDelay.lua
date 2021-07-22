@@ -9,7 +9,7 @@ local MicroDelay = Class {}
 MicroDelay:include(Unit)
 
 function MicroDelay:init(args)
-  args.title = "uDelay"
+  args.title = "Micro Delay"
   args.mnemonic = "uD"
   Unit.init(self, args)
 end

@@ -574,7 +574,7 @@ in progress
 * NEW: Variable Delay > Feedback is now modulate-able.
 * NEW: Clocked Delay > Feedback is now modulate-able.
 * NEW: Freeverb > Reduced CPU usage by more than 50%.  Now 4% on 48kHz and 8% on 96kHz firmware.
-* NEW: uDelay > Cheaper and simpler version of the Fixed Delay unit.  Use this instead whenever you need to nudge a signal forward in time for synchronicity.
+* NEW: Micro Delay > Cheaper and simpler version of the Fixed Delay unit.  Use this instead whenever you need to nudge a signal forward in time for synchronicity.
 
 # v0.3.03
 
