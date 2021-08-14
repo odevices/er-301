@@ -74,7 +74,11 @@ function PinSet:deserialize(t)
         local control = unit:getControlByName(entry.controlId)
         if control then
           self:pinControl(control, entry.targetValue, entry.pinName)
+        else
+          app.logWarn("%s: could not find control id %s", self, entry.controlId)
         end
+      else
+        app.logWarn("%s: could not find unit instance %s", self, entry.unitKey)
       end
     end
     self:endViewModifications()

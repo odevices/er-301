@@ -844,7 +844,7 @@ local function generateInstanceKey()
   return string.format("%08x", app.Rng_read32())
 end
 
-local function regenerateInstanceKeys(presetData, keys)
+local function regenerateInstanceKeysHelper(presetData, keys)
   keys = keys or {}
   local originalKey = presetData.instanceKey
   if originalKey then
@@ -854,10 +854,29 @@ local function regenerateInstanceKeys(presetData, keys)
       presetData.originalInstanceKey = originalKey
     end
     keys[originalKey] = newKey
+    -- app.logInfo("Regenerate Keys: %s becomes %s", originalKey, newKey)
   end
   for k, v in pairs(presetData) do
-    if type(v) == "table" then regenerateInstanceKeys(v, keys) end
+    if type(v) == "table" then regenerateInstanceKeysHelper(v, keys) end
   end
+  return keys
+end
+
+local function propagateReplacements(presetData, replace)
+  for k, v in pairs(presetData) do
+    if type(v) == "table" then
+      propagateReplacements(v, replace)
+    elseif type(v) == "string" then
+      local newValue = replace[v]
+      if newValue then presetData[k] = newValue end
+    end
+  end
+end
+
+local function regenerateInstanceKeys(presetData)
+  local replaced = regenerateInstanceKeysHelper(presetData)
+  -- Propagate the replacements to the values of each (key,value) pair.
+  propagateReplacements(presetData, replaced)
 end
 
 local function serializeObjects(objects)
