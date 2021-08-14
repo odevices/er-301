@@ -8,4 +8,6 @@ namespace emu
   void putDisplayBuffer(DisplayBuffer *buffer);
   DisplayBuffer *getDisplayBuffer();
   int getEncoderValue();
+  bool isRearCardPresent();
+  bool isFrontCardPresent();
 }

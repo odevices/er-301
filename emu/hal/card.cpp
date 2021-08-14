@@ -3,6 +3,7 @@
 #include <hal/log.h>
 #include <hal/card.h>
 #include <hal/events.h>
+#include <emu/emu.h>
 
 typedef struct sd
 {
@@ -119,7 +120,7 @@ uint32_t Card_getMode(uint32_t drv)
 
 bool Card_connect(uint32_t drv, uint32_t requestedMode)
 {
-  if (sd[drv].mode == requestedMode)
+  if (sd[drv].mode == (int)requestedMode)
   {
     // Already connected in the requested mode.
     return true;
@@ -132,27 +133,35 @@ bool Card_connect(uint32_t drv, uint32_t requestedMode)
     // This should never happen but let it pass anyways.
     return true;
   }
-  sd[drv].mode = requestedMode;
-  switch (requestedMode)
+  if (Card_isPresent(drv))
   {
-  case CARD_MODE_RAW:
-    logDebug(1, "drv=%d connected in raw mode", drv);
-    if (drv == CARD_REAR)
+    sd[drv].mode = requestedMode;
+    switch (requestedMode)
     {
-      Events_push(EVENT_USB_REAR_CARD_MOUNT);
+    case CARD_MODE_RAW:
+      logDebug(1, "drv=%d connected in raw mode", drv);
+      if (drv == CARD_REAR)
+      {
+        Events_push(EVENT_USB_REAR_CARD_MOUNT);
+      }
+      else
+      {
+        Events_push(EVENT_USB_FRONT_CARD_MOUNT);
+      }
+      break;
+    case CARD_MODE_FATFS:
+      logDebug(1, "drv=%d connected in fatfs mode", drv);
+      break;
+    default:
+      break;
     }
-    else
-    {
-      Events_push(EVENT_USB_FRONT_CARD_MOUNT);
-    }
-    break;
-  case CARD_MODE_FATFS:
-    logDebug(1, "drv=%d connected in fatfs mode", drv);
-    break;
-  default:
-    break;
+    return true;
   }
-  return true;
+  else
+  {
+    logWarn("Card(%d) is not present.  Cannot connect.", drv);
+    return false;
+  }
 }
 
 void Card_disconnect(uint32_t drv)
@@ -173,5 +182,13 @@ void Card_disconnect(uint32_t drv)
 
 bool Card_isPresent(uint32_t drv)
 {
-  return Card_isConnected(drv);
+  if (drv == 0)
+  {
+    return emu::isRearCardPresent();
+  }
+  if (drv == 1)
+  {
+    return emu::isFrontCardPresent();
+  }
+  return false;
 }

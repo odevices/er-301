@@ -1,7 +1,8 @@
 #include <emu/emu.h>
 #include <emu/Emulator.h>
 
-namespace emu {
+namespace emu
+{
   static Emulator emulator;
 
   DisplayBuffer *getDisplayBuffer()
@@ -17,6 +18,16 @@ namespace emu {
   int getEncoderValue()
   {
     return emulator.getEncoderValue();
+  }
+
+  bool isRearCardPresent()
+  {
+    return emulator.isRearCardPresent();
+  }
+
+  bool isFrontCardPresent()
+  {
+    return emulator.isFrontCardPresent();
   }
 }
 

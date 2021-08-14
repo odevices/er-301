@@ -15,6 +15,8 @@ namespace emu
     void putDisplayBuffer(DisplayBuffer *buffer);
     DisplayBuffer *getDisplayBuffer();
     int getEncoderValue();
+    bool isRearCardPresent();
+    bool isFrontCardPresent();
 
   private:
     void loop();
@@ -35,6 +37,8 @@ namespace emu
     double mouseWheelToKnobFactor;
     double leftRightToKnobFactor;
     double upDownToKnobFactor;
+    bool rearCardPresent = true;
+    bool frontCardPresent = true;
 
     // Persist state between sessions.
     void saveState();

@@ -336,6 +336,16 @@ namespace emu
     return encoderValue + INT32_MAX / 2;
   }
 
+  bool Emulator::isRearCardPresent()
+  {
+    return rearCardPresent;
+  }
+
+  bool Emulator::isFrontCardPresent()
+  {
+    return frontCardPresent;
+  }
+
   // Grrr. The realpath function doesn't handle the tilde.
   static char *realpathEx(const char *path, char *buff)
   {
@@ -367,9 +377,11 @@ namespace emu
     f << '\n';
     f << "## Use this root for the rear SD card.\n";
     f << "# REAR_ROOT ~/.od/rear\n";
+    f << "# REAR_PRESENT true\n";
     f << '\n';
     f << "## Use this root for the front SD card.\n";
     f << "# FRONT_ROOT ~/.od/front\n";
+    f << "# FRONT_PRESENT true\n";
     f << '\n';
     f << "## Key mapping\n";
     f << '\n';
@@ -423,7 +435,9 @@ namespace emu
     configRoot = tmp;
     createDirectory(tmp);
     rearRoot = configRoot + "/rear";
+    rearCardPresent = true;
     frontRoot = configRoot + "/front";
+    frontCardPresent = true;
     sessionFilename = configRoot + "/emu.session";
     configFilename = configRoot + "/emu.config";
     realpathEx("./xroot", tmp);
@@ -505,9 +519,17 @@ namespace emu
 
       realpath(db.get("REAR_ROOT", rearRoot).c_str(), tmp);
       rearRoot = tmp;
+      if (db.get("REAR_PRESENT", "true") == "false")
+      {
+        rearCardPresent = false;
+      }
 
       realpath(db.get("FRONT_ROOT", frontRoot).c_str(), tmp);
       frontRoot = tmp;
+      if (db.get("FRONT_PRESENT", "true") == "false")
+      {
+        frontCardPresent = false;
+      }
 
       return true;
     }

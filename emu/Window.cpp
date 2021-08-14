@@ -69,10 +69,10 @@ namespace emu
       FC_Font *font = FC_CreateFont();
       for (const char **filename = fontFiles; *filename; filename++)
       {
-        logInfo("Trying %s, size=%d", *filename, size);
+        logDebug(10, "Trying %s, size=%d", *filename, size);
         if (FC_LoadFont(font, renderer, *filename, size, FC_MakeColor(0, 0, 0, 255), TTF_STYLE_NORMAL))
         {
-          logInfo("Loaded %s, size=%d", *filename, size);
+          logDebug(10, "Loaded %s, size=%d", *filename, size);
           fontMap[size] = font;
           return font;
         }

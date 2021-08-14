@@ -1,7 +1,7 @@
 #include <emu/KeyValueStore.h>
 #include <od/extras/Utils.h>
-#define BUILDOPT_VERBOSE
-#define BUILDOPT_DEBUG_LEVEL 10
+//#define BUILDOPT_VERBOSE
+//#define BUILDOPT_DEBUG_LEVEL 10
 #include <hal/log.h>
 #include <iostream>
 #include <fstream>
