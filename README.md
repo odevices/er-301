@@ -92,9 +92,11 @@ XROOT ./xroot
 
 ## Use this root for the rear SD card.
 REAR_ROOT ~/.od/rear
+REAR_PRESENT true
 
 ## Use this root for the front SD card.
 FRONT_ROOT ~/.od/front
+FRONT_PRESENT true
 
 ## Key mapping
 
