@@ -10,7 +10,7 @@ local ply = app.SECTION_PLY
 -- A view always starts with a Header (a type of ViewControl) which is followed by whatever ViewControls instantiated in the unit's onLoadViews method.
 
 
--- This class implements a ViewControl that displays a CatCircleGraphic and nothing else.
+-- This class implements a ViewControl that displays a CatCircle Graphic and nothing else.
 local CatCircleControl = Class {}
 CatCircleControl:include(ViewControl)
 
@@ -30,7 +30,7 @@ function CatCircleControl:init(args)
   -- The width of this control defaults to 2 ply.
   local width = args.width or (2 * ply)
 
-  -- Create an empty parent Graphic to hold our CatCircleGraphic.
+  -- Create an empty parent Graphic to hold our CatCircle Graphic.
   local graphic
   graphic = app.Graphic(0, 0, width, 64)
   -- Create the CatCircle Graphic

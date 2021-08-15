@@ -30,7 +30,7 @@ SDKPATH ?= ../..
 # Describe your files to this makefile:
 headers = bjorklund.h EuclideanSequencer.h CatCircle.h
 sources = bjorklund.c EuclideanSequencer.cpp CatCircle.cpp tutorial.cpp.swig
-assets = toc.lua FMOperator.lua EuclidsCatsUnit.lua CatCircle.lua
+assets = toc.lua FMOperator.lua EuclidsCatsUnit.lua CatCircleControl.lua
 includes = .
 
 # Do you need any additional preprocess symbols?
