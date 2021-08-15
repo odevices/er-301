@@ -4,6 +4,8 @@ local Class = require "Base.Class"
 local Unit = require "Unit"
 local Fader = require "Unit.ViewControl.Fader"
 local Gate = require "Unit.ViewControl.Gate"
+-- This is how we get access to other Lua modules from this package.
+-- require "<name of package>.<name of module>"
 local CatCircle = require "tutorial.CatCircle"
 local Encoder = require "Encoder"
 

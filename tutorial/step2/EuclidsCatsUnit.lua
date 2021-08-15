@@ -1,4 +1,6 @@
 local app = app
+-- This is how we get access to other Lua/C modules from this package.
+-- require "<name of package>.<name of Lua/C module>"
 local libFoo = require "tutorial.libFoo"
 local Class = require "Base.Class"
 local Unit = require "Unit"

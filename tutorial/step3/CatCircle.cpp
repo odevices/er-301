@@ -38,6 +38,7 @@ void CatCircle::draw(od::FrameBuffer &fb)
   if (mpSequencer)
   {
     float theta, x, y;
+    // The number of steps (i.e. boxes in catspeak).
     int n = mpSequencer->mCachedBoxes;
     if(n < 1)
     {
