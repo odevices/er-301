@@ -85,7 +85,9 @@ function EuclidsCatsUnit:onLoadViews(objects, branches)
     units = app.unitNone
   }
 
+  -- This new control is the custom ViewControl that we implemented in CatCircle.lua.
   controls.circle = CatCircle {
+    -- The sequencer object that the CatCircle should render.
     sequencer = objects.euclid
   }
 
