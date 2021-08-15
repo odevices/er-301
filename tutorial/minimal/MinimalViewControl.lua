@@ -10,7 +10,7 @@ local ply = app.SECTION_PLY
 -- A view always starts with a Header (a type of ViewControl) which is followed by whatever ViewControls instantiated in the unit's onLoadViews method.
 
 
--- This class implements a ViewControl that displays a MinimalViewControl graphic and nothing else.
+-- This class implements a ViewControl that displays a MinimalGraphic and nothing else.
 local MinimalViewControl = Class {}
 MinimalViewControl:include(ViewControl)
 
@@ -26,14 +26,14 @@ function MinimalViewControl:init(args)
   -- The width of this control defaults to 2 ply.
   local width = args.width or (2 * ply)
 
-  -- Create an empty parent Graphic to hold our MinimalViewControl Graphic.
+  -- Create an empty parent Graphic to hold our MinimalGraphic.
   local graphic
   graphic = app.Graphic(0, 0, width, 64)
-  -- Create the MinimalViewControl
+  -- Create the MinimalGraphic
   self.pDisplay = libMinimal.MinimalGraphic(0, 0, width, 64)
-  -- Add the MinimalViewControl to the parent Graphic.
+  -- Add the MinimalGraphic to the parent Graphic.
   graphic:addChild(self.pDisplay)
-  -- When this ViewControl gains focus, the system cursor's location should be controlled by the MinimalViewControl graphic.
+  -- When this ViewControl gains focus, the system cursor's location should be controlled by the MinimalGraphic.
   self:setMainCursorController(self.pDisplay)
   -- Assign the parent Graphic that we prepared to this ViewControl.
   self:setControlGraphic(graphic)
