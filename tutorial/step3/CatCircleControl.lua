@@ -10,17 +10,17 @@ local ply = app.SECTION_PLY
 -- A view always starts with a Header (a type of ViewControl) which is followed by whatever ViewControls instantiated in the unit's onLoadViews method.
 
 
--- This class implements a ViewControl that displays a CatCircle graphic and nothing else.
-local CatCircle = Class {}
-CatCircle:include(ViewControl)
+-- This class implements a ViewControl that displays a CatCircleGraphic and nothing else.
+local CatCircleControl = Class {}
+CatCircleControl:include(ViewControl)
 
-function CatCircle:init(args)
+function CatCircleControl:init(args)
   -- We must have a sequencer or we cannot proceed.
   local sequencer = args.sequencer or
                         app.logError("%s.init: sequencer is missing.", self)
 
   ViewControl.init(self, "circle")
-  self:setClassName("CatCircle")
+  self:setClassName("CatCircleControl")
 
   -- Some background:
   -- Each display is divided into columns centered above each soft button.
@@ -30,14 +30,14 @@ function CatCircle:init(args)
   -- The width of this control defaults to 2 ply.
   local width = args.width or (2 * ply)
 
-  -- Create an empty parent Graphic to hold our CatCircle Graphic.
+  -- Create an empty parent Graphic to hold our CatCircleGraphic.
   local graphic
   graphic = app.Graphic(0, 0, width, 64)
-  -- Create the CatCircle
+  -- Create the CatCircle Graphic
   self.pDisplay = libFoo.CatCircle(0, 0, width, 64)
-  -- Add the CatCircle to the parent Graphic.
+  -- Add the CatCircle Graphic to the parent Graphic.
   graphic:addChild(self.pDisplay)
-  -- When this ViewControl gains focus, the system cursor's location should be controlled by the CatCircle graphic.
+  -- When this ViewControl gains focus, the system cursor's location should be controlled by the CatCircle Graphic.
   self:setMainCursorController(self.pDisplay)
   -- Assign the parent Graphic that we prepared to this ViewControl.
   self:setControlGraphic(graphic)
@@ -53,13 +53,13 @@ function CatCircle:init(args)
   -- The sub display is empty for now.
   self.subGraphic = app.Graphic(0, 0, 128, 64)
 
-  -- Configure the CatCircle to render the given sequencer object.
+  -- Configure the CatCircleControl to render the given sequencer object.
   self:follow(sequencer)
 end
 
-function CatCircle:follow(sequencer)
+function CatCircleControl:follow(sequencer)
   self.pDisplay:follow(sequencer)
   self.sequencer = sequencer
 end
 
-return CatCircle
+return CatCircleControl

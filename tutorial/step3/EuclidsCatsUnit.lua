@@ -6,7 +6,7 @@ local Fader = require "Unit.ViewControl.Fader"
 local Gate = require "Unit.ViewControl.Gate"
 -- This is how we get access to other Lua modules from this package.
 -- require "<name of package>.<name of module>"
-local CatCircle = require "tutorial.CatCircle"
+local CatCircleControl = require "tutorial.CatCircleControl"
 local Encoder = require "Encoder"
 
 local EuclidsCatsUnit = Class {}
@@ -87,8 +87,8 @@ function EuclidsCatsUnit:onLoadViews(objects, branches)
     units = app.unitNone
   }
 
-  -- This new control is the custom ViewControl that we implemented in CatCircle.lua.
-  controls.circle = CatCircle {
+  -- This new control is the custom ViewControl that we implemented in CatCircleControl.lua.
+  controls.circle = CatCircleControl {
     -- The sequencer object that the CatCircle should render.
     sequencer = objects.euclid
   }

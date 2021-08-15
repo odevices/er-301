@@ -70,7 +70,7 @@ Take a look at the [Makefile](step2/Makefile) for more details.
 
 ## Step 3: Add custom graphics
 
-Finally, we add our own custom graphics to the [EuclidsCatsUnit.lua](step3/EuclidsCatsUnit.lua) created in Step 2.  The C++ [Graphic](#graphic) is implemented in [CatCircle.h](step3/CatCircle.h) and [CatCircle.cpp](step3/CatCircle.cpp).  To actually use this graphic in a unit, we must also wrap the C++ CatCircle in a lua [ViewControl](#viewcontrol) as done in [CatCircle.lua](step3/CatCircle.lua).
+Finally, we add our own custom graphics to the [EuclidsCatsUnit.lua](step3/EuclidsCatsUnit.lua) created in Step 2.  The C++ [Graphic](#graphic) is implemented in [CatCircle.h](step3/CatCircle.h) and [CatCircle.cpp](step3/CatCircle.cpp).  To actually use this graphic in a unit, we must also wrap the C++ CatCircle in a lua [ViewControl](#viewcontrol) as done in [CatCircleControl.lua](step3/CatCircleControl.lua).
 
 This project will generate a file called **tutorial-0.0.3.pkg** in the build directory.  All the build and install commands are the same as in Step 2.  Have a look at the [Makefile](step3/Makefile) for more details.
 
