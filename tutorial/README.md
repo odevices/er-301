@@ -8,6 +8,7 @@
   * [Step 1: Make your first unit](#step-1-make-your-first-unit)
   * [Step 2: Add custom DSP code](#step-2-add-custom-dsp-code)
   * [Step 3: Add custom graphics](#step-3-add-custom-graphics)
+  * [A minimal example](#a-minimal-example)
   * [Further Reading](#further-reading)
   * [Failed to load ELF File](#failed-to-load-elf-file)
   * [Tips for coding with NEON intrinsics](#tips-for-coding-with-neon-intrinsics)
@@ -72,6 +73,31 @@ Take a look at the [Makefile](step2/Makefile) for more details.
 Finally, we add our own custom graphics to the [EuclidsCatsUnit.lua](step3/EuclidsCatsUnit.lua) created in Step 2.  The C++ [Graphic](#graphic) is implemented in [CatCircle.h](step3/CatCircle.h) and [CatCircle.cpp](step3/CatCircle.cpp).  To actually use this graphic in a unit, we must also wrap the C++ CatCircle in a lua [ViewControl](#viewcontrol) as done in [CatCircle.lua](step3/CatCircle.lua).
 
 This project will generate a file called **tutorial-0.0.3.pkg** in the build directory.  All the build and install commands are the same as in Step 2.  Have a look at the [Makefile](step3/Makefile) for more details.
+
+## A minimal example
+
+I've also provided a minimal example of a unit that does nothing except pass signal and happens to have a custom control that just draws a circle.  You can use this as a skeleton project or to help you understand how the basics are accomplished with minimal distractions.
+
+To compile:
+```bash
+cd ../minimal
+
+# Compile a testing build for the emulator (linux):
+make
+
+# Compile a release build for am335x architecture:
+make ARCH=am335x PROFILE=release
+```
+
+This will generate a file called **minimal-0.0.1.pkg** in the build directory.  To try out the new units, manually copy the tutorial package to the packages folder of the emulator or your SD card.  Alternatively, you can use the make install targets:
+
+```bash
+# To install to the emulator's package folder:
+make install
+
+# To install to the front SD card (assuming it is mounted):
+make install PROFILE=release ARCH=am335x
+```
 
 ## Further Reading
 
