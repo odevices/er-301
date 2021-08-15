@@ -21,16 +21,16 @@
 # rather than auto-generated.
 
 # Override these defaults on the commandline:
-PKGNAME ?= tutorial
-PKGVERSION ?= 0.0.3
-LIBNAME ?= libFoo
+PKGNAME ?= minimal
+PKGVERSION ?= 0.0.1
+LIBNAME ?= libMinimal
 PROFILE ?= testing
 SDKPATH ?= ../..
 
 # Describe your files to this makefile:
-headers = bjorklund.h EuclideanSequencer.h CatCircle.h
-sources = bjorklund.c EuclideanSequencer.cpp CatCircle.cpp tutorial.cpp.swig
-assets = toc.lua FMOperator.lua EuclidsCatsUnit.lua CatCircle.lua
+headers = MinimalObject.h MinimalGraphic.h
+sources = MinimalObject.cpp MinimalGraphic.cpp minimal.cpp.swig
+assets = toc.lua MinimalUnit.lua MinimalViewControl.lua
 includes = .
 
 # Do you need any additional preprocess symbols?

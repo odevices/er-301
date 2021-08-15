@@ -8,7 +8,7 @@ local TieExpression = Class {}
 TieExpression:include(Unit)
 
 function TieExpression:init(args)
-    args.title = "Tie Expr Test"
+    args.title = "Tie Expr"
     args.mnemonic = "TE"
     args.version = 1
     Unit.init(self, args)
