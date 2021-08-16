@@ -521,6 +521,7 @@ namespace emu
       rearRoot = tmp;
       if (db.get("REAR_PRESENT", "true") == "false")
       {
+        logWarn("Rear card configured to be NOT present.");
         rearCardPresent = false;
       }
 
@@ -528,6 +529,7 @@ namespace emu
       frontRoot = tmp;
       if (db.get("FRONT_PRESENT", "true") == "false")
       {
+        logWarn("Front card configured to be NOT present.");
         frontCardPresent = false;
       }
 
