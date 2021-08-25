@@ -172,13 +172,13 @@ function Chooser:refresh()
   elseif ordering == "alphabet" then
     local units = Factory.getUnits()
     table.sort(units, function(a, b)
-      return a.title < b.title
+      return a.title:upper() < b.title:upper()
     end)
     local prev
     for _, loadInfo in ipairs(units) do
-      local b = loadInfo.title:sub(1, 1)
+      local b = loadInfo.title:sub(1, 1):upper()
       if prev then
-        local a = prev.title:sub(1, 1)
+        local a = prev.title:sub(1, 1):upper()
         if b >= "A" and a ~= b then self:addCategory(b) end
       elseif b < "A" then
         self:addCategory("0-9")
