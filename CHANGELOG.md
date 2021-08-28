@@ -3,6 +3,12 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
+# v0.6.15
+* FIX: Unit Chooser > Make alphabetic ordering case-insensitive.
+* FIX: Hold Mode > Pinned controls not restoring with chain presets. [Issue #41](https://github.com/odevices/er-301/issues/41)
+* FIX: Installed packages not available if front card not mounted [Issue #42](https://github.com/odevices/er-301/issues/42)
+* FIX: Packaged presets not loading sample chains in certain situations [Issue #44](https://github.com/odevices/er-301/issues/44)
+
 # v0.6.14
 * FIX: Crashes caused by particular units that used tied expressions in their DSP graphs.
 
