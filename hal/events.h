@@ -120,6 +120,7 @@ extern "C"
   void Events_push(uint32_t e);
   uint32_t Events_pull(void);
   void Events_wait(void);
+  bool Events_waitWithTimeout(uint32_t timeout);
   void Events_clear(void);
 
 #ifdef __cplusplus

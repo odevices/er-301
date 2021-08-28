@@ -106,7 +106,7 @@ extern "C"
     fifo_init(&local.Q);
   }
 
-  void Events_wait(void)
+  static void check()
   {
     checkButtonRepeat(BUTTON_MAIN1);
     checkButtonRepeat(BUTTON_MAIN2);
@@ -128,6 +128,17 @@ extern "C"
     checkButtonRepeat(BUTTON_SELECT3);
     checkButtonRepeat(BUTTON_SELECT4);
     checkEncoder();
+  }
+
+  bool Events_waitWithTimeout(uint32_t timeout)
+  {
+    check();
+    return local.events.waitForAll(onPost, timeout) & onPost;
+  }
+
+  void Events_wait(void)
+  {
+    check();
     local.events.waitForAll(onPost);
   }
 
