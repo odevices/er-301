@@ -2,7 +2,7 @@
 #include "ElfFile.h"
 #include <od/extras/FileReader.h>
 #define BUILDOPT_VERBOSE
-#define BUILDOPT_DEBUG_LEVEL 10
+#define BUILDOPT_DEBUG_LEVEL 1
 #include <hal/log.h>
 #include <hal/dma.h>
 #include <hal/heap.h>
@@ -329,7 +329,7 @@ namespace od
         if (ELF32_ST_BIND(sym.st_info) == STB_GLOBAL && ELF32_ST_TYPE(sym.st_info) == STT_FUNC)
         {
           const char *symbolName = stringTable.data() + sym.st_name;
-          logDebug(1, "export %s @ 0x%08x", symbolName, sym.st_value);
+          logDebug(10, "export %s @ 0x%08x", symbolName, sym.st_value);
           mSymbols.add(symbolName, sym.st_value);
         }
         else if (shdr.sh_type == SHT_INIT_ARRAY && ELF32_ST_TYPE(sym.st_info) == STT_SECTION)
@@ -417,7 +417,7 @@ namespace od
             {
               if(mSymbols.update(symbolName, sym->st_value))
               {
-                logDebug(1, "update %s @ 0x%08x", symbolName, sym->st_value);
+                logDebug(10, "update %s @ 0x%08x", symbolName, sym->st_value);
               }
             }
           }
