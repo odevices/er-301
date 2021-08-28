@@ -284,7 +284,6 @@ local function install(package)
 end
 
 local function loadInstalledPackages()
-  if not Card.mounted() then return end
   for id, package in pairs(getPackages()) do
     if package.installed and loaded[package.id] == nil then
       Busy.start("Loading package: " .. id)
@@ -347,14 +346,10 @@ end
 
 local function cardMounted()
   packageCacheIsStale = true
-  installUpdates()
-  loadInstalledPackages()
 end
 
 local function cardEjected()
   packageCacheIsStale = true
-  local UnitFactory = require "Unit.Factory"
-  UnitFactory.reloadLibraries()
 end
 
 -- A file packer is a function that will be called as follows:
@@ -375,10 +370,8 @@ local function init()
   packageCacheIsStale = true
   local UnitFactory = require "Unit.Factory"
   UnitFactory.init()
-  if Card.mounted() then
-    installUpdates()
-    loadInstalledPackages()
-  end
+  installUpdates()
+  loadInstalledPackages()
 end
 
 return {

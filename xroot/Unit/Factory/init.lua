@@ -145,7 +145,7 @@ local function instantiate(loadInfo, args)
           return unit
         else
           app.logInfo("Factory.instantiate: %s not found in %s.",
-          loadInfo.moduleName, library.name)
+                      loadInfo.moduleName, library.name)
         end
       end
     end
@@ -300,20 +300,21 @@ end
 local function reloadLibraries()
   -- Unregister external libraries...
   for _, t in ipairs(ExternalLibraryList) do unregisterLibrary(t.name) end
-  if Card.mounted() then
-    local libRoot = FS.getRoot("libs")
-    -- Register external libraries...
-    if Path.exists(libRoot) then
-      for folderName in dir(libRoot) do
-        if not IgnoredFolderNames[folderName] then
-          if registerExternalLibrary(folderName, true) then
-            app.logInfo("Unit library found: %s", folderName)
-          else
-            app.logError("Unit library failed to register: %s", folderName)
-          end
+  local libRoot = FS.getRoot("libs")
+  -- Register external libraries...
+  if Path.exists(libRoot) then
+    app.logInfo("Searching %s for libraries...", libRoot)
+    for folderName in dir(libRoot) do
+      if not IgnoredFolderNames[folderName] then
+        if registerExternalLibrary(folderName, true) then
+          app.logInfo("Unit library found: %s", folderName)
+        else
+          app.logError("Unit library failed to register: %s", folderName)
         end
       end
     end
+  else
+    app.logError("Lib root does not exist. %s", libRoot)
   end
   loadLibraries()
   Signal.emit("onUnitListChanged")
