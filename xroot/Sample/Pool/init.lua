@@ -244,11 +244,14 @@ local function loadMulti(paths, id)
   end
   local opts = {
     type = "multi",
-    paths = Utils.shallowCopy(paths)
+    paths = {}
   }
+  for i,path in ipairs(paths) do
+    opts.paths[i] = Path.expandRelativePath(path)
+  end
   local sample
   if id == nil then
-    local uid, pretty = generateUniqueNameFromPaths(paths)
+    local uid, pretty = generateUniqueNameFromPaths(opts.paths)
     id = uid
     sample = Sample(id, opts, pretty)
   else
@@ -375,13 +378,16 @@ local function rename(sample, newPath)
 end
 
 local function replace(sample, newPath)
+  -- HACKy.  Detach this sample from all its users.
   local users = sample:getUsers()
   for _, user in ipairs(users) do
     if user.setSample then user:setSample(nil) end
   end
+  -- Clear up the memory.
   unload(sample, false)
   sample = nil
   app.collectgarbage()
+  -- Finally, load the new sample and attach it to users.
   sample = load(newPath)
   if sample then
     for _, user in ipairs(users) do
