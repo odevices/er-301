@@ -116,6 +116,21 @@ local floatingMenu = app.MenuArc()
 local floatingMenuTimer
 local floatingMenuObject
 
+local function fireMenuEnter()
+  if not floatingMenuObject then return end
+  floatingMenuObject:onFloatingMenuEnter()
+end
+
+local function fireMenuChange(choice, index)
+  if not floatingMenuObject then return end
+  floatingMenuObject:onFloatingMenuChange(choice, index)
+end
+
+local function fireMenuSelection(choice)
+  if not floatingMenuObject then return end
+  floatingMenuObject:onFloatingMenuSelection(choice)
+end
+
 local function selectFloatingMenu(choice)
   floatingMenu:select(choice)
 end
@@ -127,13 +142,17 @@ local function endFloatingMenu()
     Timer.cancel(floatingMenuTimer)
     floatingMenuTimer = nil
   end
-  floatingMenuObject = nil
+
+  local choice
   if floatingMenu:hasParent() then
     pMainOverlay:removeChild(floatingMenu)
-    local choice = floatingMenu:selectedText()
+    choice = floatingMenu:selectedText()
     floatingMenu:clear()
-    return choice
+    fireMenuSelection(choice)
   end
+
+  floatingMenuObject = nil
+  return choice
 end
 
 local function ignoreMainRelease(i)
@@ -162,7 +181,10 @@ local function dispatcherFloatingMenu(event)
     if p ~= 0 then
       local Env = require "Env"
       local threshold = Env.EncoderThreshold.Default
-      floatingMenu:encoder(p, false, threshold)
+      local changed = floatingMenu:encoder(p, false, threshold)
+      if changed then
+        fireMenuChange(floatingMenu:selectedText(), floatingMenu:selectedIndex())
+      end
     end
   elseif event == app.EVENT_RELEASE_MAIN1 and m == 1 then
     Application.notify("mainReleased", 1, false)
@@ -190,7 +212,7 @@ end
 local function onStartFloatingMenu()
   floatingMenuTimer = nil
   local choices = floatingMenuObject:getFloatingMenuItems()
-  floatingMenuObject = nil
+
   if choices and #choices > 0 then
     floatingMenu:add("cancel")
     for _, choice in ipairs(choices) do floatingMenu:add(choice) end
@@ -214,6 +236,7 @@ local function startFloatingMenu(o)
   local x = app.getButtonCenter(Application.getLastMainButtonPressed())
   floatingMenu:setAnchor(x)
   floatingMenuTimer = Timer.after(0.3, onStartFloatingMenu)
+  fireMenuEnter()
 end
 
 local function clearAll()

@@ -203,10 +203,7 @@ function Section:spotReleased(viewName, spotHandle, shifted)
       local control = spot:getControl()
       local index = spot:getPositionOnControl()
       local choice = Overlay.endFloatingMenu()
-      if choice then
-        -- app.logInfo("%s:spotReleased:choice='%s'",self,choice)
-        control:onFloatingMenuSelection(choice)
-      else
+      if not choice then
         control:spotReleased(index, shifted)
       end
     end

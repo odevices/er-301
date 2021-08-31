@@ -31,6 +31,13 @@ end
 function Control:getFloatingMenuItems()
 end
 
+function Control:onFloatingMenuEnter()
+end
+
+function Control:onFloatingMenuChange(choice, index)
+  app.logInfo("%s %s", choice, index)
+end
+
 function Control:onFloatingMenuSelection(choice)
 end
 
