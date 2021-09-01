@@ -187,10 +187,8 @@ function Section:spotPressed(viewName, spotHandle, shifted, isFocusedPress)
     if spot then
       local control = spot:getControl()
       local index = spot:getPositionOnControl()
-      local handled = control:spotPressed(index, shifted, isFocusedPress)
-
-      -- Don't start the menu if the control handled the press.
-      if not handled and control.getFloatingMenuItems then
+      control:spotPressed(index, shifted, isFocusedPress)
+      if control.getFloatingMenuItems then
         Overlay.startFloatingMenu(control)
       end
     end
