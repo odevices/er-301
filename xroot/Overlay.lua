@@ -117,18 +117,21 @@ local floatingMenuTimer
 local floatingMenuObject
 
 local function fireMenuEnter()
-  if not floatingMenuObject then return end
-  floatingMenuObject:onFloatingMenuEnter()
+  if floatingMenuObject and floatingMenuObject.onFloatingMenuEnter then
+    floatingMenuObject:onFloatingMenuEnter()
+  end
 end
 
 local function fireMenuChange(choice, index)
-  if not floatingMenuObject then return end
-  floatingMenuObject:onFloatingMenuChange(choice, index)
+  if floatingMenuObject and floatingMenuObject.onFloatingMenuChange then
+    floatingMenuObject:onFloatingMenuChange(choice, index)
+  end
 end
 
 local function fireMenuSelection(choice)
-  if not floatingMenuObject then return end
-  floatingMenuObject:onFloatingMenuSelection(choice)
+  if floatingMenuObject and floatingMenuObject.onFloatingMenuSelection then
+    floatingMenuObject:onFloatingMenuSelection(choice)
+  end
 end
 
 local function selectFloatingMenu(choice)
