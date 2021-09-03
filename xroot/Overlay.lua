@@ -215,6 +215,7 @@ end
 local function onStartFloatingMenu()
   floatingMenuTimer = nil
   local choices = floatingMenuObject:getFloatingMenuItems()
+  fireMenuEnter()
 
   if choices and #choices > 0 then
     floatingMenu:add("cancel")
@@ -239,7 +240,6 @@ local function startFloatingMenu(o)
   local x = app.getButtonCenter(Application.getLastMainButtonPressed())
   floatingMenu:setAnchor(x)
   floatingMenuTimer = Timer.after(0.3, onStartFloatingMenu)
-  fireMenuEnter()
 end
 
 local function clearAll()
