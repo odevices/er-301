@@ -34,7 +34,7 @@ end
 function Control:onFloatingMenuEnter()
 end
 
-function Control:onFloatingMenuChange(choice, index)
+function Control:onFloatingMenuChange(choice)
 end
 
 function Control:onFloatingMenuSelection(choice)

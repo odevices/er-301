@@ -116,24 +116,29 @@ local floatingMenu = app.MenuArc()
 local floatingMenuTimer
 local floatingMenuObject
 
-local function getMenuItems()
+local function getMenuItemsAndDefault()
   local choices = { "cancel" }
+  local defaultIndex = #choices + 1
 
-  if floatingMenuObject and floatingMenuObject.getFloatingMenuItems then
-    local items = floatingMenuObject:getFloatingMenuItems() or {}
-    for _, item in ipairs(items) do choices[#choices + 1] = item end
+  if floatingMenuObject then
+    -- First get the default menu choice
+    local defaultChoice
+    if floatingMenuObject.getFloatingMenuDefaultChoice then
+      defaultChoice = floatingMenuObject:getFloatingMenuDefaultChoice()
+    end
+
+    -- Now get the item list and set the default index
+    if floatingMenuObject.getFloatingMenuItems then
+      local items = floatingMenuObject:getFloatingMenuItems() or {}
+      for i, item in ipairs(items) do
+        local nextIndex = #choices + 1
+        choices[nextIndex] = item
+        if item == defaultChoice then defaultIndex = nextIndex end
+      end
+    end
   end
 
-  return choices
-end
-
-local function getMenuEnterIndex()
-  if floatingMenuObject and floatingMenuObject.getFloatingMenuEnterIndex then
-    return floatingMenuObject:getFloatingMenuEnterIndex()
-  end
-
-  -- start on the first item after 'cancel'
-  return 1
+  return choices, defaultIndex - 1
 end
 
 local function fireMenuEnter()
@@ -142,9 +147,9 @@ local function fireMenuEnter()
   end
 end
 
-local function fireMenuChange(choice, index)
+local function fireMenuChange(choice)
   if floatingMenuObject and floatingMenuObject.onFloatingMenuChange then
-    floatingMenuObject:onFloatingMenuChange(choice, index)
+    floatingMenuObject:onFloatingMenuChange(choice)
   end
 end
 
@@ -205,9 +210,7 @@ local function dispatcherFloatingMenu(event)
       local Env = require "Env"
       local threshold = Env.EncoderThreshold.Default
       local changed = floatingMenu:encoder(p, false, threshold)
-      if changed then
-        fireMenuChange(floatingMenu:selectedText(), floatingMenu:selectedIndex())
-      end
+      if changed then fireMenuChange(floatingMenu:selectedText()) end
     end
   elseif event == app.EVENT_RELEASE_MAIN1 and m == 1 then
     Application.notify("mainReleased", 1, false)
@@ -234,19 +237,18 @@ end
 
 local function onStartFloatingMenu()
   floatingMenuTimer = nil
-  local choices = getMenuItems()
-  local enterIndex = getMenuEnterIndex()
-  fireMenuEnter()
+  local choices, defaultIndex = getMenuItemsAndDefault()
 
   if #choices > 1 then
     for _, choice in ipairs(choices) do floatingMenu:add(choice) end
+    floatingMenu:select(defaultIndex)
     pMainOverlay:addChildOnce(floatingMenu)
   end
 
   local Application = require "Application"
   Application.setDispatcher(dispatcherFloatingMenu)
 
-  floatingMenu:select(enterIndex)
+  fireMenuEnter()
 end
 
 local function startFloatingMenu(o)
