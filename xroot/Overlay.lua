@@ -116,6 +116,26 @@ local floatingMenu = app.MenuArc()
 local floatingMenuTimer
 local floatingMenuObject
 
+local function getMenuItems()
+  local choices = { "cancel" }
+
+  if floatingMenuObject and floatingMenuObject.getFloatingMenuItems then
+    local items = floatingMenuObject:getFloatingMenuItems() or {}
+    for _, item in ipairs(items) do choices[#choices + 1] = item end
+  end
+
+  return choices
+end
+
+local function getMenuEnterIndex()
+  if floatingMenuObject and floatingMenuObject.getFloatingMenuEnterIndex then
+    return floatingMenuObject:getFloatingMenuEnterIndex()
+  end
+
+  -- start on the first item after 'cancel'
+  return 1
+end
+
 local function fireMenuEnter()
   if floatingMenuObject and floatingMenuObject.onFloatingMenuEnter then
     floatingMenuObject:onFloatingMenuEnter()
@@ -214,18 +234,19 @@ end
 
 local function onStartFloatingMenu()
   floatingMenuTimer = nil
-  local choices = floatingMenuObject:getFloatingMenuItems()
+  local choices = getMenuItems()
+  local enterIndex = getMenuEnterIndex()
   fireMenuEnter()
 
-  if choices and #choices > 0 then
-    floatingMenu:add("cancel")
+  if #choices > 1 then
     for _, choice in ipairs(choices) do floatingMenu:add(choice) end
     pMainOverlay:addChildOnce(floatingMenu)
   end
+
   local Application = require "Application"
   Application.setDispatcher(dispatcherFloatingMenu)
-  -- start on the first item after 'cancel'
-  floatingMenu:scrollDown()
+
+  floatingMenu:select(enterIndex)
 end
 
 local function startFloatingMenu(o)
