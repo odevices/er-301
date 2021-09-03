@@ -138,7 +138,7 @@ local function getMenuItemsAndDefault()
     end
   end
 
-  return choices, defaultIndex - 1
+  return choices, defaultIndex
 end
 
 local function fireMenuEnter()
@@ -241,7 +241,7 @@ local function onStartFloatingMenu()
 
   if #choices > 1 then
     for _, choice in ipairs(choices) do floatingMenu:add(choice) end
-    floatingMenu:select(defaultIndex)
+    floatingMenu:select(defaultIndex - 1)
     pMainOverlay:addChildOnce(floatingMenu)
   end
 
