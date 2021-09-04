@@ -278,12 +278,12 @@ local defaults = {
   floatingMenuDelay = {
     category = "General",
     description = "Long press time for floating menu:",
-    value = "0.3s",
+    value = "0.2s",
     choices = {
+      "50ms",
       "0.1s",
       "0.2s",
-      "0.3s",
-      "0.5s"
+      "0.4s"
     }
   },
 }
