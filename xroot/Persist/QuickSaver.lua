@@ -10,7 +10,7 @@ local selectedSlot = -1
 
 local function showMessage(...)
   local SG = require "Overlay"
-  SG.mainFlashMessage(...)
+  SG.flashMainMessage(...)
 end
 
 local function getUnitCount(preset, chain)

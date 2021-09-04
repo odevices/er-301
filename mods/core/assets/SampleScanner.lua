@@ -132,13 +132,13 @@ function SampleScanner:showSampleEditor()
     self.sampleEditor:show()
   else
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("You must first select a sample.")
+    Overlay.flashMainMessage("You must first select a sample.")
   end
 end
 
 function SampleScanner:doDetachSample()
   local Overlay = require "Overlay"
-  Overlay.mainFlashMessage("Sample detached.")
+  Overlay.flashMainMessage("Sample detached.")
   self:setSample()
 end
 
@@ -146,7 +146,7 @@ function SampleScanner:doAttachSampleFromCard()
   local task = function(sample)
     if sample then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Attached sample: %s", sample.name)
+      Overlay.flashMainMessage("Attached sample: %s", sample.name)
       self:setSample(sample)
     end
   end
@@ -161,7 +161,7 @@ function SampleScanner:doAttachSampleFromPool()
   local task = function(sample)
     if sample then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Attached sample: %s", sample.name)
+      Overlay.flashMainMessage("Attached sample: %s", sample.name)
       self:setSample(sample)
     end
   end

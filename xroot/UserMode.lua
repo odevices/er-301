@@ -23,7 +23,7 @@ end
 
 local function showMessage(...)
   local SG = require "Overlay"
-  SG.mainFlashMessage(...)
+  SG.flashMainMessage(...)
 end
 
 local buttonHeld = false

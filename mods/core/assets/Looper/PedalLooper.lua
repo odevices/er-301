@@ -63,14 +63,14 @@ function PedalLooper:copyToNewBuffer()
 
   if sample then
     if self.objects.looper:fillSample(sample.pSample) > 0 then
-      Overlay.mainFlashMessage("Copied to: %s", sample.name)
+      Overlay.flashMainMessage("Copied to: %s", sample.name)
       self.lastCopyPath = sample.path
     else
       SamplePool.unload(sample)
-      Overlay.mainFlashMessage("Failed to copy audio.")
+      Overlay.flashMainMessage("Failed to copy audio.")
     end
   else
-    Overlay.mainFlashMessage("Copy failed: %s", msg)
+    Overlay.flashMainMessage("Copy failed: %s", msg)
   end
 end
 
@@ -81,11 +81,11 @@ function PedalLooper:copyToExistingBuffer()
   local task = function(sample)
     if sample then
       if self.objects.looper:fillSample(sample.pSample) > 0 then
-        Overlay.mainFlashMessage("Copied to: %s", sample.name)
+        Overlay.flashMainMessage("Copied to: %s", sample.name)
         self.lastCopyPath = sample.path
       else
         SamplePool.unload(sample)
-        Overlay.mainFlashMessage("Failed to copy audio.")
+        Overlay.flashMainMessage("Failed to copy audio.")
       end
     end
   end
@@ -96,14 +96,14 @@ end
 function PedalLooper:copyTo(sample)
   if sample then
     if self.objects.looper:fillSample(sample.pSample) > 0 then
-      Overlay.mainFlashMessage("Copied to: %s", sample.name)
+      Overlay.flashMainMessage("Copied to: %s", sample.name)
       self.lastCopyPath = sample.path
     else
       SamplePool.unload(sample)
-      Overlay.mainFlashMessage("Failed to copy audio.")
+      Overlay.flashMainMessage("Failed to copy audio.")
     end
   else
-    Overlay.mainFlashMessage("Buffer not found.")
+    Overlay.flashMainMessage("Buffer not found.")
   end
 end
 

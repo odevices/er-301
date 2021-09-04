@@ -112,7 +112,7 @@ end
 
 function ConvolutionUnit:doDetachSample()
   local Overlay = require "Overlay"
-  Overlay.mainFlashMessage("Sample detached.")
+  Overlay.flashMainMessage("Sample detached.")
   self:setSample()
 end
 
@@ -120,7 +120,7 @@ function ConvolutionUnit:doAttachSampleFromCard()
   local task = function(sample)
     if sample then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Attached sample: %s", sample.name)
+      Overlay.flashMainMessage("Attached sample: %s", sample.name)
       self:setSample(sample)
     end
   end
@@ -134,7 +134,7 @@ function ConvolutionUnit:doAttachSampleFromPool()
   local task = function(sample)
     if sample then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Attached sample: %s", sample.name)
+      Overlay.flashMainMessage("Attached sample: %s", sample.name)
       self:setSample(sample)
     end
   end

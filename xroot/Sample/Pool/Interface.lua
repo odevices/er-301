@@ -361,7 +361,7 @@ function FakeUnit:showSampleEditor()
     self.slicingView:show()
   else
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("You must first select a sample.")
+    Overlay.flashMainMessage("You must first select a sample.")
   end
 end
 
@@ -551,7 +551,7 @@ function Interface:askAboutMultiSample(paths)
       self:doneChoosing(paths)
     else
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Sample load was canceled.")
+      Overlay.flashMainMessage("Sample load was canceled.")
     end
   end
   dialog:subscribe("done", task)
@@ -570,9 +570,9 @@ function Interface:doReplaceSample()
         local oldName = sample.name
         local new = Pool.replace(sample, result.fullpath)
         if new then
-          SG.mainFlashMessage("%s --> %s", oldName, new.name)
+          SG.flashMainMessage("%s --> %s", oldName, new.name)
         else
-          SG.mainFlashMessage("Replace failed.")
+          SG.flashMainMessage("Replace failed.")
         end
       end
     end

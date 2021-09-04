@@ -101,7 +101,7 @@ end
 
 function Raw:doDetachSample()
   local Overlay = require "Overlay"
-  Overlay.mainFlashMessage("Sample detached.")
+  Overlay.flashMainMessage("Sample detached.")
   self:setSample(nil)
 end
 
@@ -109,7 +109,7 @@ function Raw:doAttachSampleFromCard()
   local task = function(sample)
     if sample then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Attached sample: %s", sample.name)
+      Overlay.flashMainMessage("Attached sample: %s", sample.name)
       self:setSample(sample)
     end
   end
@@ -125,7 +125,7 @@ function Raw:doAttachSampleFromPool()
   local task = function(sample)
     if sample then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Attached sample: %s", sample.name)
+      Overlay.flashMainMessage("Attached sample: %s", sample.name)
       self:setSample(sample)
     end
   end
@@ -142,7 +142,7 @@ function Raw:showSampleEditor()
     self.slicingView:show()
   else
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("You must first select a sample.")
+    Overlay.flashMainMessage("You must first select a sample.")
   end
 end
 

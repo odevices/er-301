@@ -8,7 +8,7 @@ local lastChooser = 1
 
 local function showMessage(...)
   local Overlay = require "Overlay"
-  Overlay.mainFlashMessage(...)
+  Overlay.flashMainMessage(...)
 end
 
 local Chooser = Class {}

@@ -162,7 +162,7 @@ local function saveUnitPreset(unit, fullpath)
     Busy.start("Saving unit preset: %s", filename)
     if preset:write(fullpath) then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Unit preset saved: %s", filename)
+      Overlay.flashMainMessage("Unit preset saved: %s", filename)
       unit:setLastPreset(path, filename)
     else
       showMessage("Failed to save unit preset:", filename)
@@ -213,7 +213,7 @@ local function loadUnitPreset(unit, fullpath)
           unit:setLastPreset(path, filename)
           Busy.stop()
           local Overlay = require "Overlay"
-          Overlay.mainFlashMessage("Unit preset loaded: %s", filename)
+          Overlay.flashMainMessage("Unit preset loaded: %s", filename)
         end
       end
       confirmFirmwareVersionAndExecute(preset, task)
@@ -256,7 +256,7 @@ local function saveChainPreset(chain, fullpath)
     Busy.start("Saving chain preset: %s", filename)
     if preset:write(fullpath) then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Chain preset saved: %s", filename)
+      Overlay.flashMainMessage("Chain preset saved: %s", filename)
       chain:setLastPreset(path, filename)
     else
       showMessage("Failed to save chain preset:", filename)
@@ -310,7 +310,7 @@ local function loadChainPreset(chain, fullpath)
           chain:setLastPreset(path, filename)
           Busy.stop()
           local Overlay = require "Overlay"
-          Overlay.mainFlashMessage("Chain preset loaded: %s", filename)
+          Overlay.flashMainMessage("Chain preset loaded: %s", filename)
         end
       end
       confirmFirmwareVersionAndExecute(preset, task)
@@ -626,7 +626,7 @@ local function handleUnsavedBuffers(after)
             after()
           else
             local Overlay = require "Overlay"
-            Overlay.mainFlashMessage("Quicksave canceled.")
+            Overlay.flashMainMessage("Quicksave canceled.")
           end
         end)
         window:show()
@@ -668,10 +668,10 @@ local function quickSaveToSlot(slot, checkForUnsavedBuffers, after)
   local Overlay = require "Overlay"
   if result then
     app.logInfo("Quicksaved to %s", filename)
-    Overlay.mainFlashMessage("Quicksaved to slot %d.", slot)
+    Overlay.flashMainMessage("Quicksaved to slot %d.", slot)
   else
     app.logError("Quicksave:failed")
-    Overlay.mainFlashMessage("Quicksave to slot %d failed.", slot)
+    Overlay.flashMainMessage("Quicksave to slot %d failed.", slot)
   end
   if after then after() end
 end
@@ -732,12 +732,12 @@ local function quickLoad(slot, i)
           metaData["boot"].lastSlot = slot
           writeBootData()
           Busy.stop()
-          Overlay.mainFlashMessage("'%s' loaded (^_^)y", name)
+          Overlay.flashMainMessage("'%s' loaded (^_^)y", name)
         end
       end
       confirmFirmwareVersionAndExecute(preset, task)
     else
-      Overlay.mainFlashMessage("Failed to load '%s' (>_<)", name)
+      Overlay.flashMainMessage("Failed to load '%s' (>_<)", name)
     end
   end
 end

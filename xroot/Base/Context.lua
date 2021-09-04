@@ -200,7 +200,7 @@ function Context:mainPressed(i, shifted)
         Busy.stop()
       else
         local Overlay = require "Overlay"
-        Overlay.mainFlashMessage("Quicksave: No card mounted.")
+        Overlay.flashMainMessage("Quicksave: No card mounted.")
       end
       return true
     end

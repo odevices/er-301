@@ -137,9 +137,9 @@ function Console:subReleased(i, shifted)
       local task = function(ans)
         if ans then
           if Card.format() then
-            Overlay.mainFlashMessage("Format was successful.")
+            Overlay.flashMainMessage("Format was successful.")
           else
-            Overlay.mainFlashMessage("Format failed.")
+            Overlay.flashMainMessage("Format failed.")
           end
         end
       end

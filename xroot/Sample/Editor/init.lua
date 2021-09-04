@@ -133,7 +133,7 @@ function Editor:setInterfaceMode(mode, flash)
     self.mainButton[3]:setText("")
     self.mainButton[4]:setText("")
     self.mainButton[5]:setText("zc.snap")
-    if flash then Overlay.mainFlashMessage("Mode: Edit") end
+    if flash then Overlay.flashMainMessage("Mode: Edit") end
   end
 
   -- buttons 6 is always same
@@ -280,7 +280,7 @@ function Editor:mainReleased(i, shifted)
     elseif i == 4 then
     elseif i == 5 then
       local n = self.mainDisplay:movePointerToNearestZeroCrossing()
-      Overlay.mainFlashMessage(string.format("Cursor moved %d samples.", n))
+      Overlay.flashMainMessage(string.format("Cursor moved %d samples.", n))
     end
   end
   return true

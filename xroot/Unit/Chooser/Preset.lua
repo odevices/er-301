@@ -11,7 +11,7 @@ local threshold = Env.EncoderThreshold.Default
 
 local function showMessage(...)
   local Overlay = require "Overlay"
-  Overlay.mainFlashMessage(...)
+  Overlay.flashMainMessage(...)
 end
 
 local PresetChooser = Class {}

@@ -79,7 +79,7 @@ function Creator:doneChoosing(srcPaths, dstPath, author)
     self:emitSignal("done")
   else
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("%s created.", dstFilename)
+    Overlay.flashMainMessage("%s created.", dstFilename)
   end
 end
 
