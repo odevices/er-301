@@ -148,12 +148,11 @@ local function getDelayTime()
   local Settings = require "Settings"
   local choice = Settings.get("floatingMenuDelay")
   local values = {
-    ["50ms"] = 0.05,
-    ["0.1s"] = 0.1,
     ["0.2s"] = 0.2,
-    ["0.4s"] = 0.4,
+    ["0.3s"] = 0.3,
+    ["0.5s"] = 0.5,
    }
-   return values[choice] or 0.2
+   return values[choice] or 0.3
 end
 
 local function open(o)
