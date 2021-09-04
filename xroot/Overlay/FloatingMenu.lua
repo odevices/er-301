@@ -1,6 +1,7 @@
 local app = app
 local Timer = require "Timer"
 local Manager = require "Overlay.Manager"
+local Settings = require "Settings"
 
 -- MenuArc implements the graphics.
 local menuArc = app.MenuArc()
@@ -144,6 +145,18 @@ local function onOpen()
   fireMenuEnter()
 end
 
+local function getDelayTime()
+  local Settings = require "Settings"
+  local choice = Settings.get("floatingMenuDelay")
+  local values = {
+    ["0.1s"] = 0.1,
+    ["0.2s"] = 0.2,
+    ["0.3s"] = 0.3,
+    ["0.4s"] = 0.4,
+   }
+   return values[choice] or 0.3
+end
+
 local function open(o)
   Manager.removeMainGraphic(menuArc)
   menuArc:clear()
@@ -155,7 +168,7 @@ local function open(o)
   local Application = require "Application"
   local x = app.getButtonCenter(Application.getLastMainButtonPressed())
   menuArc:setAnchor(x)
-  timer = Timer.after(0.3, onOpen)
+  timer = Timer.after(getDelayTime(), onOpen)
 end
 
 return {

@@ -21,6 +21,10 @@ menuItems[#menuItems + 1] = {
   "addVariable",
   "animation"
 }
+menuItems[#menuItems + 1] = {
+  "addVariable",
+  "floatingMenuDelay"
+}
 if app.TESTING then
   menuItems[#menuItems + 1] = {
     "addVariable",

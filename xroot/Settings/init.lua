@@ -274,7 +274,18 @@ local defaults = {
       local Signal = require "Signal"
       Signal.emit("onUSBModeChanged")
     end
-  }
+  },
+  floatingMenuDelay = {
+    category = "General",
+    description = "Long press time for floating menu:",
+    value = "0.3s",
+    choices = {
+      "0.1s",
+      "0.2s",
+      "0.3s",
+      "0.4s"
+    }
+  },
 }
 
 --------------------------------------------------------
