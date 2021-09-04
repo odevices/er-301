@@ -16,7 +16,7 @@ $(firmware_archive): $(firmware_contents)
 	@rm -rf $(firmware_archive)
 	@$(ZIP) -j $(firmware_archive) $(firmware_contents)	
 
-$(build_dir)/install.lua: scripts/install.lua
+$(build_dir)/install.lua: scripts/install.lua scripts/env.mk
 	@echo $(describe_env) SED $(describe_target)
 	@sed 's/FIRMWARE_VERSION/$(FIRMWARE_VERSION)/g' $< > $@
 
