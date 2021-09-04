@@ -58,7 +58,7 @@ function MenuOperations:doTrim()
   local Ns = to - from
   if Ns < 32 then
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("Trim failed. Region is too small.")
+    Overlay.flashMainMessage("Trim failed. Region is too small.")
   end
   if sample then
     Busy.start("Trimming...")
@@ -67,7 +67,7 @@ function MenuOperations:doTrim()
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Trim failed. Could not clone sample.")
+      Overlay.flashMainMessage("Trim failed. Could not clone sample.")
       return
     end
     newSample:copyFrom(0,Ns,sample,from,true)
@@ -90,7 +90,7 @@ function MenuOperations:doCut()
   local Ns = As + Bs
   if Ns < 32 then
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("Cut failed. Remaining region is too small.")
+    Overlay.flashMainMessage("Cut failed. Remaining region is too small.")
   end
   if sample then
     Busy.start("Cutting...")
@@ -99,7 +99,7 @@ function MenuOperations:doCut()
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Cut failed. Could not clone sample.")
+      Overlay.flashMainMessage("Cut failed. Could not clone sample.")
       return
     end
     if As > 0 then
@@ -130,7 +130,7 @@ function MenuOperations:doSilence()
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Silence failed. Could not clone sample.")
+      Overlay.flashMainMessage("Silence failed. Could not clone sample.")
       return
     end
     newSample:copyFrom(0,Ns,sample,0,true)
@@ -155,7 +155,7 @@ function MenuOperations:doFadeIn()
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Fade failed. Could not clone sample.")
+      Overlay.flashMainMessage("Fade failed. Could not clone sample.")
       return
     end
     newSample:copyFrom(0,Ns,sample,0,true)
@@ -180,7 +180,7 @@ function MenuOperations:doFadeOut()
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Fade failed. Could not clone sample.")
+      Overlay.flashMainMessage("Fade failed. Could not clone sample.")
       return
     end
     newSample:copyFrom(0,Ns,sample,0,true)
@@ -205,7 +205,7 @@ function MenuOperations:doNormalize()
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Normalize failed. Could not clone sample.")
+      Overlay.flashMainMessage("Normalize failed. Could not clone sample.")
       return
     end
     newSample:copyFrom(0,Ns,sample,0,true)
@@ -230,7 +230,7 @@ function MenuOperations:doRemoveDC()
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Remove DC failed. Could not clone sample.")
+      Overlay.flashMainMessage("Remove DC failed. Could not clone sample.")
       return
     end
     newSample:copyFrom(0,Ns,sample,0,true)
@@ -252,9 +252,9 @@ function MenuOperations:doSave()
   if sample then
     local success, status = SamplePool.save(sample)
     if success then
-      Overlay.mainFlashMessage("Saved: %s",sample:getFullPathForDisplay(32))
+      Overlay.flashMainMessage("Saved: %s",sample:getFullPathForDisplay(32))
     elseif status then
-      Overlay.mainFlashMessage(status)
+      Overlay.flashMainMessage(status)
     end
   end
 end
@@ -266,9 +266,9 @@ function MenuOperations:doSaveAs()
   if sample then
     local success, status = SamplePool.save(sample,true)
     if success then
-      Overlay.mainFlashMessage("Saved: %s",sample:getFullPathForDisplay(32))
+      Overlay.flashMainMessage("Saved: %s",sample:getFullPathForDisplay(32))
     elseif status then
-      Overlay.mainFlashMessage(status)
+      Overlay.flashMainMessage(status)
     end
   end
 end
@@ -287,9 +287,9 @@ function MenuOperations:doRevert()
         SamplePool.unload(sample)
       end
       self.mainDisplay:movePointerToViewCenter()
-      Overlay.mainFlashMessage("Reverted: %s",revertedSample:getFullPathForDisplay(32))
+      Overlay.flashMainMessage("Reverted: %s",revertedSample:getFullPathForDisplay(32))
     elseif status then
-      Overlay.mainFlashMessage(status)
+      Overlay.flashMainMessage(status)
     end
   end
 end

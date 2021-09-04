@@ -191,7 +191,7 @@ function InputGate:subReleased(i, shifted)
   if shifted then return false end
   if i == 1 then
     local Overlay = require "Overlay"
-    Overlay.subFlashMessage("Unit input only.")
+    Overlay.flashSubMessage("Unit input only.")
   elseif i == 2 then
     if not self:hasFocus("encoder") then self:focus() end
     self:setFocusedReadout(self.threshold)

@@ -248,7 +248,7 @@ function FileChooser:finish(filename, path, overwrite)
     local fullpath = Path.join(path, filename)
     if filename == nil or filename == "" or Path.isDirectory(fullpath) then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("This choice is not a file ^(;,;)^")
+      Overlay.flashMainMessage("This choice is not a file ^(;,;)^")
       return
     elseif not overwrite and Path.exists(fullpath) then
       -- overwriting existing file...
@@ -286,7 +286,7 @@ function FileChooser:finish(filename, path, overwrite)
     local fullpath = Path.join(path, filename)
     if filename == nil or filename == "" or not Path.isDirectory(fullpath) then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("This choice is not a folder ^(;,;)^")
+      Overlay.flashMainMessage("This choice is not a folder ^(;,;)^")
       return
     end
     -- Save the path and choice in the history.
@@ -325,7 +325,7 @@ function FileChooser:finish(filename, path, overwrite)
       local selectedPaths = self.browser:getCheckedPaths()
       if #selectedPaths == 0 then
         local Overlay = require "Overlay"
-        Overlay.mainFlashMessage("Nothing is selected ^(;,;)^")
+        Overlay.flashMainMessage("Nothing is selected ^(;,;)^")
         return
       end
       local result = {
@@ -338,7 +338,7 @@ function FileChooser:finish(filename, path, overwrite)
       local fullpath = Path.join(path, filename)
       if filename == nil or filename == "" or Path.isDirectory(fullpath) then
         local Overlay = require "Overlay"
-        Overlay.mainFlashMessage("This choice is not a file ^(;,;)^")
+        Overlay.flashMainMessage("This choice is not a file ^(;,;)^")
         return
       end
       local result = {
@@ -621,7 +621,7 @@ function FileChooser:selectPressed(i, shifted)
   local Overlay = require "Overlay"
   local Channels = require "Channels"
   local chain = Channels.getChain(i)
-  Overlay.mainFlashMessage("Audition Output: " .. chain.title)
+  Overlay.flashMainMessage("Audition Output: " .. chain.title)
   self:getPlayer():changeDestination(i)
   return true
 end

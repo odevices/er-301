@@ -123,7 +123,7 @@ function SlicingView:setInterfaceMode(mode, flash)
     self.mainButton[3]:setText("+ Slice")
     self.mainButton[4]:setText("- Slice")
     self.mainButton[5]:setText("goto ZC")
-    if flash then Overlay.mainFlashMessage("Mode: Manual Slicing") end
+    if flash then Overlay.flashMainMessage("Mode: Manual Slicing") end
   end
 
   -- buttons 6 is always same
@@ -280,7 +280,7 @@ function SlicingView:mainReleased(i, shifted)
               Settings.get("insertSliceAtZeroCrossing"))
         end
       else
-        Overlay.mainFlashMessage("No slice under cursor.")
+        Overlay.flashMainMessage("No slice under cursor.")
       end
     elseif i == 2 then
       if self.mainDisplay:haveSliceUnderPointer() then
@@ -291,7 +291,7 @@ function SlicingView:mainReleased(i, shifted)
           self.mainDisplay:setLoopEnd(Settings.get("insertSliceAtZeroCrossing"))
         end
       else
-        Overlay.mainFlashMessage("No slice under cursor.")
+        Overlay.flashMainMessage("No slice under cursor.")
       end
     elseif i == 3 then
       if shifted then
@@ -304,7 +304,7 @@ function SlicingView:mainReleased(i, shifted)
       self.mainDisplay:deleteSlice()
     elseif i == 5 then
       local n = self.mainDisplay:movePointerToNearestZeroCrossing()
-      Overlay.mainFlashMessage(string.format("Cursor moved %d samples.", n))
+      Overlay.flashMainMessage(string.format("Cursor moved %d samples.", n))
     end
   end
   return true

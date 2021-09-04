@@ -33,7 +33,7 @@ function LogViewer:nextError(stopAt)
     if not self.console:scrollDown() then self.console:scrollToTop() end
   until self.console:getSelectedIndex() == stopAt
   local Overlay = require "Overlay"
-  Overlay.mainFlashMessage("No error found.")
+  Overlay.flashMainMessage("No error found.")
 end
 
 function LogViewer:doSave()
@@ -47,11 +47,11 @@ function LogViewer:doSave()
         for i = 1, n do f:write(self:get(i), "\n") end
         f:close()
         local Overlay = require "Overlay"
-        Overlay.mainFlashMessage("Log file saved.")
+        Overlay.flashMainMessage("Log file saved.")
         app.logInfo("Saved log to %s.", result.fullpath)
       else
         local Overlay = require "Overlay"
-        Overlay.mainFlashMessage("Failed to save log file.")
+        Overlay.flashMainMessage("Failed to save log file.")
         app.logError("Could not create %s.", result.fullpath)
       end
     end

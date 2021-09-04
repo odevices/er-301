@@ -31,6 +31,12 @@ end
 function Control:getFloatingMenuItems()
 end
 
+function Control:onFloatingMenuEnter()
+end
+
+function Control:onFloatingMenuChange(choice)
+end
+
 function Control:onFloatingMenuSelection(choice)
 end
 

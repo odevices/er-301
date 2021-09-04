@@ -48,7 +48,7 @@ function Control:onReleased()
 end
 
 function Control:onReleasedWhenDisabled()
-  if self.disabledMsg then Overlay.mainFlashMessage(self.disabledMsg) end
+  if self.disabledMsg then Overlay.flashMainMessage(self.disabledMsg) end
   return true
 end
 

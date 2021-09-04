@@ -102,7 +102,7 @@ function Decimal:commitReleased()
     self:emitSignal("commit", g:getValue())
   end
   local SG = require "Overlay"
-  SG.mainFlashMessage(self.commitMessage or "Value committed.")
+  SG.flashMainMessage(self.commitMessage or "Value committed.")
   return true
 end
 

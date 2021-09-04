@@ -108,11 +108,11 @@ function ChannelGroup:toggleMute()
   local Overlay = require "Overlay"
   local chain = self.chain
   if chain:isMuted() then
-    Overlay.mainFlashMessage(chain.title .. ": Mute Off")
+    Overlay.flashMainMessage(chain.title .. ": Mute Off")
     self:unmute()
   else
     self:mute()
-    Overlay.mainFlashMessage(chain.title .. ": Mute On")
+    Overlay.flashMainMessage(chain.title .. ": Mute On")
   end
 end
 

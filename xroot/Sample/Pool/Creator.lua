@@ -230,7 +230,7 @@ function Creator:enterReleased()
   }
   if not sample then
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("Failed to create buffer.", status)
+    Overlay.flashMainMessage("Failed to create buffer.", status)
   end
   self:hide()
   self:emitSignal("done", sample)

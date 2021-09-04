@@ -374,7 +374,7 @@ function ChainBase:loadUnit(loadInfo, position, continuing)
   if unit == nil then
     Busy.stop()
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("Failed to load unit: %s",
+    Overlay.flashMainMessage("Failed to load unit: %s",
                              loadInfo.title or loadInfo.moduleName)
     return nil
   end

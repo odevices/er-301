@@ -89,10 +89,10 @@ function FileRecorder:updateHints()
       local action = spot:getValue("action")
       if action == "link" then
         self.hint:setText("ENTER links to stereo.")
-        Overlay.mainFlashMessage("ENTER links to stereo.")
+        Overlay.flashMainMessage("ENTER links to stereo.")
       elseif action == "unlink" then
         self.hint:setText("ENTER splits back to mono.")
-        Overlay.mainFlashMessage("ENTER splits back to mono.")
+        Overlay.flashMainMessage("ENTER splits back to mono.")
       else
         self.hint:setText("Press HOME to clear.")
       end
@@ -128,10 +128,10 @@ function FileRecorder:startRecording()
   end
 
   if noSources then
-    Overlay.mainFlashMessage("Assign at least one channel.")
+    Overlay.flashMainMessage("Assign at least one channel.")
     return false
   elseif not Card.mounted() then
-    Overlay.mainFlashMessage("The SD card is not mounted.")
+    Overlay.flashMainMessage("The SD card is not mounted.")
     return false
   else
     Busy.start("Preparing files for recording...")
@@ -153,7 +153,7 @@ function FileRecorder:startRecording()
       end
     end
     if not self.thread:allocateCache() then
-      Overlay.mainFlashMessage("Not enough memory for cache.")
+      Overlay.flashMainMessage("Not enough memory for cache.")
     end
     app.AudioThread.addTask(self.task, -1)
     self.state = "recording"
@@ -252,7 +252,7 @@ end
 
 function FileRecorder:saveSingleTrackTo(i, path)
   app.moveFile(self.paths[i], path, true)
-  Overlay.mainFlashMessage("Saved to %s", path)
+  Overlay.flashMainMessage("Saved to %s", path)
   for i, path in ipairs(self.paths) do Card.release(path) end
   self.sinks = {}
   self.state = "setup"
@@ -264,14 +264,14 @@ end
 function FileRecorder:saveMultipleTracksTo(base, path)
   if self:hasSavedTracks(base, path) then
     local nextTake = self:getMaxTake(base, path) + 1
-    Overlay.mainFlashMessage("Saved recording to %s (take %d)", base, nextTake)
+    Overlay.flashMainMessage("Saved recording to %s (take %d)", base, nextTake)
     for i, sink in pairs(self.sinks) do
       local filename = string.format("%s-take%d-T%d.wav", base, nextTake, i)
       local destPath = Path.join(path, filename)
       app.moveFile(self.paths[i], destPath, false)
     end
   else
-    Overlay.mainFlashMessage("Saved recording to %s", base)
+    Overlay.flashMainMessage("Saved recording to %s", base)
     for i, sink in pairs(self.sinks) do
       local filename = string.format("%s-T%d.wav", base, i)
       local destPath = Path.join(path, filename)
@@ -561,7 +561,7 @@ end
 function FileRecorder:subReleased(i, shifted)
   if self.state == "setup" then
     if not Card.mounted() then
-      Overlay.mainFlashMessage("The SD card is not mounted.")
+      Overlay.flashMainMessage("The SD card is not mounted.")
     elseif i == 1 then
       local Persist = require "Persist"
       Persist.loadRecorderPreset()

@@ -123,7 +123,7 @@ function Chooser:subReleased(i, shifted)
   local GlobalChains = require "GlobalChains"
   if i == 3 and GlobalChains.count() == 0 then
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("No global chains.")
+    Overlay.flashMainMessage("No global chains.")
     return
   end
   self:setChooser(i)

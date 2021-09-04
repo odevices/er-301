@@ -274,7 +274,17 @@ local defaults = {
       local Signal = require "Signal"
       Signal.emit("onUSBModeChanged")
     end
-  }
+  },
+  floatingMenuDelay = {
+    category = "General",
+    description = "Long press time for floating menu:",
+    value = "0.3s",
+    choices = {
+      "0.2s",
+      "0.3s",
+      "0.5s"
+    }
+  },
 }
 
 --------------------------------------------------------
@@ -347,11 +357,11 @@ local function save()
   for name, v in pairs(variables) do t[name] = v.value end
   if not Persist.writeTable(settingsFile, t) then
     Busy.stop()
-    Overlay.mainFlashMessage("Failed to save settings (>_<)")
+    Overlay.flashMainMessage("Failed to save settings (>_<)")
     app.logError("Failed to save settings.")
   else
     Busy.stop()
-    Overlay.mainFlashMessage("Settings saved.")
+    Overlay.flashMainMessage("Settings saved.")
   end
   syncFirmwareConfig(true)
 end

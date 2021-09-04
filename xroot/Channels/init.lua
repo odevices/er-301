@@ -39,7 +39,7 @@ local function update()
     c2g[1] = group
     c2g[2] = group
     Busy.stop()
-    Overlay.mainFlashMessage("Linked OUT1 + OUT2")
+    Overlay.flashMainMessage("Linked OUT1 + OUT2")
   elseif not links[1] and c2g[1] == c2g[2] then
     Busy.start("Unlinking OUT1+2")
     c2g[1]:destroy()
@@ -47,7 +47,7 @@ local function update()
     c2g[1] = ChannelGroup(1)
     c2g[2] = ChannelGroup(2)
     Busy.stop()
-    Overlay.mainFlashMessage("Unlinked OUT1+2")
+    Overlay.flashMainMessage("Unlinked OUT1+2")
   end
 
   if links[2] and c2g[2] ~= c2g[3] then
@@ -58,7 +58,7 @@ local function update()
     c2g[2] = group
     c2g[3] = group
     Busy.stop()
-    Overlay.mainFlashMessage("Linked OUT2 + OUT3")
+    Overlay.flashMainMessage("Linked OUT2 + OUT3")
   elseif not links[2] and c2g[2] == c2g[3] then
     Busy.start("Unlinking OUT2+3")
     c2g[2]:destroy()
@@ -66,7 +66,7 @@ local function update()
     c2g[2] = ChannelGroup(2)
     c2g[3] = ChannelGroup(3)
     Busy.stop()
-    Overlay.mainFlashMessage("Unlinked OUT2+3")
+    Overlay.flashMainMessage("Unlinked OUT2+3")
   end
 
   if links[3] and c2g[3] ~= c2g[4] then
@@ -77,7 +77,7 @@ local function update()
     c2g[3] = group
     c2g[4] = group
     Busy.stop()
-    Overlay.mainFlashMessage("Linked OUT3 + OUT4")
+    Overlay.flashMainMessage("Linked OUT3 + OUT4")
   elseif not links[3] and c2g[3] == c2g[4] then
     Busy.start("Unlinking OUT3+4")
     c2g[3]:destroy()
@@ -85,7 +85,7 @@ local function update()
     c2g[3] = ChannelGroup(3)
     c2g[4] = ChannelGroup(4)
     Busy.stop()
-    Overlay.mainFlashMessage("Unlinked OUT3 + OUT4")
+    Overlay.flashMainMessage("Unlinked OUT3 + OUT4")
   end
 
   groups = {

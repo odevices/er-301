@@ -98,7 +98,7 @@ function FeedbackLooper:doCreateBuffer()
   local task = function(sample)
     if sample then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Attached buffer: %s", sample.name)
+      Overlay.flashMainMessage("Attached buffer: %s", sample.name)
       self:setSample(sample)
     end
   end
@@ -113,7 +113,7 @@ function FeedbackLooper:doAttachBufferFromPool()
   local task = function(sample)
     if sample then
       local Overlay = require "Overlay"
-      Overlay.mainFlashMessage("Attached buffer: %s", sample.name)
+      Overlay.flashMainMessage("Attached buffer: %s", sample.name)
       self:setSample(sample)
     end
   end
@@ -123,13 +123,13 @@ end
 
 function FeedbackLooper:doDetachBuffer()
   local Overlay = require "Overlay"
-  Overlay.mainFlashMessage("Buffer detached.")
+  Overlay.flashMainMessage("Buffer detached.")
   self:setSample()
 end
 
 function FeedbackLooper:doZeroBuffer()
   local Overlay = require "Overlay"
-  Overlay.mainFlashMessage("Buffer zeroed.")
+  Overlay.flashMainMessage("Buffer zeroed.")
   self.objects.head:zeroBuffer()
 end
 
@@ -144,7 +144,7 @@ function FeedbackLooper:showSampleEditor()
     self.sampleEditor:show()
   else
     local Overlay = require "Overlay"
-    Overlay.mainFlashMessage("You must first select a sample.")
+    Overlay.flashMainMessage("You must first select a sample.")
   end
 end
 

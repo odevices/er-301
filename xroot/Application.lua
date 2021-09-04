@@ -111,12 +111,12 @@ local function doScreenShot()
     local shortPath = Path.lastFolderAndFilename(fullPath)
     local result = app.UIThread.saveScreenShotTo(fullPath)
     if result then
-      Overlay.mainFlashMessage("Saved screenshot to %s", shortPath)
+      Overlay.flashMainMessage("Saved screenshot to %s", shortPath)
     else
-      Overlay.mainFlashMessage("Failed to save screenshot to %s", shortPath)
+      Overlay.flashMainMessage("Failed to save screenshot to %s", shortPath)
     end
   else
-    Overlay.mainFlashMessage("Screenshot failed. Card not mounted.")
+    Overlay.flashMainMessage("Screenshot failed. Card not mounted.")
   end
 end
 

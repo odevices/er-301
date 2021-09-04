@@ -614,9 +614,9 @@ local function chooseFileFromCard(history, after, loop)
       sample = nil
       local Overlay = require "Overlay"
       if status == app.STATUS_OUT_OF_MEMORY then
-        Overlay.mainFlashMessage("Failed. Not enough sample memory.")
+        Overlay.flashMainMessage("Failed. Not enough sample memory.")
       elseif status == app.STATUS_ERROR_OPENING_FILE then
-        Overlay.mainFlashMessage("Failed. Could not open file.")
+        Overlay.flashMainMessage("Failed. Could not open file.")
       end
     end
     if after then after(sample) end
