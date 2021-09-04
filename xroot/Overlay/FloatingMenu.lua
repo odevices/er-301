@@ -1,7 +1,6 @@
 local app = app
 local Timer = require "Timer"
 local Manager = require "Overlay.Manager"
-local Settings = require "Settings"
 
 -- MenuArc implements the graphics.
 local menuArc = app.MenuArc()
@@ -152,7 +151,7 @@ local function getDelayTime()
     ["0.1s"] = 0.1,
     ["0.2s"] = 0.2,
     ["0.3s"] = 0.3,
-    ["0.4s"] = 0.4,
+    ["0.5s"] = 0.5,
    }
    return values[choice] or 0.3
 end
