@@ -246,6 +246,11 @@ namespace od
         // ignore hidden and system files
         continue;
       }
+      else if (tmp[0] == '.')
+      {
+        // ignore dot files
+        continue;
+      }
       fname = tmp;
       if (attributes & FILEOPS_DIR)
       {
@@ -557,6 +562,17 @@ namespace od
 
     while (Dir_read(dir, &tmp, &attributes))
     {
+      if (attributes & (FILEOPS_HID | FILEOPS_SYS))
+      {
+        // ignore hidden and system files
+        continue;
+      }
+      else if (tmp[0] == '.')
+      {
+        // ignore dot files
+        continue;
+      }
+
       fname = tmp;
       if (attributes & FILEOPS_DIR)
       {
@@ -596,6 +612,17 @@ namespace od
 
     while (Dir_read(dir, &tmp, &attributes))
     {
+      if (attributes & (FILEOPS_HID | FILEOPS_SYS))
+      {
+        // ignore hidden and system files
+        continue;
+      }
+      else if (tmp[0] == '.')
+      {
+        // ignore dot files
+        continue;
+      }
+
       fname = tmp;
       if (attributes & FILEOPS_DIR)
       {

@@ -1,5 +1,6 @@
 #include "AppInterpreter.h"
 #include <hal/dir.h>
+#include <hal/fileops.h>
 #include <set>
 #include <vector>
 #include <string>
@@ -16,15 +17,28 @@ extern "C"
   static int dir_iter(lua_State *L)
   {
     char *fname;
+    uint32_t attributes;
     dir_t *d = (dir_t *)lua_touserdata(L, lua_upvalueindex(1));
 
-    if (Dir_read(*d, &fname, 0))
+    while (Dir_read(*d, &fname, &attributes))
     {
-      lua_pushstring(L, fname);
-      return 1;
+      if (attributes & (FILEOPS_HID | FILEOPS_SYS))
+      {
+        // ignore hidden and system files
+        continue;
+      }
+      else if (fname[0] == '.')
+      {
+        // ignore dot files
+        continue;
+      }
+      else
+      {
+        lua_pushstring(L, fname);
+        return 1;
+      }
     }
-    else
-      return 0; /* no more values to return */
+    return 0; /* no more values to return */
   }
 
   static int l_dir(lua_State *L)
