@@ -154,7 +154,7 @@ end
 function Sample:getLastFolderAndFilenameForDisplay(maxLength)
   if self.pretty then return Utils.shorten(self.pretty, maxLength, "..", true) end
 
-  local path = self.path
+  local path = FS.makePathPretty(self.path)
   local folder, filename = Path.split(path)
   if folder and folder ~= app.roots.front and folder ~= app.roots.front then
     local parentFolder, lastFolder = Path.split(folder)
@@ -171,6 +171,7 @@ end
 function Sample:getFullPathForDisplay(maxLength)
   if self.pretty then return Utils.shorten(self.pretty, maxLength, "..") end
   local path, filename = Path.split(self.path)
+  path = FS.makePathPretty(path)
   local token = app.roots.front .. "/"
   if path and Utils.startsWith(path, token) then
     path = string.sub(path, #token + 1)

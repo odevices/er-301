@@ -179,6 +179,12 @@ local function checkPath(key, mode, fullpath)
   end
 end
 
+local function makePathPretty(path)
+  path = path:gsub((roots["libs"].."/"):quote(),"pkg:")
+  path = path:gsub(string.quote("/front/"),"/")
+  return path
+end
+
 local function findPreviousRoot()
   local currentVersion =
       Utils.convertVersionStringToNumber(app.FIRMWARE_VERSION)
@@ -270,5 +276,6 @@ return {
   checkPath = checkPath,
   isType = isType,
   isValidExtension = isValidExtension,
+  makePathPretty = makePathPretty,
   init = init
 }

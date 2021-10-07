@@ -37,19 +37,22 @@ local function generateUniqueName(root)
 end
 
 local function generateUniqueNameFromPaths(paths)
-  local id = lastBufferId + 1
-  lastBufferId = id
+  local FS = require "Card.FileSystem"
   local Persist = require "Persist"
   local session = Persist.meta.boot.count
   local longestPath = app.LongestPath()
-  for _, path in ipairs(paths) do longestPath:add(path) end
+  for _, path in ipairs(paths) do longestPath:add(FS.makePathPretty(path)) end
   local longest = longestPath:calculate()
   -- remove drive root
   longest = longest:gsub(app.roots.front, "")
   longest = longest:gsub(app.roots.rear, "")
   longest = longest:gsub(app.roots.x, "")
+  
+  local id = lastBufferId + 1
+  lastBufferId = id
+
   return string.format("%s-%04d-%02d", longest, session, id),
-         string.format("%02d-%s:%d", id, longest, #paths)
+         string.format("%s*", longest)
 end
 
 -- sample loading and saving queues
@@ -246,9 +249,7 @@ local function loadMulti(paths, id)
     type = "multi",
     paths = {}
   }
-  for i,path in ipairs(paths) do
-    opts.paths[i] = Path.expandRelativePath(path)
-  end
+  for i, path in ipairs(paths) do opts.paths[i] = Path.expandRelativePath(path) end
   local sample
   if id == nil then
     local uid, pretty = generateUniqueNameFromPaths(opts.paths)
@@ -519,12 +520,8 @@ end
 local function serializeSample(sample)
   app.logInfo("Serializing sample: %s", sample.path)
   local t = {}
-  if sample:isFileBased() or sample:isShared() then 
-    t.path = sample.path
-  end
-  if sample:isFileBased() then
-    sample.slices:save(sample:defaultSlicesPath())
-  end
+  if sample:isFileBased() or sample:isShared() then t.path = sample.path end
+  if sample:isFileBased() then sample.slices:save(sample:defaultSlicesPath()) end
   t.opts = Utils.deepCopy(sample.opts)
   if t.opts.type == "buffer" then
     -- Buffers do not persist their channelCount because it depends on the chain/serialization context.
