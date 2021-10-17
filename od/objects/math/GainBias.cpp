@@ -23,8 +23,13 @@ namespace od
   {
     float gain0 = mPreviousGain;
     float bias0 = mPreviousBias;
+    float32x4_t _gain0 = vdupq_n_f32(gain0);
+    float32x4_t _bias0 = vdupq_n_f32(bias0);
+
     float gain1 = mGain.value();
     float bias1 = mBias.value();
+    float32x4_t _gain1 = vdupq_n_f32(gain1);
+    float32x4_t _bias1 = vdupq_n_f32(bias1);
 
     float *in = mInput.buffer();
     float *out = mOutput.buffer();
@@ -38,9 +43,9 @@ namespace od
       }
       else
       {
-        for (int i = 0; i < FRAMELENGTH; i++)
+        for (int i = 0; i < FRAMELENGTH; i += 4)
         {
-          out[i] = in[i] * gain1 + bias1;
+          vst1q_f32(out + i, vld1q_f32(in + i) * _gain1 + _bias1);
         }
         mOutput.mIsConstant = false;
       }
@@ -48,11 +53,15 @@ namespace od
     else
     {
       float *ramp = LookupTables::FrameOfLinearRamp.mValues.data();
-      for (int i = 0; i < FRAMELENGTH; i++)
+      float32x4_t one = vdupq_n_f32(1);
+      for (int i = 0; i < FRAMELENGTH; i += 4)
       {
-        float w1 = ramp[i];
-        float w0 = 1.0f - w1;
-        out[i] = in[i] * (w0 * gain0 + w1 * gain1) + (w0 * bias0 + w1 * bias1);
+        float32x4_t w1 = vld1q_f32(ramp + i);
+        float32x4_t w0 = one - w1;
+
+        float32x4_t g = w0 * _gain0 + w1 * _gain1;
+        float32x4_t b = w0 * _bias0 + w1 * _bias1;
+        vst1q_f32(out + i, vld1q_f32(in + i) * g + b);
       }
       mOutput.mIsConstant = false;
     }
