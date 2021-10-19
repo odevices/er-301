@@ -25,7 +25,11 @@ extern "C"
 
   extern ConfigData globalConfig;
 
-// Use this for vectorizing loops in DSP render code.
+// Important: Use FRAMELENGTH instead of globalConfig.frameLength everywhere that speed matters.
+//
+// Frame lengths should already be multiples of 4 (for SIMD) but this macro 
+// convinces the compiler of that fact so it can vectorize loops without the 
+// post-processing step for non-multiples of 4.
 #define FRAMELENGTH ((int)(4 * (globalConfig.frameLength / 4)))
 
   void Config_init(const char *filename, const char *xRoot, const char *rearRoot, const char *frontRoot);
