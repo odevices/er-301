@@ -153,7 +153,8 @@ This of course assumes that your Makefile is based on the one provided with the 
 
 * You are basically telling the compiler that you want to take over (i.e. hold my beer/milk/tea while I show you how it is done) and thus many optimizations will not be attempted on code sections that use NEON intrinsics and/or data types.
 * Do not expect consistent behavior across processor types and compiler versions like you can for higher-level language constructs.
-* Ideally, you would first implement in idiomatic C. If after inspecting the disassembly, you see that the compiler has not vectorized at all (or not very well) then try to refactor so that the compiler can recognize the vectorization opportunity.
+* Ideally, you would first implement in idiomatic C. If after inspecting the disassembly, you see that the compiler has not vectorized at all (or not very well) then try to refactor so that the compiler can recognize the vectorization opportunity.  
+* Using the [FRAMELENGTH](../od/config.h#L33) macro in your loops will help the compiler recognize that you are working with data lengths that are a multiple of 4.
 * If that fails, then replace the smallest (most contained) section possible with your own vectorization via NEON intrinsics. If you can turn your optimization on and off with a simple set of #ifdef/#endif statements then you know you have done it right.
 * In other words, the ideal coding style for NEON intrinsics is to treat it like inline assembly: make the smallest surgical strike as possible.
 * NEON (and in fact all SIMD) data types are not proper citizens of high-level language design. They have special requirements (memory alignment, special registers, timing constraints) and sometimes do not (and can not) fit neatly within language standards (especially C++). The correct level of abstraction is to think of them as simple macros for assembly.
