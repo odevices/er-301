@@ -90,8 +90,15 @@ end
 local function instantiateFromLibrary(library, loadInfo, args)
   local loadInfoFound = library:find(loadInfo.moduleName) or loadInfo
   local modulePath = library.name .. "." .. loadInfoFound.moduleName
+  local moduleDir = FS.getRoot("libs") .. "/" .. library.name
+
   -- First try to load the unit's module
+  -- Add the module dir so files can be looked up without jumping through hoops.
+  local originalPath = package.path
+  package.path = moduleDir .. "/?.lua;" .. package.path
   local status, retval = xpcall(require, debug.traceback, modulePath)
+  package.path = originalPath
+
   if status then
     args.loadInfo = loadInfoFound
     -- Now try to construct the unit
