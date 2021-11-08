@@ -90,12 +90,19 @@ end
 local function instantiateFromLibrary(library, loadInfo, args)
   local loadInfoFound = library:find(loadInfo.moduleName) or loadInfo
   local modulePath = library.name .. "." .. loadInfoFound.moduleName
-  local moduleDir = FS.getRoot("libs") .. "/" .. library.name
 
-  -- First try to load the unit's module
-  -- Add the module dir so files can be looked up without jumping through hoops.
+  local moduleDir = FS.getRoot("libs") .. "/" .. library.name
+  local modulePackagePath = moduleDir .. "/?.lua"
+
+  -- Try to load the unit's module
+  -- Include the module dir in the package path so that modules can require
+  -- their own code without needing to know the outer dir structure. We keep it
+  -- on the end to avoid name conflicts with the core lib.
+  --
+  -- Notably this won't work for modules that require their own code inside
+  -- function calls, since the package path will have been reset by then.
   local originalPath = package.path
-  package.path = moduleDir .. "/?.lua;" .. package.path
+  package.path = package.path .. ";" .. modulePackagePath
   local status, retval = xpcall(require, debug.traceback, modulePath)
   package.path = originalPath
 
