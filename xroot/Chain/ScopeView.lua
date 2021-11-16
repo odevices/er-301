@@ -160,9 +160,9 @@ function ScopeView:onSelectionChanged()
     elseif node.type == "MonoSource" then
       self.scope:watchOutlet(node.o:getOutlet())
     elseif node.type == "Unit" then
-      self.scope:watchOutlet(node.o:getMonitoringOutput(side))
+      self.scope:watchOutlet(node.o:getOutput(side))
     elseif node.type == "Branch" then
-      self.scope:watchOutlet(node.o:getMonitoringOutput(side))
+      self.scope:watchOutlet(node.o:getOutput(side))
     elseif node.type == "Patch" then
       self.scope:watchOutlet(node.o:getMonitoringOutput(side))
     end
