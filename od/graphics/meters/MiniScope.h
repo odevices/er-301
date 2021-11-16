@@ -53,7 +53,8 @@ namespace od
 
     void calculate();
     int mCalculateCount = 0;
-    static const int RefreshTime = 2;
+    int mRefreshTime = 2;
+    static const int MaxRefreshTime = 2;
     static const int WarmUpTime = 10;
 
     int mLeftBorder = 0;

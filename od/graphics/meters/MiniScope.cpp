@@ -5,6 +5,7 @@
 
 #define USE_AUTO_TRIGGER 1
 #define MANUAL_TRIGGER_THRESHOLD 0
+#define USE_ADAPTIVE_REFRESH 1
 
 namespace od
 {
@@ -18,7 +19,7 @@ namespace od
       mMinimums[i] = 0;
     }
     mEWMA.setInitialState(0.0f);
-    mEWMA.setTimeConstant(globalConfig.sampleRate, 1.0f);
+    mEWMA.setTimeConstant(globalConfig.sampleRate * 0.25, 1.0f);
     mShowStatus = mWidth > 50;
   }
 
@@ -66,6 +67,11 @@ namespace od
         break;
       }
     }
+
+#if USE_ADAPTIVE_REFRESH
+    mRefreshTime = 4 * mHorizontalSync * globalConfig.samplePeriod * GRAPHICS_REFRESH_RATE;
+    mRefreshTime = CLAMP(2, MaxRefreshTime, mRefreshTime);
+#endif
 
     int imin = n2 + mHorizontalSync - n4;
     int imax = imin + n2;
@@ -140,7 +146,7 @@ namespace od
       return;
     }
 
-    if (mCalculateCount == RefreshTime)
+    if (mCalculateCount >= mRefreshTime)
     {
       calculate();
       mCalculateCount = 0;
