@@ -52,10 +52,10 @@ namespace od
     FastEWMA mEWMA;
 
     void calculate();
-    int mCalculateCount = 0;
-    int mRefreshTime = 2;
-    static const int MaxRefreshTime = 2;
+
     static const int WarmUpTime = 10;
+    static const int RefreshTime = 2;
+    int mCalculateCount = 0;
 
     int mLeftBorder = 0;
     int mRightBorder = 0;

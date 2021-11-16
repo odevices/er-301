@@ -5,7 +5,6 @@
 
 #define USE_AUTO_TRIGGER 1
 #define MANUAL_TRIGGER_THRESHOLD 0
-#define USE_ADAPTIVE_REFRESH 1
 
 namespace od
 {
@@ -67,11 +66,6 @@ namespace od
         break;
       }
     }
-
-#if USE_ADAPTIVE_REFRESH
-    mRefreshTime = 4 * mHorizontalSync * globalConfig.samplePeriod * GRAPHICS_REFRESH_RATE;
-    mRefreshTime = CLAMP(2, MaxRefreshTime, mRefreshTime);
-#endif
 
     int imin = n2 + mHorizontalSync - n4;
     int imax = imin + n2;
@@ -146,7 +140,7 @@ namespace od
       return;
     }
 
-    if (mCalculateCount >= mRefreshTime)
+    if (mCalculateCount >= RefreshTime)
     {
       calculate();
       mCalculateCount = 0;
