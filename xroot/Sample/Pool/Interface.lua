@@ -607,10 +607,9 @@ end
 function Interface:subReleased(i, shifted)
   if shifted then return true end
   if self.purpose == "save" then
-    if i == 1 then
+    if i == 1 or i == 2 then
       self:hide()
       self:emitSignal("done", true)
-    elseif i == 2 then
     elseif i == 3 then
       self:doPurgeUnused()
     end
