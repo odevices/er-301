@@ -425,7 +425,11 @@ function Pitch:subReleased(i, shifted)
       branch:show()
     end
   elseif i == 2 then
-    if self:hasFocus("encoder") then self:doTuneSet() end
+    if self:hasFocus("encoder") then 
+      self:doTuneSet()
+    else
+      self:focus()
+    end
   elseif i == 3 then
 
   end
