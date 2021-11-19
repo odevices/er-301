@@ -5,6 +5,8 @@
 #include <od/UIThread.h>
 #include <od/config.h>
 
+#define COMMIT_CHUNKSIZE_FRAMES 16
+
 namespace od
 {
 
@@ -411,6 +413,15 @@ namespace od
       }
       break;
     case stopState:
+      if (mPlayLevel.mValue > 0.0f)
+      {
+        // Continue advancing while volume is positive.
+        mCurrentFrame++;
+        if (mCurrentFrame == mFrameCount)
+        {
+          mCurrentFrame = 0;
+        }
+      }
       break;
     }
 
@@ -420,70 +431,76 @@ namespace od
     mUndoLevel.step();
   }
 
-  void PedalLooper::commit()
+  static void circularCopyFrames(float *dst, float *src, int len, int start, int n)
   {
-    float *bufferL = getLeftMaster();
-    float *undoL = getLeftCopy();
-    mCommitCount = mFrameCount;
-    mCommitStart = mCurrentFrame;
-    int n = MIN(10, mFrameCount);
     while (n > 0)
     {
-      int j = mCommitStart * FRAMELENGTH;
-      memcpy(undoL + j, bufferL + j, sizeof(float) * FRAMELENGTH);
-      mCommitStart++;
-      if (mCommitStart == mFrameCount)
+      int j = start * FRAMELENGTH;
+      memcpy(dst + j, src + j, sizeof(float) * FRAMELENGTH);
+      start++;
+      if (start == len)
       {
-        mCommitStart = 0;
+        start = 0;
       }
       n--;
-      mCommitCount--;
     }
+  }
+
+  void PedalLooper::commit()
+  {
+    // First commit up to COMMIT_CHUNKSIZE_FRAMES in the audio thread.
+
+    mCommitRemaining = mFrameCount;
+    mCommitStart = mCurrentFrame;
+
+    int n = MIN(COMMIT_CHUNKSIZE_FRAMES, mCommitRemaining);
+    float *bufferL = getLeftMaster();
+    float *undoL = getLeftCopy();
+    circularCopyFrames(undoL, bufferL, mFrameCount, mCommitStart, n);
+    if (mChannelCount > 1)
+    {
+      float *bufferR = getRightMaster();
+      float *undoR = getRightCopy();
+      circularCopyFrames(undoR, bufferR, mFrameCount, mCommitStart, n);
+    }
+
+    mCommitRemaining -= n;
+    mCommitStart += n;
+    if (mCommitStart > mFrameCount)
+    {
+      mCommitStart -= mFrameCount;
+    }
+
+    // Schedule the remaining frames in another thread.
     scheduleCommit();
   }
 
   // do not call in the audio thread
   void PedalLooper::commitRemaining()
   {
-    if (mFrameCount == 0 || mCommitCount == 0)
+    if (mFrameCount == 0)
     {
       return;
     }
 
+    while (mCommitRemaining > 0)
     {
+      int n = MIN(COMMIT_CHUNKSIZE_FRAMES, mCommitRemaining);
       float *bufferL = getLeftMaster();
       float *undoL = getLeftCopy();
-      int i = mCommitStart;
-      int n = mCommitCount;
-      while (n > 0)
+      circularCopyFrames(undoL, bufferL, mFrameCount, mCommitStart, n);
+      if (mChannelCount > 1)
       {
-        int j = i * FRAMELENGTH;
-        memcpy(undoL + j, bufferL + j, sizeof(float) * FRAMELENGTH);
-        i++;
-        if (i == mFrameCount)
-        {
-          i = 0;
-        }
-        n--;
+        float *bufferR = getRightMaster();
+        float *undoR = getRightCopy();
+        circularCopyFrames(undoR, bufferR, mFrameCount, mCommitStart, n);
       }
-    }
 
-    if (mChannelCount > 1)
-    {
-      float *bufferR = getRightMaster();
-      float *undoR = getRightCopy();
-      int i = mCommitStart;
-      int n = mCommitCount;
-      while (n > 0)
+      mCommitRemaining -= n;
+      mCommitStart += n;
+      if (mCommitStart > mFrameCount)
       {
-        int j = i * FRAMELENGTH;
-        memcpy(undoR + j, bufferR + j, sizeof(float) * FRAMELENGTH);
-        i++;
-        if (i == mFrameCount)
-        {
-          i = 0;
-        }
-        n--;
+        mCommitStart -= mFrameCount;
       }
     }
   }
@@ -633,78 +650,43 @@ namespace od
       pass = 0.0f;
     }
 
-    if (mRecordLevel.mGoal > 0.5f || !mRecordLevel.done())
+    float *playLevel = AudioThread::getFrame();
+    float *recLevel = AudioThread::getFrame();
+    float *fdbkLevel = AudioThread::getFrame();
+    float *undoLevel = AudioThread::getFrame();
+    mPlayLevel.getInterpolatedFrame(playLevel);
+    mRecordLevel.getInterpolatedFrame(recLevel);
+    mFeedbackLevel.getInterpolatedFrame(fdbkLevel);
+    mUndoLevel.getInterpolatedFrame(undoLevel);
+
+    for (int i = 0; i < FRAMELENGTH; i++)
     {
-      if (mPrevState == recordState || mState == recordState)
-      {
-        // record
-        float *recLevel = AudioThread::getFrame();
-        mRecordLevel.getInterpolatedFrame(recLevel);
-        for (int i = 0; i < FRAMELENGTH; i++)
-        {
-          outL[i] = pass * inL[i];
-          undoL[i] = 0;
-          bufferL[i] = recLevel[i] * inL[i];
-        }
-        AudioThread::releaseFrame(recLevel);
-      }
-      else
-      {
-        // overdub
-        float *playLevel = AudioThread::getFrame();
-        float *recLevel = AudioThread::getFrame();
-        float *fdbkLevel = AudioThread::getFrame();
-        float *undoLevel = AudioThread::getFrame();
-        mPlayLevel.getInterpolatedFrame(playLevel);
-        mRecordLevel.getInterpolatedFrame(recLevel);
-        mFeedbackLevel.getInterpolatedFrame(fdbkLevel);
-        mUndoLevel.getInterpolatedFrame(undoLevel);
-
-        for (int i = 0; i < FRAMELENGTH; i++)
-        {
-          float x = (1 - undoLevel[i]) * bufferL[i] + undoLevel[i] * undoL[i];
-          outL[i] = playLevel[i] * x + pass * inL[i];
-          bufferL[i] = fdbkLevel[i] * x + recLevel[i] * inL[i];
-        }
-
-        AudioThread::releaseFrame(playLevel);
-        AudioThread::releaseFrame(recLevel);
-        AudioThread::releaseFrame(fdbkLevel);
-        AudioThread::releaseFrame(undoLevel);
-      }
+      float x = (1 - undoLevel[i]) * bufferL[i] + undoLevel[i] * undoL[i];
+      outL[i] = playLevel[i] * x + pass * inL[i];
+      bufferL[i] = fdbkLevel[i] * x + recLevel[i] * inL[i];
     }
-    else
-    {
-      // play
-      float *playLevel = AudioThread::getFrame();
-      float *undoLevel = AudioThread::getFrame();
-      mPlayLevel.getInterpolatedFrame(playLevel);
-      mUndoLevel.getInterpolatedFrame(undoLevel);
 
-      for (int i = 0; i < FRAMELENGTH; i++)
-      {
-        float x = (1 - undoLevel[i]) * bufferL[i] + undoLevel[i] * undoL[i];
-        outL[i] = playLevel[i] * x + pass * inL[i];
-      }
-
-      AudioThread::releaseFrame(playLevel);
-      AudioThread::releaseFrame(undoLevel);
-    }
+    AudioThread::releaseFrame(playLevel);
+    AudioThread::releaseFrame(recLevel);
+    AudioThread::releaseFrame(fdbkLevel);
+    AudioThread::releaseFrame(undoLevel);
   }
 
   void PedalLooper::stereo()
   {
     float *inL = mLeftInput.buffer();
     float *inR = mRightInput.buffer();
+
     float *outL = mLeftOutput.buffer();
+    float *outR = mRightOutput.buffer();
+
     float *bufferL = getLeftMaster();
     bufferL += mCurrentFrame * FRAMELENGTH;
-    float *undoL = getLeftCopy();
-    undoL += mCurrentFrame * FRAMELENGTH;
-
-    float *outR = mRightOutput.buffer();
     float *bufferR = getRightMaster();
     bufferR += mCurrentFrame * FRAMELENGTH;
+
+    float *undoL = getLeftCopy();
+    undoL += mCurrentFrame * FRAMELENGTH;
     float *undoR = getRightCopy();
     undoR += mCurrentFrame * FRAMELENGTH;
 
@@ -718,74 +700,30 @@ namespace od
       pass = 0.0f;
     }
 
-    if (mRecordLevel.mGoal > 0.5f || !mRecordLevel.done())
+    float *playLevel = AudioThread::getFrame();
+    float *recLevel = AudioThread::getFrame();
+    float *fdbkLevel = AudioThread::getFrame();
+    float *undoLevel = AudioThread::getFrame();
+    mPlayLevel.getInterpolatedFrame(playLevel);
+    mRecordLevel.getInterpolatedFrame(recLevel);
+    mFeedbackLevel.getInterpolatedFrame(fdbkLevel);
+    mUndoLevel.getInterpolatedFrame(undoLevel);
+
+    for (int i = 0; i < FRAMELENGTH; i++)
     {
-      if (mPrevState == recordState || mState == recordState)
-      {
-        // record
-        float *recLevel = AudioThread::getFrame();
-        mRecordLevel.getInterpolatedFrame(recLevel);
-        for (int i = 0; i < FRAMELENGTH; i++)
-        {
-          outL[i] = pass * inL[i];
-          undoL[i] = 0;
-          bufferL[i] = recLevel[i] * inL[i];
+      float x = (1 - undoLevel[i]) * bufferL[i] + undoLevel[i] * undoL[i];
+      outL[i] = playLevel[i] * x + pass * inL[i];
+      bufferL[i] = fdbkLevel[i] * x + recLevel[i] * inL[i];
 
-          outR[i] = pass * inR[i];
-          undoR[i] = 0;
-          bufferR[i] = recLevel[i] * inR[i];
-        }
-        AudioThread::releaseFrame(recLevel);
-      }
-      else
-      {
-        // overdub
-        float *playLevel = AudioThread::getFrame();
-        float *recLevel = AudioThread::getFrame();
-        float *fdbkLevel = AudioThread::getFrame();
-        float *undoLevel = AudioThread::getFrame();
-        mPlayLevel.getInterpolatedFrame(playLevel);
-        mRecordLevel.getInterpolatedFrame(recLevel);
-        mFeedbackLevel.getInterpolatedFrame(fdbkLevel);
-        mUndoLevel.getInterpolatedFrame(undoLevel);
-
-        for (int i = 0; i < FRAMELENGTH; i++)
-        {
-          float x = (1 - undoLevel[i]) * bufferL[i] + undoLevel[i] * undoL[i];
-          outL[i] = playLevel[i] * x + pass * inL[i];
-          bufferL[i] = fdbkLevel[i] * x + recLevel[i] * inL[i];
-
-          x = (1 - undoLevel[i]) * bufferR[i] + undoLevel[i] * undoR[i];
-          outR[i] = playLevel[i] * x + pass * inR[i];
-          bufferR[i] = fdbkLevel[i] * x + recLevel[i] * inR[i];
-        }
-
-        AudioThread::releaseFrame(playLevel);
-        AudioThread::releaseFrame(recLevel);
-        AudioThread::releaseFrame(fdbkLevel);
-        AudioThread::releaseFrame(undoLevel);
-      }
+      x = (1 - undoLevel[i]) * bufferR[i] + undoLevel[i] * undoR[i];
+      outR[i] = playLevel[i] * x + pass * inR[i];
+      bufferR[i] = fdbkLevel[i] * x + recLevel[i] * inR[i];
     }
-    else
-    {
-      // play
-      float *playLevel = AudioThread::getFrame();
-      float *undoLevel = AudioThread::getFrame();
-      mPlayLevel.getInterpolatedFrame(playLevel);
-      mUndoLevel.getInterpolatedFrame(undoLevel);
 
-      for (int i = 0; i < FRAMELENGTH; i++)
-      {
-        float x = (1 - undoLevel[i]) * bufferL[i] + undoLevel[i] * undoL[i];
-        outL[i] = playLevel[i] * x + pass * inL[i];
-
-        x = (1 - undoLevel[i]) * bufferR[i] + undoLevel[i] * undoR[i];
-        outR[i] = playLevel[i] * x + pass * inR[i];
-      }
-
-      AudioThread::releaseFrame(playLevel);
-      AudioThread::releaseFrame(undoLevel);
-    }
+    AudioThread::releaseFrame(playLevel);
+    AudioThread::releaseFrame(recLevel);
+    AudioThread::releaseFrame(fdbkLevel);
+    AudioThread::releaseFrame(undoLevel);
   }
 
   int PedalLooper::fillSample(Sample *sample)

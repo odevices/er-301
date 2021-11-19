@@ -134,7 +134,7 @@ namespace od
     void scheduleCommit();
 
     int mCommitStart = 0;
-    int mCommitCount = 0;
+    int mCommitRemaining = 0;
     void commit();
     // do not call in the audio thread
     void commitRemaining();
