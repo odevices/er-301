@@ -1,4 +1,11 @@
 # Build Tools for OSX
+
+# If the processor arch is arm (aka Apple M1) use gcc@11 instead. At the moment
+# there isn't a gcc@10 build available for the M1 chip and even worse the
+# gcc@11 install from homebrew can't seem to find certain header files...
+#
+# For now this will have to do, may want to update this in the future if
+# eventually they can use the same version.
 GCC_VERSION = 10
 ifeq ($(shell uname -p),arm)
   GCC_VERSION = 11
