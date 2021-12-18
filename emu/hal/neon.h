@@ -5,11 +5,11 @@ extern "C"
 {
 #endif
 
-#ifdef __x86_64__
+#ifdef __ARM_NEON
+  #include <arm_neon.h>
+#else
   #define USE_SSE4
   #include <hal/neon2sse.h>
-#else
-  #include <arm_neon.h>
 #endif
 
 #ifdef __cplusplus
