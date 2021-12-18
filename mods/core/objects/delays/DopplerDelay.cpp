@@ -91,7 +91,7 @@ namespace od
 
   static inline int sampleDistance(float *small, float *big)
   {
-    ptrdiff_t d = big - small;
+    std::ptrdiff_t d = big - small;
     return d;
   }
 

@@ -4,6 +4,7 @@
 #include <hal/ops.h>
 #include <algorithm>
 #include <string.h>
+#include <math.h>
 
 namespace od
 {

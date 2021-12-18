@@ -118,7 +118,7 @@ pkg_install_dir = $(HOME)/.od/rear
 include scripts/darwin.mk
 
 includes += emu
-CFLAGS.darwin = -Wno-deprecated-declarations -msse4 -fPIC
+CFLAGS.darwin = -Wno-deprecated-declarations -march=native -fPIC
 endif
 
 ###########################
