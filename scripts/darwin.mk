@@ -1,11 +1,16 @@
 # Build Tools for OSX
-CC := gcc-11 -fdiagnostics-color -fmax-errors=5
-CPP := g++-11 -fdiagnostics-color -fmax-errors=5
+GCC_VERSION = 10
+ifeq ($(shell uname -p),arm)
+  GCC_VERSION = 11
+endif
+
+CC := gcc-$(GCC_VERSION) -fdiagnostics-color -fmax-errors=5
+CPP := g++-$(GCC_VERSION) -fdiagnostics-color -fmax-errors=5
 OBJCOPY := objcopy
 OBJDUMP := objdump
 ADDR2LINE := addr2line
 LD := ld
-AR := gcc-ar-11
+AR := gcc-ar-$(GCC_VERSION)
 SIZE := size
 STRIP := strip
 READELF := readelf
