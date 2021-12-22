@@ -15,6 +15,7 @@ local function createColumn(x)
   list:setVerticalMargin(3)
   list:setJustification(app.justifyCenter)
   list:reverseDirection()
+  list:setSelectionDrawStyle(app.beveledBox)
   return list
 end
 
@@ -46,30 +47,30 @@ function Header:init(args)
   graphic = app.Graphic(0, 0, ply, 64)
 
   local list
-  list = createColumn(app.COL1_LEFT)
+  list = createColumn(0)
   list:add("Load")
   list:add("Bypass")
   list:select("Bypass")
   graphic:addChild(list)
   self.commandList1 = list
 
-  list = createColumn(app.COL2_LEFT)
+  list = createColumn(ply)
   list:add("Save")
   list:add("Delete")
   list:select("Delete")
   graphic:addChild(list)
   self.commandList2 = list
 
-  list = createColumn(app.COL3_LEFT)
+  list = createColumn(ply*2)
   list:add("Replace")
   list:add("Config")
   list:select("Config")
   graphic:addChild(list)
   self.commandList3 = list
 
-  local drawing = app.Drawing(0, 0, 128, 64)
-  drawing:add(Drawings.Sub.ThreeColumns)
-  graphic:addChild(drawing)
+  --local drawing = app.Drawing(0, 0, 128, 64)
+  --drawing:add(Drawings.Sub.ThreeColumns)
+  --graphic:addChild(drawing)
 
   self.subGraphic = graphic
 

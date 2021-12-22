@@ -138,4 +138,10 @@ namespace od
         sectionEnd
     };
 
+    enum SelectionDrawStyle {
+      straight,
+      box,
+      beveledBox
+    };    
+
 } /* namespace od */
