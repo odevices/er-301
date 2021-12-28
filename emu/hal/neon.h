@@ -5,8 +5,12 @@ extern "C"
 {
 #endif
 
-#define USE_SSE4
-#include <hal/neon2sse.h>
+#ifdef __ARM_NEON
+  #include <arm_neon.h>
+#else
+  #define USE_SSE4
+  #include <hal/neon2sse.h>
+#endif
 
 #ifdef __cplusplus
 }
