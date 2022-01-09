@@ -253,26 +253,31 @@ namespace od
 
     fb.text(mForeground, textLeft, mWorldBottom, mText.c_str(), mTextSize);
 
-    int cursorPad = 10;
     int textRight = textLeft + mTextWidth;
+    int textTop = mWorldBottom + mTextHeight;
+    int textBottom = mWorldBottom;
+    int textCenterY = mWorldBottom + mTextHeight / 2;
+    int textCenterX = textLeft + mTextWidth / 2;
+
+    int cursorPad = 10;
     switch (mCursorState.orientation)
     {
     default:
     case cursorRight:
       mCursorState.x = textLeft - cursorPad;
-      mCursorState.y = mWorldBottom + mTextHeight / 2;
+      mCursorState.y = textCenterY;
       break;
     case cursorDown:
-      mCursorState.x = textLeft + mTextWidth / 2;
-      mCursorState.y = mWorldBottom + mTextHeight + cursorPad;
+      mCursorState.x = textCenterX;
+      mCursorState.y = textTop + cursorPad;
       break;
     case cursorLeft:
       mCursorState.x = textRight + cursorPad;
-      mCursorState.y = mWorldBottom + mTextHeight / 2;
+      mCursorState.y = textCenterY;
       break;
     case cursorUp:
-      mCursorState.x = textLeft + mTextWidth / 2;
-      mCursorState.y = mWorldBottom - cursorPad;
+      mCursorState.x = textCenterX;
+      mCursorState.y = textBottom - cursorPad;
       break;
     }
   }
