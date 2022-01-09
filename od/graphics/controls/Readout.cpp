@@ -253,8 +253,28 @@ namespace od
 
     fb.text(mForeground, textLeft, mWorldBottom, mText.c_str(), mTextSize);
 
-    mCursorState.x = textLeft - 10;
-    mCursorState.y = mWorldBottom + mTextHeight / 2;
+    int cursorPad = 10;
+    int textRight = textLeft + mTextWidth;
+    switch (mCursorState.orientation)
+    {
+    default:
+    case cursorRight:
+      mCursorState.x = textLeft - cursorPad;
+      mCursorState.y = mWorldBottom + mTextHeight / 2;
+      break;
+    case cursorDown:
+      mCursorState.x = textLeft + mTextWidth / 2;
+      mCursorState.y = mWorldBottom + mTextHeight + cursorPad;
+      break;
+    case cursorLeft:
+      mCursorState.x = textRight + cursorPad;
+      mCursorState.y = mWorldBottom + mTextHeight / 2;
+      break;
+    case cursorUp:
+      mCursorState.x = textLeft + mTextWidth / 2;
+      mCursorState.y = mWorldBottom - cursorPad;
+      break;
+    }
   }
 
   void Readout::encoder(int change, bool shifted, bool fine)
