@@ -3,12 +3,8 @@
 namespace od
 {
 
-    Followable::Followable()
-    {
-    }
-
-    Followable::~Followable()
-    {
-    }
+  Followable::~Followable()
+  {
+  }
 
 } /* namespace od */

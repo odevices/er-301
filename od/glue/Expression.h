@@ -1,6 +1,8 @@
 #pragma once
 
 #include <od/objects/Followable.h>
+#include <string>
+#include <vector>
 
 namespace od
 {

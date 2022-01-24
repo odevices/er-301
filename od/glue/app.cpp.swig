@@ -280,6 +280,7 @@ bool Uart_isEnabled();
 %include <od/objects/Inlet.h>
 %include <od/objects/Outlet.h>
 %include <od/objects/Followable.h>
+%include <od/objects/Settable.h>
 %include <od/objects/Parameter.h>
 %include <od/objects/Option.h>
 %include <od/objects/StateMachine.h>
