@@ -1,7 +1,6 @@
 #pragma once
 
 #include <od/objects/Followable.h>
-#include <od/objects/Settable.h>
 #include <vector>
 #include <string>
 #include <limits>
@@ -10,7 +9,7 @@ namespace od
 {
 
     class ParamSetMorph;
-    class Parameter : public Followable, public Settable
+    class Parameter : public Followable
     {
     public:
         Parameter(const std::string &name, float initialValue = 0.0f);

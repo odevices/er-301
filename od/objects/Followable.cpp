@@ -7,4 +7,12 @@ namespace od
   {
   }
 
+  void Followable::hardSet(float x)
+  {
+  }
+
+  void Followable::softSet(float x)
+  {
+  }
+
 } /* namespace od */

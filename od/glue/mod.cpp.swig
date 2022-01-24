@@ -38,7 +38,6 @@
 %import(module="app") <od/objects/Inlet.h>
 %import(module="app") <od/objects/Outlet.h>
 %import(module="app") <od/objects/Followable.h>
-%import(module="app") <od/objects/Settable.h>
 %import(module="app") <od/objects/Parameter.h>
 %import(module="app") <od/objects/Option.h>
 %import(module="app") <od/objects/StateMachine.h>

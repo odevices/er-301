@@ -14,6 +14,10 @@ namespace od
     virtual float target() = 0;
     virtual int roundValue() = 0;
     virtual int roundTarget() = 0;
+
+    // optional
+    virtual void hardSet(float x);
+    virtual void softSet(float x);
   };
 
 } // namespace od
