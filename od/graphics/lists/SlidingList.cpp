@@ -1,10 +1,3 @@
-/*
- * SlidingList.cpp
- *
- *  Created on: 24 Mar 2017
- *      Author: clarkson
- */
-
 #include <od/graphics/lists/SlidingList.h>
 #include <od/graphics/fonts.h>
 #include <stdlib.h>
