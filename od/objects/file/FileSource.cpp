@@ -60,6 +60,7 @@ namespace od
     if (mReader.open(mFilename))
     {
       mError = false;
+      mErrorMessage = "";
       mEOF = false;
       mInputChannelCount = mReader.getChannelCount();
       mSamplePeriod = 1.0f / mReader.getSampleRate();
@@ -84,6 +85,7 @@ namespace od
     else
     {
       mError = true;
+      mErrorMessage = "Failed to open.";
       mSamplePeriod = 0.0f;
       return false;
     }
@@ -125,6 +127,7 @@ namespace od
     if (mReader.getSampleCount() == 0)
     {
       mError = true;
+      mErrorMessage = "No samples.";
       return;
     }
 
@@ -156,6 +159,7 @@ namespace od
       else
       {
         mError = true;
+        mErrorMessage = "Read failed.";
       }
     }
     else

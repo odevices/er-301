@@ -35,6 +35,11 @@ namespace od
       return mError;
     }
 
+    std::string & getErrorString()
+    {
+      return mErrorMessage;
+    }
+
     bool buffering()
     {
       return mBuffering;
@@ -157,6 +162,7 @@ namespace od
     StereoResampler mStereoResampler;
     WavFileReader mReader;
     std::string mFilename;
+    std::string mErrorMessage;
     float mSamplePeriod = 0.0f;
 
     class ReadJob : public Job
