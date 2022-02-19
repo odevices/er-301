@@ -28,26 +28,25 @@ function BranchMeter:init(args)
   faderParam:enableSerialization()
 
   self.branch = branch
-  local graphic
   local ply = app.SECTION_PLY
 
-  graphic = app.Fader(0, 0, ply, 64)
-  graphic:setParameter(faderParam)
-  graphic:setLabel(button)
-  graphic:setAttributes(units, map, scaling)
+  local fader = app.Fader(0, 0, ply, 64)
+  fader:setParameter(faderParam)
+  fader:setLabel(button)
+  fader:setAttributes(units, map, scaling)
   if units == app.unitDecibels then
-    graphic:setTextBelow(-59, "-inf dB")
-    graphic:setPrecision(1)
+    fader:setTextBelow(-59, "-inf dB")
+    fader:setPrecision(1)
   end
-  self.fader = graphic
-  self:setMainCursorController(graphic)
-  self:setControlGraphic(graphic)
+  self.fader = fader
+  self:setMainCursorController(fader)
+  self:setControlGraphic(fader)
   self:addSpotDescriptor{
     center = 0.5 * ply
   }
 
   -- sub display
-  graphic = app.Graphic(0, 0, 128, 64)
+  local graphic = app.Graphic(0, 0, 128, 64)
   self.subGraphic = graphic
 
   self.scope = app.MiniScope(0, 15, ply, 64 - 15)
