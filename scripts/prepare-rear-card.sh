@@ -6,7 +6,7 @@
 # > prepare-rear-card 0.6.12 /dev/mmcblk0 /dev/mmcblk0p1
 
 # Defaults
-DEFAULT_VERSION="0.6.14"
+DEFAULT_VERSION="0.6.16"
 #DEFAULT_CARD_DEVICE="/dev/sda"
 #DEFAULT_CARD_PARTITION="/dev/sda1"
 DEFAULT_CARD_DEVICE="/dev/mmcblk0"
@@ -20,15 +20,21 @@ CARD_PARTITION=${3:-${DEFAULT_CARD_PARTITION}}
 CARD_PATH=`findmnt --source ${CARD_PARTITION} --noheadings --output TARGET`
 LABEL="ER301-REAR"
 
-echo "The $CARD_PARTITION is mounted at $CARD_PATH."
-echo "Firmware Source: $FIRMWARE_PATH"
-echo "Performing filesystem check"
-sudo fsck.fat -a ${CARD_PARTITION}
-unzip $FIRMWARE_PATH -d $CARD_PATH
-sync
-echo "Setting volume label to $LABEL."
-sudo fatlabel ${CARD_PARTITION} $LABEL
-echo "Setting boot flag on partition 1."
-sudo parted --script $CARD_DEVICE set 1 boot on
-sync
-echo "Done."
+if [[ -d $CARD_PATH ]]
+then
+  echo "The $CARD_PARTITION is mounted at $CARD_PATH."
+  echo "Firmware Source: $FIRMWARE_PATH"
+  echo "Performing filesystem check"
+  sudo fsck.fat -a ${CARD_PARTITION}
+  unzip $FIRMWARE_PATH -d $CARD_PATH
+  sync
+  echo "Setting volume label to $LABEL."
+  sudo fatlabel ${CARD_PARTITION} $LABEL
+  echo "Setting boot flag on partition 1."
+  sudo parted --script $CARD_DEVICE set 1 boot on
+  sync
+  echo "Done."
+else
+  echo "The $CARD_PARTITION is not mounted. Abort."
+fi
+
