@@ -8,6 +8,10 @@ local ply = app.SECTION_PLY
 local ChainTitleControl = Class {}
 ChainTitleControl:include(SpottedControl)
 
+local clearText = "Clear Chain"
+local loadText = "Load Chain"
+local saveText = "Save Chain"
+
 function ChainTitleControl:init(title, subTitle)
   SpottedControl.init(self)
   self:setClassName("ChainTitleControl")
@@ -26,12 +30,12 @@ function ChainTitleControl:init(title, subTitle)
 
   -- submenu graphics
   graphic = app.Graphic(0, 0, 128, 64)
-  local label = app.TextPanel("Clear", 2)
+  local label = app.TextPanel(clearText, 2)
   graphic:addChild(label)
   self.clearButton = label
-  label = app.TextPanel("Load", 1)
+  label = app.TextPanel(loadText, 1)
   graphic:addChild(label)
-  label = app.TextPanel("Save", 3)
+  label = app.TextPanel(saveText, 3)
   graphic:addChild(label)
   self.menuGraphic = graphic
 
@@ -106,7 +110,7 @@ function ChainTitleControl:onCursorEnter()
   if self:callUp("canUndo") then
     self.clearButton:setText("Undo")
   else
-    self.clearButton:setText("Clear")
+    self.clearButton:setText(clearText)
   end
 end
 
