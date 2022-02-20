@@ -3,9 +3,11 @@
 * NEW: A new feature. Relevant to users and developers.
 * SYS: A system-level change.  Usually only relevant to developers.
 
-# v0.6.17
+# Development
+* ENHANCE: Unit Header Menu > Replace grid lines by beveled boxes to improve clarity around which commands are active.
 * FIX: Control subdisplay miniscope showing signal after gain and bias. [Issue #53](https://github.com/odevices/er-301/issues/53)
 * FIX: Pedal Looper > Potential for clicks and artifacts when overdubbing, stopping, or looping. [Issue #51](https://github.com/odevices/er-301/issues/51)
+* ENHANCE: Card Player > Improve error and status messages.
 
 # v0.6.16
 * SYS: Merge in tmfset's floating menu event [pull request](https://github.com/odevices/er-301/pull/48).  The purpose is to allow unit developers to implement custom behaviors for the floating menu (e.g. unit view paging).
