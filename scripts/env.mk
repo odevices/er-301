@@ -15,15 +15,14 @@ ifndef ARCH
   endif
 endif
 
-FIRMWARE_NAME = Thoon
-FIRMWARE_VERSION = 0.6.17
+GIT_DESCRIBE := $(shell git describe --match v*.*.*-* --tags)
+COMMIT_COUNT := $(shell git rev-list --count $(GIT_DESCRIBE)..HEAD)
 
-FIRMWARE_STATUS.release = unstable
-#FIRMWARE_STATUS.release = stable
-FIRMWARE_STATUS.debug = debug
-FIRMWARE_STATUS.testing = testing
-
-FIRMWARE_STATUS = $(FIRMWARE_STATUS.$(PROFILE))
+ifeq ($(COMMIT_COUNT),0)
+	FIRMWARE_VERSION = $(GIT_DESCRIBE:v%=%)
+else
+	FIRMWARE_VERSION = $(GIT_DESCRIBE:v%=%).$(COMMIT_COUNT)
+endif
 
 scriptname := $(word 1, $(MAKEFILE_LIST))
 scriptname := $(scriptname:scripts/%=%)

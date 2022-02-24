@@ -2,11 +2,11 @@
 
 # examples:
 # > prepare-rear-card
-# > prepare-rear-card 0.6.12
-# > prepare-rear-card 0.6.12 /dev/mmcblk0 /dev/mmcblk0p1
+# > prepare-rear-card v0.6.12
+# > prepare-rear-card v0.6.12 /dev/mmcblk0 /dev/mmcblk0p1
 
 # Defaults
-DEFAULT_VERSION="0.6.16"
+DEFAULT_VERSION="v0.6.16"
 #DEFAULT_CARD_DEVICE="/dev/sda"
 #DEFAULT_CARD_PARTITION="/dev/sda1"
 DEFAULT_CARD_DEVICE="/dev/mmcblk0"
@@ -14,7 +14,7 @@ DEFAULT_CARD_PARTITION="/dev/mmcblk0p1"
 
 ########
 FIRMWARE_VERSION=${1:-${DEFAULT_VERSION}}
-FIRMWARE_PATH="release/am335x/er-301-v${FIRMWARE_VERSION}-stable.zip"
+FIRMWARE_PATH="release/am335x/er-301-${FIRMWARE_VERSION}.zip"
 CARD_DEVICE=${2:-${DEFAULT_CARD_DEVICE}}
 CARD_PARTITION=${3:-${DEFAULT_CARD_PARTITION}}
 CARD_PATH=`findmnt --source ${CARD_PARTITION} --noheadings --output TARGET`

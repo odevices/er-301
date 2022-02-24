@@ -39,8 +39,7 @@ LFLAGS += -L$(sdl2)/lib -L$(sdl2_ttf)/lib -L$(fftw)/lib
 endif
 
 CFLAGS += -DFIRMWARE_VERSION=\"$(FIRMWARE_VERSION)\"
-CFLAGS += -DFIRMWARE_NAME=\"$(FIRMWARE_NAME)\"
-CFLAGS += -DFIRMWARE_STATUS=\"$(FIRMWARE_STATUS)\"
+CFLAGS += -DBUILD_PROFILE=\"$(PROFILE)\"
 LFLAGS += -lSDL2 -lSDL2_ttf -lfftw3f -lm -ldl -lstdc++ 
 
 all: $(out_dir)/$(program_name).elf

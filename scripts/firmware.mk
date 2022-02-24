@@ -2,7 +2,7 @@ PROFILE ?= release
 ARCH = am335x
 include scripts/env.mk
 
-firmware_archive = $(build_dir)/er-301-v$(FIRMWARE_VERSION)-$(FIRMWARE_STATUS).zip
+firmware_archive = $(build_dir)/er-301-v$(FIRMWARE_VERSION)-$(PROFILE).zip
 
 firmware_contents = $(build_dir)/app/kernel.bin
 firmware_contents += $(build_dir)/sbl/SBL

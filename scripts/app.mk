@@ -57,8 +57,7 @@ objects += $(out_dir)/$(program_name)/symtab.o
 
 CFLAGS += $(sysbios_cflags)
 CFLAGS += -DFIRMWARE_VERSION=\"$(FIRMWARE_VERSION)\"
-CFLAGS += -DFIRMWARE_NAME=\"$(FIRMWARE_NAME)\"
-CFLAGS += -DFIRMWARE_STATUS=\"$(FIRMWARE_STATUS)\"
+CFLAGS += -DBUILD_PROFILE=\"$(PROFILE)\"
 LFLAGS = $(sysbios_lflags) -Wl,--gc-sections -lm -lc -lnosys -u _printf_float 
 
 all: $(out_dir)/kernel.bin $(exports)
