@@ -98,7 +98,7 @@ function Path.createAll(x, skipLast)
   for i = 2, n do
     sofar = sofar .. Path.sep .. dirs[i]
     if not app.pathExists(sofar) then
-      app.logInfo("Creating %s", sofar)
+      --app.logInfo("Creating %s", sofar)
       if not app.createDirectory(sofar) then return false end
     end
   end
@@ -124,7 +124,7 @@ function Path.recursiveCopy(fromPath, toPath, excludes)
       Path.recursiveCopy(srcPath, dstPath)
     else
       if app.copyFile(srcPath, dstPath, true) then
-        app.logInfo("Copied %s to %s", srcPath, dstPath)
+        --app.logInfo("Copied %s to %s", srcPath, dstPath)
       else
         app.logError("Failed: %s to %s", srcPath, dstPath)
       end
@@ -140,13 +140,13 @@ function Path.recursiveDelete(path)
     local path2 = Path.join(path, fname)
     if app.isDirectory(path2) then
       if Path.recursiveDelete(path2) then
-        app.logInfo("Deleted folder %s", path2)
+        --app.logInfo("Deleted folder %s", path2)
       else
         app.logError("Failed to delete %s", path2)
       end
     else
       if app.deleteFile(path2) then
-        app.logInfo("Deleted %s", path2)
+        --app.logInfo("Deleted %s", path2)
       else
         app.logError("Failed to delete %s", path2)
       end
@@ -154,7 +154,7 @@ function Path.recursiveDelete(path)
   end
 
   if app.deleteDirectory(path) then
-    app.logInfo("Deleted %s", path)
+    --app.logInfo("Deleted %s", path)
   else
     app.logError("Failed to delete %s", path)
   end
