@@ -4,21 +4,21 @@ local Path = require "Path"
 local Utils = require "Utils"
 local Busy = require "Busy"
 
-local function getVersionFolder()
-  local t = Utils.split(app.FIRMWARE_VERSION, ".")
-  local major = t[1] or 0
-  local minor = t[2] or 0
-  return string.format("/v%d.%d", major, minor)
-end
+local versionFolder = "v0.7"
 
-local versionFolder = getVersionFolder()
+-- In search order...
+local oldVersionFolders = {
+  "v0.6",
+  "v0.5",
+  "v0.4"
+}
 
 local roots = {}
 
 roots["x"] = app.roots.x
 
 roots["rear"] = app.roots.rear
-roots["rear-versioned"] = roots["rear"] .. versionFolder
+roots["rear-versioned"] = roots["rear"] .. "/" .. versionFolder
 roots["rear-meta"] = roots["rear-versioned"] .. "/meta"
 roots["libs"] = roots["rear-versioned"] .. "/libs"
 roots["package-configs"] = roots["rear-meta"] .. "/packages"
@@ -28,7 +28,7 @@ roots["logs"] = roots["front"] .. "/logs"
 roots["tmp"] = roots["front"] .. "/tmp"
 roots["packages"] = roots["front"] .. "/packages"
 roots["recordings"] = roots["front"] .. "/recorded"
-roots["front-versioned"] = roots["front"] .. versionFolder
+roots["front-versioned"] = roots["front"] .. "/" .. versionFolder
 roots["front-meta"] = roots["front-versioned"] .. "/meta"
 roots["screenshot"] = roots["front-versioned"] .. "/screenshots"
 roots["quicksaves"] = roots["front-versioned"] .. "/quicksaves"
@@ -180,35 +180,21 @@ local function checkPath(key, mode, fullpath)
 end
 
 local function makePathPretty(path)
-  path = path:gsub((roots["libs"].."/"):quote(),"pkg:")
-  path = path:gsub(string.quote("/front/"),"/")
+  path = path:gsub((roots["libs"] .. "/"):quote(), "pkg:")
+  path = path:gsub(string.quote("/front/"), "/")
   return path
 end
 
 local function findPreviousRoot()
-  local currentVersion =
-      Utils.convertVersionStringToNumber(app.FIRMWARE_VERSION)
-  local previousVersion = 0
-  local previousRoot
-  -- Find the most recent version that is less than the current version.
   if Path.exists(roots["front"]) then
-    for x in dir(roots["front"]) do
-      local path = Path.join(roots["front"], x)
+    for _, folder in ipairs(oldVersionFolders) do
+      local path = Path.join(roots["front"], folder)
       if app.isDirectory(path) then
-        local version = x:match("v(%d+[.]%d+)")
-        if version then
-          version = Utils.convertVersionStringToNumber(version)
-          app.logInfo("FS.findPreviousRoot: found %s", path)
-          if version > previousVersion and version < currentVersion then
-            previousVersion = version
-            previousRoot = path
-          end
-        end
+        app.logInfo("FS:findPreviousRoot: choosing %s", path)
+        return path
       end
     end
   end
-  app.logInfo("FS:findPreviousRoot: choosing %s", previousRoot)
-  return previousRoot
 end
 
 local function init()
