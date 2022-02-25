@@ -122,7 +122,7 @@ extern "C"
 
 #define LOG_FMT_FILE_LINE "\033[36m[%s:%d]\033[0m"
 #define LOG_FMT_FUNCTION "\033[34m%s()\033[0m"
-#define LOG_FMT_PREFIX "\033[34m[#%d %0.4fs %s]\033[0m"
+#define LOG_FMT_PREFIX "\033[34m[%d %0.4fs %s]\033[0m"
 
   static int count = 0;
 

@@ -199,10 +199,10 @@ namespace od
       if (shdr.sh_type != SHT_NOBITS)
       {
         // Section has data.
-        logDebug(11, "Loading section #%d into memory, reading %d bytes @ %d.", i, shdr.sh_size, shdr.sh_offset);
+        logDebug(11, "Loading section %d into memory, reading %d bytes @ %d.", i, shdr.sh_size, shdr.sh_offset);
         if (reader.readBytes(*pptr, shdr.sh_size, shdr.sh_offset) != shdr.sh_size)
         {
-          logError("Failed to read section #%d data.", i);
+          logError("Failed to read section %d data.", i);
           return false;
         }
       }

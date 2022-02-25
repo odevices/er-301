@@ -585,7 +585,7 @@ namespace od
   void USBDevice::handleUSBEvent(void)
   {
     mUsbEventCount++;
-    logDebug(1, "#%d, addr=%d, %s",
+    logDebug(1, "%d, addr=%d, %s",
              mUsbEventCount,
              USBDevAddrGet(BASE_ADDRESS),
              _USBEventDebugString(epIrqStatus, ulIrqStatus, dmaStatus));
@@ -905,7 +905,7 @@ namespace od
           devState = USB_DEVICE_STATE_CONFIGURED;
           onConfigurationChange();
           onEnumerationComplete();
-          logInfo("Enumeration complete. Configuration #%d.", pSetup->wValue);
+          logInfo("Enumeration complete. Configuration %d.", pSetup->wValue);
         }
         else
         {

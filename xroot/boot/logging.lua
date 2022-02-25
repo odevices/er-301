@@ -13,7 +13,7 @@ function app.enableLogging()
     local fatalLabel = "\27[31mFATAL\27[0m"
 
     local function logPrefix(label)
-      return string.format("\27[34m[#%d %0.4fs lua]\27[0m %s", logCount(),
+      return string.format("\27[34m[%d %0.4fs lua]\27[0m %s", logCount(),
                            wallclock(), label)
     end
 
