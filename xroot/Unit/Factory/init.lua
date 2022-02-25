@@ -307,7 +307,7 @@ local function reloadLibraries()
     for folderName in dir(libRoot) do
       if not IgnoredFolderNames[folderName] then
         if registerExternalLibrary(folderName, true) then
-          app.logInfo("Unit library found: %s", folderName)
+          --app.logInfo("Unit library found: %s", folderName)
         else
           app.logError("Unit library failed to register: %s", folderName)
         end

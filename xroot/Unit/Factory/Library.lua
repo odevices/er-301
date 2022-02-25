@@ -43,8 +43,12 @@ function Library:loadFromTable(t)
   self.categoryList = categoryList
   local category = t.category or name
 
+  local unitCount = 0
+  local unitFailed = 0
+  local presetCount = 0
+  local presetFailed = 0
+
   if t.units then
-    local failed = 0
     for i, e in ipairs(t.units) do
 
       if e.moduleName and e.title then
@@ -76,17 +80,14 @@ function Library:loadFromTable(t)
         -- category marker
         category = e.category
       else
-        failed = failed + 1
+        unitFailed = unitFailed + 1
       end
     end
-    app.logInfo("%s: %d loaded units (%d failed)", self, #unitList, failed)
-  else
-    app.logInfo("%s: no units", self)
+    unitCount = #unitList
   end
 
   if t.presets then
     category = t.category or name
-    local failed = 0
     for i, e in ipairs(t.presets) do
 
       if e.filename and e.title then
@@ -115,15 +116,15 @@ function Library:loadFromTable(t)
         -- category marker
         category = e.category
       else
-        failed = failed + 1
+        presetFailed = presetFailed + 1
       end
     end
-    app.logInfo("%s: %d presets (%d failed)", self, #unitList, failed)
-  else
-    app.logInfo("%s: no presets", self)
+    presetCount = #unitList - unitCount
   end
 
-  app.logInfo("%s: %d categories", self, #categoryList)
+  app.logInfo("Parsed %s TOC: %d of %d units, %d of %d presets, %d categories",
+              name, unitCount, unitCount + unitFailed, presetCount,
+              presetCount + presetFailed, #categoryList)
   return true
 end
 

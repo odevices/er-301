@@ -100,8 +100,6 @@ function Console:enterReleased()
   Signal.weakRegister("logInfo", self)
   Signal.weakRegister("logWarn", self)
   Signal.weakRegister("logError", self)
-  local saveVerbose = app.logDebug
-  app.logDebug = true
   Busy.start()
   if i == 0 then
     Tests.runAll()
@@ -109,7 +107,6 @@ function Console:enterReleased()
     Tests.run(i)
   end
   Busy.stop()
-  app.logDebug = saveVerbose
   Signal.remove("logInfo", self)
   Signal.remove("logWarn", self)
   Signal.remove("logError", self)
