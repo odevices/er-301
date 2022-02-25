@@ -44,24 +44,31 @@ local drawing = app.Drawing(0, 0, 128, 64)
 drawing:add(Drawings.Sub.TitleLine)
 menu.subGraphic:addChild(drawing)
 
-local label = app.Label("Current Firmware", 12)
+local label = app.Label("System Admin", 12)
 label:setJustification(app.justifyLeft)
 label:setPosition(0, app.GRID4_LINE1 + 1)
 menu.subGraphic:addChild(label)
 
-local version = string.format("Version: %s (%s)", app.FIRMWARE_VERSION,
-                              app.FIRMWARE_STATUS)
+local offset = -5
+
+local version = "Version: "..app.FIRMWARE_VERSION
 label = app.Label(version, 10)
 label:setJustification(app.justifyLeft)
-label:setPosition(0, app.GRID4_LINE2)
+label:setPosition(0, app.GRID5_LINE2+offset)
 menu.subGraphic:addChild(label)
 
-local desc = string.format("%s (%0.0fkHz, %dsmps)", app.FIRMWARE_NAME,
+local build = "Build: "..app.BUILD_PROFILE
+label = app.Label(build, 10)
+label:setJustification(app.justifyLeft)
+label:setPosition(0, app.GRID5_LINE3+offset)
+menu.subGraphic:addChild(label)
+
+local config = string.format("Config: %0.0fkHz, %dsmps",
                            app.globalConfig.sampleRate / 1000.0,
                            app.globalConfig.frameLength)
-label = app.Label(desc, 10)
+label = app.Label(config, 10)
 label:setJustification(app.justifyLeft)
-label:setPosition(0, app.GRID4_LINE3)
+label:setPosition(0, app.GRID5_LINE4+offset)
 menu.subGraphic:addChild(label)
 
 local context = Context("Admin", menu)

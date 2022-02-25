@@ -30,16 +30,18 @@ function Firmware:init()
   label:setPosition(0, app.GRID4_LINE1 + 1)
   self.subGraphic:addChild(label)
 
-  local version = string.format("Version: %s (%s)", app.FIRMWARE_VERSION,
-                                app.FIRMWARE_STATUS)
+  local offset = -5
+
+  local version = "Version: "..app.FIRMWARE_VERSION
   label = app.Label(version, 10)
   label:setJustification(app.justifyLeft)
-  label:setPosition(0, app.GRID4_LINE2)
+  label:setPosition(0, app.GRID5_LINE2+offset)
   self.subGraphic:addChild(label)
-
-  label = app.Label(app.FIRMWARE_NAME, 10)
+  
+  local build = "Build: "..app.BUILD_PROFILE
+  label = app.Label(build, 10)
   label:setJustification(app.justifyLeft)
-  label:setPosition(0, app.GRID4_LINE3)
+  label:setPosition(0, app.GRID5_LINE3+offset)
   self.subGraphic:addChild(label)
 
   label = app.SubButton("update", 1)
