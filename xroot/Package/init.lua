@@ -4,6 +4,7 @@ local Card = require "Card"
 local Path = require "Path"
 local Utils = require "Utils"
 local FS = require "Card.FileSystem"
+local SemanticVersion = require "SemanticVersion"
 
 --[[
 A Package is a zip file containing:
@@ -86,14 +87,14 @@ end
 
 -- Package name is the id without version.
 function Package:getName()
-  return self.id:match("^(.*)-.*$") or self.id
+  return self.id:match("^(.*)-.*-.*$") or self.id:match("^(.*)-.*$") or self.id
 end
 
--- Package version is parsed from the id: <name>-<major>.<minor>.<build>
+-- Package version is parsed from the id: <name>-<major>.<minor>.<build>-<extra>
 function Package:getVersion()
   local id = self.id
-  return id:match("-(%d+[.]%d+[.]%d+)") or id:match("-(%d+[.]%d+)") or
-             id:match("-(%d+)") or "0.0.0"
+  return id:match("-(%d+[.]%d+[.]%d+.*)") or id:match("-(%d+[.]%d+.*)") or
+             id:match("-(%d+.*)") or "0.0.0"
 end
 
 function Package:getInstallationPath()
@@ -136,13 +137,13 @@ function Package:satisfies(dep)
     if #dep == 1 then
       return self:getName() == dep[1]
     elseif #dep == 2 then
-      local minVersion = Utils.convertVersionStringToNumber(dep[2])
-      local version = Utils.convertVersionStringToNumber(self:getVersion())
+      local minVersion = SemanticVersion(dep[2])
+      local version = SemanticVersion(self:getVersion())
       return self:getName() == dep[1] and version >= minVersion
     elseif #dep > 2 then
-      local minVersion = Utils.convertVersionStringToNumber(dep[2])
-      local maxVersion = Utils.convertVersionStringToNumber(dep[3])
-      local version = Utils.convertVersionStringToNumber(self:getVersion())
+      local minVersion = SemanticVersion(dep[2])
+      local maxVersion = SemanticVersion(dep[3])
+      local version = SemanticVersion(self:getVersion())
       return self:getName() == dep[1] and version >= minVersion and version <=
                  maxVersion
     else
@@ -175,7 +176,10 @@ function Package:getLibrary()
   local pathToInit = Path.join(pathToInstallation, "init.lua")
   if Path.exists(pathToInit) then
     local instantiate = function()
-      local M = require(self:getName())
+      local modname = self:getName()
+      app.logInfo("Attempting to require %s...", modname)
+      local M = require(modname)
+      app.logInfo("%s returned: %s", modname, M)
       return M {
         package = self
       }

@@ -151,15 +151,6 @@ local function findNextUnusedKey(keysInUse, prefix)
   return key
 end
 
-local function convertVersionStringToNumber(version)
-  local values = {}
-  for match in (version .. "."):gmatch("(.-)[.]") do
-    if match then table.insert(values, tonumber(match) or 0) end
-  end
-  while #values < 3 do table.insert(values, 0) end
-  return 1000000 * values[1] + 1000 * values[2] + values[3]
-end
-
 local function spaceWrap(text, width)
   text = text:gsub("(" .. ("."):rep(width) .. ")", "%1 ")
   return text
@@ -286,7 +277,6 @@ return {
   duration = duration,
   durationNoSpace = durationNoSpace,
   timestamp = timestamp,
-  convertVersionStringToNumber = convertVersionStringToNumber,
   removeExtension = removeExtension,
   shorten = shorten,
   shortenPath = shortenPath,

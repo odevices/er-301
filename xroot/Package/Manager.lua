@@ -18,6 +18,7 @@ local Busy = require "Busy"
 local Package = require "Package"
 local Utils = require "Utils"
 local Persist = require "Persist"
+local SemanticVersion = require "SemanticVersion"
 
 local loaded = {}
 local packageCache = {}
@@ -93,9 +94,9 @@ local function findCompatiblePackage(dep, installedOnly)
   end
   -- Choose the candidate with the highest version.
   local best
-  local vMax = -1
+  local vMax = SemanticVersion('0-0')
   for _, package in ipairs(C) do
-    local v = Utils.convertVersionStringToNumber(package:getVersion())
+    local v = SemanticVersion(package:getVersion())
     if v > vMax then
       vMax = v
       best = package
@@ -251,13 +252,13 @@ local function install(package)
   local n = archive:getFileCount()
   for i = 1, n do
     local filename = archive:getFilename(i - 1)
-    Busy.status("Installing %s: %s", package.id, Path.getFilename(filename))
     local path = Path.join(installFolder, filename)
     Path.createAll(path, true)
     if Path.isDirectory(path:gsub("/$", "")) then
-      app.logInfo("Skipping folder: %s", path)
+      --app.logInfo("Skipping folder: %s", path)
     else
-      app.logInfo("Extracting %s.", path)
+      Busy.status("Installing %s: %s", package.id, Path.getFilename(filename))
+      --app.logInfo("Extracting %s.", path)
       if not archive:extract(filename, path) then
         local msg = string.format("Failed to extract %s from %s.", filename,
                                   package.id)

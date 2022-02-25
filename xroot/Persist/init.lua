@@ -13,6 +13,7 @@ local UnitPreset = require "Persist.UnitPreset"
 local ChainPreset = require "Persist.ChainPreset"
 local Serialization = require "Persist.Serialization"
 local FS = require "Card.FileSystem"
+local SemanticVersion = require "SemanticVersion"
 
 local readTable = Serialization.readTable
 local writeTable = Serialization.writeTable
@@ -106,8 +107,8 @@ end
 
 local function confirmFirmwareVersionAndExecute(preset, task)
   local version = preset:getVersionString()
-  local x = Utils.convertVersionStringToNumber(version)
-  local y = Utils.convertVersionStringToNumber(app.FIRMWARE_VERSION)
+  local x = SemanticVersion(version)
+  local y = SemanticVersion(app.FIRMWARE_VERSION)
   if y < x then
     local text = string.format("Preset was created by newer firmware: v%s",
                                version)

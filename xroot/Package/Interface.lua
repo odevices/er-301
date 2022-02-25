@@ -16,13 +16,13 @@ function Interface:init()
     columns = {
       {
         name = "name",
-        width = 0.75,
+        width = 0.6,
         showCheck = true,
         emptyText = "No packages found."
       },
       {
-        name = "status",
-        width = 0.25,
+        name = "version",
+        width = 0.4,
         justify = app.justifyRight
       }
     }
