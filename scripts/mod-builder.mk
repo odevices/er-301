@@ -23,6 +23,7 @@ all_imports_file = $(out_dir)/$(MODNAME)/imports.txt
 missing_imports_file = $(out_dir)/$(MODNAME)/missing.txt
 app_exports_file = $(build_dir)/app/exports.sym
 package_file = $(out_dir)/$(MODNAME)-$(MODVERSION).pkg
+install_file = $(pkg_install_dir)/$(notdir $(package_file))
 
 # Get the parent of the src dir (without the trailing slash)
 parent_dir := $(dir $(src_dir))
@@ -96,6 +97,10 @@ $(all_imports_file): $(lib_file)
 $(missing_imports_file): $(all_imports_file) $(app_exports_file)
 	@sort -u $(app_exports_file) | comm -23 $< - > $@
 
+$(install_file): $(package_file)
+	@echo $(describe_env) COPY $(describe_input) to $(describe_target)
+	@cp -f $< $@ && sync
+
 # Check for any undefined symbols that are not exported by app.
 missing: $(missing_imports_file)
 	@[ ! -s $< ] || echo "Missing Symbols:"
@@ -105,9 +110,7 @@ missing: $(missing_imports_file)
 list: $(package_file)
 	unzip -l $(package_file)
 
-install: $(package_file)
-	@echo $(describe_env) INSTALL $(describe_input) to $(pkg_install_dir)
-	@cp -f $(package_file) $(pkg_install_dir) && sync
+install: $(install_file)
 
 clean:
 	rm -rf $(out_dir)/$(MODNAME) $(package_file)

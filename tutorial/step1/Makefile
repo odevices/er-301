@@ -27,6 +27,9 @@ assets = toc.lua FMOperator.lua
 # Edits are generally not needed beyond this point.
 
 package_file = $(PKGNAME)-$(PKGVERSION).pkg
+emu_install_dir = $(HOME)/.od/rear
+# This assumes an SD card is mounted to /media/$(USERNAME)/FRONT
+card_install_dir = /media/$(USERNAME)/FRONT/ER-301/packages
 
 #######################################################
 # Rules
@@ -45,9 +48,14 @@ clean:
 	rm -rf $(package_file)
 
 emu-install: $(package_file)
-	cp $(package_file) $(HOME)/.od/rear
 
-# This assumes an SD card is mounted to /media/$(USERNAME)/FRONT
 card-install: $(package_file)
-	cp $(package_file) /media/$(USERNAME)/FRONT/ER-301/packages
+
+$(emu_install_dir)/$(package_file): $(package_file)
+	cp -f $< $@ && sync
+
+$(card_install_dir)/$(package_file): $(package_file)
+	cp -f $< $@ && sync
+
+
 

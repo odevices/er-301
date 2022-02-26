@@ -73,6 +73,8 @@ CFLAGS.swig = $(CFLAGS.common) $(CFLAGS.$(ARCH)) $(CFLAGS.size)
 CFLAGS.swig += $(addprefix -I,$(includes)) -I$(SDKPATH)/libs/lua54
 CFLAGS.swig += $(addprefix -D,$(symbols))
 
+install_file = $(INSTALLPATH.$(ARCH))/$(notdir $(package_file))
+
 #######################################################
 # Rules
 
@@ -100,8 +102,10 @@ clean:
 dist-clean:
 	rm -rf testing release debug
 
-install: $(package_file)
-	cp $(package_file) $(INSTALLPATH.$(ARCH))
+install: $(install_file)
+
+$(install_file): $(package_file)
+	cp -f $< $@ && sync
 
 # C/C++ compilation rules
 
