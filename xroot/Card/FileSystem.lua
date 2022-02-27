@@ -4,7 +4,13 @@ local Path = require "Path"
 local Utils = require "Utils"
 local Busy = require "Busy"
 
-local versionFolder = "v0.7"
+local function getVersionFolderName()
+  local SemanticVersion = require "SemanticVersion"
+  local version = SemanticVersion(app.FIRMWARE_VERSION)
+  return string.format("v%d.%d", version.major, version.minor)
+end
+
+local versionFolder = getVersionFolderName()
 
 -- In search order...
 local oldVersionFolders = {
