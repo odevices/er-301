@@ -10,7 +10,9 @@ local timer
 local target
 
 local function getMenuItemsAndDefault()
-  local choices = { "cancel" }
+  local choices = {
+    "cancel"
+  }
   local defaultIndex = #choices + 1
 
   if target then
@@ -26,7 +28,9 @@ local function getMenuItemsAndDefault()
       for i, item in ipairs(items) do
         local nextIndex = #choices + 1
         choices[nextIndex] = item
-        if item == defaultChoice then defaultIndex = nextIndex end
+        if item == defaultChoice then
+          defaultIndex = nextIndex
+        end
       end
     end
   end
@@ -103,7 +107,9 @@ local function dispatcher(event)
       local Env = require "Env"
       local threshold = Env.EncoderThreshold.Default
       local changed = menuArc:encoder(p, false, threshold)
-      if changed then fireMenuChange(menuArc:selectedText()) end
+      if changed then
+        fireMenuChange(menuArc:selectedText())
+      end
     end
   elseif event == app.EVENT_RELEASE_MAIN1 and m == 1 then
     Application.notify("mainReleased", 1, false)
@@ -133,7 +139,9 @@ local function onOpen()
   local choices, defaultIndex = getMenuItemsAndDefault()
 
   if #choices > 1 then
-    for _, choice in ipairs(choices) do menuArc:add(choice) end
+    for _, choice in ipairs(choices) do
+      menuArc:add(choice)
+    end
     menuArc:select(defaultIndex - 1)
     Manager.addMainGraphic(menuArc)
   end
@@ -150,9 +158,9 @@ local function getDelayTime()
   local values = {
     ["0.2s"] = 0.2,
     ["0.3s"] = 0.3,
-    ["0.5s"] = 0.5,
-   }
-   return values[choice] or 0.3
+    ["0.5s"] = 0.5
+  }
+  return values[choice] or 0.3
 end
 
 local function open(o)
@@ -172,5 +180,5 @@ end
 return {
   open = open,
   select = select,
-  close = close,
+  close = close
 }

@@ -39,7 +39,9 @@ function Boolean:set(x)
     self.value = x
     app.logInfo("%s = %s", self.name, self.value)
   end
-  if self.onSet then self.onSet(self.value) end
+  if self.onSet then
+    self.onSet(self.value)
+  end
 end
 
 local String = Class {}
@@ -61,7 +63,9 @@ function String:set(x)
     self.value = x
     app.logInfo("%s = %s", self.name, self.value)
   end
-  if self.onSet then self.onSet(self.value) end
+  if self.onSet then
+    self.onSet(self.value)
+  end
 end
 
 local Number = Class {}
@@ -80,10 +84,14 @@ function Number:getValueText()
 end
 
 function Number:set(x)
-  if x == nil then return end
+  if x == nil then
+    return
+  end
   self.value = tonumber(x)
   app.logInfo("%s = %f", self.name, self.value)
-  if self.onSet then self.onSet(self.value) end
+  if self.onSet then
+    self.onSet(self.value)
+  end
 end
 
 return {

@@ -67,11 +67,14 @@ Pitch:include(Base)
 
 function Pitch:init(args)
   -- required arguments
-  local button = args.button or app.logError("%s.init: button is missing.", self)
+  local button = args.button or
+                     app.logError("%s.init: button is missing.", self)
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
-  local branch = args.branch or app.logError("%s.init: branch is missing.", self)
-  local offset = args.offset or app.logError("%s.init: offset is missing.", self)
+  local branch = args.branch or
+                     app.logError("%s.init: branch is missing.", self)
+  local offset = args.offset or
+                     app.logError("%s.init: offset is missing.", self)
   local range = args.range or app.logError("%s.init: range is missing.", self)
   Base.init(self, button)
   self:setClassName("Unit.ViewControl.Pitch")
@@ -180,13 +183,21 @@ function Pitch:customize(args)
   local t = self.customizations or {}
   local refreshMap = false
   for k, v in pairs(args) do
-    if isMapProperty[k] then refreshMap = true end
+    if isMapProperty[k] then
+      refreshMap = true
+    end
     t[k] = v
   end
 
-  if args.name then self:rename(args.name) end
-  if args.description then self.description:setText(args.description) end
-  if args.precision then self:setPrecision(args.precision) end
+  if args.name then
+    self:rename(args.name)
+  end
+  if args.description then
+    self.description:setText(args.description)
+  end
+  if args.precision then
+    self:setPrecision(args.precision)
+  end
 
   if refreshMap then
     local map = self.privateMap
@@ -198,8 +209,12 @@ function Pitch:customize(args)
     local coarse = t.coarseStep or map:coarseStep()
     local fine = t.fineStep or map:fineStep()
     local superFine = t.superFineStep or map:superFineStep()
-    if t.min then map:setMin(t.min) end
-    if t.max then map:setMax(t.max) end
+    if t.min then
+      map:setMin(t.min)
+    end
+    if t.max then
+      map:setMax(t.max)
+    end
     map:setSteps(superCoarse, coarse, fine, superFine)
     self:setMap(map)
   end
@@ -366,7 +381,9 @@ function Pitch:deserialize(t)
     self.gainEncoderState = Encoder.deserialize(t.gainEncoderState)
   end
   self:removeCustomizations()
-  if t.customizations then self:customize(t.customizations) end
+  if t.customizations then
+    self:customize(t.customizations)
+  end
 end
 
 function Pitch:rename(name)
@@ -417,7 +434,9 @@ function Pitch:doTuneSet()
 end
 
 function Pitch:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     local branch = self.branch
     if branch then
@@ -425,7 +444,7 @@ function Pitch:subReleased(i, shifted)
       branch:show()
     end
   elseif i == 2 then
-    if self:hasFocus("encoder") then 
+    if self:hasFocus("encoder") then
       self:doTuneSet()
     else
       self:focus()

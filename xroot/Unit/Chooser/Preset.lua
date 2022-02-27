@@ -38,7 +38,9 @@ function PresetChooser:init(ring)
   local data = Persist.getFrontCardValue("UnitPresetChooser", "lastChoice")
   if data and data.path then
     self:navigateTo(data.path)
-    if data.choice then browser:choose(data.choice) end
+    if data.choice then
+      browser:choose(data.choice)
+    end
   else
     self:navigateTo(FS.getRoot("unit-preset"))
   end
@@ -56,7 +58,9 @@ function PresetChooser:navigateTo(path)
   local dirs = Utils.split(path, Path.sep)
   local browser = self.browser
   browser:setRootPath(dirs[1])
-  for i = 2, #dirs do browser:pushDirectory(dirs[i]) end
+  for i = 2, #dirs do
+    browser:pushDirectory(dirs[i])
+  end
   browser:refresh()
 end
 
@@ -100,7 +104,9 @@ end
 
 function PresetChooser:doCloseFolder()
   local browser = self.browser
-  if browser:popDirectory() then browser:refresh() end
+  if browser:popDirectory() then
+    browser:refresh()
+  end
 end
 
 -------------------------------------------------
@@ -129,11 +135,15 @@ function PresetChooser:upReleased(shifted)
 end
 
 function PresetChooser:mainReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 5 then
     self:doCloseFolder()
   elseif i == 6 then
-    if self.browser:isDirectory() then self:doOpenFolder() end
+    if self.browser:isDirectory() then
+      self:doOpenFolder()
+    end
   end
   return true
 end

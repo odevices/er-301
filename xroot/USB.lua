@@ -17,7 +17,7 @@ local function onUSBEnableChanged()
   local mode = Settings.get("usbMode")
   if enabled then
     app.USB_start()
-    if mode=="serial" then
+    if mode == "serial" then
       app.enableLogging()
       app.USB_waitForHostToConnect()
     end

@@ -21,7 +21,9 @@ function MasterFader:init(args)
   self.task = task
   self:setMainCursorController(fader)
   self:setControlGraphic(fader)
-  self:addSpotDescriptor{center = 0.5 * ply}
+  self:addSpotDescriptor{
+    center = 0.5 * ply
+  }
   self.params = {}
   self.targets = {}
 end
@@ -133,7 +135,9 @@ function MasterFader:disengage()
 end
 
 function MasterFader:spotReleased(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if self.focused then
     self:unfocus()
   else
@@ -143,7 +147,9 @@ function MasterFader:spotReleased(spot, shifted)
 end
 
 function MasterFader:upReleased(shifted)
-  if not shifted then self:unfocus() end
+  if not shifted then
+    self:unfocus()
+  end
   return true
 end
 
@@ -158,42 +164,56 @@ end
 function MasterFader:deserialize(t)
   Base.deserialize(self, t)
   local encoderState = t.encoderState
-  if encoderState then self.encoderState = Encoder.deserialize(encoderState) end
+  if encoderState then
+    self.encoderState = Encoder.deserialize(encoderState)
+  end
 end
 
 function MasterFader:encoder(change, shifted)
-  if not self.engaged then self:engage() end
+  if not self.engaged then
+    self:engage()
+  end
   local fine = self.encoderState == Encoder.Fine
   self.fader:encoder(change, shifted, fine)
   return true
 end
 
 function MasterFader:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.fader:restore()
   return true
 end
 
 function MasterFader:zeroPressed()
-  if not self.engaged then self:engage() end
+  if not self.engaged then
+    self:engage()
+  end
   self.morpher:softSet(0)
   return true
 end
 
 function MasterFader:homePressed()
-  if not self.engaged then self:engage() end
+  if not self.engaged then
+    self:engage()
+  end
   self.morpher:softSet(0)
   return true
 end
 
 function MasterFader:enterReleased()
-  if not self.engaged then self:engage() end
+  if not self.engaged then
+    self:engage()
+  end
   self.morpher:softSet(1)
   return true
 end
 
 function MasterFader:commitReleased()
-  if not self.engaged then self:engage() end
+  if not self.engaged then
+    self:engage()
+  end
   self.morpher:softSet(1)
   return true
 end

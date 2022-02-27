@@ -74,7 +74,9 @@ function Library:loadFromTable(t)
         end
 
         if e.aliases then
-          for _, alias in ipairs(e.aliases) do aliasHash[alias] = u end
+          for _, alias in ipairs(e.aliases) do
+            aliasHash[alias] = u
+          end
         end
       elseif e.category then
         -- category marker
@@ -110,7 +112,9 @@ function Library:loadFromTable(t)
         end
 
         if e.aliases then
-          for _, alias in ipairs(e.aliases) do aliasHash[alias] = u end
+          for _, alias in ipairs(e.aliases) do
+            aliasHash[alias] = u
+          end
         end
       elseif e.category then
         -- category marker
@@ -129,9 +133,13 @@ function Library:loadFromTable(t)
 end
 
 function Library:loadFromFile(pathToFile)
-  if not Card.mounted() or not Path.exists(pathToFile) then return end
+  if not Card.mounted() or not Path.exists(pathToFile) then
+    return
+  end
   local t = Persist.readTable(pathToFile)
-  if t then return self:loadFromTable(t) end
+  if t then
+    return self:loadFromTable(t)
+  end
 end
 
 function Library:getUnits(t, category, channelCount)
@@ -154,7 +162,9 @@ function Library:getUnits(t, category, channelCount)
   elseif category then
     -- select on just category
     for _, u in ipairs(unitList) do
-      if u.category == category then t[#t + 1] = u end
+      if u.category == category then
+        t[#t + 1] = u
+      end
     end
   elseif channelCount then
     -- select on just channelCount
@@ -165,7 +175,9 @@ function Library:getUnits(t, category, channelCount)
     end
   else
     -- return all units
-    for _, u in ipairs(unitList) do t[#t + 1] = u end
+    for _, u in ipairs(unitList) do
+      t[#t + 1] = u
+    end
   end
 
   return t

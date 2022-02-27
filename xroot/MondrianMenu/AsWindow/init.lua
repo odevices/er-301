@@ -96,14 +96,18 @@ function MondrianMenu:encoder(change, shifted)
 end
 
 function MondrianMenu:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   self:emitSignal("done")
   return true
 end
 
 function MondrianMenu:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   self:emitSignal("done")
   return true

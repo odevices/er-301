@@ -120,7 +120,9 @@ function Console:subReleased(i, shifted)
     self:printInfo(rearCardInfo)
     return true
   end
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     if not Card.mounted() then
       self:msg("Card is not mounted.")

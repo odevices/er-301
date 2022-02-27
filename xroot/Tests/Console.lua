@@ -86,12 +86,12 @@ function Console:logInfo(text)
 end
 
 function Console:logWarn(text)
-  self.console:addItem("WARN "..text)
+  self.console:addItem("WARN " .. text)
   self.console:scrollToBottom()
 end
 
 function Console:logError(text)
-  self.console:addItem("ERROR "..text)
+  self.console:addItem("ERROR " .. text)
   self.console:scrollToBottom()
 end
 

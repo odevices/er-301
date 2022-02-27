@@ -26,13 +26,19 @@ end
 
 function Widget:removeChildWidget(child)
   -- app.logInfo("%s:removeChildWidget(%s)",self,child)
-  if child.parent == self then child:setParentWidget(nil) end
+  if child.parent == self then
+    child:setParentWidget(nil)
+  end
 end
 
 function Widget:setParentWidget(parent)
-  if self.parent then self.parent.children[self] = nil end
+  if self.parent then
+    self.parent.children[self] = nil
+  end
   self.parent = parent
-  if parent then parent.children[self] = true end
+  if parent then
+    parent.children[self] = true
+  end
 end
 
 function Widget:setMainCursorController(graphic)
@@ -41,7 +47,9 @@ function Widget:setMainCursorController(graphic)
   local window = self:getWindow()
   if window and window.context then
     local focus = window:getFocusedWidget("encoder")
-    if focus == self then window.context:onEncoderFocusChanged() end
+    if focus == self then
+      window.context:onEncoderFocusChanged()
+    end
   end
 end
 
@@ -51,7 +59,9 @@ function Widget:setSubCursorController(graphic)
   local window = self:getWindow()
   if window and window.context then
     local focus = window:getFocusedWidget("encoder")
-    if focus == self then window.context:onEncoderFocusChanged() end
+    if focus == self then
+      window.context:onEncoderFocusChanged()
+    end
   end
 end
 
@@ -59,7 +69,9 @@ function Widget:getWindow()
   local widget = self
   while widget.parent do
     widget = widget.parent
-    if widget.isWindow then return widget end
+    if widget.isWindow then
+      return widget
+    end
   end
   return widget.isWindow and widget
 end
@@ -67,17 +79,23 @@ end
 -- WARNING: This will fail if the widget's containing window is not active (i.e. has no conttext).
 function Widget:getRootWindow()
   local window = self:getWindow()
-  if window and window.context then return window.context:root() end
+  if window and window.context then
+    return window.context:root()
+  end
 end
 
 function Widget:addSubGraphic(graphic)
   local window = self:getWindow()
-  if window then window:addSubGraphic(graphic) end
+  if window then
+    window:addSubGraphic(graphic)
+  end
 end
 
 function Widget:removeSubGraphic(graphic)
   local window = self:getWindow()
-  if window then window:removeSubGraphic(graphic) end
+  if window then
+    window:removeSubGraphic(graphic)
+  end
 end
 
 function Widget:grabFocus(...)
@@ -106,7 +124,9 @@ function Widget:releaseFocus(...)
   }
   for _, event in ipairs(events) do
     -- app.logInfo("%s:releaseFocus(%s)",self,event)
-    if window.focus[event] == self then window:setFocusedWidget(event, nil) end
+    if window.focus[event] == self then
+      window:setFocusedWidget(event, nil)
+    end
   end
 end
 
@@ -120,7 +140,9 @@ function Widget:hasFocus(event)
 end
 
 function Widget:queryUp(key)
-  if verbose then app.logInfo("%s:queryUp(%s)", self, key) end
+  if verbose then
+    app.logInfo("%s:queryUp(%s)", self, key)
+  end
   local value = self[key]
   if value then
     return value
@@ -133,7 +155,9 @@ end
 
 -- callUp is for methods
 function Widget:callUp(method, ...)
-  if verbose then app.logInfo("%s:callUp(%s)", self, method) end
+  if verbose then
+    app.logInfo("%s:callUp(%s)", self, method)
+  end
   local handler = self[method]
   if handler then
     return handler(self, ...)
@@ -177,7 +201,9 @@ function Widget:sendUpHelper(uid, verbose, event, ...)
 end
 
 function Widget:broadcastDown(method, ...)
-  if verbose then app.logInfo("%s:broadcastDown(%s)", self, method) end
+  if verbose then
+    app.logInfo("%s:broadcastDown(%s)", self, method)
+  end
   self:broadcastDownHelper(method, ...)
 end
 
@@ -190,8 +216,12 @@ function Widget:broadcastDownHelper(method, ...)
     handler(self, ...)
   end
   local tmp = {}
-  for child, _ in pairs(self.children) do tmp[#tmp + 1] = child end
-  for i = 1, #tmp do tmp[i]:broadcastDownHelper(method, ...) end
+  for child, _ in pairs(self.children) do
+    tmp[#tmp + 1] = child
+  end
+  for i = 1, #tmp do
+    tmp[i]:broadcastDownHelper(method, ...)
+  end
 end
 
 function Widget.enableVerbose()

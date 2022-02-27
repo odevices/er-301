@@ -61,16 +61,16 @@ function Header:init(args)
   graphic:addChild(list)
   self.commandList2 = list
 
-  list = createColumn(ply*2)
+  list = createColumn(ply * 2)
   list:add("Replace")
   list:add("Config")
   list:select("Config")
   graphic:addChild(list)
   self.commandList3 = list
 
-  --local drawing = app.Drawing(0, 0, 128, 64)
-  --drawing:add(Drawings.Sub.ThreeColumns)
-  --graphic:addChild(drawing)
+  -- local drawing = app.Drawing(0, 0, 128, 64)
+  -- drawing:add(Drawings.Sub.ThreeColumns)
+  -- graphic:addChild(drawing)
 
   self.subGraphic = graphic
 
@@ -101,7 +101,9 @@ function Header:setText(text)
   graphic:clear()
   for _, word in ipairs(words) do
     word = Utils.shorten(word, 8, "..")
-    if word:len() > 0 then graphic:addLine(word) end
+    if word:len() > 0 then
+      graphic:addLine(word)
+    end
   end
 end
 
@@ -144,13 +146,17 @@ function Header:onFloatingMenuSelection(choice)
 end
 
 function Header:spotPressed(spot, shifted, isFocusedPress)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.focusPress = isFocusedPress
   return true
 end
 
 function Header:spotReleased(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if self.focusPress then
     self.focusPress = false
     self.parent:showMenu()
@@ -171,7 +177,9 @@ function Header:enterReleased()
 end
 
 function Header:upReleased(shifted)
-  if not shifted then self:unfocus() end
+  if not shifted then
+    self:unfocus()
+  end
   return true
 end
 
@@ -191,7 +199,9 @@ function Header:doDelete()
   if Settings.get("confirmUnitDelete") == "yes" then
     local dialog = Verification.Sub("Deleting!", unit.title)
     dialog:subscribe("done", function(ans)
-      if ans then deleteHelper(unit) end
+      if ans then
+        deleteHelper(unit)
+      end
     end)
     dialog:show()
   else

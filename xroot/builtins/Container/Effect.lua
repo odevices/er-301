@@ -18,21 +18,31 @@ function Effect:notifyBranches(method, ...)
   -- propagate branch notifications to the patch chain
   if self.patch then
     local f = self.patch[method]
-    if f ~= nil then f(self.patch, ...) end
+    if f ~= nil then
+      f(self.patch, ...)
+    end
   end
   Unit.notifyBranches(self, method, ...)
 end
 
 function Effect:findUnitByTitle(title)
   local unit = Unit.findUnitByTitle(self, title)
-  if unit then return unit end
-  if self.patch then return self.patch:findUnitByTitle(title) end
+  if unit then
+    return unit
+  end
+  if self.patch then
+    return self.patch:findUnitByTitle(title)
+  end
 end
 
 function Effect:findByInstanceKey(key)
   local o = Unit.findByInstanceKey(self, key)
-  if o then return o end
-  if self.patch then return self.patch:findByInstanceKey(key) end
+  if o then
+    return o
+  end
+  if self.patch then
+    return self.patch:findByInstanceKey(key)
+  end
 end
 
 function Effect:onLoadGraph(channelCount)

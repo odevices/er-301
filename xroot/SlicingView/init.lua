@@ -93,21 +93,29 @@ function SlicingView:getSelectionEndTime()
 end
 
 function SlicingView:hideMainButtons()
-  for i = 1, 6 do self.mainButton[i]:hide() end
+  for i = 1, 6 do
+    self.mainButton[i]:hide()
+  end
 end
 
 function SlicingView:showMainButtons()
-  for i = 1, 6 do self.mainButton[i]:show() end
+  for i = 1, 6 do
+    self.mainButton[i]:show()
+  end
 end
 
 function SlicingView:setMainButtons(b)
   b = b or {}
-  for i = 1, 6 do self.mainButton[i]:setText(b[i] or "") end
+  for i = 1, 6 do
+    self.mainButton[i]:setText(b[i] or "")
+  end
 end
 
 function SlicingView:getMainButtons()
   local b = {}
-  for i = 1, 6 do b[i] = self.mainButton[i]:getText() end
+  for i = 1, 6 do
+    b[i] = self.mainButton[i]:getText()
+  end
   return b
 end
 
@@ -123,7 +131,9 @@ function SlicingView:setInterfaceMode(mode, flash)
     self.mainButton[3]:setText("+ Slice")
     self.mainButton[4]:setText("- Slice")
     self.mainButton[5]:setText("goto ZC")
-    if flash then Overlay.flashMainMessage("Mode: Manual Slicing") end
+    if flash then
+      Overlay.flashMainMessage("Mode: Manual Slicing")
+    end
   end
 
   -- buttons 6 is always same
@@ -169,7 +179,9 @@ function SlicingView:setSample(sample)
 end
 
 function SlicingView:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   self:emitSignal("done")
   return true
@@ -190,7 +202,9 @@ function SlicingView:subReleased(i, shifted)
       self.head:reset()
     end
   elseif i == 2 then
-    if self.head then self.head:toggle() end
+    if self.head then
+      self.head:toggle()
+    end
   elseif i == 3 then
     self:toggleNavigationMode()
   end
@@ -253,7 +267,9 @@ function SlicingView:shiftReleased()
 end
 
 function SlicingView:cancelReleased(shifted)
-  if self.mainDisplay:isMarked() then self.mainDisplay:clearMarking() end
+  if self.mainDisplay:isMarked() then
+    self.mainDisplay:clearMarking()
+  end
 end
 
 function SlicingView:mainPressed(i, shifted)

@@ -6,7 +6,7 @@ return {
     {
       title = "Minimal Unit",
       category = "Learning",
-      moduleName = "MinimalUnit",
-    },
+      moduleName = "MinimalUnit"
+    }
   }
 }

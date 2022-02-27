@@ -13,7 +13,9 @@ function Decimal:init(args)
   self:setClassName("Keyboard.Decimal")
   self.suppressQuickSave = true
 
-  if args.message then self.mainGraphic:setMessage(args.message) end
+  if args.message then
+    self.mainGraphic:setMessage(args.message)
+  end
 
   if args.integerOnly then
     self.integerOnly = true
@@ -45,14 +47,20 @@ function Decimal:init(args)
 end
 
 function Decimal:mainReleased(i, shifted)
-  if shifted then return true end
+  if shifted then
+    return true
+  end
   self.mainGraphic:selectDigit(i)
   return true
 end
 
 function Decimal:subPressed(i, shifted)
-  if shifted then return true end
-  if i == 3 and not self.integerOnly then self.mainGraphic:selectDecimalPoint() end
+  if shifted then
+    return true
+  end
+  if i == 3 and not self.integerOnly then
+    self.mainGraphic:selectDecimalPoint()
+  end
   return true
 end
 
@@ -73,13 +81,17 @@ function Decimal:encoder(change, shifted)
 end
 
 function Decimal:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   return true
 end
 
 function Decimal:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   return true
 end

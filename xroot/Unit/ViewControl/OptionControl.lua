@@ -18,7 +18,9 @@ function Item:init(name, choice)
   self.graphic = graphic
 
   local txt1, txt2, txt3
-  if choice then txt1, txt2, txt3 = table.unpack(Utils.split(choice, " ")) end
+  if choice then
+    txt1, txt2, txt3 = table.unpack(Utils.split(choice, " "))
+  end
 
   local label = app.Label(txt1 or defaultTxt, 10)
   graphic:addChild(label)
@@ -61,11 +63,13 @@ function OptionControl:init(args)
   ViewControl.init(self)
   self:setClassName("Unit.ViewControl.OptionControl")
   -- required arguments
-  local button = args.button or app.logError("%s.init: button is missing.", self)
+  local button = args.button or
+                     app.logError("%s.init: button is missing.", self)
   self:setInstanceName(button)
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
-  local option = args.option or app.logError("%s.init: option is missing.", self)
+  local option = args.option or
+                     app.logError("%s.init: option is missing.", self)
   local choices = args.choices or
                       app.logError("%s.init: 'choices' is missing.", self)
 
@@ -107,7 +111,9 @@ function OptionControl:init(args)
 end
 
 function OptionControl:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if self.muteOnChange then
     local chain = self.parent.chain
     local wasMuted = chain:muteIfNeeded()
@@ -127,7 +133,9 @@ function OptionControl:update()
     local text = string.format("%s: %s", self.description, choice)
     self.activeItem:set(text)
   end
-  if self.onUpdate then self.onUpdate(choice) end
+  if self.onUpdate then
+    self.onUpdate(choice)
+  end
 end
 
 return OptionControl

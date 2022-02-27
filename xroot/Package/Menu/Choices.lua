@@ -57,12 +57,16 @@ function Choices:init(args)
 end
 
 function Choices:onReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i > self.descWidth then
     local j = i - self.descWidth
     if j <= #self.choices then
       local choice = self.choices[j]
-      if self.callback then self.callback(choice) end
+      if self.callback then
+        self.callback(choice)
+      end
       self:update(choice)
     end
   end

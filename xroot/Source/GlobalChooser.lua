@@ -97,11 +97,15 @@ function GlobalChooser:init(ring)
 end
 
 function GlobalChooser:refresh()
-  for _, item in pairs(self.items) do self:removeSection(item) end
+  for _, item in pairs(self.items) do
+    self:removeSection(item)
+  end
   self.items = {}
   local GlobalChains = require "GlobalChains.Interface"
   local ordered = GlobalChains:getOrderedChains()
-  for i, chain in ipairs(ordered) do self:add(chain.title, chain, i) end
+  for i, chain in ipairs(ordered) do
+    self:add(chain.title, chain, i)
+  end
 end
 
 function GlobalChooser:onCreateGlobalChain(chain, name, position)
@@ -129,7 +133,9 @@ function GlobalChooser:add(title, chain, position)
   local item = Item(title, chain)
   self.items[title] = item
 
-  if position == nil then position = self:getSectionCount() end
+  if position == nil then
+    position = self:getSectionCount()
+  end
 
   if position == self:getSectionCount() then
     self:insertSection(item, position)

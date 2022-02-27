@@ -45,9 +45,13 @@ function Package:init(filename)
 end
 
 function Package:getTOC()
-  if self.toc then return self.toc end
+  if self.toc then
+    return self.toc
+  end
   local pathToArchive = self:getArchivePath()
-  if not Card.mounted() or not Path.exists(pathToArchive) then return end
+  if not Card.mounted() or not Path.exists(pathToArchive) then
+    return
+  end
 
   local archive = app.ZipArchiveReader()
   if not archive:open(pathToArchive) then
@@ -171,7 +175,9 @@ function Package:onUnload()
 end
 
 function Package:getLibrary()
-  if self.library then return self.library end
+  if self.library then
+    return self.library
+  end
   local pathToInstallation = self:getInstallationPath()
   local pathToInit = Path.join(pathToInstallation, "init.lua")
   if Path.exists(pathToInit) then

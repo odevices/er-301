@@ -65,7 +65,9 @@ function FMOperator:onLoadGraph(channelCount)
   self:addMonoBranch("num", num, "In", num, "Out")
   self:addMonoBranch("den", den, "In", den, "Out")
 
-  if channelCount > 1 then connect(self.objects.vca, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(self.objects.vca, "Out", self, "Out2")
+  end
 end
 
 local views = {

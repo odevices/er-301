@@ -70,7 +70,9 @@ function ChannelControl:getDisplayName()
 end
 
 function ChannelControl:spotReleased(i, shifted)
-  if shifted then return end
+  if shifted then
+    return
+  end
   if self:queryUp("state") == "setup" then
     local chooser = SourceChooser()
     local window = self:getWindow()

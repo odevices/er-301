@@ -8,7 +8,7 @@ local Busy = require "Busy"
 local MenuOperations = {}
 
 local function prepare(self)
-  if self.sample==nil or self.sample.pSample==nil then
+  if self.sample == nil or self.sample.pSample == nil then
     return
   end
 
@@ -23,8 +23,8 @@ end
 
 function MenuOperations:doClearSlices()
   local Settings = require "Settings"
-  if Settings.get("confirmClearSlices")=="yes" then
-    local dlg = Verification.Main("Clearing all slices...","Are you sure?")
+  if Settings.get("confirmClearSlices") == "yes" then
+    local dlg = Verification.Main("Clearing all slices...", "Are you sure?")
     local task = function(ans)
       if ans then
         self.mainDisplay:clearSlices()
@@ -63,14 +63,14 @@ function MenuOperations:doTrim()
   if sample then
     Busy.start("Trimming...")
     local SamplePool = require "Sample.Pool"
-    local newSample, status = SamplePool.clone(sample,Ns)
+    local newSample, status = SamplePool.clone(sample, Ns)
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
       Overlay.flashMainMessage("Trim failed. Could not clone sample.")
       return
     end
-    newSample:copyFrom(0,Ns,sample,from,true)
+    newSample:copyFrom(0, Ns, sample, from, true)
     if self.unit then
       self.unit:setSample(newSample)
     end
@@ -95,7 +95,7 @@ function MenuOperations:doCut()
   if sample then
     Busy.start("Cutting...")
     local SamplePool = require "Sample.Pool"
-    local newSample, status = SamplePool.clone(sample,Ns)
+    local newSample, status = SamplePool.clone(sample, Ns)
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
@@ -103,10 +103,10 @@ function MenuOperations:doCut()
       return
     end
     if As > 0 then
-      newSample:copyFrom(0,from,sample,0,true)
+      newSample:copyFrom(0, from, sample, 0, true)
     end
     if Bs > 0 then
-      newSample:copyFrom(As,Ns,sample,to,true)
+      newSample:copyFrom(As, Ns, sample, to, true)
     end
     if self.unit then
       self.unit:setSample(newSample)
@@ -126,15 +126,15 @@ function MenuOperations:doSilence()
     Busy.start("Silencing...")
     local Ns = sample:length()
     local SamplePool = require "Sample.Pool"
-    local newSample, status = SamplePool.clone(sample,Ns)
+    local newSample, status = SamplePool.clone(sample, Ns)
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
       Overlay.flashMainMessage("Silence failed. Could not clone sample.")
       return
     end
-    newSample:copyFrom(0,Ns,sample,0,true)
-    newSample.pSample:silence(from,to)
+    newSample:copyFrom(0, Ns, sample, 0, true)
+    newSample.pSample:silence(from, to)
     if self.unit then
       self.unit:setSample(newSample)
     end
@@ -151,15 +151,15 @@ function MenuOperations:doFadeIn()
     Busy.start("Fading in...")
     local Ns = sample:length()
     local SamplePool = require "Sample.Pool"
-    local newSample, status = SamplePool.clone(sample,Ns)
+    local newSample, status = SamplePool.clone(sample, Ns)
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
       Overlay.flashMainMessage("Fade failed. Could not clone sample.")
       return
     end
-    newSample:copyFrom(0,Ns,sample,0,true)
-    newSample.pSample:fadeIn(from,to)
+    newSample:copyFrom(0, Ns, sample, 0, true)
+    newSample.pSample:fadeIn(from, to)
     if self.unit then
       self.unit:setSample(newSample)
     end
@@ -176,15 +176,15 @@ function MenuOperations:doFadeOut()
     Busy.start("Fading out...")
     local Ns = sample:length()
     local SamplePool = require "Sample.Pool"
-    local newSample, status = SamplePool.clone(sample,Ns)
+    local newSample, status = SamplePool.clone(sample, Ns)
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
       Overlay.flashMainMessage("Fade failed. Could not clone sample.")
       return
     end
-    newSample:copyFrom(0,Ns,sample,0,true)
-    newSample.pSample:fadeOut(from,to)
+    newSample:copyFrom(0, Ns, sample, 0, true)
+    newSample.pSample:fadeOut(from, to)
     if self.unit then
       self.unit:setSample(newSample)
     end
@@ -201,15 +201,15 @@ function MenuOperations:doNormalize()
     Busy.start("Normalizing...")
     local Ns = sample:length()
     local SamplePool = require "Sample.Pool"
-    local newSample, status = SamplePool.clone(sample,Ns)
+    local newSample, status = SamplePool.clone(sample, Ns)
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
       Overlay.flashMainMessage("Normalize failed. Could not clone sample.")
       return
     end
-    newSample:copyFrom(0,Ns,sample,0,true)
-    newSample.pSample:normalize(from,to)
+    newSample:copyFrom(0, Ns, sample, 0, true)
+    newSample.pSample:normalize(from, to)
     if self.unit then
       self.unit:setSample(newSample)
     end
@@ -226,15 +226,15 @@ function MenuOperations:doRemoveDC()
     Busy.start("Removing DC...")
     local Ns = sample:length()
     local SamplePool = require "Sample.Pool"
-    local newSample, status = SamplePool.clone(sample,Ns)
+    local newSample, status = SamplePool.clone(sample, Ns)
     if not newSample then
       Busy.stop()
       local Overlay = require "Overlay"
       Overlay.flashMainMessage("Remove DC failed. Could not clone sample.")
       return
     end
-    newSample:copyFrom(0,Ns,sample,0,true)
-    newSample.pSample:removeDC(from,to)
+    newSample:copyFrom(0, Ns, sample, 0, true)
+    newSample.pSample:removeDC(from, to)
     if self.unit then
       self.unit:setSample(newSample)
     end
@@ -252,7 +252,7 @@ function MenuOperations:doSave()
   if sample then
     local success, status = SamplePool.save(sample)
     if success then
-      Overlay.flashMainMessage("Saved: %s",sample:getFullPathForDisplay(32))
+      Overlay.flashMainMessage("Saved: %s", sample:getFullPathForDisplay(32))
     elseif status then
       Overlay.flashMainMessage(status)
     end
@@ -264,9 +264,9 @@ function MenuOperations:doSaveAs()
   local Overlay = require "Overlay"
   local sample = self.sample
   if sample then
-    local success, status = SamplePool.save(sample,true)
+    local success, status = SamplePool.save(sample, true)
     if success then
-      Overlay.flashMainMessage("Saved: %s",sample:getFullPathForDisplay(32))
+      Overlay.flashMainMessage("Saved: %s", sample:getFullPathForDisplay(32))
     elseif status then
       Overlay.flashMainMessage(status)
     end
@@ -287,7 +287,8 @@ function MenuOperations:doRevert()
         SamplePool.unload(sample)
       end
       self.mainDisplay:movePointerToViewCenter()
-      Overlay.flashMainMessage("Reverted: %s",revertedSample:getFullPathForDisplay(32))
+      Overlay.flashMainMessage("Reverted: %s",
+                               revertedSample:getFullPathForDisplay(32))
     elseif status then
       Overlay.flashMainMessage(status)
     end

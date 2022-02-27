@@ -59,7 +59,9 @@ function ModeControl:init(args)
 end
 
 function ModeControl:onReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i > self.descWidth then
     local j = i - self.descWidth
     if j <= #self.choices then
@@ -67,10 +69,14 @@ function ModeControl:onReleased(i, shifted)
       if self.muteOnChange then
         local chain = self.parent.unit.chain
         local wasMuted = chain:muteIfNeeded()
-        if self.onUpdate then self.onUpdate(choice) end
+        if self.onUpdate then
+          self.onUpdate(choice)
+        end
         chain:unmuteIfNeeded(wasMuted)
       else
-        if self.onUpdate then self.onUpdate(choice) end
+        if self.onUpdate then
+          self.onUpdate(choice)
+        end
       end
       self:update(choice)
     end

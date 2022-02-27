@@ -1,11 +1,11 @@
 local Class = require "Base.Class"
 local Source = require "Source"
 
-local Internal = Class{}
+local Internal = Class {}
 Internal:include(Source)
 
-function Internal:init(type,object,channel)
-  Source.init(self,type)
+function Internal:init(type, object, channel)
+  Source.init(self, type)
   self:setClassName("Source.Internal")
   self:setInstanceName(object:getInstanceName())
   self.object = object

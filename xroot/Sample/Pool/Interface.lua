@@ -119,7 +119,9 @@ function Interface:init(history, purpose)
   end
 
   -- load samples currently in the pool
-  for _, sample in pairs(Pool.samples) do self:addSample(sample) end
+  for _, sample in pairs(Pool.samples) do
+    self:addSample(sample)
+  end
 
   self.timerHandleForDisplay = nil
 
@@ -213,7 +215,9 @@ function Interface:onShow()
     self:memoryUsageChanged()
     self:updateDetail()
   end
-  for _, sample in pairs(Pool.samples) do self:sampleStatusChanged(sample) end
+  for _, sample in pairs(Pool.samples) do
+    self:sampleStatusChanged(sample)
+  end
   self.timerHandleForDisplay = Timer.every(0.5, task)
 end
 
@@ -253,9 +257,13 @@ end
 
 function Interface:deleteSample()
   local path = self.sampleColumn:getSelectedData()
-  if not path then return end
+  if not path then
+    return
+  end
   local sample = Pool.samples[path]
-  if not sample then return end
+  if not sample then
+    return
+  end
   self.sampleColumn:scrollUp()
   self.statusColumn:scrollUp()
   self:updateDetail()
@@ -285,7 +293,9 @@ end
 
 function Interface:tryPurgeSample()
   local path = self.sampleColumn:getSelectedData()
-  if not path then return false end
+  if not path then
+    return false
+  end
   local sample = Pool.samples[path]
   if sample then
     if sample:inUse() then
@@ -337,7 +347,9 @@ function FakeUnit:setSample(sample)
     self.sample = nil
   end
   self.sample = sample
-  if self.sample then self.sample:claim(self) end
+  if self.sample then
+    self.sample:claim(self)
+  end
 
   if sample == nil then
     self.head:setSample(nil, nil)
@@ -345,7 +357,9 @@ function FakeUnit:setSample(sample)
     self.head:setSample(sample.pSample, sample.slices.pSlices)
   end
 
-  if self.slicingView then self.slicingView:setSample(sample) end
+  if self.slicingView then
+    self.slicingView:setSample(sample)
+  end
 end
 
 function FakeUnit:showSampleEditor()
@@ -388,7 +402,7 @@ end
 function Interface:cancelReleased(shifted)
   if not shifted then
     self:hide()
-    if self.purpose=="save" then
+    if self.purpose == "save" then
       self:emitSignal("done", false)
     else
       self:emitSignal("done")
@@ -400,7 +414,7 @@ end
 function Interface:upReleased(shifted)
   if not shifted then
     self:hide()
-    if self.purpose=="save" then
+    if self.purpose == "save" then
       self:emitSignal("done", true)
     else
       self:emitSignal("done")
@@ -411,7 +425,7 @@ end
 
 function Interface:homeReleased()
   self:hide()
-  if self.purpose=="save" then
+  if self.purpose == "save" then
     self:emitSignal("done", true)
   else
     self:emitSignal("done")
@@ -481,8 +495,12 @@ function Interface:doneChoosing(selectedPaths)
         local success, status = Pool.load(fullPath)
         if not success then
           failed[#failed + 1] = filename
-          if status == app.STATUS_OUT_OF_MEMORY then outOfMemory = true end
-          if #failed > 100 then break end
+          if status == app.STATUS_OUT_OF_MEMORY then
+            outOfMemory = true
+          end
+          if #failed > 100 then
+            break
+          end
         end
       end
     else
@@ -525,7 +543,9 @@ function Interface:doPurgeUnused()
   local dirty = Pool.hasDirtySamples()
   if dirty or Settings.get("confirmPurgeUnusedSamples") == "yes" then
     local task = function(yes)
-      if yes then self:purgeUnused() end
+      if yes then
+        self:purgeUnused()
+      end
     end
     local dialog
     if dirty then
@@ -561,9 +581,13 @@ end
 function Interface:doReplaceSample()
   if Card.mounted() then
     local path = self.sampleColumn:getSelectedData()
-    if not path then return end
+    if not path then
+      return
+    end
     local sample = Pool.samples[path]
-    if not sample then return end
+    if not sample then
+      return
+    end
     local task = function(result)
       if result and result.fullpath then
         local SG = require "Overlay"
@@ -605,7 +629,9 @@ function Interface:doLoadSample()
 end
 
 function Interface:subReleased(i, shifted)
-  if shifted then return true end
+  if shifted then
+    return true
+  end
   if self.purpose == "save" then
     if i == 1 or i == 2 then
       self:hide()

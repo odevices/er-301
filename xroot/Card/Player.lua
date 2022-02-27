@@ -62,7 +62,9 @@ function Player:play(path, position, loop, channel)
     self.fileSource:setLooping(false)
   end
 
-  if position ~= nil then self.fileSource:setPositionInSamples(position) end
+  if position ~= nil then
+    self.fileSource:setPositionInSamples(position)
+  end
 
   self.preemptedChannel = channel
   self.wasMuted = preemptedChain:muteIfNeeded()

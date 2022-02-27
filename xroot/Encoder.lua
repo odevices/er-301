@@ -18,10 +18,14 @@ local function bilinearMap(min1, max1, n1, min2, max2, n2)
   local map = app.LUTDialMap(n1 + n2 + 2)
 
   local scale1 = (max1 - min1) / n1
-  for i = 0, n1 do map:add(i * scale1 + min1) end
+  for i = 0, n1 do
+    map:add(i * scale1 + min1)
+  end
 
   local scale2 = (max2 - min2) / n2
-  for i = 0, n2 do map:add(i * scale2 + min2) end
+  for i = 0, n2 do
+    map:add(i * scale2 + min2)
+  end
   return map
 end
 
@@ -48,18 +52,26 @@ end
 
 local function octaveMap(from, to, F0, step)
   local n = 0
-  for x = from, to, step do n = n + 1 end
+  for x = from, to, step do
+    n = n + 1
+  end
   local map = app.LUTDialMap(n)
-  for x = from, to, step do map:add((2 ^ x) * F0) end
+  for x = from, to, step do
+    map:add((2 ^ x) * F0)
+  end
   return map
 end
 
 local function octaveMapWithZero(from, to, F0, step)
   local n = 0
-  for x = from, to, step do n = n + 1 end
+  for x = from, to, step do
+    n = n + 1
+  end
   local map = app.LUTDialMap(n + 1)
   map:add(0)
-  for x = from, to, step do map:add((2 ^ x) * F0) end
+  for x = from, to, step do
+    map:add((2 ^ x) * F0)
+  end
   return map
 end
 
@@ -185,10 +197,10 @@ local function dumpMap(name, map)
   app.logInfo("Map(%s)", name)
   app.logInfo("min,max: %s %s", map:min(), map:max())
   app.logInfo("radix: %s %s %s", map:coarseRadix(), map:fineRadix(),
-         map:superFineRadix())
+              map:superFineRadix())
   if map.coarseStep then
     app.logInfo("steps: %s %s %s", map:coarseStep(), map:fineStep(),
-           map:superFineStep())
+                map:superFineStep())
   end
 end
 

@@ -49,7 +49,9 @@ function Patch:getOutputDisplayName(channel)
 end
 
 function Patch:insertEmptySection()
-  if self.emptySection then return end
+  if self.emptySection then
+    return
+  end
   self.emptySection = EmptySection(4 * ply)
   self:insertSection(self.emptySection, 2)
 end
@@ -79,7 +81,9 @@ function Patch:start()
     self.stopCount = self.stopCount - 1
     if self.stopCount == 0 then
       self.started = true
-      for _, unit in pairs(self.units) do unit:start() end
+      for _, unit in pairs(self.units) do
+        unit:start()
+      end
     end
   end
 end
@@ -88,7 +92,9 @@ function Patch:stop()
   if self.stopCount == 0 then
     self.stopCount = 1
     self.started = false
-    for _, unit in pairs(self.units) do unit:stop() end
+    for _, unit in pairs(self.units) do
+      unit:stop()
+    end
   else
     self.stopCount = self.stopCount + 1
   end
@@ -109,7 +115,9 @@ end
 function Patch:deserialize(t)
   self:startDeserialization()
   self:setLastPreset(t.lastPresetPath, t.lastPresetFilename)
-  if t.instanceKey then self:setInstanceKey(t.instanceKey) end
+  if t.instanceKey then
+    self:setInstanceKey(t.instanceKey)
+  end
   self:deserializeUnits(t.units)
   self:deserializeSelection(t.selection)
   self:finishDeserialization()
@@ -130,7 +138,9 @@ function Patch:disable(soft)
 end
 
 function Patch:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   return true
 end

@@ -40,7 +40,9 @@ local function refreshPackageCache()
   -- Refresh installed packages.
   local installed = Persist.getRearCardValue("packages", "installed") or {}
   for k, v in pairs(installed) do
-    if packageCache[k] == nil then packageCache[k] = Package(v) end
+    if packageCache[k] == nil then
+      packageCache[k] = Package(v)
+    end
     packageCache[k].installed = true
     keep[k] = true
   end
@@ -62,19 +64,25 @@ local function refreshPackageCache()
   end
   -- Remove any packages that are not installed and don't have an archive.
   for k, _ in pairs(packageCache) do
-    if not keep[k] then packageCache[k] = nil end
+    if not keep[k] then
+      packageCache[k] = nil
+    end
   end
   Busy.stop()
   packageCacheIsStale = false
 end
 
 local function getPackages()
-  if packageCacheIsStale then refreshPackageCache() end
+  if packageCacheIsStale then
+    refreshPackageCache()
+  end
   return packageCache
 end
 
 local function getPackage(id)
-  if packageCacheIsStale then refreshPackageCache() end
+  if packageCacheIsStale then
+    refreshPackageCache()
+  end
   return packageCache[id]
 end
 
@@ -89,7 +97,9 @@ local function findCompatiblePackage(dep, installedOnly)
     end
   else
     for _, package in pairs(getPackages()) do
-      if package:satisfies(dep) then C[#C + 1] = package end
+      if package:satisfies(dep) then
+        C[#C + 1] = package
+      end
     end
   end
   -- Choose the candidate with the highest version.
@@ -161,7 +171,9 @@ local function uninstall(package)
 end
 
 local function load(package)
-  if loaded[package.id] then return true end
+  if loaded[package.id] then
+    return true
+  end
 
   app.logInfo("Loading package: %s", package.id)
 
@@ -173,12 +185,12 @@ local function load(package)
       if otherPackage then
         if not load(otherPackage) then
           app.logError("%s: failed to load dependency, %s.", package.id,
-                      otherPackage.id)
+                       otherPackage.id)
           return false
         end
       else
         app.logError("%s: required package (%s) not found.", package.id,
-                    dependencyToPrettyString(dep))
+                     dependencyToPrettyString(dep))
         return false
       end
     end
@@ -193,7 +205,9 @@ local function delete(package)
   uninstall(package)
   packageCache[package.id] = nil
   local path = package:getArchivePath()
-  if Path.exists(path) then app.deleteFile(path) end
+  if Path.exists(path) then
+    app.deleteFile(path)
+  end
 end
 
 -- Only used by Package.Interface?
@@ -255,10 +269,10 @@ local function install(package)
     local path = Path.join(installFolder, filename)
     Path.createAll(path, true)
     if Path.isDirectory(path:gsub("/$", "")) then
-      --app.logInfo("Skipping folder: %s", path)
+      -- app.logInfo("Skipping folder: %s", path)
     else
       Busy.status("Installing %s: %s", package.id, Path.getFilename(filename))
-      --app.logInfo("Extracting %s.", path)
+      -- app.logInfo("Extracting %s.", path)
       if not archive:extract(filename, path) then
         local msg = string.format("Failed to extract %s from %s.", filename,
                                   package.id)
@@ -298,7 +312,9 @@ end
 
 local function reset()
   Busy.start("Uninstalling all packages...")
-  for k, v in pairs(loaded) do unload(v) end
+  for k, v in pairs(loaded) do
+    unload(v)
+  end
   Path.recursiveDelete(FS.getRoot("libs"))
   Path.recursiveDelete(FS.getRoot("package-configs"))
   Persist.deleteRearCardDatabase("packages")
@@ -325,7 +341,9 @@ local function installUpdates()
       for id, package in pairs(packages) do
         if package:getName() == name then
           wasPresent = true
-          if package.installed then wasInstalled = true end
+          if package.installed then
+            wasInstalled = true
+          end
           app.logInfo("Removing package %s", id)
           delete(package)
         end
@@ -338,7 +356,9 @@ local function installUpdates()
         app.logInfo("Copied %s to %s.", srcPath, dstPath)
         app.deleteFile(srcPath)
         updated = updated + 1
-        if wasInstalled or not wasPresent then install(update) end
+        if wasInstalled or not wasPresent then
+          install(update)
+        end
       end
     end
   end

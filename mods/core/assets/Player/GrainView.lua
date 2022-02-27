@@ -50,7 +50,9 @@ function GrainView:init(args)
 end
 
 function GrainView:setSample(sample)
-  if sample then self.subDisplay:setName(sample.name) end
+  if sample then
+    self.subDisplay:setName(sample.name)
+  end
 end
 
 function GrainView:selectReleased(i, shifted)

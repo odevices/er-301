@@ -57,11 +57,15 @@ end
 
 function Library:clearConfiguration()
   local path = self:pathToConfigurationDatabase()
-  if Path.exists(path) then app.deleteFile(path) end
+  if Path.exists(path) then
+    app.deleteFile(path)
+  end
 end
 
 function Library:showMenu()
-  if self.onShowMenu == nil then return end
+  if self.onShowMenu == nil then
+    return
+  end
   local controls, order, description = self:onShowMenu()
 
   if controls == nil then
@@ -82,7 +86,9 @@ function Library:showMenu()
       menu:startNewRow()
     else
       local control = controls[cname]
-      if control then menu:addControl(control, control.isHeader) end
+      if control then
+        menu:addControl(control, control.isHeader)
+      end
     end
   end
 

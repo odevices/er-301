@@ -51,13 +51,17 @@ function Gate:rename(name)
 end
 
 function Gate:spotPressed(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.comparator:simulateRisingEdge()
   return true
 end
 
 function Gate:spotReleased(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.comparator:simulateFallingEdge()
   return true
 end
@@ -67,7 +71,9 @@ function Gate:encoder(change, shifted)
 end
 
 function Gate:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     self:doRename()
   elseif i == 2 then

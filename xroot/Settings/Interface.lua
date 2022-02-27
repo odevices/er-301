@@ -253,7 +253,9 @@ function Interface:updateDetail()
         subList:choose("no")
       end
     elseif var.type == "string" then
-      for _, choice in ipairs(var.choices) do subList:addItem(choice) end
+      for _, choice in ipairs(var.choices) do
+        subList:addItem(choice)
+      end
       subList:choose(var.value)
     end
     self.toggleButton:show()
@@ -310,7 +312,9 @@ function Interface:encoder(change, shifted)
     end
   else
     local subList = self.subList
-    if subList:encoder(change, shifted, threshold) then self:commit() end
+    if subList:encoder(change, shifted, threshold) then
+      self:commit()
+    end
   end
   return true
 end

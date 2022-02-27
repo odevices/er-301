@@ -22,8 +22,12 @@ end
 
 function Zoomable:deserialize(t)
   ViewControl.deserialize(self, t)
-  if t.time then self.mainDisplay:setViewTimeInSeconds(t.time) end
-  if t.gain then self.mainDisplay:setViewGainInDecibels(t.gain) end
+  if t.time then
+    self.mainDisplay:setViewTimeInSeconds(t.time)
+  end
+  if t.gain then
+    self.mainDisplay:setViewGainInDecibels(t.gain)
+  end
 end
 
 function Zoomable:onCursorLeave(spot)

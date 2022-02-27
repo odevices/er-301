@@ -52,7 +52,8 @@ InputGate:include(EncoderControl)
 
 function InputGate:init(args)
   -- required arguments
-  local button = args.button or app.logError("%s.init: button is missing.", self)
+  local button = args.button or
+                     app.logError("%s.init: button is missing.", self)
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
   local comparator = args.comparator or
@@ -151,7 +152,9 @@ function InputGate:rename(name)
 end
 
 function InputGate:setFocusedReadout(readout)
-  if readout then readout:save() end
+  if readout then
+    readout:save()
+  end
   self.focusedReadout = readout
   self:setSubCursorController(readout)
 end
@@ -177,23 +180,33 @@ function InputGate:enterReleased()
 end
 
 function InputGate:zeroPressed()
-  if self.focusedReadout then self.focusedReadout:zero() end
+  if self.focusedReadout then
+    self.focusedReadout:zero()
+  end
   return true
 end
 
 function InputGate:cancelReleased(shifted)
-  if shifted then return false end
-  if self.focusedReadout then self.focusedReadout:restore() end
+  if shifted then
+    return false
+  end
+  if self.focusedReadout then
+    self.focusedReadout:restore()
+  end
   return true
 end
 
 function InputGate:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     local Overlay = require "Overlay"
     Overlay.flashSubMessage("Unit input only.")
   elseif i == 2 then
-    if not self:hasFocus("encoder") then self:focus() end
+    if not self:hasFocus("encoder") then
+      self:focus()
+    end
     self:setFocusedReadout(self.threshold)
   elseif i == 3 then
     self.comparator:simulateFallingEdge();
@@ -202,8 +215,12 @@ function InputGate:subReleased(i, shifted)
 end
 
 function InputGate:subPressed(i, shifted)
-  if shifted then return false end
-  if i == 3 then self.comparator:simulateRisingEdge(); end
+  if shifted then
+    return false
+  end
+  if i == 3 then
+    self.comparator:simulateRisingEdge();
+  end
   return true
 end
 

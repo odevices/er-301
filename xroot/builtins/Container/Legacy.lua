@@ -6,7 +6,9 @@ local function createGate(unit, id, t)
   local cb = unit:addControlBranch("Gate", id, bdata)
   unit:placeControl(id, "expanded")
   local cdata = t.controls and t.controls[id]
-  if cdata then cb.control:deserialize(cdata) end
+  if cdata then
+    cb.control:deserialize(cdata)
+  end
   cb.control:customize{
     outputMode = app.COMPARATOR_GATE
   }
@@ -34,7 +36,9 @@ local function createLinear(unit, id, t)
   local cb = unit:addControlBranch("GainBias", id, bdata)
   unit:placeControl(id, "expanded")
   local cdata = t.controls and t.controls[id]
-  if cdata then cb.control:deserialize(cdata) end
+  if cdata then
+    cb.control:deserialize(cdata)
+  end
   local odata = t.objects[id .. "_gainbias"]
   if odata then
     local o = cb.objects[1]
@@ -62,7 +66,9 @@ local function createPitch(unit, id, t)
   local cb = unit:addControlBranch("Pitch", id, bdata)
   unit:placeControl(id, "expanded")
   local cdata = t.controls and t.controls[id]
-  if cdata then cb.control:deserialize(cdata) end
+  if cdata then
+    cb.control:deserialize(cdata)
+  end
   local odata = t.objects[id .. "_tune"]
   if odata then
     local o = cb.objects[1]
@@ -130,7 +136,9 @@ local descriptors = {
 local aliases = {}
 for i, czd in ipairs(descriptors) do
   czd.type = czd.aliases[1]
-  for j, alias in ipairs(czd.aliases) do aliases[alias] = czd end
+  for j, alias in ipairs(czd.aliases) do
+    aliases[alias] = czd
+  end
 end
 
 local function lookup(type)
@@ -177,7 +185,9 @@ local function deserializeCustomizations(unit, t)
       insertCustomization(unit, czd.controlType, name, t)
     end
   end
-  if t.patch and unit.patch then unit.patch:deserialize(t.patch) end
+  if t.patch and unit.patch then
+    unit.patch:deserialize(t.patch)
+  end
 end
 
 return {

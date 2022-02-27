@@ -60,7 +60,9 @@ function FileChooser:init(opts)
 
   if not hasHistory then
     self:navigateTo(opts.path)
-    if opts.suggested then self:choose(opts.suggested) end
+    if opts.suggested then
+      self:choose(opts.suggested)
+    end
   end
 
   self.goal = opts.goal
@@ -165,7 +167,9 @@ function FileChooser:init(opts)
     label = app.TextPanel("Enable Multi", 3, 0.5, app.GRID5_LINE3)
     self.subGraphic:addChild(label)
     self.S3 = label
-    if self.staged > 0 then self:toggleMultiSelection() end
+    if self.staged > 0 then
+      self:toggleMultiSelection()
+    end
   end
 
   Signal.weakRegister("cardMounted", self)
@@ -230,7 +234,9 @@ function FileChooser:setPattern(pattern)
   if pattern then
     if type(pattern) == "table" then
       browser:clearPatterns()
-      for _, glob in ipairs(pattern) do browser:addPattern(glob) end
+      for _, glob in ipairs(pattern) do
+        browser:addPattern(glob)
+      end
     else
       browser:setPattern(pattern)
     end
@@ -254,7 +260,9 @@ function FileChooser:finish(filename, path, overwrite)
       -- overwriting existing file...
       local Verification = require "Verification"
       local task = function(ans)
-        if ans then self:finish(filename, path, true) end
+        if ans then
+          self:finish(filename, path, true)
+        end
       end
       local dialog = Verification.Main("Is it OK to overwrite this file?",
                                        filename)
@@ -416,7 +424,8 @@ function FileChooser:updatePreview()
       if playing ~= selected then
         player:stop()
         self.browser:setFileSource(nil)
-        if FS.isType("audio", selected) and player:play(selected, nil, self.previewLoop) then
+        if FS.isType("audio", selected) and
+            player:play(selected, nil, self.previewLoop) then
           self.browser:setFileSource(player:getFileSource(), true)
         else
           self:stopUpdateTimer()
@@ -437,7 +446,9 @@ end
 
 function FileChooser:doCloseFolder()
   local browser = self.browser
-  if browser:popDirectory() then browser:refresh() end
+  if browser:popDirectory() then
+    browser:refresh()
+  end
 end
 
 function FileChooser:doNewFile()
@@ -467,7 +478,9 @@ function FileChooser:doNewFolder()
     end
   end
   local suggested = self.suggested
-  if self.goal == "save file" then suggested = "" end
+  if self.goal == "save file" then
+    suggested = ""
+  end
   local kb = Keyboard("Enter folder name:", suggested, false, "NamingStuff")
   kb:subscribe("done", task)
   kb:show()
@@ -532,7 +545,9 @@ end
 
 function FileChooser:encoder(change, shifted)
   if self.browser:encoder(change, shifted, threshold) then
-    if Settings.get("samplePreviewStop") == "yes" then self:stopPreview() end
+    if Settings.get("samplePreviewStop") == "yes" then
+      self:stopPreview()
+    end
   end
   return true
 end
@@ -554,14 +569,18 @@ function FileChooser:commitReleased()
 end
 
 function FileChooser:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:stopPreview()
   self:abort()
   return true
 end
 
 function FileChooser:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:stopPreview()
   if self.multi and self.browser:countCheckedPaths() > 0 then
     self:finish()
@@ -572,10 +591,14 @@ function FileChooser:upReleased(shifted)
 end
 
 function FileChooser:mainReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 4 then
     self:stopPreview()
-    if self.multi then self:toggleSelected() end
+    if self.multi then
+      self:toggleSelected()
+    end
   elseif i == 5 then
     self:stopPreview()
     self:doCloseFolder()
@@ -592,10 +615,14 @@ function FileChooser:mainReleased(i, shifted)
 end
 
 function FileChooser:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:stopPreview()
   if self.goal == "save folder" then
-    if i == 3 then self:doNewFolder() end
+    if i == 3 then
+      self:doNewFolder()
+    end
   elseif self.goal == "save file" then
     if i == 2 then
       self:doNewFile()
@@ -606,9 +633,13 @@ function FileChooser:subReleased(i, shifted)
     -- nothing to do
   elseif self.goal == "load files" then
     if i == 1 then
-      if self.multi then self:checkNone() end
+      if self.multi then
+        self:checkNone()
+      end
     elseif i == 2 then
-      if self.multi then self:checkAll() end
+      if self.multi then
+        self:checkAll()
+      end
     elseif i == 3 then
       self:toggleMultiSelection()
     end
@@ -617,7 +648,9 @@ function FileChooser:subReleased(i, shifted)
 end
 
 function FileChooser:selectPressed(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   local Overlay = require "Overlay"
   local Channels = require "Channels"
   local chain = Channels.getChain(i)

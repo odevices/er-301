@@ -71,7 +71,9 @@ function Chooser:init(chain, currentSource)
     end
   end
 
-  if self.index == 3 and nGlobals == 0 then self.index = 1 end
+  if self.index == 3 and nGlobals == 0 then
+    self.index = 1
+  end
 
   self:setChooser(self.index)
 end
@@ -82,7 +84,9 @@ function Chooser:onGlobalChainCountChanged(n)
   else
     self.panels[3]:setText(string.format("%d Globals", n))
   end
-  if n == 0 and self.index == 3 then self:setChooser(1) end
+  if n == 0 and self.index == 3 then
+    self:setChooser(1)
+  end
 end
 
 function Chooser:getExternalChooser()
@@ -118,8 +122,12 @@ function Chooser:hide()
 end
 
 function Chooser:subReleased(i, shifted)
-  if shifted then return false end
-  if i == self.index then return end
+  if shifted then
+    return false
+  end
+  if i == self.index then
+    return
+  end
   local GlobalChains = require "GlobalChains"
   if i == 3 and GlobalChains.count() == 0 then
     local Overlay = require "Overlay"
@@ -131,7 +139,9 @@ function Chooser:subReleased(i, shifted)
 end
 
 function Chooser:setChooser(i)
-  if self.chain == nil and i == 2 then return end
+  if self.chain == nil and i == 2 then
+    return
+  end
 
   local window
   if i == 2 then
@@ -159,13 +169,17 @@ function Chooser:setChooser(i)
   self.panels[3]:deselect()
   self.panels[self.index]:select()
 
-  if self.current then self.current:removeSubGraphic(self.menuGraphic) end
+  if self.current then
+    self.current:removeSubGraphic(self.menuGraphic)
+  end
 
   window:addSubGraphic(self.menuGraphic)
 
   if self.current and self.current.context then
     -- active
-    if self.current ~= window then self.current:replace(window) end
+    if self.current ~= window then
+      self.current:replace(window)
+    end
   end
 
   self.current = window

@@ -7,8 +7,8 @@ return {
     {
       title = "Tie Expression Example",
       category = "Learning",
-      moduleName = "TieExpression",
-    },
+      moduleName = "TieExpression"
+    }
   }
 }
 

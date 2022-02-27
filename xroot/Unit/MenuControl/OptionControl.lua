@@ -14,7 +14,8 @@ function OptionControl:init(args)
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
   self:setInstanceName(description)
-  local option = args.option or app.logError("%s.init: option is missing.", self)
+  local option = args.option or
+                     app.logError("%s.init: option is missing.", self)
   local choices = args.choices or
                       app.logError("%s.init: 'choices' is missing.", self)
   local descWidth = args.descriptionWidth or 1
@@ -66,7 +67,9 @@ function OptionControl:init(args)
 end
 
 function OptionControl:onReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i > self.descWidth then
     local choice = i - self.descWidth - self.offset
     if choice <= #self.choices then
@@ -94,7 +97,9 @@ function OptionControl:update()
       label:setForegroundColor(app.GRAY5)
     end
   end
-  if self.onUpdate then self.onUpdate(choice) end
+  if self.onUpdate then
+    self.onUpdate(choice)
+  end
 end
 
 return OptionControl

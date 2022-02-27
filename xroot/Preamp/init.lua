@@ -36,7 +36,11 @@ local function get(channel)
   local chId = channel and channels[channel]
   if chId then
     local gId = app.Modulation_getChannelRange(chId)
-    for k, v in pairs(gains) do if v == gId then return k end end
+    for k, v in pairs(gains) do
+      if v == gId then
+        return k
+      end
+    end
   else
     app.logError("Preamp.get: Invalid channel, %s.", channel)
   end
@@ -52,7 +56,9 @@ local function serialize()
 end
 
 local function deserialize(t)
-  for k, v in pairs(t) do set(k, v) end
+  for k, v in pairs(t) do
+    set(k, v)
+  end
   app.Modulation_restart()
   Signal.emit("onPreampChanged")
 end

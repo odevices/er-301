@@ -21,28 +21,38 @@ function MultiBand:notifyBranches(method, ...)
   for i = 1, self.bandCount do
     local band = self.bands[i]
     local f = band[method]
-    if f ~= nil then f(band, ...) end
+    if f ~= nil then
+      f(band, ...)
+    end
   end
   Unit.notifyBranches(self, method, ...)
 end
 
 function MultiBand:findUnitByTitle(title)
   local unit = Unit.findUnitByTitle(self, title)
-  if unit then return unit end
+  if unit then
+    return unit
+  end
   for i = 1, self.bandCount do
     local band = self.bands[i]
     unit = band and band:findUnitByTitle(title)
-    if unit then return unit end
+    if unit then
+      return unit
+    end
   end
 end
 
 function MultiBand:findByInstanceKey(key)
   local o = Unit.findByInstanceKey(self, key)
-  if o then return o end
+  if o then
+    return o
+  end
   for i = 1, self.bandCount do
     local band = self.bands[i]
     o = band and band:findByInstanceKey(key)
-    if o then return o end
+    if o then
+      return o
+    end
   end
 end
 
@@ -104,7 +114,9 @@ end
 function MultiBand:serialize()
   local t = Unit.serialize(self)
   local bands = {}
-  for i = 1, self.bandCount do bands[i] = self.bands[i]:serialize() end
+  for i = 1, self.bandCount do
+    bands[i] = self.bands[i]:serialize()
+  end
   t.bands = bands
   return t
 end
@@ -112,7 +124,9 @@ end
 function MultiBand:deserialize(t)
   Unit.deserialize(self, t)
   if t.bands then
-    for i = 1, self.bandCount do self.bands[i]:deserialize(t.bands[i] or {}) end
+    for i = 1, self.bandCount do
+      self.bands[i]:deserialize(t.bands[i] or {})
+    end
   end
 end
 

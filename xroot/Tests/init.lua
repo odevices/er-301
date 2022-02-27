@@ -7,7 +7,9 @@ local function addTest(moduleName)
     allTests[#allTests + 1] = module
   else
     for _, test in ipairs(module) do
-      if test.run and test.description then allTests[#allTests + 1] = test end
+      if test.run and test.description then
+        allTests[#allTests + 1] = test
+      end
     end
   end
 end
@@ -30,11 +32,15 @@ end
 local function run(i)
   local test = allTests[i]
   if test then
-    if not test.suppressReset then reset() end
+    if not test.suppressReset then
+      reset()
+    end
     app.logInfo("START: %s", test.description)
     test.run()
     app.logInfo("DONE: %s", test.description)
-    if not test.suppressReset then reset() end
+    if not test.suppressReset then
+      reset()
+    end
   end
 end
 

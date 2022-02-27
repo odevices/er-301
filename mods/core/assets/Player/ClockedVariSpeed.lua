@@ -52,7 +52,9 @@ function ClockedVariSpeed:onLoadGraph(channelCount)
   self:addMonoBranch("clock", clock, "In", clock, "Out")
 
   connect(head, "Left Out", self, "Out1")
-  if channelCount > 1 then connect(head, "Right Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(head, "Right Out", self, "Out2")
+  end
 
   self:setStretchMode("slice")
 end
@@ -108,9 +110,13 @@ function ClockedVariSpeed:deserialize(t)
 end
 
 function ClockedVariSpeed:setSample(sample)
-  if self.sample then self.sample:release(self) end
+  if self.sample then
+    self.sample:release(self)
+  end
   self.sample = sample
-  if self.sample then self.sample:claim(self) end
+  if self.sample then
+    self.sample:claim(self)
+  end
 
   if sample then
     self.objects.head:setSample(sample.pSample, sample.slices.pSlices)
@@ -118,7 +124,9 @@ function ClockedVariSpeed:setSample(sample)
     self.objects.head:setSample(nil, nil)
   end
 
-  if self.slicingView then self.slicingView:setSample(sample) end
+  if self.slicingView then
+    self.slicingView:setSample(sample)
+  end
   self:notifyControls("setSample", sample)
 end
 
@@ -140,7 +148,8 @@ function ClockedVariSpeed:doAttachSampleFromCard()
     end
   end
   local Pool = require "Sample.Pool"
-  local loop = self.objects.head:getOptionValue("How Often") == app.HOWOFTEN_LOOP
+  local loop = self.objects.head:getOptionValue("How Often") ==
+                   app.HOWOFTEN_LOOP
   Pool.chooseFileFromCard(self.loadInfo.id, task, loop)
 end
 

@@ -13,7 +13,9 @@ end
 
 function Slices:load(path)
   path = Path.expandRelativePath(path)
-  if path == nil then return false end
+  if path == nil then
+    return false
+  end
   if app.pathExists(path) then
     if self.pSlices:load(path) then
       app.logInfo("%s:load(%s):success", self, path)

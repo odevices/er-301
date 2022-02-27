@@ -25,7 +25,9 @@ end
 
 function Loader:doneChoosing(paths)
   -- The paths argument is never nil.
-  if self.after then self.after(paths) end
+  if self.after then
+    self.after(paths)
+  end
 end
 
 function Loader:doStaging(sofar, morePaths)

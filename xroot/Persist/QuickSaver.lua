@@ -138,7 +138,9 @@ function Slot:init(slot)
   else
     graphic = app.TextPanel(name .. " (empty)", 1)
   end
-  if not self.isCompatible then graphic:setForegroundColor(app.GRAY5) end
+  if not self.isCompatible then
+    graphic:setForegroundColor(app.GRAY5)
+  end
   graphic:setCornerRadius(3, 3, 3, 3)
   graphic:setBorder(1)
   graphic:setBorderColor(app.GRAY3)

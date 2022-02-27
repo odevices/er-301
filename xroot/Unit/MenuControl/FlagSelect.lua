@@ -14,7 +14,8 @@ function FlagSelect:init(args)
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
   self:setInstanceName(description)
-  local option = args.option or app.logError("%s.init: option is missing.", self)
+  local option = args.option or
+                     app.logError("%s.init: option is missing.", self)
   local flags = args.flags or app.logError("%s.init: 'flags' is missing.", self)
   local descWidth = args.descriptionWidth or 1
 
@@ -58,7 +59,9 @@ function FlagSelect:init(args)
 end
 
 function FlagSelect:onReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i > self.descWidth then
     local flag = i - self.descWidth - 1
     if flag < #self.flags then
@@ -78,7 +81,9 @@ function FlagSelect:update()
       label:setForegroundColor(app.GRAY5)
     end
   end
-  if self.onUpdate then self.onUpdate(self.option) end
+  if self.onUpdate then
+    self.onUpdate(self.option)
+  end
 end
 
 return FlagSelect

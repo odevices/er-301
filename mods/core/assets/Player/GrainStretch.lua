@@ -64,7 +64,9 @@ function GrainStretch:onLoadGraph(channelCount)
   self:addMonoBranch("shift", shift, "In", shift, "Out")
   self:addMonoBranch("jitter", jitter, "In", jitter, "Out")
 
-  if channelCount > 1 then connect(head, "Right Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(head, "Right Out", self, "Out2")
+  end
 
 end
 
@@ -109,7 +111,9 @@ function GrainStretch:setSample(sample)
     self.sample = nil
   end
   self.sample = sample
-  if self.sample then self.sample:claim(self) end
+  if self.sample then
+    self.sample:claim(self)
+  end
 
   -- construct a new slices object when the sample changes
   if sample == nil or sample:getChannelCount() == 0 then
@@ -118,7 +122,9 @@ function GrainStretch:setSample(sample)
     self.objects.head:setSample(sample.pSample, sample.slices.pSlices)
   end
 
-  if self.slicingView then self.slicingView:setSample(sample) end
+  if self.slicingView then
+    self.slicingView:setSample(sample)
+  end
   self:notifyControls("setSample", sample)
 end
 
@@ -140,7 +146,8 @@ function GrainStretch:doAttachSampleFromCard()
     end
   end
   local Pool = require "Sample.Pool"
-  local loop = self.objects.head:getOptionValue("How Often") == app.HOWOFTEN_LOOP
+  local loop = self.objects.head:getOptionValue("How Often") ==
+                   app.HOWOFTEN_LOOP
   Pool.chooseFileFromCard(self.loadInfo.id, task, loop)
 end
 

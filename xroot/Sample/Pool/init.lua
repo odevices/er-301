@@ -41,13 +41,15 @@ local function generateUniqueNameFromPaths(paths)
   local Persist = require "Persist"
   local session = Persist.meta.boot.count
   local longestPath = app.LongestPath()
-  for _, path in ipairs(paths) do longestPath:add(FS.makePathPretty(path)) end
+  for _, path in ipairs(paths) do
+    longestPath:add(FS.makePathPretty(path))
+  end
   local longest = longestPath:calculate()
   -- remove drive root
   longest = longest:gsub(app.roots.front, "")
   longest = longest:gsub(app.roots.rear, "")
   longest = longest:gsub(app.roots.x, "")
-  
+
   local id = lastBufferId + 1
   lastBufferId = id
 
@@ -96,7 +98,9 @@ local function updateQueue()
       -- still loading so just update progress display
       loadingSample:setProgress(loader.mPercentDone)
       Signal.emit("sampleStatusChanged", loadingSample)
-      if samples[loadingSample.path] == nil then jobQ:cancel(loader) end
+      if samples[loadingSample.path] == nil then
+        jobQ:cancel(loader)
+      end
     elseif loader.mStatus == app.STATUS_FINISHED then
       loadingSample:setGood()
       Signal.emit("sampleStatusChanged", loadingSample)
@@ -159,7 +163,9 @@ end
 
 local function addToSaveQueue(sample)
   sample:prepareForSaving()
-  if not sample:isDirty() then return true end
+  if not sample:isDirty() then
+    return true
+  end
   if sample:length() > 0 then
     saveQ[#saveQ + 1] = sample
     if timerHandleForQ == nil then
@@ -205,7 +211,9 @@ local function unload(sample, detach)
   if detach then
     local users = sample:getUsers()
     for _, user in ipairs(users) do
-      if user.setSample then user:setSample(nil) end
+      if user.setSample then
+        user:setSample(nil)
+      end
     end
   end
   samples[sample.path] = nil
@@ -216,10 +224,14 @@ local function unload(sample, detach)
 end
 
 local function load(path)
-  if path == nil then app.logFatal("Sample.Pool.load called on nil path.") end
+  if path == nil then
+    app.logFatal("Sample.Pool.load called on nil path.")
+  end
   path = Path.expandRelativePath(path)
   local sample = samples[path]
-  if sample then return sample end
+  if sample then
+    return sample
+  end
   sample = Sample(path, {
     type = "single"
   })
@@ -243,13 +255,17 @@ end
 local function loadMulti(paths, id)
   if id then
     local sample = samples[id]
-    if sample then return sample end
+    if sample then
+      return sample
+    end
   end
   local opts = {
     type = "multi",
     paths = {}
   }
-  for i, path in ipairs(paths) do opts.paths[i] = Path.expandRelativePath(path) end
+  for i, path in ipairs(paths) do
+    opts.paths[i] = Path.expandRelativePath(path)
+  end
   local sample
   if id == nil then
     local uid, pretty = generateUniqueNameFromPaths(opts.paths)
@@ -382,7 +398,9 @@ local function replace(sample, newPath)
   -- HACKy.  Detach this sample from all its users.
   local users = sample:getUsers()
   for _, user in ipairs(users) do
-    if user.setSample then user:setSample(nil) end
+    if user.setSample then
+      user:setSample(nil)
+    end
   end
   -- Clear up the memory.
   unload(sample, false)
@@ -392,7 +410,9 @@ local function replace(sample, newPath)
   sample = load(newPath)
   if sample then
     for _, user in ipairs(users) do
-      if user.setSample then user:setSample(sample) end
+      if user.setSample then
+        user:setSample(sample)
+      end
     end
     return sample
   end
@@ -410,7 +430,9 @@ local function saveMulti(sample, forceDialog)
   local pathValid = Path.exists(path)
   local ext = FS.getExt("multi")
   local filenameValid = Utils.endsWith(filename, ext)
-  if not (pathValid and filenameValid) then forceDialog = true end
+  if not (pathValid and filenameValid) then
+    forceDialog = true
+  end
   if forceDialog then
     -- try getting a path from the user
     local task = function(result)
@@ -447,7 +469,9 @@ local function saveMulti(sample, forceDialog)
 end
 
 local function save(sample, forceDialog)
-  if sample:isMulti() then return saveMulti(sample, forceDialog) end
+  if sample:isMulti() then
+    return saveMulti(sample, forceDialog)
+  end
 
   if not Card.mounted() then
     local msg = Message.Main("Card not mounted.")
@@ -459,7 +483,9 @@ local function save(sample, forceDialog)
   local pathValid = Path.exists(path)
   local filenameValid = Utils.endsWith(filename, ".wav") or
                             Utils.endsWith(filename, ".WAV")
-  if not (pathValid and filenameValid) then forceDialog = true end
+  if not (pathValid and filenameValid) then
+    forceDialog = true
+  end
   if forceDialog then
     -- try getting a path from the user
     local task = function(result)
@@ -520,8 +546,12 @@ end
 local function serializeSample(sample)
   app.logInfo("Serializing sample: %s", sample.path)
   local t = {}
-  if sample:isFileBased() or sample:isShared() then t.path = sample.path end
-  if sample:isFileBased() then sample.slices:save(sample:defaultSlicesPath()) end
+  if sample:isFileBased() or sample:isShared() then
+    t.path = sample.path
+  end
+  if sample:isFileBased() then
+    sample.slices:save(sample:defaultSlicesPath())
+  end
   t.opts = Utils.deepCopy(sample.opts)
   if t.opts.type == "buffer" then
     -- Buffers do not persist their channelCount because it depends on the chain/serialization context.
@@ -533,9 +563,13 @@ end
 local function fixLegacySamplePreset(t)
   if t.opts == nil then
     t.opts = {}
-    if t.path then t.opts.type = "single" end
+    if t.path then
+      t.opts.type = "single"
+    end
   end
-  if t.opts.type == nil or t.opts.type == "file" then t.opts.type = "single" end
+  if t.opts.type == nil or t.opts.type == "file" then
+    t.opts.type = "single"
+  end
   return t
 end
 
@@ -574,13 +608,17 @@ end
 
 local function serialize()
   local t = {}
-  for _, sample in pairs(samples) do t[#t + 1] = serializeSample(sample) end
+  for _, sample in pairs(samples) do
+    t[#t + 1] = serializeSample(sample)
+  end
   return t
 end
 
 local function clear()
   -- clear out pool and defrag for efficient memory usage
-  for _, sample in pairs(samples) do unload(sample, true) end
+  for _, sample in pairs(samples) do
+    unload(sample, true)
+  end
   defrag()
 end
 
@@ -616,14 +654,20 @@ local function chooseFileFromCard(history, after, loop)
         Overlay.flashMainMessage("Failed. Could not open file.")
       end
     end
-    if after then after(sample) end
+    if after then
+      after(sample)
+    end
   end
   history = history or "Admin"
   Loader(history .. "/Samples", task, loop)
 end
 
 local function hasDirtySamples()
-  for _, sample in pairs(samples) do if sample:isDirty() then return true end end
+  for _, sample in pairs(samples) do
+    if sample:isDirty() then
+      return true
+    end
+  end
   return false
 end
 

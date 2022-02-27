@@ -80,7 +80,9 @@ function Control:onCursorLeave(spot)
 end
 
 function Control:spotReleased(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if self.focused then
     self:unfocus()
   else
@@ -90,7 +92,9 @@ function Control:spotReleased(spot, shifted)
 end
 
 function Control:upReleased(shifted)
-  if not shifted then self:unfocus() end
+  if not shifted then
+    self:unfocus()
+  end
   return true
 end
 

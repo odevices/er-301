@@ -25,7 +25,8 @@ function ChainBase:init(args)
     self:setInstanceName(title .. ",depth=" .. tostring(depth))
   end
   local channelCount = args.channelCount or
-                           app.logError("%s.init: channelCount is missing.", self)
+                           app.logError("%s.init: channelCount is missing.",
+                                        self)
 
   self.title = title
   self.subTitle = args.subTitle
@@ -44,23 +45,31 @@ end
 function ChainBase:findUnitByTitle(title)
   for i = 1, self:length() do
     local unit = self:getUnit(i)
-    if unit.title == title then return unit end
+    if unit.title == title then
+      return unit
+    end
   end
 
   for i = 1, self:length() do
     local unit = self:getUnit(i)
     local unit2 = unit:findUnitByTitle(title)
-    if unit2 then return unit2 end
+    if unit2 then
+      return unit2
+    end
   end
 end
 
 function ChainBase:findByInstanceKey(key)
-  if self:getInstanceKey() == key then return self end
+  if self:getInstanceKey() == key then
+    return self
+  end
 
   for i = 1, self:length() do
     local unit = self:getUnit(i)
     local o = unit:findByInstanceKey(key)
-    if o then return o end
+    if o then
+      return o
+    end
   end
 end
 
@@ -68,13 +77,17 @@ function ChainBase:findParameter(unitKey, objectKey, paramKey)
   local unit = self:findByInstanceKey(unitKey)
   if unit and unit.objects then
     local o = unit.objects[objectKey]
-    if o then return o:getParameter(paramKey) end
+    if o then
+      return o:getParameter(paramKey)
+    end
   end
 end
 
 function ChainBase:findControl(unitKey, controlId)
   local unit = self:findByInstanceKey(unitKey)
-  if unit then return unit:getControlByName(controlId) end
+  if unit then
+    return unit:getControlByName(controlId)
+  end
 end
 
 function ChainBase:getXPathNode()
@@ -83,7 +96,9 @@ function ChainBase:getXPathNode()
     -- subtract 1 for the header section
     local nodeIndex = self:getSelectedSectionPosition() - 1
     local nodeName = section.title
-    if section.currentViewName ~= "expanded" then return nodeName, nodeIndex end
+    if section.currentViewName ~= "expanded" then
+      return nodeName, nodeIndex
+    end
     local control = section:getControlFromSpotHandle("expanded", spotHandle)
     if control then
       local nodeName2 = control:getInstanceName()
@@ -103,7 +118,9 @@ function ChainBase:getXPathToSelection()
   local xpath = app.XPath()
   local root = self:getRootChain()
   local context = root.context
-  if context == nil then return xpath end
+  if context == nil then
+    return xpath
+  end
   local start = context:getStackIndex(root)
   local stack = context:getStack()
   if start and stack then
@@ -127,7 +144,9 @@ function ChainBase:getXPathToSelection()
 end
 
 function ChainBase:notifyBranches(method, ...)
-  for handle, unit in pairs(self.units) do unit:notifyBranches(method, ...) end
+  for handle, unit in pairs(self.units) do
+    unit:notifyBranches(method, ...)
+  end
 end
 
 function ChainBase:notifyUnits(method, ...)
@@ -168,7 +187,9 @@ function ChainBase:clearSubTitle()
 end
 
 function ChainBase:insertEmptySection()
-  if self.emptySection then return end
+  if self.emptySection then
+    return
+  end
   if self.channelCount == 1 then
     self.emptySection = EmptySection(3 * ply)
   else
@@ -216,13 +237,17 @@ end
 
 function ChainBase:expandAllUnits()
   self:disableSelection()
-  for hSection, unit in pairs(self.units) do unit:expand() end
+  for hSection, unit in pairs(self.units) do
+    unit:expand()
+  end
   self:enableSelection()
 end
 
 function ChainBase:collapseAllUnits()
   self:disableSelection()
-  for hSection, unit in pairs(self.units) do unit:collapse() end
+  for hSection, unit in pairs(self.units) do
+    unit:collapse()
+  end
   self:enableSelection()
 end
 
@@ -243,12 +268,16 @@ end
 
 function ChainBase:muteIfNeeded()
   local wasMuted = self.pChain:isMuted()
-  if not wasMuted then self.pChain:mute() end
+  if not wasMuted then
+    self.pChain:mute()
+  end
   return wasMuted
 end
 
 function ChainBase:unmuteIfNeeded(wasMuted)
-  if not wasMuted then self.pChain:unmute() end
+  if not wasMuted then
+    self.pChain:unmute()
+  end
 end
 
 function ChainBase:mute()
@@ -264,7 +293,9 @@ function ChainBase:isMuted()
 end
 
 function ChainBase:getOutput(ch)
-  if ch == nil or self.channelCount == 1 then ch = 1 end
+  if ch == nil or self.channelCount == 1 then
+    ch = 1
+  end
   local outlet = self.outputs[ch]
   if outlet == nil then
     outlet = self.pChain:getOutput(ch - 1)
@@ -326,7 +357,9 @@ end
 
 function ChainBase:deserializeUnits(units, start)
   local offset = self:length() + 1
-  if start then offset = start end
+  if start then
+    offset = start
+  end
   if units then
     for i, uData in ipairs(units) do
       local loadInfo = UnitFactory.deserializeLoadInfo(uData.loadInfo, uData)
@@ -388,7 +421,9 @@ function ChainBase:loadUnit(loadInfo, position, continuing)
   if position == nil then
     -- load before the currently selected unit
     position = self:getSelectedSectionPosition() - 1
-    if position < 1 then position = 1 end
+    if position < 1 then
+      position = 1
+    end
   end
   self:insertSection(unit, position + 1)
   -- insert unit into audio loop
@@ -411,21 +446,27 @@ function ChainBase:loadUnit(loadInfo, position, continuing)
 end
 
 function ChainBase:getUnit(position)
-  if self:length() == 0 then return nil end
+  if self:length() == 0 then
+    return nil
+  end
   -- skip header
   return self:getSectionByIndex(position + 1)
 end
 
 function ChainBase:removeUnit(unit, continuing)
   self:disableSelection()
-  if unit == nil then return end
+  if unit == nil then
+    return
+  end
   -- get these before removing
   self.pChain:lock()
   self.pChain:removeUnit(unit.pUnit)
   self.pChain:unlock()
   self.units[unit.hSection] = nil
   self:removeSection(unit)
-  if self:length() == 0 then self:insertEmptySection() end
+  if self:length() == 0 then
+    self:insertEmptySection()
+  end
   if not continuing then
     app.collectgarbage()
     self:emitSignal("contentChanged", self)
@@ -438,9 +479,13 @@ function ChainBase:removeMarkedUnits()
   self:stop()
   local units = {}
   for _, unit in pairs(self.units) do
-    if unit:marked() then units[#units + 1] = unit end
+    if unit:marked() then
+      units[#units + 1] = unit
+    end
   end
-  for _, unit in ipairs(units) do self:removeUnit(unit, false) end
+  for _, unit in ipairs(units) do
+    self:removeUnit(unit, false)
+  end
   self:emitSignal("contentChanged", self)
   self:start()
   Busy.stop()

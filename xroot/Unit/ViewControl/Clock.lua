@@ -47,10 +47,12 @@ Clock:include(Base)
 
 function Clock:init(args)
   -- required arguments
-  local button = args.button or app.logError("%s.init: button is missing.", self)
+  local button = args.button or
+                     app.logError("%s.init: button is missing.", self)
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
-  local branch = args.branch or app.logError("%s.init: branch is missing.", self)
+  local branch = args.branch or
+                     app.logError("%s.init: branch is missing.", self)
   local comparator = args.comparator or
                          app.logError("%s.init: comparator is missing.", self)
   local tap = args.tap or app.logError("%s.init: tap is missing.", self)
@@ -144,7 +146,9 @@ function Clock:rename(name)
 end
 
 function Clock:setFocusedReadout(readout)
-  if readout then readout:save() end
+  if readout then
+    readout:save()
+  end
   self.focusedReadout = readout
   self:setSubCursorController(readout)
 end
@@ -178,17 +182,23 @@ function Clock:enterReleased()
 end
 
 function Clock:zeroPressed()
-  if self.focusedReadout then self.focusedReadout:zero() end
+  if self.focusedReadout then
+    self.focusedReadout:zero()
+  end
   return true
 end
 
 function Clock:cancelReleased(shifted)
-  if self.focusedReadout then self.focusedReadout:restore() end
+  if self.focusedReadout then
+    self.focusedReadout:restore()
+  end
   return true
 end
 
 function Clock:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     local branch = self.branch
     if branch then
@@ -196,10 +206,14 @@ function Clock:subReleased(i, shifted)
       branch:show()
     end
   elseif i == 2 then
-    if not self:hasFocus("encoder") then self:focus() end
+    if not self:hasFocus("encoder") then
+      self:focus()
+    end
     self:setFocusedReadout(self.multiplier)
   elseif i == 3 then
-    if not self:hasFocus("encoder") then self:focus() end
+    if not self:hasFocus("encoder") then
+      self:focus()
+    end
     self:setFocusedReadout(self.divider)
   end
   return true

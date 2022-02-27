@@ -22,7 +22,7 @@ function CollapsedHeader:init(title, sources)
 
   for i, source in ipairs(sources) do
     local meter = app.VerticalMeter((i - 1) * (width + gap) + offset, 8, width,
-                                   44)
+                                    44)
     meter:watchOutlet(source:getOutlet())
     graphic:addChild(meter)
   end

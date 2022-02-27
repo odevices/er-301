@@ -52,11 +52,15 @@ function KeyboardItem:onRepeated(_, shifted)
 end
 
 function KeyboardItem:onShiftPressed()
-  if self.shiftedText then self.controlGraphic:setText(self.shiftedText) end
+  if self.shiftedText then
+    self.controlGraphic:setText(self.shiftedText)
+  end
 end
 
 function KeyboardItem:onShiftReleased()
-  if self.shiftedText then self.controlGraphic:setText(self.text) end
+  if self.shiftedText then
+    self.controlGraphic:setText(self.text)
+  end
 end
 
 -- Keyboard
@@ -73,7 +77,9 @@ function Keyboard:init(msg, initial, extended, history)
   if history then
     local Persist = require "Persist"
     local historyDB = Persist.getRearCardValue("Keyboard", history) or {}
-    for _, text in ipairs(historyDB) do self:addItem(text, nil, true) end
+    for _, text in ipairs(historyDB) do
+      self:addItem(text, nil, true)
+    end
 
     local Drawings = require "Drawings"
     local graphic = app.Drawing(0, 0, 256, 6)
@@ -204,7 +210,9 @@ function Keyboard:insertText(text)
 end
 
 function Keyboard:subPressed(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     self.textEditor:doBackspace()
   elseif i == 2 then
@@ -218,7 +226,9 @@ function Keyboard:subPressed(i, shifted)
 end
 
 function Keyboard:subRepeated(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     self.textEditor:doBackspace()
   elseif i == 2 then
@@ -230,7 +240,9 @@ function Keyboard:subRepeated(i, shifted)
 end
 
 function Keyboard:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 2 then
     self.caretFocused = false
     self:setSubCursorController(nil)
@@ -277,11 +289,15 @@ function Keyboard:enterReleased()
       local tmp = {}
       local start = 1
       -- Keep only last 100 entries.
-      if #db > 100 then start = #db - 100 end
+      if #db > 100 then
+        start = #db - 100
+      end
       -- Skip the entered text.
       for i = start, #db do
         local text2 = db[i]
-        if text2 ~= text then tmp[#tmp + 1] = text2 end
+        if text2 ~= text then
+          tmp[#tmp + 1] = text2
+        end
       end
       -- Finally, add the entered text to the end.
       tmp[#tmp + 1] = text
@@ -295,14 +311,18 @@ end
 
 function Keyboard:shiftPressed()
   for _, control in pairs(self.controls) do
-    if control.onShiftPressed then control:onShiftPressed() end
+    if control.onShiftPressed then
+      control:onShiftPressed()
+    end
   end
   return true
 end
 
 function Keyboard:shiftReleased()
   for _, control in pairs(self.controls) do
-    if control.onShiftReleased then control:onShiftReleased() end
+    if control.onShiftReleased then
+      control:onShiftReleased()
+    end
   end
   return true
 end

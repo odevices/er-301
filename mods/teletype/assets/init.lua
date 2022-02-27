@@ -39,7 +39,9 @@ end
 function Teletype:disable()
   if self.enabled then
     self.dispatcher:disable()
-    if self:uartInUse() then app.Uart_enable() end
+    if self:uartInUse() then
+      app.Uart_enable()
+    end
     self.enabled = false
     app.logInfo("%s: i2c disabled.", self)
   end
@@ -48,7 +50,9 @@ end
 -- overrides
 
 function Teletype:onLoad()
-  if self:getConfiguration("autoEnable") == "yes" then self:enable() end
+  if self:getConfiguration("autoEnable") == "yes" then
+    self:enable()
+  end
 end
 
 function Teletype:onUnload()

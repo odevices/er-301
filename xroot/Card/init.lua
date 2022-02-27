@@ -31,7 +31,9 @@ function EjectingState:enter(prevState, ...)
     Signal.emit("cardEjecting")
   end
   State.enter(self, prevState, ...)
-  if claimCount == 0 then CardState:switch(EjectedState) end
+  if claimCount == 0 then
+    CardState:switch(EjectedState)
+  end
 end
 
 function RemoteEjectingState:enter(prevState, ...)
@@ -91,7 +93,9 @@ local function onStorageChanged()
   local toggle = app.getStorageToggleState()
 
   if state == MountedState then
-    if toggle == "eject" then CardState:switch(EjectingState) end
+    if toggle == "eject" then
+      CardState:switch(EjectingState)
+    end
   elseif state == RemoteMountedState then
   elseif state == EjectedState then
     if toggle == "eject" then
@@ -104,7 +108,9 @@ local function onStorageChanged()
       end
     end
   elseif state == EjectingState then
-    if toggle ~= "eject" then CardState:switch(MountedState) end
+    if toggle ~= "eject" then
+      CardState:switch(MountedState)
+    end
   elseif state == RemoteEjectingState then
   elseif state == FailedState then
     if toggle == "eject" then
@@ -247,7 +253,9 @@ end
 local function forceEject()
   claims = {}
   claimCount = 0
-  if mounted() then unmount(drive) end
+  if mounted() then
+    unmount(drive)
+  end
 end
 
 return {

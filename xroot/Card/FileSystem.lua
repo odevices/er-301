@@ -97,7 +97,9 @@ local validExtensions = {
 }
 
 local extHash = {}
-for key, ext in pairs(extensions) do extHash[ext] = true end
+for key, ext in pairs(extensions) do
+  extHash[ext] = true
+end
 
 local function getExt(key)
   return extensions[key] or "lua"
@@ -139,7 +141,9 @@ local function isType(key, path)
 end
 
 local function isValidExtension(key, ext)
-  if ext == nil then return false end
+  if ext == nil then
+    return false
+  end
   local supported = validExtensions[key]
   return supported and supported[string.lower(ext)]
 end
@@ -257,7 +261,9 @@ local function init()
     app.logInfo("FS.init: %s already exists, skipping population.", sysPath)
   end
   -- Make sure all root folders exist on disk.
-  for key, path in pairs(roots) do Path.createAll(path) end
+  for key, path in pairs(roots) do
+    Path.createAll(path)
+  end
   Busy.stop();
 end
 

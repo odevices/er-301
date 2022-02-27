@@ -33,7 +33,7 @@ end
 function history:showErrors(...)
   local msg = string.format(...)
   local msg2
-  if errors==0 then
+  if errors == 0 then
     msg2 = "View log history?"
   elseif errors == 1 then
     msg2 = "1 error. View log history?"
@@ -46,7 +46,9 @@ function history:showErrors(...)
     if ans then
       local viewer = LogViewer("Log History")
       local n = history:count()
-      for i = 1, n do viewer:add(history:get(i)) end
+      for i = 1, n do
+        viewer:add(history:get(i))
+      end
       viewer:show()
     end
   end

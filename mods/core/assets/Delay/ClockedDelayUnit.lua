@@ -304,9 +304,13 @@ end
 
 function ClockedDelayUnit:deserialize(t)
   local time = t.maximumDelayTime
-  if time and time > 0 then self:setMaxDelayTime(time) end
+  if time and time > 0 then
+    self:setMaxDelayTime(time)
+  end
   Unit.deserialize(self, t)
-  if self:getPresetVersion(t) < 1 then self:deserializeLegacyPreset(t) end
+  if self:getPresetVersion(t) < 1 then
+    self:deserializeLegacyPreset(t)
+  end
 end
 
 function ClockedDelayUnit:onRemove()

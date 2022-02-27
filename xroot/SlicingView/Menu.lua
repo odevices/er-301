@@ -13,7 +13,9 @@ local function confirm(o, method, msg)
     if Settings.get("confirmSampleEdit") == "yes" then
       local dlg = Verification.Main(msg, "Are you sure?")
       local task = function(ans)
-        if ans then o[method](o) end
+        if ans then
+          o[method](o)
+        end
       end
       dlg:subscribe("done", task)
       dlg:show()
@@ -48,7 +50,9 @@ function Control:onReleased()
 end
 
 function Control:onReleasedWhenDisabled()
-  if self.disabledMsg then Overlay.flashMainMessage(self.disabledMsg) end
+  if self.disabledMsg then
+    Overlay.flashMainMessage(self.disabledMsg)
+  end
   return true
 end
 

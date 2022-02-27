@@ -21,7 +21,9 @@ end
 
 local function newChain(numChannels)
   local task = function(text)
-    if text then GlobalChains.create(text, numChannels) end
+    if text then
+      GlobalChains.create(text, numChannels)
+    end
   end
   local kb = Keyboard("Name this chain.", nil, true, "NamingStuff")
   kb:setValidator(nameValidator)
@@ -35,7 +37,9 @@ end
 
 local function renameChain(chain)
   local task = function(text)
-    if text then GlobalChains.rename(chain.title, text) end
+    if text then
+      GlobalChains.rename(chain.title, text)
+    end
   end
   local kb = Keyboard("Rename this chain.", chain.title, true, "NamingStuff")
   kb:setValidator(nameValidator)
@@ -50,7 +54,9 @@ local function deleteChain(chain)
     local dialog =
         Verification.Main("Deleting " .. chain.title, "Are you sure?")
     dialog:subscribe("done", function(ans)
-      if ans then GlobalChains.delete(chain.title) end
+      if ans then
+        GlobalChains.delete(chain.title)
+      end
     end)
     dialog:show()
   else
@@ -64,7 +70,9 @@ local function deleteAllChains()
     local Verification = require "Verification"
     local dialog = Verification.Main("Deleting All Chains!", "Are you sure?")
     dialog:subscribe("done", function(ans)
-      if ans then GlobalChains.deleteAll() end
+      if ans then
+        GlobalChains.deleteAll()
+      end
     end)
     dialog:show()
   else
@@ -144,7 +152,9 @@ function Header:spotReleased()
 end
 
 function Header:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     renameChain(self.chain)
   elseif i == 2 then
@@ -191,7 +201,9 @@ function Insert:onCursorLeave()
 end
 
 function Insert:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     newChain(1)
   elseif i == 2 then
@@ -261,7 +273,9 @@ function MenuHeader:onCursorLeave()
 end
 
 function MenuHeader:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     deleteAllChains()
   elseif i == 2 then
@@ -329,7 +343,9 @@ function Interface:add(title, chain, position)
   local item = Item(title, chain)
   self.items[title] = item
   -- load before the currently selected unit
-  if position == nil then position = self:getSelectedSectionPosition() end
+  if position == nil then
+    position = self:getSelectedSectionPosition()
+  end
   if position == self:getSectionCount() then
     self:insertSection(item, position)
   else
@@ -338,7 +354,9 @@ function Interface:add(title, chain, position)
 end
 
 function Interface:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   return true
 end
@@ -354,7 +372,9 @@ function Interface:getOrderedChains()
   local j = 1
   for i = 1, n do
     local item = self:getSectionByIndex(i)
-    if item.chain then chains[#chains + 1] = item.chain end
+    if item.chain then
+      chains[#chains + 1] = item.chain
+    end
   end
   return chains
 end

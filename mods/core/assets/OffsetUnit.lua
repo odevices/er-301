@@ -114,21 +114,24 @@ function OffsetUnit:deserialize(t)
     local offset = Serialization.get("objects/offset/params/Offset", t)
     if self.channelCount == 1 then
       if offset then
-        app.logInfo("%s:deserialize:legacy preset detected:setting offset to %s",
-                self, offset)
+        app.logInfo(
+            "%s:deserialize:legacy preset detected:setting offset to %s", self,
+            offset)
         self.objects.gainbias:deserialize("Bias", offset)
       end
     elseif self.channelCount == 2 then
       local offset1 = Serialization.get("objects/offset1/params/Offset", t)
       if offset1 then
-        app.logInfo("%s:deserialize:legacy preset detected:setting offset1 to %s",
-                self, offset1)
+        app.logInfo(
+            "%s:deserialize:legacy preset detected:setting offset1 to %s", self,
+            offset1)
         self.objects.gainbias1:deserialize("Bias", offset1)
       end
       local offset2 = Serialization.get("objects/offset2/params/Offset", t)
       if offset2 then
-        app.logInfo("%s:deserialize:legacy preset detected:setting offset2 to %s",
-                self, offset2)
+        app.logInfo(
+            "%s:deserialize:legacy preset detected:setting offset2 to %s", self,
+            offset2)
         self.objects.gainbias2:deserialize("Bias", offset2)
       end
     end

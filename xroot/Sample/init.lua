@@ -41,23 +41,33 @@ local function populateLoadInfo(info, paths)
   local good = {}
   info:reserve(#paths)
   for _, path in ipairs(paths) do
-    if info:add(path, false) then good[#good + 1] = path end
+    if info:add(path, false) then
+      good[#good + 1] = path
+    end
   end
   return good
 end
 
 function Sample:prepareForLoading()
-  if self:isBuffer() then return end
+  if self:isBuffer() then
+    return
+  end
   local info = app.SampleLoadInfo()
   if self:isMulti() then
     local good = populateLoadInfo(info, self.opts.paths)
     self.opts.paths = good
-    if #good == 0 then return app.STATUS_ERROR_OPENING_FILE end
+    if #good == 0 then
+      return app.STATUS_ERROR_OPENING_FILE
+    end
   elseif FS.isType("multi", self.path) then
     local paths = self:readPaths()
-    if paths == nil then return app.STATUS_ERROR_OPENING_FILE end
+    if paths == nil then
+      return app.STATUS_ERROR_OPENING_FILE
+    end
     local good = populateLoadInfo(info, paths)
-    if #good == 0 then return app.STATUS_ERROR_OPENING_FILE end
+    if #good == 0 then
+      return app.STATUS_ERROR_OPENING_FILE
+    end
   elseif Path.exists(self.path) then
     info:reserve(1)
     if not info:add(self.path, false) then
@@ -86,7 +96,9 @@ end
 function Sample:claim(user)
   local x = self.users[user] or 0
   self.users[user] = x + 1
-  if x == 0 then self.userCount = self.userCount + 1 end
+  if x == 0 then
+    self.userCount = self.userCount + 1
+  end
 end
 
 function Sample:release(user)
@@ -112,7 +124,9 @@ end
 function Sample:getUsers()
   local users = {}
   for user, count in pairs(self.users) do
-    if count > 0 then users[#users + 1] = user end
+    if count > 0 then
+      users[#users + 1] = user
+    end
   end
   return users
 end
@@ -132,7 +146,9 @@ function Sample:setPath(fullPath)
   end
   self.path = fullPath
   self:setInstanceName(fullPath)
-  if self:isFileBased() then self.opts.type = "single" end
+  if self:isFileBased() then
+    self.opts.type = "single"
+  end
   self.name = self:getLastFolderAndFilenameForDisplay(22)
 end
 
@@ -141,7 +157,9 @@ function Sample:setRate(rate)
 end
 
 function Sample:getFilenameForDisplay(maxLength)
-  if self.pretty then return Utils.shorten(self.pretty, maxLength, "..", true) end
+  if self.pretty then
+    return Utils.shorten(self.pretty, maxLength, "..", true)
+  end
   local path, filename = Path.split(self.path)
   local token = app.roots.front .. "/"
   filename = filename or path
@@ -152,7 +170,9 @@ function Sample:getFilenameForDisplay(maxLength)
 end
 
 function Sample:getLastFolderAndFilenameForDisplay(maxLength)
-  if self.pretty then return Utils.shorten(self.pretty, maxLength, "..", true) end
+  if self.pretty then
+    return Utils.shorten(self.pretty, maxLength, "..", true)
+  end
 
   local path = FS.makePathPretty(self.path)
   local folder, filename = Path.split(path)
@@ -169,7 +189,9 @@ function Sample:getLastFolderAndFilenameForDisplay(maxLength)
 end
 
 function Sample:getFullPathForDisplay(maxLength)
-  if self.pretty then return Utils.shorten(self.pretty, maxLength, "..") end
+  if self.pretty then
+    return Utils.shorten(self.pretty, maxLength, "..")
+  end
   local path, filename = Path.split(self.path)
   path = FS.makePathPretty(path)
   local token = app.roots.front .. "/"
@@ -254,7 +276,9 @@ end
 function Sample:readPaths()
   local Persist = require "Persist"
   local paths = Persist.readTable(self.path)
-  if paths then self.paths = paths end
+  if paths then
+    self.paths = paths
+  end
   return paths
 end
 
@@ -452,8 +476,12 @@ end
 
 function Sample:getDecoratedName()
   local name = self.name
-  if self:isDirty() then name = "*" .. name end
-  if self:hasChildren() then name = "+" .. name end
+  if self:isDirty() then
+    name = "*" .. name
+  end
+  if self:hasChildren() then
+    name = "+" .. name
+  end
   return name
 end
 

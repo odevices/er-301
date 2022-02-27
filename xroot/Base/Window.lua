@@ -25,34 +25,46 @@ function Window:show(context)
     local Application = require "Application"
     context = Application:getVisibleContext()
   end
-  if context then context:add(self) end
+  if context then
+    context:add(self)
+  end
 end
 
 function Window:hide()
   local context = self.context
-  if context then context:remove(self) end
+  if context then
+    context:remove(self)
+  end
 end
 
 function Window:replace(otherWindow)
   otherWindow:hide()
-  if self.context then self.context:replace(self, otherWindow) end
+  if self.context then
+    self.context:replace(self, otherWindow)
+  end
 end
 
 function Window:hideOthers()
   local context = self.context
   if context then
-    while context:top() ~= self do context:remove(context:top()) end
+    while context:top() ~= self do
+      context:remove(context:top())
+    end
   end
 end
 
 function Window:hideCursor()
   self.isCursorVisible = false
-  if self.context then self.context:onEncoderFocusChanged() end
+  if self.context then
+    self.context:onEncoderFocusChanged()
+  end
 end
 
 function Window:showCursor()
   self.isCursorVisible = true
-  if self.context then self.context:onEncoderFocusChanged() end
+  if self.context then
+    self.context:onEncoderFocusChanged()
+  end
 end
 
 function Window:setFocusedWidget(event, target)
@@ -67,19 +79,27 @@ function Window:getFocusedWidget(event)
 end
 
 function Window:addMainGraphic(graphic)
-  if graphic then self.mainGraphic:addChildOnce(graphic) end
+  if graphic then
+    self.mainGraphic:addChildOnce(graphic)
+  end
 end
 
 function Window:removeMainGraphic(graphic)
-  if graphic then self.mainGraphic:removeChild(graphic) end
+  if graphic then
+    self.mainGraphic:removeChild(graphic)
+  end
 end
 
 function Window:addSubGraphic(graphic)
-  if graphic then self.subGraphic:addChildOnce(graphic) end
+  if graphic then
+    self.subGraphic:addChildOnce(graphic)
+  end
 end
 
 function Window:removeSubGraphic(graphic)
-  if graphic then self.subGraphic:removeChild(graphic) end
+  if graphic then
+    self.subGraphic:removeChild(graphic)
+  end
 end
 
 return Window

@@ -59,7 +59,9 @@ function ChannelControl:onCursorLeave()
 end
 
 function ChannelControl:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     -- 0dB
     Preamp.set(self.channel, 1, true)
@@ -84,7 +86,8 @@ function ChannelControl:onPreampChanged()
       self.panels[4]:deselect()
       self.panels[gain]:select()
     else
-      app.logWarn("%s.onPreampChanged(): gain is nil for channel %s.", self, self.channel)
+      app.logWarn("%s.onPreampChanged(): gain is nil for channel %s.", self,
+                  self.channel)
     end
   else
     app.logWarn("%s.onPreampChanged(): channel is nil.", self)
@@ -155,7 +158,9 @@ function MenuControl:onCursorLeave()
 end
 
 function MenuControl:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     Preamp.set("IN1", 1, false)
     Preamp.set("IN2", 1, false)
@@ -200,7 +205,9 @@ function Interface:init(name)
 end
 
 function Interface:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   return true
 end

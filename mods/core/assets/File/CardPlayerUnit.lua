@@ -80,7 +80,9 @@ end
 
 function CardPlayerUnit:deserialize(t)
   Unit.deserialize(self, t)
-  if t.filename then self:setFilename(t.filename) end
+  if t.filename then
+    self:setFilename(t.filename)
+  end
   if t.paused then
     self:pause()
   else
@@ -89,7 +91,9 @@ function CardPlayerUnit:deserialize(t)
 end
 
 function CardPlayerUnit:setFilename(filename)
-  if self.filename then Card.release(self.filename) end
+  if self.filename then
+    Card.release(self.filename)
+  end
   self:notifyControls("onFileChanged", filename)
   Card.claim(self:getClassName(), filename)
   self.filename = filename
@@ -98,7 +102,9 @@ end
 
 function CardPlayerUnit:doLoadFile()
   local task = function(result)
-    if result and result.fullpath then self:setFilename(result.fullpath) end
+    if result and result.fullpath then
+      self:setFilename(result.fullpath)
+    end
   end
   local FileChooser = require "Card.FileChooser"
   local FS = require "Card.FileSystem"

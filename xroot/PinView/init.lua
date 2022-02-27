@@ -51,20 +51,26 @@ local alphabet = {
 function PinView:suggestPinSetName()
   -- single letter
   for _, letter in ipairs(alphabet) do
-    if self:getPinSetByName(letter) == nil then return letter end
+    if self:getPinSetByName(letter) == nil then
+      return letter
+    end
   end
   -- two letters
   for _, letter1 in ipairs(alphabet) do
     for _, letter2 in ipairs(alphabet) do
       local name = letter1 .. letter2
-      if self:getPinSetByName(name) == nil then return name end
+      if self:getPinSetByName(name) == nil then
+        return name
+      end
     end
   end
   return ""
 end
 
 function PinView:makeNameUnique(name)
-  while self:getPinSetByName(name) do name = name .. "'" end
+  while self:getPinSetByName(name) do
+    name = name .. "'"
+  end
   return name
 end
 
@@ -126,7 +132,9 @@ function PinView:removePinSetByName(name)
       break
     end
   end
-  if self:getSectionCount() == 1 then self.message:show() end
+  if self:getSectionCount() == 1 then
+    self.message:show()
+  end
 end
 
 function PinView:removeAllPinSets()
@@ -224,7 +232,8 @@ function PinView:pin(control, pinSetName)
     pinSet:pinControl(control)
     pinSet:endViewModifications()
   else
-    app.logInfo("%s:pin(%s,%s): no PinSet by that name", self, control, pinSetName)
+    app.logInfo("%s:pin(%s,%s): no PinSet by that name", self, control,
+                pinSetName)
   end
 end
 
@@ -235,7 +244,8 @@ function PinView:unpin(control, pinSetName)
     pinSet:unpinControl(control)
     pinSet:endViewModifications()
   else
-    app.logInfo("%s:unpin(%s,%s): no PinSet by that name", self, control, pinSetName)
+    app.logInfo("%s:unpin(%s,%s): no PinSet by that name", self, control,
+                pinSetName)
   end
 end
 
@@ -278,7 +288,9 @@ function PinView:notifyPinSets(method, ...)
   for _, section in pairs(self.sections) do
     if section.isPinSet then
       local f = section[method]
-      if f then f(section, ...) end
+      if f then
+        f(section, ...)
+      end
     end
   end
 end
@@ -287,7 +299,9 @@ function PinView:notifyOtherPinSets(except, method, ...)
   for _, section in pairs(self.sections) do
     if section.isPinSet and section ~= except then
       local f = section[method]
-      if f then f(section, ...) end
+      if f then
+        f(section, ...)
+      end
     end
   end
 end

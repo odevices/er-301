@@ -72,7 +72,9 @@ end
 local function split(s, delimiter)
   local result = {}
   for match in (s .. delimiter):gmatch("(.-)" .. delimiter:quote()) do
-    if match then table.insert(result, match) end
+    if match then
+      table.insert(result, match)
+    end
   end
   return result
 end
@@ -86,7 +88,8 @@ local function startsWith(s, pattern)
 end
 
 local function endsWith(s, pattern)
-  return s and pattern and (pattern == '' or string.sub(s, -string.len(pattern)) == pattern)
+  return s and pattern and
+             (pattern == '' or string.sub(s, -string.len(pattern)) == pattern)
 end
 
 local function firstToUpper(s)
@@ -98,21 +101,35 @@ local function removeExtension(text)
 end
 
 local function shorten(text, maxLen, div, forceRemoveExtension)
-  if text == nil then return end
-  if forceRemoveExtension then text = removeExtension(text) end
-  if text:len() <= maxLen then return text end
+  if text == nil then
+    return
+  end
+  if forceRemoveExtension then
+    text = removeExtension(text)
+  end
+  if text:len() <= maxLen then
+    return text
+  end
   -- trim and remove consecutive white space
   text = text:match("^%s*(.*%S)")
-  if text then text = text:gsub("%s%s*", " ") end
-  if text:len() <= maxLen then return text end
+  if text then
+    text = text:gsub("%s%s*", " ")
+  end
+  if text:len() <= maxLen then
+    return text
+  end
   -- strip off the extension
   if not forceRemoveExtension then
     text = removeExtension(text)
-    if text:len() <= maxLen then return text end
+    if text:len() <= maxLen then
+      return text
+    end
   end
   -- remove any whitespace
   text = text:gsub("%s%s*", "")
-  if text:len() <= maxLen then return text end
+  if text:len() <= maxLen then
+    return text
+  end
   -- remove any non-alphanumeric characters
   -- text = text:gsub("[^%w]","")
   -- if text:len() <= maxLen then
@@ -161,7 +178,9 @@ local function shallowCopy(orig)
   local copy
   if orig_type == 'table' then
     copy = {}
-    for orig_key, orig_value in pairs(orig) do copy[orig_key] = orig_value end
+    for orig_key, orig_value in pairs(orig) do
+      copy[orig_key] = orig_value
+    end
   else -- number, string, boolean, etc
     copy = orig
   end
@@ -236,7 +255,9 @@ Example:
 
 local function genOrderedIndex(t)
   local orderedIndex = {}
-  for key in pairs(t) do table.insert(orderedIndex, key) end
+  for key in pairs(t) do
+    table.insert(orderedIndex, key)
+  end
   table.sort(orderedIndex)
   return orderedIndex
 end
@@ -255,11 +276,15 @@ local function orderedNext(t, state)
   else
     -- fetch the next value
     for i = 1, #(t.__orderedIndex) do
-      if t.__orderedIndex[i] == state then key = t.__orderedIndex[i + 1] end
+      if t.__orderedIndex[i] == state then
+        key = t.__orderedIndex[i + 1]
+      end
     end
   end
 
-  if key then return key, t[key] end
+  if key then
+    return key, t[key]
+  end
 
   -- no more value to return, cleanup
   t.__orderedIndex = nil

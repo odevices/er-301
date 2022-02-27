@@ -126,7 +126,9 @@ function Fader:enterReleased()
 end
 
 function Fader:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.fader:restore()
   return true
 end
@@ -137,7 +139,9 @@ function Fader:zeroPressed()
 end
 
 function Fader:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     self:doRename()
   elseif i == 2 then

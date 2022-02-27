@@ -285,7 +285,9 @@ end
 
 function DopplerDelayUnit:deserialize(t)
   local time = t.maximumDelayTime
-  if time and time > 0 then self:setMaxDelayTime(time) end
+  if time and time > 0 then
+    self:setMaxDelayTime(time)
+  end
   Unit.deserialize(self, t)
 end
 

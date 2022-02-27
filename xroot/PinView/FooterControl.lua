@@ -22,7 +22,9 @@ function FooterControl:setText(text)
 end
 
 function FooterControl:spotReleased(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:callUp("doInsertPinSet")
   return true
 end

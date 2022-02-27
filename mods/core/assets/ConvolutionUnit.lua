@@ -65,10 +65,14 @@ function ConvolutionUnit:loadStereoGraph()
 end
 
 function ConvolutionUnit:setSample(sample)
-  if self.sample then self.sample:release(self) end
+  if self.sample then
+    self.sample:release(self)
+  end
 
   self.sample = sample
-  if self.sample then self.sample:claim(self) end
+  if self.sample then
+    self.sample:claim(self)
+  end
 
   if sample then
     if sample:isPending() then
@@ -92,7 +96,9 @@ end
 function ConvolutionUnit:serialize()
   local t = Unit.serialize(self)
   local sample = self.sample
-  if sample then t.sample = SamplePool.serializeSample(sample) end
+  if sample then
+    t.sample = SamplePool.serializeSample(sample)
+  end
   return t
 end
 

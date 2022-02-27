@@ -44,7 +44,9 @@ function PinSet:serialize()
   for i, pinControl in ipairs(self.pinOrder) do
     local control = pinControl.delegate
     local target
-    if pinControl.getEndValue then target = pinControl:getEndValue() end
+    if pinControl.getEndValue then
+      target = pinControl:getEndValue()
+    end
     local entry = {
       unitKey = control.parent:getInstanceKey(),
       controlId = control.id,
@@ -63,7 +65,9 @@ end
 function PinSet:deserialize(t)
   self:unpinAll()
 
-  if t.name then self:rename(t.name) end
+  if t.name then
+    self:rename(t.name)
+  end
 
   local chain = self.parent.chain
   if chain and t.pins then
@@ -84,7 +88,9 @@ function PinSet:deserialize(t)
     self:endViewModifications()
   end
 
-  if t.activeView then self:switchView(t.activeView) end
+  if t.activeView then
+    self:switchView(t.activeView)
+  end
 end
 
 function PinSet:leaveHoldMode()
@@ -94,14 +100,18 @@ end
 function PinSet:notifyPinnedControls(method, ...)
   for control, _ in pairs(self.control2pin) do
     local f = control[method]
-    if f ~= nil then f(control, ...) end
+    if f ~= nil then
+      f(control, ...)
+    end
   end
 end
 
 function PinSet:notifyPinControls(method, ...)
   for _, control in ipairs(self.pinOrder) do
     local f = control[method]
-    if f ~= nil then f(control, ...) end
+    if f ~= nil then
+      f(control, ...)
+    end
   end
 end
 
@@ -111,7 +121,9 @@ end
 
 function PinSet:unpinAll()
   self:startViewModifications()
-  for control, _ in pairs(self.control2pin) do self:unpinControl(control) end
+  for control, _ in pairs(self.control2pin) do
+    self:unpinControl(control)
+  end
   self:endViewModifications()
 end
 
@@ -127,7 +139,9 @@ function PinSet:doRename()
   local suggested = self:getInstanceName()
   local kb = Keyboard("Rename PinSet", suggested, true, "NamingStuff")
   local task = function(text)
-    if text then self:rename(text) end
+    if text then
+      self:rename(text)
+    end
   end
   kb:subscribe("done", task)
   kb:show()
@@ -135,7 +149,9 @@ end
 
 function PinSet:renamePin(control, name)
   local pin = self:getPinControl(control)
-  if pin then pin:rename(name) end
+  if pin then
+    pin:rename(name)
+  end
 end
 
 function PinSet:getPinControl(control)
@@ -156,15 +172,21 @@ function PinSet:pinControl(control, optionalTargetValue, optionalName)
     if pinControl.fader then
       local controlParam = pinControl.fader:getValueParameter()
       local targetParam = pinControl.fader:getTargetParameter()
-      if optionalTargetValue then targetParam:hardSet(optionalTargetValue) end
+      if optionalTargetValue then
+        targetParam:hardSet(optionalTargetValue)
+      end
       self.masterFader:addFollower(controlParam, targetParam)
     elseif pinControl.comparator then
       self.masterGate:addFollower(pinControl.comparator)
     end
 
-    if optionalName then pinControl:rename(optionalName) end
+    if optionalName then
+      pinControl:rename(optionalName)
+    end
 
-    if control.onPinned then control:onPinned() end
+    if control.onPinned then
+      control:onPinned()
+    end
   end
 end
 
@@ -188,7 +210,9 @@ function PinSet:unpinControl(control)
       self.masterGate:removeFollower(pinControl.comparator)
     end
 
-    if control.onUnpinned then control:onUnpinned() end
+    if control.onUnpinned then
+      control:onUnpinned()
+    end
 
     return true
   end
@@ -233,7 +257,9 @@ function PinSet:endViewModifications()
     expanded:addControl(self.emptyControl)
     collapsed:addControl(self.emptyControl)
   end
-  for _, control in ipairs(self.pinOrder) do expanded:addControl(control) end
+  for _, control in ipairs(self.pinOrder) do
+    expanded:addControl(control)
+  end
 
   self:rebuildView()
   self.parent:enableSelection()

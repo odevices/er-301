@@ -3,7 +3,9 @@ local callFilter = {}
 
 local function hook(why)
   local info = debug.getinfo(2, "Sn")
-  if callFilter[info.name] then return end
+  if callFilter[info.name] then
+    return
+  end
   print(info.name, info.source, info.linedefined)
 end -- hook
 
@@ -26,7 +28,9 @@ local function enableRequireHook()
   local depth = 0
   function require(modname)
     local module = package.loaded[modname]
-    if module then return module end
+    if module then
+      return module
+    end
     app.logInfo("%sstart require %s", string.rep("-", depth), modname)
     if depth > 15 then
       app.logError("Exceeded require recursion depth (require %s).", modname)
@@ -41,9 +45,9 @@ local function enableRequireHook()
 end
 
 local function startProfile(shifted)
-  if shifted then 
+  if shifted then
     app.logInfo("Debug: start profiling")
-    app.Profiler.start() 
+    app.Profiler.start()
   end
 end
 
@@ -58,7 +62,9 @@ local function stopProfile(shifted)
 end
 
 local function cancelReleased(shifted)
-  if shifted then error("Simulated Error.") end
+  if shifted then
+    error("Simulated Error.")
+  end
 end
 
 local function printTraceback()

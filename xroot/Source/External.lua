@@ -1,11 +1,11 @@
 local Class = require "Base.Class"
 local Source = require "Source"
 
-local External = Class{}
+local External = Class {}
 External:include(Source)
 
-function External:init(name,outlet,isUnipolar)
-  Source.init(self,"external")
+function External:init(name, outlet, isUnipolar)
+  Source.init(self, "external")
   self:setClassName("Source.External")
   self:setInstanceName(name)
   self.name = name

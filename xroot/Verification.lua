@@ -55,7 +55,9 @@ function MainVerification:setTimer(secs, ans)
 end
 
 function MainVerification:finish(ans)
-  if self.timer then Timer.cancel(self.timer) end
+  if self.timer then
+    Timer.cancel(self.timer)
+  end
   self:hide()
   self:emitSignal("done", ans)
 end

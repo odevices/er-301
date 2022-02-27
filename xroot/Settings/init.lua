@@ -2,7 +2,7 @@ local Variable = require "Settings.Variable"
 local Env = require "Env"
 local Timer = require "Timer"
 
-local settingsFile = app.roots.rear.."/settings.lua"
+local settingsFile = app.roots.rear .. "/settings.lua"
 local variables = nil
 local promiseToSave = nil
 
@@ -284,7 +284,7 @@ local defaults = {
       "0.3s",
       "0.5s"
     }
-  },
+  }
 }
 
 --------------------------------------------------------
@@ -354,7 +354,9 @@ local function save()
   local t = {
     firmwareVersion = app.FIRMWARE_VERSION
   }
-  for name, v in pairs(variables) do t[name] = v.value end
+  for name, v in pairs(variables) do
+    t[name] = v.value
+  end
   if not Persist.writeTable(settingsFile, t) then
     Busy.stop()
     Overlay.flashMainMessage("Failed to save settings (>_<)")
@@ -377,7 +379,9 @@ local function load()
   if t then
     for name, var in pairs(variables) do
       local value = t[name]
-      if value then var:set(value) end
+      if value then
+        var:set(value)
+      end
     end
   else
     app.logInfo("No settings file found.")

@@ -103,8 +103,9 @@ function GridQuantizerUnit:deserialize(t)
     local Serialization = require "Persist.Serialization"
     local n = Serialization.get("objects/quantizer/params/Levels", t)
     if n then
-      app.logInfo("%s:deserialize:legacy preset detected:setting levels bias to %s",
-              self, n)
+      app.logInfo(
+          "%s:deserialize:legacy preset detected:setting levels bias to %s",
+          self, n)
       self.objects.levels:hardSet("Bias", n)
     end
   end

@@ -22,8 +22,8 @@ local function start(...)
   Overlay.startMainMessage(text)
 
   refCount = refCount + 1
-  if refCount == 1 then 
-    busyThread:enable() 
+  if refCount == 1 then
+    busyThread:enable()
     LogHistory:clearErrors()
   end
 end
@@ -31,7 +31,9 @@ end
 local function status(...)
   if refCount > 0 then
     local msg = string.format(...)
-    if logStatus then app.logInfo(msg) end
+    if logStatus then
+      app.logInfo(msg)
+    end
     Overlay.startMainMessage(msg)
   end
 end
@@ -39,7 +41,9 @@ end
 local function error(...)
   if refCount > 0 then
     local msg = string.format(...)
-    if logError then app.logError(msg) end
+    if logError then
+      app.logError(msg)
+    end
     Overlay.startMainMessage(msg)
   end
 end

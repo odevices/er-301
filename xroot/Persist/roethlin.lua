@@ -40,13 +40,17 @@ local typeHooks = {}
 local function write(file, item, level, objRefNames)
   local itemType = type(item)
   local hook = typeHooks[itemType]
-  if hook then item = hook(item) end
+  if hook then
+    item = hook(item)
+  end
   writers[itemType](file, item, level, objRefNames);
 end
 
 -- write indent
 local function writeIndent(file, level)
-  for i = 1, level do file:write("\t"); end
+  for i = 1, level do
+    file:write("\t");
+  end
 end
 
 -- recursively count references
@@ -152,12 +156,14 @@ local function store(path, ...)
   local n = select("#", ...);
   -- Count references
   local objRefCount = {}; -- Stores reference that will be exported
-  for i = 1, n do refCount(objRefCount, (select(i, ...))); end
+  for i = 1, n do
+    refCount(objRefCount, (select(i, ...)));
+  end
   -- Export Objects with more than one ref and assign name
   -- First, create empty tables for each
   local objRefNames = {};
   local objRefIdx = 0;
-  --file:write("-- Persistent Data\n");
+  -- file:write("-- Persistent Data\n");
   file:write("local shared = {\n");
   for obj, count in pairs(objRefCount) do
     if count > 1 then
@@ -186,7 +192,9 @@ local function store(path, ...)
   -- Return them
   if n > 0 then
     file:write("return obj1");
-    for i = 2, n do file:write(" ,obj" .. i); end
+    for i = 2, n do
+      file:write(" ,obj" .. i);
+    end
     file:write("\n");
   else
     file:write("return\n");
@@ -212,5 +220,9 @@ local function load(path)
   end
 end
 
-return {store = store, load = load, storeWithHooks = storeWithHooks}
+return {
+  store = store,
+  load = load,
+  storeWithHooks = storeWithHooks
+}
 

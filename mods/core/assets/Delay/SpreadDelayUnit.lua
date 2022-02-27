@@ -19,7 +19,9 @@ function SpreadDelayUnit:init(args)
 end
 
 function SpreadDelayUnit:onLoadGraph(channelCount)
-  if channelCount ~= 2 then app.logError("%s: can only load into a stereo chain.") end
+  if channelCount ~= 2 then
+    app.logError("%s: can only load into a stereo chain.")
+  end
 
   local delay = self:addObject("delay", libcore.Delay(2))
 
@@ -192,7 +194,9 @@ end
 
 function SpreadDelayUnit:deserialize(t)
   local time = t.maximumDelayTime
-  if time and time > 0 then self:setMaxDelayTime(time) end
+  if time and time > 0 then
+    self:setMaxDelayTime(time)
+  end
   Unit.deserialize(self, t)
 end
 

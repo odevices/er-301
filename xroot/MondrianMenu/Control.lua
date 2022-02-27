@@ -12,12 +12,16 @@ end
 
 function Control:enable()
   self.enabled = true
-  if self.controlGraphic then self.controlGraphic:setForegroundColor(app.WHITE) end
+  if self.controlGraphic then
+    self.controlGraphic:setForegroundColor(app.WHITE)
+  end
 end
 
 function Control:disable()
   self.enabled = false
-  if self.controlGraphic then self.controlGraphic:setForegroundColor(app.GRAY7) end
+  if self.controlGraphic then
+    self.controlGraphic:setForegroundColor(app.GRAY7)
+  end
 end
 
 function Control:onPressed(i, shifted)

@@ -1,7 +1,7 @@
 local Class = require "Base.Class"
 local Widget = require "Base.Widget"
 
-local PeriodWidget = Class{}
+local PeriodWidget = Class {}
 PeriodWidget:include(Widget)
 
 function PeriodWidget:init(parent)
@@ -11,22 +11,24 @@ function PeriodWidget:init(parent)
 end
 
 function PeriodWidget:show()
-  self:grabFocus("encoder","cancelReleased","enterReleased","mainReleased","mainPressed")
+  self:grabFocus("encoder", "cancelReleased", "enterReleased", "mainReleased",
+                 "mainPressed")
   self.parent.mainDisplay:showPeriodGadget()
   self.parent:hideMainButtons()
 end
 
 function PeriodWidget:hide()
-  self:releaseFocus("encoder","cancelReleased","enterReleased","mainReleased","mainPressed")
+  self:releaseFocus("encoder", "cancelReleased", "enterReleased",
+                    "mainReleased", "mainPressed")
   self.parent.mainDisplay:hideGadget()
   self.parent:showMainButtons()
 end
 
 function PeriodWidget:encoder(change, shifted)
   if self.parent.zooming then
-    self.parent:encoderZoom(change,shifted)
+    self.parent:encoderZoom(change, shifted)
   else
-    self.parent.mainDisplay:encoderGridPeriod(change,shifted,10)
+    self.parent.mainDisplay:encoderGridPeriod(change, shifted, 10)
   end
   return true
 end
@@ -42,11 +44,11 @@ function PeriodWidget:enterReleased()
   return true
 end
 
-function PeriodWidget:mainPressed(i,shifted)
+function PeriodWidget:mainPressed(i, shifted)
   return true
 end
 
-function PeriodWidget:mainReleased(i,shifted)
+function PeriodWidget:mainReleased(i, shifted)
   return true
 end
 

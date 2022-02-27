@@ -50,11 +50,15 @@ function ChainTitleControl:setText(text)
   local graphic = self:getControlGraphic()
   local words = Utils.split(text, " ")
   graphic:clear()
-  for _, word in ipairs(words) do graphic:addLine(Utils.shorten(word, 8, "..")) end
+  for _, word in ipairs(words) do
+    graphic:addLine(Utils.shorten(word, 8, ".."))
+  end
 end
 
 function ChainTitleControl:enterReleased(i, shifted)
-  if not shifted then self:callUp("toggleAllUnits") end
+  if not shifted then
+    self:callUp("toggleAllUnits")
+  end
   return true
 end
 
@@ -71,7 +75,9 @@ function ChainTitleControl:doClear()
     local Verification = require "Verification"
     local dialog = Verification.Sub("Clearing chain!", "Are you sure?")
     dialog:subscribe("done", function(ans)
-      if ans then self:callUp("clear") end
+      if ans then
+        self:callUp("clear")
+      end
     end)
     dialog:show()
   else

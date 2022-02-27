@@ -103,21 +103,29 @@ function Editor:getSelectionEndTime()
 end
 
 function Editor:hideMainButtons()
-  for i = 1, 6 do self.mainButton[i]:hide() end
+  for i = 1, 6 do
+    self.mainButton[i]:hide()
+  end
 end
 
 function Editor:showMainButtons()
-  for i = 1, 6 do self.mainButton[i]:show() end
+  for i = 1, 6 do
+    self.mainButton[i]:show()
+  end
 end
 
 function Editor:setMainButtons(b)
   b = b or {}
-  for i = 1, 6 do self.mainButton[i]:setText(b[i] or "") end
+  for i = 1, 6 do
+    self.mainButton[i]:setText(b[i] or "")
+  end
 end
 
 function Editor:getMainButtons()
   local b = {}
-  for i = 1, 6 do b[i] = self.mainButton[i]:getText() end
+  for i = 1, 6 do
+    b[i] = self.mainButton[i]:getText()
+  end
   return b
 end
 
@@ -133,7 +141,9 @@ function Editor:setInterfaceMode(mode, flash)
     self.mainButton[3]:setText("")
     self.mainButton[4]:setText("")
     self.mainButton[5]:setText("zc.snap")
-    if flash then Overlay.flashMainMessage("Mode: Edit") end
+    if flash then
+      Overlay.flashMainMessage("Mode: Edit")
+    end
   end
 
   -- buttons 6 is always same
@@ -173,7 +183,9 @@ function Editor:setSample(sample)
 end
 
 function Editor:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   return true
 end
@@ -181,7 +193,9 @@ end
 function Editor:subReleased(i, shifted)
   if i == 1 then
     if self.head then
-      if self.head.setManualMode then self.head:setManualMode(true) end
+      if self.head.setManualMode then
+        self.head:setManualMode(true)
+      end
       if self.navigationMode == CursorNavigation then
         local pointer = self.mainDisplay:getPointer()
         if self.head.setReset then
@@ -189,14 +203,20 @@ function Editor:subReleased(i, shifted)
         else
           self.head:setPosition(pointer)
         end
-        if self.head.clearStops then self.head:clearStops() end
+        if self.head.clearStops then
+          self.head:clearStops()
+        end
       else
         self.head:setPosition(0)
       end
-      if self.head.reset then self.head:reset() end
+      if self.head.reset then
+        self.head:reset()
+      end
     end
   elseif i == 2 then
-    if self.head.toggle then self.head:toggle() end
+    if self.head.toggle then
+      self.head:toggle()
+    end
   elseif i == 3 then
     self:toggleNavigationMode()
   end
@@ -256,7 +276,9 @@ function Editor:shiftReleased()
 end
 
 function Editor:cancelReleased(shifted)
-  if self.mainDisplay:isMarked() then self.mainDisplay:clearMarking() end
+  if self.mainDisplay:isMarked() then
+    self.mainDisplay:clearMarking()
+  end
   return true
 end
 
@@ -295,7 +317,9 @@ function Editor:onHide()
 end
 
 function Editor:onClose()
-  if self.head.setManualMode then self.head:setManualMode(false) end
+  if self.head.setManualMode then
+    self.head:setManualMode(false)
+  end
 end
 
 return Editor

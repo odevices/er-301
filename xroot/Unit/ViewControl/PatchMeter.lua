@@ -9,7 +9,8 @@ PatchMeter:include(ViewControl)
 function PatchMeter:init(args)
   ViewControl.init(self)
   self:setClassName("Unit.ViewControl.PatchMeter")
-  local button = args.button or app.logError("%s.init: button is missing.", self)
+  local button = args.button or
+                     app.logError("%s.init: button is missing.", self)
   self:setInstanceName(button)
   local patch = args.patch or app.logError("%s.init: patch is missing.", self)
 
@@ -64,14 +65,22 @@ end
 
 function PatchMeter:contentChanged(chain)
   if chain == self.patch then
-    if self.scope then self.scope:watchOutlet(chain:getMonitoringOutput(1)) end
-    if self.scope1 then self.scope1:watchOutlet(chain:getMonitoringOutput(1)) end
-    if self.scope2 then self.scope2:watchOutlet(chain:getMonitoringOutput(2)) end
+    if self.scope then
+      self.scope:watchOutlet(chain:getMonitoringOutput(1))
+    end
+    if self.scope1 then
+      self.scope1:watchOutlet(chain:getMonitoringOutput(1))
+    end
+    if self.scope2 then
+      self.scope2:watchOutlet(chain:getMonitoringOutput(2))
+    end
   end
 end
 
 function PatchMeter:spotReleased(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.patch:show()
   return true
 end

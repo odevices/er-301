@@ -34,7 +34,9 @@ function InsertControl:enterReleased()
 end
 
 function InsertControl:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     self:paste()
   elseif i == 3 then

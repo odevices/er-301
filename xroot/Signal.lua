@@ -25,13 +25,17 @@ local function weakRegister(s, f)
 end
 
 local function emit(s, ...)
-  --if app.TESTING then app.logInfo("Signal:emit(%s)",s) end
+  -- if app.TESTING then app.logInfo("Signal:emit(%s)",s) end
   local slots = signals[s] or createSignal(s)
   -- Move invocations outside of the loop
   -- in case a handler manipulates the signal table.
   local tmp = {}
-  for f, _ in pairs(slots.strong) do tmp[#tmp + 1] = f end
-  for f, _ in pairs(slots.weak) do tmp[#tmp + 1] = f end
+  for f, _ in pairs(slots.strong) do
+    tmp[#tmp + 1] = f
+  end
+  for f, _ in pairs(slots.weak) do
+    tmp[#tmp + 1] = f
+  end
   for i = 1, #tmp do
     local f = tmp[i]
     if type(f) == "table" then
@@ -59,19 +63,33 @@ local function clear(...)
   local s = {
     ...
   }
-  for i = 1, select('#', ...) do createSignal(s[i]) end
+  for i = 1, select('#', ...) do
+    createSignal(s[i])
+  end
 end
 
 local function emitPattern(p, ...)
-  for s in pairs(signals) do if s:match(p) then emit(s, ...) end end
+  for s in pairs(signals) do
+    if s:match(p) then
+      emit(s, ...)
+    end
+  end
 end
 
 local function removePattern(p, ...)
-  for s in pairs(signals) do if s:match(p) then remove(s, ...) end end
+  for s in pairs(signals) do
+    if s:match(p) then
+      remove(s, ...)
+    end
+  end
 end
 
 local function clearPattern(p)
-  for s in pairs(signals) do if s:match(p) then createSignal(s) end end
+  for s in pairs(signals) do
+    if s:match(p) then
+      createSignal(s)
+    end
+  end
 end
 
 return {

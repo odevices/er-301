@@ -98,7 +98,9 @@ end
 local function selectReleased(i, shifted)
   buttonHeld = false
   -- app.logInfo("UserMode:selectReleased(%s,%s)",i,shifted)
-  if shifted then return end
+  if shifted then
+    return
+  end
 end
 
 ---------------------

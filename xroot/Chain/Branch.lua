@@ -67,7 +67,9 @@ function Branch:disable(soft)
 end
 
 function Branch:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   return true
 end

@@ -55,7 +55,9 @@ function ChannelGroup:init(left, right)
 end
 
 function ChannelGroup:contentChanged()
-  if self.mode == "scope" then self.chain:enterScopeView() end
+  if self.mode == "scope" then
+    self.chain:enterScopeView()
+  end
 end
 
 function ChannelGroup:show()
@@ -68,11 +70,15 @@ end
 function ChannelGroup:setActiveContext(context)
   local visible = self.activeContext.visible
   self.activeContext = context
-  if visible then self:show() end
+  if visible then
+    self:show()
+  end
 end
 
 function ChannelGroup:setMode(mode)
-  if mode == self.mode then return end
+  if mode == self.mode then
+    return
+  end
   if mode == "edit" then
     if self.mode == "scope" then
       self.chain:leaveScopeView()
@@ -94,14 +100,18 @@ function ChannelGroup:mute()
   self.chain:mute()
   self.chain:setSubTitle("muted")
   app.ChannelLEDs_flash(self.left - 1)
-  if self.right then app.ChannelLEDs_flash(self.right - 1) end
+  if self.right then
+    app.ChannelLEDs_flash(self.right - 1)
+  end
 end
 
 function ChannelGroup:unmute()
   self.chain:unmute()
   self.chain:clearSubTitle()
   app.ChannelLEDs_steady(self.left - 1)
-  if self.right then app.ChannelLEDs_steady(self.right - 1) end
+  if self.right then
+    app.ChannelLEDs_steady(self.right - 1)
+  end
 end
 
 function ChannelGroup:toggleMute()

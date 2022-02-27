@@ -42,9 +42,13 @@ function ListWindow:init(opts)
     local listBox = app.ListBox(x, 0, width, 64)
     x = x + width
     listBox:setFocus()
-    if column.showCheck then listBox:showCheck() end
+    if column.showCheck then
+      listBox:showCheck()
+    end
     listBox:setTextSize(column.textSize or 10)
-    if i < #columns then listBox:hideScrollbar() end
+    if i < #columns then
+      listBox:hideScrollbar()
+    end
     listBox:setEmptyText(column.emptyText or "")
     listBox:setJustification(column.justify or app.justifyLeft)
     self.mainGraphic:addChild(listBox)
@@ -113,7 +117,9 @@ function ListWindow:addRow(row)
 end
 
 function ListWindow:clearRows()
-  for _, column in ipairs(self.colByIndex) do column:clear() end
+  for _, column in ipairs(self.colByIndex) do
+    column:clear()
+  end
 end
 
 function ListWindow:setMainCommand(i, label, releaseHandler, pressHandler)
@@ -131,7 +137,9 @@ end
 
 function ListWindow:clearMainCommand(i)
   local button = self.mainButtons[i]
-  if button then button:setText("") end
+  if button then
+    button:setText("")
+  end
   self.mainReleaseHandlers[i] = nil
   self.mainPressHandlers[i] = nil
 end
@@ -151,7 +159,9 @@ end
 
 function ListWindow:clearSubCommand(i)
   local button = self.subButtons[i]
-  if button then button:setText("") end
+  if button then
+    button:setText("")
+  end
   self.subReleaseHandlers[i] = nil
   self.subPressHandlers[i] = nil
 end
@@ -164,7 +174,9 @@ function ListWindow:getSelection()
 end
 
 function ListWindow:setSelection(id)
-  for _, column in ipairs(self.colByIndex) do column:chooseWithData(id) end
+  for _, column in ipairs(self.colByIndex) do
+    column:chooseWithData(id)
+  end
   self:onSelectionChanged()
 end
 
@@ -174,7 +186,9 @@ function ListWindow:encoder(change, shifted)
     column:encoder(change, shifted, threshold)
   end
   local curIndex = self.colByIndex[1]:getSelectedIndex()
-  if curIndex ~= prevIndex then self:onSelectionChanged(prevIndex, curIndex) end
+  if curIndex ~= prevIndex then
+    self:onSelectionChanged(prevIndex, curIndex)
+  end
   return true
 end
 

@@ -13,11 +13,15 @@ function Control:init(source, label)
 
   local scope = app.MiniScope(0, 0, ply, 64)
   scope:watchOutlet(source:getOutlet())
-  if source.isUnipolar then scope:setOffset(-1) end
+  if source.isUnipolar then
+    scope:setOffset(-1)
+  end
   scope:setLeftBorder(1)
   scope:setBorderColor(app.GRAY3)
 
-  if label then scope:addChild(app.MainButton(label, 1)) end
+  if label then
+    scope:addChild(app.MainButton(label, 1))
+  end
   self:setControlGraphic(scope)
   self:addSpotDescriptor{
     center = 0.5 * ply
@@ -36,7 +40,9 @@ end
 
 function Control:onCursorEnter(spot)
   SpottedControl.onCursorEnter(self, spot)
-  if self.hasRange then self:callUp("showRangeButton") end
+  if self.hasRange then
+    self:callUp("showRangeButton")
+  end
 end
 
 function Control:onCursorLeave(spot)

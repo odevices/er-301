@@ -57,7 +57,9 @@ end
 
 function MenuSection:setValue(key, value, invalidateLayout)
   local control = self.menuControls[key]
-  if control then control:setValue(value, invalidateLayout) end
+  if control then
+    control:setValue(value, invalidateLayout)
+  end
 end
 
 function MenuSection:invalidateLayout()
@@ -81,7 +83,9 @@ function MenuSection:onCursorLeave(viewName, spotHandle, shifted)
 end
 
 function MenuSection:subReleased(i, shifted)
-  if shifted then return true end
+  if shifted then
+    return true
+  end
   if i == 1 then
     self:callUp("doLoadPreset")
   elseif i == 2 then
@@ -109,12 +113,16 @@ function TestSection:init(args)
     title = unit.title
   }
   self.control = self.controlBranch.control
-  if args.isBuiltin then self.control.isBuiltin = true end
+  if args.isBuiltin then
+    self.control.isBuiltin = true
+  end
   if args.defaults then
     self.control:setDefaults(args.defaults)
     self.control:removeCustomizations(true)
   end
-  if args.customizations then self.control:customize(args.customizations) end
+  if args.customizations then
+    self.control:customize(args.customizations)
+  end
   self:addView("default")
   self:addControl("default", self.control)
   self:switchView("default")
@@ -318,13 +326,17 @@ function ControlEditor:enterReleased()
 end
 
 function ControlEditor:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:doCancel()
   return true
 end
 
 function ControlEditor:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:doCancel()
   return true
 end
@@ -359,7 +371,9 @@ function ControlEditor:serialize()
   local keys = control:getCustomizableKeys()
 
   local c = {}
-  for _, key in ipairs(keys) do c[key] = control:getCustomizableValue(key) end
+  for _, key in ipairs(keys) do
+    c[key] = control:getCustomizableValue(key)
+  end
   c.name = nil
   c.description = nil
 
@@ -372,7 +386,9 @@ end
 
 function ControlEditor:deserialize(t)
   self.test.control:removeCustomizations()
-  if t.customizations then self.test.control:customize(t.customizations) end
+  if t.customizations then
+    self.test.control:customize(t.customizations)
+  end
   self:updateMenu()
   self:onChange()
 end

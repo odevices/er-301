@@ -41,7 +41,9 @@ end
 local function endMainMessage()
   Manager.removeMainGraphic(mainLabel)
   showingMainLabel = false
-  if lastMainTimerHandle then mainFlashLabel:setCenter(128, 32) end
+  if lastMainTimerHandle then
+    mainFlashLabel:setCenter(128, 32)
+  end
 end
 
 local function endflashMainMessage()
@@ -50,7 +52,9 @@ local function endflashMainMessage()
     Timer.cancel(lastMainTimerHandle)
     lastMainTimerHandle = nil
   end
-  if showingMainLabel then mainLabel:setCenter(128, 32) end
+  if showingMainLabel then
+    mainLabel:setCenter(128, 32)
+  end
 end
 
 local function flashMainMessage(...)
@@ -120,5 +124,5 @@ return {
   endMainMessage = endMainMessage,
   flashMainMessage = flashMainMessage,
   flashSubMessage = flashSubMessage,
-  closeAll = closeAll,
+  closeAll = closeAll
 }

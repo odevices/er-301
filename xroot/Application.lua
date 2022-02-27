@@ -77,17 +77,25 @@ end
 
 local function setVisibleContext(context)
   if context ~= visibleContext then
-    if visibleContext then visibleContext:hide() end
+    if visibleContext then
+      visibleContext:hide()
+    end
     visibleContext = context
-    if visibleContext then visibleContext:show() end
+    if visibleContext then
+      visibleContext:show()
+    end
   end
 end
 
 local function setActiveMode(mode)
   if mode ~= activeMode then
-    if activeMode then activeMode:leave() end
+    if activeMode then
+      activeMode:leave()
+    end
     activeMode = mode
-    if activeMode then activeMode:enter() end
+    if activeMode then
+      activeMode:enter()
+    end
   end
 end
 
@@ -131,7 +139,7 @@ local function onDisplayReady()
   if timerUpdateCount < timerUpdatePeriod then
     timerUpdateCount = timerUpdateCount + 1
   else
-    --app.logInfo("timer update")
+    -- app.logInfo("timer update")
     Timer.update(timerDelta)
     timerUpdateCount = 0
   end
@@ -175,7 +183,9 @@ local function post(f)
 end
 
 local function sendEvent(target, e, ...)
-  if target[e] then return target[e](target, ...) end
+  if target[e] then
+    return target[e](target, ...)
+  end
 end
 
 local function postEvent(target, e, ...)
@@ -210,7 +220,9 @@ local function defaultDispatcher(event)
   -- app.logInfo("Application.defaultDispatcher(%s)",event)
   if event == eventToIgnore then
     ignoreCount = ignoreCount - 1
-    if ignoreCount < 1 then eventToIgnore = nil end
+    if ignoreCount < 1 then
+      eventToIgnore = nil
+    end
     return
   elseif event == app.EVENT_RELEASE_SHIFT then
     shifted = false
@@ -224,7 +236,9 @@ local function defaultDispatcher(event)
   --------
   if event == app.EVENT_KNOB then
     local p = getEncoderChange()
-    if p ~= 0 then visibleContext:notify("encoder", p, shifted) end
+    if p ~= 0 then
+      visibleContext:notify("encoder", p, shifted)
+    end
     ---- Press Events
   elseif event == app.EVENT_PRESS_UP then
     notify("upPressed", shifted)
@@ -241,7 +255,9 @@ local function defaultDispatcher(event)
       notify("enterPressed")
     end
   elseif event == app.EVENT_PRESS_CANCEL then
-    if not shifted then notify("cancelPressed", false) end
+    if not shifted then
+      notify("cancelPressed", false)
+    end
   elseif event == app.EVENT_PRESS_DIALMODE then
     notify("dialPressed", shifted)
   elseif event == app.EVENT_PRESS_MAIN1 then
@@ -342,7 +358,9 @@ local function defaultDispatcher(event)
       notify("enterRepeated")
     end
   elseif event == app.EVENT_REPEAT_CANCEL then
-    if not shifted then notify("cancelRepeated", false) end
+    if not shifted then
+      notify("cancelRepeated", false)
+    end
   elseif event == app.EVENT_REPEAT_DIALMODE then
     notify("dialRepeated", shifted)
   elseif event == app.EVENT_REPEAT_MAIN1 then
@@ -422,7 +440,7 @@ local function init()
   math.randomseed(seed)
   app.logInfo("Application.init: random seed = 0x%08x", seed)
 
-  local filename = app.roots.rear.."/onNextBoot.lua"
+  local filename = app.roots.rear .. "/onNextBoot.lua"
   local Path = require "Path"
   if Path.exists(filename) then
     app.logInfo("%s: executing...", filename)
@@ -497,14 +515,18 @@ local function loop()
       end
     end
     -- process events posted during the spontaneous event processing
-    while posted:length() > 0 do posted:pop()() end
+    while posted:length() > 0 do
+      posted:pop()()
+    end
     -- process triggers
     local save = elapsedTriggers
     elapsedTriggers = pendingTriggers
     pendingTriggers = save
     for key, task in pairs(elapsedTriggers) do
       local f = key[task]
-      if f then f(key) end
+      if f then
+        f(key)
+      end
       elapsedTriggers[key] = nil
     end
     stopEventTimer()

@@ -91,9 +91,15 @@ local function update()
   groups = {
     c2g[1]
   }
-  if c2g[2] ~= c2g[1] then groups[#groups + 1] = c2g[2] end
-  if c2g[3] ~= c2g[2] then groups[#groups + 1] = c2g[3] end
-  if c2g[4] ~= c2g[3] then groups[#groups + 1] = c2g[4] end
+  if c2g[2] ~= c2g[1] then
+    groups[#groups + 1] = c2g[2]
+  end
+  if c2g[3] ~= c2g[2] then
+    groups[#groups + 1] = c2g[3]
+  end
+  if c2g[4] ~= c2g[3] then
+    groups[#groups + 1] = c2g[4]
+  end
 
   app.collectgarbage()
 end
@@ -115,7 +121,9 @@ local function getChain(channel)
 end
 
 local function link(i, continued)
-  if not checkLink(i) then return false end
+  if not checkLink(i) then
+    return false
+  end
   links[i] = true
   if not continued then
     update()
@@ -166,7 +174,9 @@ local function toggleLinkWithConfirmation(i)
       local dialog = Verification.Main(msg, "Are you sure you want to unlink?",
                                        12, 10)
       local task = function(ans)
-        if ans then unlinkAndKeep(i) end
+        if ans then
+          unlinkAndKeep(i)
+        end
       end
       dialog:subscribe("done", task)
       dialog:show()
@@ -190,7 +200,9 @@ local function toggleLinkWithConfirmation(i)
       local dialog = Verification.Main(msg, "Are you sure you want to link?",
                                        12, 10)
       local task = function(ans)
-        if ans then linkAndKeep(i) end
+        if ans then
+          linkAndKeep(i)
+        end
       end
       dialog:subscribe("done", task)
       dialog:show()
@@ -256,7 +268,9 @@ local function generic(method, channel, ...)
     local g = c2g[channel]
     g[method](g, ...)
   else
-    for i, g in ipairs(groups) do g[method](g, ...) end
+    for i, g in ipairs(groups) do
+      g[method](g, ...)
+    end
   end
 end
 
@@ -332,7 +346,9 @@ local function serialize()
   }
 
   local chainData = {}
-  for i, g in ipairs(groups) do chainData[i] = g:serialize() end
+  for i, g in ipairs(groups) do
+    chainData[i] = g:serialize()
+  end
 
   return {
     links = linkData,
@@ -346,12 +362,16 @@ local function deserializeLegacy(linkData, chainData)
     false,
     false
   }
-  for _, i in ipairs(linkData) do links[i] = true end
+  for _, i in ipairs(linkData) do
+    links[i] = true
+  end
 
   update()
   stop()
   for i, data in ipairs(chainData) do
-    if data then c2g[i].chain:deserialize(data) end
+    if data then
+      c2g[i].chain:deserialize(data)
+    end
   end
   start()
   unmute()
@@ -376,18 +396,26 @@ local function deserialize(t)
   update()
 
   local unmute = {}
-  for i = 1, #groups do unmute[i] = true end
+  for i = 1, #groups do
+    unmute[i] = true
+  end
 
   if t.chains then
     stop()
     for i, data in ipairs(t.chains) do
       groups[i]:deserialize(data)
-      if data.isMuted then unmute[i] = false end
+      if data.isMuted then
+        unmute[i] = false
+      end
     end
     start()
   end
 
-  for i, flag in ipairs(unmute) do if flag then groups[i]:unmute() end end
+  for i, flag in ipairs(unmute) do
+    if flag then
+      groups[i]:unmute()
+    end
+  end
 
   Signal.emit("channelsModified")
 end

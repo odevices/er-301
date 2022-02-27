@@ -228,7 +228,9 @@ local function saveErrorReport(msg, trace, logFile)
       local count = LogHistory:count()
       if count > 0 then
         f:write("Recent Log Messages:\n")
-        for i = 1, count do f:write(LogHistory:get(i), "\n") end
+        for i = 1, count do
+          f:write(LogHistory:get(i), "\n")
+        end
       end
       f:write("---ERROR REPORT END\n")
       f:close()
@@ -262,7 +264,9 @@ local function init()
   if needInit then
     needInit = false
     Signal.register("cardMounted", onCardMounted)
-    if Card.mounted() then onCardMounted() end
+    if Card.mounted() then
+      onCardMounted()
+    end
   end
 end
 
@@ -298,8 +302,12 @@ local cachedKeys
 local function getKeys()
   if refresh() or cachedKeys == nil then
     cachedKeys = {}
-    for i, k in ipairs(foundKeys) do cachedKeys[#cachedKeys + 1] = k end
-    for i, k in ipairs(builtinKeys) do cachedKeys[#cachedKeys + 1] = k end
+    for i, k in ipairs(foundKeys) do
+      cachedKeys[#cachedKeys + 1] = k
+    end
+    for i, k in ipairs(builtinKeys) do
+      cachedKeys[#cachedKeys + 1] = k
+    end
     table.sort(cachedKeys)
   end
   return cachedKeys

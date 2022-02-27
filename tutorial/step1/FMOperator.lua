@@ -80,7 +80,9 @@ function FMOperator:onLoadGraph(channelCount)
   self:addMonoBranch("den", den, "In", den, "Out")
 
   -- Handle stereo case here by connecting up the 2nd channel as well.
-  if channelCount > 1 then connect(self.objects.vca, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(self.objects.vca, "Out", self, "Out2")
+  end
 end
 
 -- A shared instance of the views table to save resources.

@@ -19,7 +19,9 @@ end
 function CV:onLoadGraph(channelCount)
   local cv = self:addObject("cv", libteletype.CV(teletype.dispatcher))
   connect(cv, "Out", self, "Out1")
-  if channelCount > 1 then connect(cv, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(cv, "Out", self, "Out2")
+  end
 
   local port = self:addObject("port", app.ParameterAdapter())
   tie(cv, "Port", port, "Out")

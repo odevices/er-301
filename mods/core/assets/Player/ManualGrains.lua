@@ -79,7 +79,9 @@ end
 function ManualGrains:serialize()
   local t = Unit.serialize(self)
   local sample = self.sample
-  if sample then t.sample = SamplePool.serializeSample(sample) end
+  if sample then
+    t.sample = SamplePool.serializeSample(sample)
+  end
   return t
 end
 
@@ -112,7 +114,9 @@ function ManualGrains:setSample(sample)
     self.sample:claim(self)
   end
 
-  if self.sampleEditor then self.sampleEditor:setSample(sample) end
+  if self.sampleEditor then
+    self.sampleEditor:setSample(sample)
+  end
   self:notifyControls("setSample", sample)
 end
 

@@ -32,16 +32,16 @@ function Firmware:init()
 
   local offset = -5
 
-  local version = "Version: "..app.FIRMWARE_VERSION
+  local version = "Version: " .. app.FIRMWARE_VERSION
   label = app.Label(version, 10)
   label:setJustification(app.justifyLeft)
-  label:setPosition(0, app.GRID5_LINE2+offset)
+  label:setPosition(0, app.GRID5_LINE2 + offset)
   self.subGraphic:addChild(label)
-  
-  local build = "Build: "..app.BUILD_PROFILE
+
+  local build = "Build: " .. app.BUILD_PROFILE
   label = app.Label(build, 10)
   label:setJustification(app.justifyLeft)
-  label:setPosition(0, app.GRID5_LINE3+offset)
+  label:setPosition(0, app.GRID5_LINE3 + offset)
   self.subGraphic:addChild(label)
 
   label = app.SubButton("update", 1)
@@ -96,21 +96,24 @@ function Firmware:defaultInstallation(archive)
   -- First extract all files to a temporary location.
   local renames = {}
   local n = archive:getFileCount()
-  
-  for i =1,n do
-    local filename = archive:getFilename(i-1)
+
+  for i = 1, n do
+    local filename = archive:getFilename(i - 1)
     app.logInfo("Trying to extract and copy %s.", filename)
     self:msg("Installing %s...", filename)
     if not archive:exists(filename) then
       self:msg("Update failed: %s was not found.", filename)
       return false
     end
-    local tmpFilename = "_"..filename
+    local tmpFilename = "_" .. filename
     local tmpPath = Path.join(app.roots.rear, tmpFilename)
     local actualPath = Path.join(app.roots.rear, filename)
     if archive:extract(filename, tmpPath) then
       app.logInfo("%s copied successfully.", filename)
-      renames[#renames + 1] = {tmp=tmpPath, actual=actualPath}
+      renames[#renames + 1] = {
+        tmp = tmpPath,
+        actual = actualPath
+      }
     else
       self:msg("Update failed: could not copy %s.", filename)
       for _, e in ipairs(renames) do
@@ -212,7 +215,9 @@ function Firmware:encoder(change, shifted)
 end
 
 function Firmware:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 and not self.updateButton:isHidden() then
     self:update()
   elseif i == 3 and not self.rebootButton:isHidden() then

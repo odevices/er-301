@@ -37,7 +37,9 @@ function Sine:onLoadGraph(channelCount)
   self:addMonoBranch("skew", skew, "In", skew, "Out")
   self:addMonoBranch("duration", duration, "In", duration, "Out")
 
-  if channelCount > 1 then connect(env, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(env, "Out", self, "Out2")
+  end
 end
 
 local views = {

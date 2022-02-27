@@ -54,11 +54,15 @@ function InsertControl:spotReleased(spot, shifted)
 end
 
 function InsertControl:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     if Clipboard.hasData(1) then
       local chain = self:getWindow()
-      if chain then Clipboard.paste(self:getWindow(), nil, 1) end
+      if chain then
+        Clipboard.paste(self:getWindow(), nil, 1)
+      end
     end
   elseif i == 3 then
     self:activateChooser()

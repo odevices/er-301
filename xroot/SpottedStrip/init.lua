@@ -41,7 +41,7 @@ function SpottedStrip:insertSection(section, position)
     self.pDisplay:appendSection(section.pSection)
   elseif position == 0 then
     app.logError("%s:insertSection(%s,%d): 1-based position is zero!", self,
-              section, position)
+                 section, position)
   else
     self.pDisplay:insertSection(section.pSection, position - 1)
   end
@@ -169,7 +169,9 @@ function SpottedStrip:notifySections(method, ...)
   -- notify all the sections
   for _, section in pairs(self.sections) do
     local f = section[method]
-    if f ~= nil then f(section, ...) end
+    if f ~= nil then
+      f(section, ...)
+    end
   end
 end
 
@@ -211,7 +213,7 @@ function SpottedStrip:mainPressed(i, shifted)
   local pSection1 = pDisplay:findSectionByScreenLocation(buttonCenter)
   if pSection1 == nil then
     app.logInfo("SpottedStrip(%s).mainPressed: no section at location %d.",
-            self.name, buttonCenter)
+                self.name, buttonCenter)
     return true
   end
   local section1 = self.sections[pSection1:handle()]
@@ -241,8 +243,8 @@ end
 function SpottedStrip:mainReleased(i, shifted)
   if self.savedSpotPress then
     -- fire event
-    local section, viewName, spotHandle, shifted =
-        table.unpack(self.savedSpotPress)
+    local section, viewName, spotHandle, shifted = table.unpack(
+                                                       self.savedSpotPress)
     self.savedSpotPress = nil
     self:spotReleased(section, viewName, spotHandle, shifted)
   end
@@ -269,8 +271,12 @@ function SpottedStrip:onCursorMove(section, viewName, spotHandle, section0,
       section:onCursorMove(viewName, spotHandle, viewName0, spotHandle0, shifted)
     end
   else
-    if section0 then section0:onCursorLeave(viewName0, spotHandle0, shifted) end
-    if section then section:onCursorEnter(viewName, spotHandle, shifted) end
+    if section0 then
+      section0:onCursorLeave(viewName0, spotHandle0, shifted)
+    end
+    if section then
+      section:onCursorEnter(viewName, spotHandle, shifted)
+    end
   end
 end
 

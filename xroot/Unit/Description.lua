@@ -1,7 +1,7 @@
 local Class = require "Base.Class"
 local Object = require "Base.Object"
 
-local Description = Class{}
+local Description = Class {}
 Description:include(Object)
 
 function Description:init()

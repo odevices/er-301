@@ -65,10 +65,11 @@ function Gate:init(args)
   self:setClassName("Unit.ViewControl.Gate")
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
-  local branch = args.branch or app.logError("%s.init: branch is missing.", self)
+  local branch = args.branch or
+                     app.logError("%s.init: branch is missing.", self)
   local comparator = args.comparator or
                          app.logError("%s.init: comparator is missing.", self)
-  
+
   self.branch = branch
   self.comparator = comparator
   -- optional arguments
@@ -161,7 +162,9 @@ function Gate:getPinControl()
 end
 
 function Gate:setDefaults(args)
-  if args.outputMode == nil then args.outputMode = self.comparator:getMode() end
+  if args.outputMode == nil then
+    args.outputMode = self.comparator:getMode()
+  end
   if args.inversion == nil then
     args.inversion = self.comparator:isOutputInverted()
   end
@@ -175,11 +178,19 @@ end
 function Gate:customize(args)
   local t = self.customizations or {}
 
-  for k, v in pairs(args) do t[k] = v end
+  for k, v in pairs(args) do
+    t[k] = v
+  end
 
-  if args.name then self:rename(args.name) end
-  if args.description then self.description:setText(args.description) end
-  if args.outputMode then self.comparator:setMode(args.outputMode) end
+  if args.name then
+    self:rename(args.name)
+  end
+  if args.description then
+    self.description:setText(args.description)
+  end
+  if args.outputMode then
+    self.comparator:setMode(args.outputMode)
+  end
   if args.inversion ~= nil then
     self.comparator:setOutputInversion(args.inversion)
   end
@@ -229,7 +240,9 @@ end
 function Gate:deserialize(t)
   Base.deserialize(self, t)
   self:removeCustomizations()
-  if t.customizations then self:customize(t.customizations) end
+  if t.customizations then
+    self:customize(t.customizations)
+  end
 end
 
 function Gate:populateEditMenu(menu)
@@ -298,7 +311,9 @@ function Gate:rename(name)
 end
 
 function Gate:setFocusedReadout(readout)
-  if readout then readout:save() end
+  if readout then
+    readout:save()
+  end
   self.focusedReadout = readout
   self:setSubCursorController(readout)
 end
@@ -332,12 +347,16 @@ function Gate:enterReleased()
 end
 
 function Gate:zeroPressed()
-  if self.focusedReadout then self.focusedReadout:zero() end
+  if self.focusedReadout then
+    self.focusedReadout:zero()
+  end
   return true
 end
 
 function Gate:cancelReleased(shifted)
-  if self.focusedReadout then self.focusedReadout:restore() end
+  if self.focusedReadout then
+    self.focusedReadout:restore()
+  end
   return true
 end
 
@@ -362,7 +381,9 @@ function Gate:doThresholdSet()
 end
 
 function Gate:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     local branch = self.branch
     if branch then
@@ -387,8 +408,12 @@ function Gate:subReleased(i, shifted)
 end
 
 function Gate:subPressed(i, shifted)
-  if shifted then return false end
-  if i == 3 then self.comparator:simulateRisingEdge() end
+  if shifted then
+    return false
+  end
+  if i == 3 then
+    self.comparator:simulateRisingEdge()
+  end
   return true
 end
 

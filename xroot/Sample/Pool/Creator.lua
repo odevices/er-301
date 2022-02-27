@@ -41,7 +41,9 @@ function Creator:init(defaultChannelCount)
     app.SubButton("zero", 3)
   }
 
-  for _, button in ipairs(self.subButtons) do self.subGraphic:addChild(button) end
+  for _, button in ipairs(self.subButtons) do
+    self.subGraphic:addChild(button)
+  end
 
   self.durationControl = app.DurationControl()
   self.durationControl:setCenter(app.BUTTON2_CENTER, line2)
@@ -74,7 +76,9 @@ function Creator:init(defaultChannelCount)
   self.channelBox:hideScrollbar()
   self.mainGraphic:addChild(self.channelBox)
 
-  if defaultChannelCount == 2 then self.channelBox:choose("2ch") end
+  if defaultChannelCount == 2 then
+    self.channelBox:choose("2ch")
+  end
 
   self.rateBox = app.ListBox(0, 0, ply, 24)
   self.rateBox:setFocus()
@@ -83,7 +87,8 @@ function Creator:init(defaultChannelCount)
   self.rateBox:setTextSize(10)
   self.rateBox:setCenter(app.BUTTON6_CENTER, line2)
   -- only support one sample rate at the moment
-  self.rateBox:addItem(string.format("%dkHz", app.globalConfig.sampleRate // 1000))
+  self.rateBox:addItem(string.format("%dkHz",
+                                     app.globalConfig.sampleRate // 1000))
   self.rateBox:hideScrollbar()
   self.mainGraphic:addChild(self.rateBox)
 
@@ -209,7 +214,9 @@ function Creator:encoder(change, shifted)
 end
 
 function Creator:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   self:emitSignal("done")
   return true
@@ -238,7 +245,9 @@ function Creator:enterReleased()
 end
 
 function Creator:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   self:emitSignal("done")
   return true

@@ -29,7 +29,9 @@ function ScopeView:getXPath()
 end
 
 function ScopeView:select(xpath)
-  if self.refreshNeeded then self:refresh() end
+  if self.refreshNeeded then
+    self:refresh()
+  end
   self.ptr:select(xpath)
   self:onSelectionChanged()
 end
@@ -38,7 +40,9 @@ function ScopeView:loadUnitHelper(unit)
   -- Traverse each control in the scope or expanded view
   -- app.logInfo("%s:loadUnitHelper(%s)",self,unit)
   local view = unit:getView("scope") or unit:getView("expanded")
-  if view == nil then return end
+  if view == nil then
+    return
+  end
   local overview = self.ptr
   for i, control in ipairs(view.controls) do
     if control.getPatch then
@@ -116,18 +120,24 @@ function ScopeView:encoder(change, shifted)
 end
 
 function ScopeView:mainReleased(i, shifted)
-  if shifted then return true end
+  if shifted then
+    return true
+  end
   self.ptr:selectColumn(i - 1, shifted)
   return true
 end
 
 function ScopeView:enterReleased()
-  if self.ptr:down() then self:onSelectionChanged() end
+  if self.ptr:down() then
+    self:onSelectionChanged()
+  end
   return true
 end
 
 function ScopeView:upReleased(shifted)
-  if self.ptr:up() then self:onSelectionChanged() end
+  if self.ptr:up() then
+    self:onSelectionChanged()
+  end
   return true
 end
 
@@ -170,7 +180,9 @@ function ScopeView:onSelectionChanged()
 end
 
 function ScopeView:onShow()
-  if self.refreshNeeded then self:refresh() end
+  if self.refreshNeeded then
+    self:refresh()
+  end
   self.initialSelectionId = self.ptr:selected()
   Encoder.set(self.encoderState)
 end

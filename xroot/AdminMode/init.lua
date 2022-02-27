@@ -51,24 +51,24 @@ menu.subGraphic:addChild(label)
 
 local offset = -5
 
-local version = "Version: "..app.FIRMWARE_VERSION
+local version = "Version: " .. app.FIRMWARE_VERSION
 label = app.Label(version, 10)
 label:setJustification(app.justifyLeft)
-label:setPosition(0, app.GRID5_LINE2+offset)
+label:setPosition(0, app.GRID5_LINE2 + offset)
 menu.subGraphic:addChild(label)
 
-local build = "Build: "..app.BUILD_PROFILE
+local build = "Build: " .. app.BUILD_PROFILE
 label = app.Label(build, 10)
 label:setJustification(app.justifyLeft)
-label:setPosition(0, app.GRID5_LINE3+offset)
+label:setPosition(0, app.GRID5_LINE3 + offset)
 menu.subGraphic:addChild(label)
 
 local config = string.format("Config: %0.0fkHz, %dsmps",
-                           app.globalConfig.sampleRate / 1000.0,
-                           app.globalConfig.frameLength)
+                             app.globalConfig.sampleRate / 1000.0,
+                             app.globalConfig.frameLength)
 label = app.Label(config, 10)
 label:setJustification(app.justifyLeft)
-label:setPosition(0, app.GRID5_LINE4+offset)
+label:setPosition(0, app.GRID5_LINE4 + offset)
 menu.subGraphic:addChild(label)
 
 local context = Context("Admin", menu)

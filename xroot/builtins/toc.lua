@@ -10,7 +10,7 @@ local units = {
     title = "Test Osc",
     moduleName = "TestOscillator",
     category = "Experimental",
-    keywords = "source, pitch, modulate",
+    keywords = "source, pitch, modulate"
   },
   {
     title = "Stereo Mix",

@@ -73,7 +73,9 @@ end
 
 function MarkMenu:encoder(change, shifted)
   self.sum = self.sum + change
-  if math.abs(self.sum) > Env.EncoderThreshold.Default then self:finish() end
+  if math.abs(self.sum) > Env.EncoderThreshold.Default then
+    self:finish()
+  end
   return true
 end
 
@@ -116,23 +118,31 @@ function MarkMenu:subReleased(i, shifted)
     local chain = self.chain
     Clipboard.copy(chain, 1, true)
     local wasMuted = chain:isMuted()
-    if not wasMuted then chain:mute() end
+    if not wasMuted then
+      chain:mute()
+    end
     chain:stop()
     chain:removeMarkedUnits()
     chain:start()
-    if not wasMuted then chain:unmute() end
+    if not wasMuted then
+      chain:unmute()
+    end
   elseif i == 3 then
     -- move to mixer
     local UnitFactory = require "Unit.Factory"
     local chain = self.chain
     local index = Clipboard.copy(chain, 2, true)
     local wasMuted = chain:isMuted()
-    if not wasMuted then chain:mute() end
+    if not wasMuted then
+      chain:mute()
+    end
     chain:stop()
     -- preserve the pins
     local root = chain:getRootChain()
     local pinData
-    if root and root.serializePins then pinData = root:serializePins() end
+    if root and root.serializePins then
+      pinData = root:serializePins()
+    end
     chain:removeMarkedUnits()
     local loadInfo = UnitFactory.getBuiltin("MixerUnit")
     if loadInfo then
@@ -146,7 +156,9 @@ function MarkMenu:subReleased(i, shifted)
       root:deserializePins(pinData)
     end
     chain:start()
-    if not wasMuted then chain:unmute() end
+    if not wasMuted then
+      chain:unmute()
+    end
   end
   self:finish()
   return true

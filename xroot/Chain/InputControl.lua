@@ -88,7 +88,9 @@ function InputControl:setText(text)
   local graphic = self.panel
   local words = Utils.split(text, " ")
   graphic:clear()
-  for _, word in ipairs(words) do graphic:addLine(Utils.shorten(word, 8, "..")) end
+  for _, word in ipairs(words) do
+    graphic:addLine(Utils.shorten(word, 8, ".."))
+  end
 end
 
 function InputControl:onCursorEnter()
@@ -102,8 +104,12 @@ function InputControl:onCursorLeave()
 end
 
 function InputControl:subReleased(i, shifted)
-  if shifted then return end
-  if i == 3 then self:callUp("clearInputSource", self.inputIndex) end
+  if shifted then
+    return
+  end
+  if i == 3 then
+    self:callUp("clearInputSource", self.inputIndex)
+  end
   return true
 end
 

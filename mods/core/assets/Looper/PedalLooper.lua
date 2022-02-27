@@ -190,7 +190,9 @@ function PedalLooper:onShowMenu(objects, branches)
     task = function()
       local chooser = TimeChooser(self.channelCount)
       local subTask = function(secs)
-        if secs then self:setMaxLoopTime(secs) end
+        if secs then
+          self:setMaxLoopTime(secs)
+        end
       end
       chooser:subscribe("done", subTask)
       chooser:show()
@@ -312,7 +314,9 @@ end
 function PedalLooper:deserialize(t)
   Unit.deserialize(self, t)
   local time = t.maximumLoopTime
-  if time and time > 0 then self:setMaxLoopTime(time) end
+  if time and time > 0 then
+    self:setMaxLoopTime(time)
+  end
 end
 
 function PedalLooper:onRemove()

@@ -86,26 +86,38 @@ end
 function ViewControl:disableHighlight()
   self.controlGraphic:setBorder(0)
   Encoder.set(Encoder.Neutral)
-  if self.moreLeft then self.moreLeft:hide() end
+  if self.moreLeft then
+    self.moreLeft:hide()
+  end
   self.focused = false
 end
 
 function ViewControl:focus(notify)
-  if notify == nil then notify = true end
+  if notify == nil then
+    notify = true
+  end
   self:grabFocus("encoder", "upReleased", "cancelReleased")
   self:enableHighlight()
-  if notify then self:onFocused() end
+  if notify then
+    self:onFocused()
+  end
 end
 
 function ViewControl:unfocus(notify)
-  if notify == nil then notify = true end
+  if notify == nil then
+    notify = true
+  end
   self:releaseFocus("encoder", "upReleased", "cancelReleased")
   self:disableHighlight()
-  if notify then self:onUnfocused() end
+  if notify then
+    self:onUnfocused()
+  end
 end
 
 function ViewControl:dialPressed(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.encoderState = Encoder.Neutral
   Encoder.set(self.encoderState)
   return true
@@ -174,19 +186,25 @@ end
 
 function ViewControl:onPinned()
   if self.pinCount == 0 then
-    if self.pinMark == nil then self:createPinMark() end
+    if self.pinMark == nil then
+      self:createPinMark()
+    end
     self.pinMark:show()
   end
   self.pinCount = self.pinCount + 1
 end
 
 function ViewControl:onUnpinned()
-  if self.pinCount == 1 then self.pinMark:hide() end
+  if self.pinCount == 1 then
+    self.pinMark:hide()
+  end
   self.pinCount = self.pinCount - 1
 end
 
 function ViewControl:spotReleased(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if self.focused then
     self:unfocus()
   else
@@ -204,7 +222,9 @@ function ViewControl:getFloatingMenuItems()
       t[1] = "expand"
     end
   end
-  if self.canEdit then t[#t + 1] = "edit" end
+  if self.canEdit then
+    t[#t + 1] = "edit"
+  end
   if self.getPinControl then
     local chain = self:getRootChain()
     if chain and chain.isRoot then
@@ -213,7 +233,9 @@ function ViewControl:getFloatingMenuItems()
       if #pinSetNames > 1 and #pinSetNames > pinCount then
         t[#t + 1] = "pin to all"
       end
-      if pinCount > 1 then t[#t + 1] = "unpin from all" end
+      if pinCount > 1 then
+        t[#t + 1] = "unpin from all"
+      end
       for _, name in ipairs(pinSetNames) do
         if pinned[name] then
           t[#t + 1] = "unpin from " .. name
@@ -237,10 +259,14 @@ function ViewControl:onFloatingMenuSelection(choice)
     return true
   elseif choice == "pin to all" then
     local chain = self:getRootChain()
-    if chain and chain.isRoot then chain:pinControlToAllPinSets(self) end
+    if chain and chain.isRoot then
+      chain:pinControlToAllPinSets(self)
+    end
   elseif choice == "unpin from all" then
     local chain = self:getRootChain()
-    if chain and chain.isRoot then chain:unpinControlFromAllPinSets(self) end
+    if chain and chain.isRoot then
+      chain:unpinControlFromAllPinSets(self)
+    end
   elseif choice == "pin to <new>" then
     local chain = self:getRootChain()
     if chain and chain.isRoot then
@@ -292,7 +318,9 @@ function ViewControl:enterReleased()
 end
 
 function ViewControl:upReleased(shifted)
-  if not shifted then self:unfocus() end
+  if not shifted then
+    self:unfocus()
+  end
   return true
 end
 

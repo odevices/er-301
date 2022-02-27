@@ -79,7 +79,9 @@ end
 function Interface:doUninstallPackage()
   local id = self:getSelection()
   local package = Manager.getPackage(id)
-  if package and Manager.uninstall(package) then self:refresh() end
+  if package and Manager.uninstall(package) then
+    self:refresh()
+  end
 end
 
 function Interface:doDeletePackage()
@@ -103,7 +105,9 @@ end
 function Interface:doConfigurePackage()
   local id = self:getSelection()
   local package = Manager.getPackage(id)
-  if package then package:libraryCall("showMenu") end
+  if package then
+    package:libraryCall("showMenu")
+  end
 end
 
 function Interface:refresh()
@@ -168,11 +172,15 @@ function Interface:onSelectionChanged()
 end
 
 function Interface:cardMounted()
-  if self.visible then self:refresh() end
+  if self.visible then
+    self:refresh()
+  end
 end
 
 function Interface:cardEjected()
-  if self.visible then self:refresh() end
+  if self.visible then
+    self:refresh()
+  end
 end
 
 function Interface:onShow()

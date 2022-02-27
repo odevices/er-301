@@ -64,7 +64,9 @@ function ClockedStretch:onLoadGraph(channelCount)
   self:addMonoBranch("slice", slice, "In", slice, "Out")
   self:addMonoBranch("shift", shift, "In", shift, "Out")
 
-  if channelCount > 1 then connect(head, "Right Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(head, "Right Out", self, "Out2")
+  end
 
   self:setStretchMode("slice")
 end
@@ -125,7 +127,9 @@ function ClockedStretch:setSample(sample)
     self.sample = nil
   end
   self.sample = sample
-  if self.sample then self.sample:claim(self) end
+  if self.sample then
+    self.sample:claim(self)
+  end
 
   if sample == nil or sample:getChannelCount() == 0 then
     self.objects.head:setSample(nil, nil)
@@ -133,7 +137,9 @@ function ClockedStretch:setSample(sample)
     self.objects.head:setSample(sample.pSample, sample.slices.pSlices)
   end
 
-  if self.slicingView then self.slicingView:setSample(sample) end
+  if self.slicingView then
+    self.slicingView:setSample(sample)
+  end
   self:notifyControls("setSample", sample)
 end
 

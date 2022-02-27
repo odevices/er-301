@@ -101,7 +101,9 @@ function FileRecorder:updateHints()
 end
 
 function FileRecorder:startRecording()
-  if self.state ~= "setup" then return false end
+  if self.state ~= "setup" then
+    return false
+  end
   local noSources = true
   for i, config in ipairs(self.configs) do
     if config.stereo then
@@ -147,8 +149,8 @@ function FileRecorder:startRecording()
           self.thread:add(sink)
           Card.claim("Recording to", self.paths[i])
         else
-          app.logError("%s.startRecording: Failed to open track %d: %s.", self, i,
-                  self.paths[i])
+          app.logError("%s.startRecording: Failed to open track %d: %s.", self,
+                       i, self.paths[i])
         end
       end
     end
@@ -210,7 +212,9 @@ local function suggestSaveFolder(root)
   for i = 1, 999 do
     folder = string.format("save%03d", i)
     path = Path.join(root, folder)
-    if not app.pathExists(path) then break end
+    if not app.pathExists(path) then
+      break
+    end
   end
   return folder
 end
@@ -231,7 +235,9 @@ function FileRecorder:hasSavedTracks(base, path)
   for i, sink in pairs(self.sinks) do
     local filename = string.format("%s-T%d.wav", base, i)
     local destPath = Path.join(path, filename)
-    if app.pathExists(destPath) then return true end
+    if app.pathExists(destPath) then
+      return true
+    end
   end
   return false
 end
@@ -243,7 +249,9 @@ function FileRecorder:getMaxTake(base, path)
       local a, b = string.find(x, "-take[0-9][0-9]*-T")
       if a and b then
         local tmp = tonumber(string.sub(x, a + 5, b - 2))
-        if tmp and tmp > maxTake then maxTake = tmp end
+        if tmp and tmp > maxTake then
+          maxTake = tmp
+        end
       end
     end
   end
@@ -253,7 +261,9 @@ end
 function FileRecorder:saveSingleTrackTo(i, path)
   app.moveFile(self.paths[i], path, true)
   Overlay.flashMainMessage("Saved to %s", path)
-  for i, path in ipairs(self.paths) do Card.release(path) end
+  for i, path in ipairs(self.paths) do
+    Card.release(path)
+  end
   self.sinks = {}
   self.state = "setup"
   self.subGraphic:clear()
@@ -278,7 +288,9 @@ function FileRecorder:saveMultipleTracksTo(base, path)
       app.moveFile(self.paths[i], destPath, false)
     end
   end
-  for i, path in ipairs(self.paths) do Card.release(path) end
+  for i, path in ipairs(self.paths) do
+    Card.release(path)
+  end
   self.sinks = {}
   self.state = "setup"
   self.subGraphic:clear()
@@ -294,12 +306,22 @@ function FileRecorder:stopRecording(wait)
       Busy.start("Flushing pending buffers to card...")
       self.state = "waiting"
       Timer.script(function(wait)
-        while self.thread:getPendingBufferCount() > 0 do wait(1) end
+        while self.thread:getPendingBufferCount() > 0 do
+          wait(1)
+        end
       end)
-      for i, sink in pairs(self.sinks) do if sink then sink:stop() end end
+      for i, sink in pairs(self.sinks) do
+        if sink then
+          sink:stop()
+        end
+      end
       Busy.stop()
     else
-      for i, sink in pairs(self.sinks) do if sink then sink:abort() end end
+      for i, sink in pairs(self.sinks) do
+        if sink then
+          sink:abort()
+        end
+      end
     end
     self.thread:wait()
     self.thread:clear()
@@ -377,7 +399,9 @@ function FileRecorder:saveMultiTrackRecording()
 end
 
 function FileRecorder:discardRecording()
-  for _, path in ipairs(self.paths) do Card.release(path) end
+  for _, path in ipairs(self.paths) do
+    Card.release(path)
+  end
   self.sinks = {}
   self.state = "setup"
   self.subGraphic:clear()
@@ -399,7 +423,9 @@ function FileRecorder:setInputSource(trackIndex, channelIndex, source)
     end
   end
   local track = self.tracks[trackIndex]
-  if track then track:setInputSource(channelIndex, source) end
+  if track then
+    track:setInputSource(channelIndex, source)
+  end
 end
 
 function FileRecorder:buildTracks()
@@ -451,12 +477,16 @@ end
 function FileRecorder:findSpotByAction(track, viewName, action)
   local view = track.views[viewName]
   for _, spot in pairs(view.spots) do
-    if spot:getValue("action") == action then return spot:getHandle() end
+    if spot:getValue("action") == action then
+      return spot:getHandle()
+    end
   end
 end
 
 function FileRecorder:enterReleased()
-  if self.state ~= "setup" then return true end
+  if self.state ~= "setup" then
+    return true
+  end
   local track, viewName, spotHandle = self:getSelection()
   local scroll = self:getScrollPosition()
   local view = track.views[viewName]
@@ -523,7 +553,9 @@ end
 
 function FileRecorder:onCursorMove(section, view, spot, section0, view0, spot0)
   SpottedStrip.onCursorMove(self, section, view, spot, section0, view0, spot0)
-  if self.state == "setup" then self:updateHints() end
+  if self.state == "setup" then
+    self:updateHints()
+  end
 end
 
 function FileRecorder:zeroPressed()
@@ -532,7 +564,9 @@ function FileRecorder:zeroPressed()
 end
 
 function FileRecorder:homeReleased()
-  if self.state ~= "setup" then return true end
+  if self.state ~= "setup" then
+    return true
+  end
   local track, viewName, spotHandle = self:getSelection()
   local view = track.views[viewName]
   if view then
@@ -626,8 +660,8 @@ function FileRecorder:setInputWithSourceData(trackIndex, channelIndex, data)
       local Utils = require "Utils"
       Utils.pp(data)
     else
-      app.logInfo("%s:setInputWithSourceData(%s,%s,%s):NOT found", self, trackIndex,
-              channelIndex, data)
+      app.logInfo("%s:setInputWithSourceData(%s,%s,%s):NOT found", self,
+                  trackIndex, channelIndex, data)
     end
   end
 
@@ -638,7 +672,9 @@ end
 function FileRecorder:deserialize(t)
   local Application = require "Application"
   -- only allow deserialization if in setup state
-  if self.state ~= "setup" then return end
+  if self.state ~= "setup" then
+    return
+  end
   self.configs = {}
   for i, cdata in ipairs(t) do
     if cdata.stereo then

@@ -54,8 +54,12 @@ function Chain:init(args)
 end
 
 function Chain:connectOutputs(leftDestination, rightDestination)
-  if leftDestination then self.leftDestination = leftDestination end
-  if rightDestination then self.rightDestination = rightDestination end
+  if leftDestination then
+    self.leftDestination = leftDestination
+  end
+  if rightDestination then
+    self.rightDestination = rightDestination
+  end
   self.pChain:lock()
   self.pChain:connectOutput(0, self.leftDestination)
   self.pChain:connectOutput(1, self.rightDestination)
@@ -70,8 +74,12 @@ end
 
 function Chain:setTitle(title, subTitle)
   ChainBase.setTitle(self, title, subTitle)
-  if self.leftOutputSource then self.leftOutputSource:onRename() end
-  if self.rightOutputSource then self.rightOutputSource:onRename() end
+  if self.leftOutputSource then
+    self.leftOutputSource:onRename()
+  end
+  if self.rightOutputSource then
+    self.rightOutputSource:onRename()
+  end
 end
 
 function Chain:connectOutput(i, inlet)
@@ -80,7 +88,9 @@ end
 
 function Chain:navigateToXPath(xpath)
   local n = xpath:getNodeCount()
-  if n == 0 then return end
+  if n == 0 then
+    return
+  end
   local chain = self
   local unit
   local type = "unit"
@@ -144,14 +154,18 @@ end
 
 function Chain:clear()
   local wasMuted = self:isMuted()
-  if not wasMuted then self:mute() end
+  if not wasMuted then
+    self:mute()
+  end
   local Utils = require "Utils"
   Busy.start("Clearing: %s", Utils.shorten(self.title, 42))
   self:removeAllUnits()
   self:clearInputSources()
   Busy.stop()
   -- don't touch destinations
-  if not wasMuted then self:unmute() end
+  if not wasMuted then
+    self:unmute()
+  end
 end
 
 function Chain:getOutputSource(i)
@@ -172,16 +186,24 @@ end
 
 -- used by InputControl
 function Chain:setInputSource(i, src)
-  if i ~= 1 and i ~= 2 then return end
+  if i ~= 1 and i ~= 2 then
+    return
+  end
   if src then
     local prev = self:getInputSource(i)
-    if prev then prev:unsubscribe(self) end
+    if prev then
+      prev:unsubscribe(self)
+    end
     if i == 1 or self.channelCount == 1 then
-      if self.leftInputSource then self.leftInputSource:release() end
+      if self.leftInputSource then
+        self.leftInputSource:release()
+      end
       self.leftInputSource = src
       src:claim()
     else
-      if self.rightInputSource then self.rightInputSource:release() end
+      if self.rightInputSource then
+        self.rightInputSource:release()
+      end
       self.rightInputSource = src
       src:claim()
     end
@@ -197,7 +219,9 @@ end
 
 -- used by InputControl
 function Chain:clearInputSource(i)
-  if i ~= 1 and i ~= 2 then return end
+  if i ~= 1 and i ~= 2 then
+    return
+  end
   local src = self:getInputSource(i)
   if src then
     self.pChain:lock()
@@ -220,7 +244,9 @@ function Chain:clearInputSource(i)
 end
 
 function Chain:clearInputSources()
-  for i = 1, self.channelCount do self:clearInputSource(i) end
+  for i = 1, self.channelCount do
+    self:clearInputSource(i)
+  end
 end
 
 function Chain:onRenameSource(src)
@@ -237,11 +263,21 @@ end
 
 local function summarizeSources(x1, x2)
   local ch1, ch2
-  if x1 then ch1 = x1:getDisplayName() end
-  if x2 then ch2 = x2:getDisplayName() end
-  if ch2 == nil then return ch1 end
-  if ch1 == nil then return ch2 end
-  if ch1 == ch2 then return ch1 end
+  if x1 then
+    ch1 = x1:getDisplayName()
+  end
+  if x2 then
+    ch2 = x2:getDisplayName()
+  end
+  if ch2 == nil then
+    return ch1
+  end
+  if ch1 == nil then
+    return ch2
+  end
+  if ch1 == ch2 then
+    return ch1
+  end
   local prefix1 = ch1:match("[^%d]+")
   local prefix2 = ch2:match("[^%d]+")
   local num1 = ch1:match("[%d]+")
@@ -280,9 +316,13 @@ end
 
 function Chain:updateDepth(depth)
   local wasStarted = self.started
-  if wasStarted then self:stop() end
+  if wasStarted then
+    self:stop()
+  end
   self.depth = depth
-  if wasStarted then self:start() end
+  if wasStarted then
+    self:start()
+  end
 end
 
 function Chain:start()
@@ -297,7 +337,9 @@ function Chain:start()
 end
 
 function Chain:onStart()
-  for _, unit in pairs(self.units) do unit:start() end
+  for _, unit in pairs(self.units) do
+    unit:start()
+  end
   app.AudioThread.addTask(self.pChain, self.depth)
 end
 
@@ -314,7 +356,9 @@ end
 
 function Chain:onStop()
   app.AudioThread.removeTask(self.pChain)
-  for _, unit in pairs(self.units) do unit:stop() end
+  for _, unit in pairs(self.units) do
+    unit:stop()
+  end
 end
 
 function Chain:serialize()
@@ -343,10 +387,14 @@ end
 
 function Chain:deserialize(t)
   local wasMuted = self:isMuted()
-  if not wasMuted then self:mute() end
+  if not wasMuted then
+    self:mute()
+  end
   self:startDeserialization()
   self:setLastPreset(t.lastPresetPath, t.lastPresetFilename)
-  if t.instanceKey then self:setInstanceKey(t.instanceKey) end
+  if t.instanceKey then
+    self:setInstanceKey(t.instanceKey)
+  end
   self:deserializeUnits(t.units)
   -- clear existing input channels
   self:clearInputSources()
@@ -368,7 +416,9 @@ function Chain:deserialize(t)
   end
   self:deserializeSelection(t.selection)
   self:finishDeserialization()
-  if not wasMuted then self:unmute() end
+  if not wasMuted then
+    self:unmute()
+  end
 end
 
 function Chain:setInputWithSourceData(i, data)
@@ -396,8 +446,12 @@ function Chain:releaseResources()
   self:unsubscribe("contentChanged", self.footerSection)
 
   self:clearInputSources()
-  if self.leftOutputSource then self.leftOutputSource:onDelete() end
-  if self.rightOutputSource then self.rightOutputSource:onDelete() end
+  if self.leftOutputSource then
+    self.leftOutputSource:onDelete()
+  end
+  if self.rightOutputSource then
+    self.rightOutputSource:onDelete()
+  end
 
   self:removeAllUnits()
   self.pChain:lock()

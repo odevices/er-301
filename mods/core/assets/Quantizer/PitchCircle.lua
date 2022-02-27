@@ -68,7 +68,9 @@ function PitchCircle:setQuantizer(q)
 end
 
 function PitchCircle:loadScalaFile(filename)
-  if self.quantizer and filename then self.quantizer:loadScalaFile(filename) end
+  if self.quantizer and filename then
+    self.quantizer:loadScalaFile(filename)
+  end
 end
 
 function PitchCircle:serialize()
@@ -97,7 +99,9 @@ function PitchCircle:loadBuiltinScale(name)
     if scale then
       local quantizer = self.quantizer
       quantizer:beginScale()
-      for i, pitch in ipairs(scale) do quantizer:addPitch(pitch) end
+      for i, pitch in ipairs(scale) do
+        quantizer:addPitch(pitch)
+      end
       quantizer:endScale()
     end
   end

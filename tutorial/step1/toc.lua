@@ -9,8 +9,8 @@ return {
       title = "FM Operator",
       category = "Learning",
       -- Which lua module contains the unit definition?
-      moduleName = "FMOperator",
-    },
+      moduleName = "FMOperator"
+    }
   }
 }
 

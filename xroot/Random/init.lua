@@ -4,10 +4,10 @@ local FS = require "Card.FileSystem"
 
 local rootPath = Path.join(FS.getRoot("front"), "namegen")
 
-local defaultNounFile = app.roots.x.."/Random/Nouns.txt"
+local defaultNounFile = app.roots.x .. "/Random/Nouns.txt"
 local userNounFile = rootPath .. "/nouns.txt"
 
-local defaultAdjectiveFile = app.roots.x.."/Random/Adjectives.txt"
+local defaultAdjectiveFile = app.roots.x .. "/Random/Adjectives.txt"
 local userAdjectiveFile = rootPath .. "/adjectives.txt"
 
 local userSuppressFile = rootPath .. "/suppress.txt"
@@ -47,7 +47,9 @@ local function load()
     adjectiveFile = defaultAdjectiveFile
   end
 
-  if loadHelper(nounFile, nouns) == 0 then loadHelper(defaultNounFile, nouns) end
+  if loadHelper(nounFile, nouns) == 0 then
+    loadHelper(defaultNounFile, nouns)
+  end
 
   if loadHelper(adjectiveFile, adjectives) == 0 then
     loadHelper(defaultAdjectiveFile, adjectives)
@@ -79,13 +81,17 @@ end
 
 local function generateName(mode)
   if mode == "poet" then
-    if not loaded then load() end
+    if not loaded then
+      load()
+    end
     local retries = 10
     local name = generateUnsafeName()
     while suppressed[name:lower()] do
       name = generateUnsafeName()
       retries = retries - 1
-      if retries == 0 then return generateRobotName() end
+      if retries == 0 then
+        return generateRobotName()
+      end
     end
     return name
   else
@@ -104,7 +110,9 @@ local function init()
   local Signal = require "Signal"
   local Card = require "Card"
   Signal.register("cardMounted", onCardMounted)
-  if Card.mounted() then onCardMounted() end
+  if Card.mounted() then
+    onCardMounted()
+  end
 end
 
 return {

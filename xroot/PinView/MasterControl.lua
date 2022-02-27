@@ -96,7 +96,9 @@ function MasterControl:dialPressed()
 end
 
 function MasterControl:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     self:callUp("doRename")
   elseif i == 2 then

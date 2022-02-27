@@ -14,9 +14,11 @@ BranchMeter:include(Base)
 function BranchMeter:init(args)
   Base.init(self)
   self:setClassName("Unit.ViewControl.BranchMeter")
-  local button = args.button or app.logError("%s.init: button is missing.", self)
+  local button = args.button or
+                     app.logError("%s.init: button is missing.", self)
   self:setInstanceName(button)
-  local branch = args.branch or app.logError("%s.init: branch is missing.", self)
+  local branch = args.branch or
+                     app.logError("%s.init: branch is missing.", self)
   local faderParam = args.faderParam or
                          app.logError("%s.init: faderParam is missing.", self)
   -- optional arguments
@@ -77,9 +79,15 @@ function BranchMeter:onRemove()
 end
 
 function BranchMeter:setDefaults(args)
-  if args.map == nil then args.map = Encoder.getMap("volume") end
-  if args.units == nil then args.units = app.unitDecibels end
-  if args.scaling == nil then args.scaling = app.linearScaling end
+  if args.map == nil then
+    args.map = Encoder.getMap("volume")
+  end
+  if args.units == nil then
+    args.units = app.unitDecibels
+  end
+  if args.scaling == nil then
+    args.scaling = app.linearScaling
+  end
   self.defaults = args
 end
 
@@ -209,7 +217,9 @@ function BranchMeter:selectReleased(i, shifted)
     local Channels = require "Channels"
     local side = Channels.getSide(i)
     local outlet = branch:getMonitoringOutput(side)
-    if outlet then self.scope:watchOutlet(outlet) end
+    if outlet then
+      self.scope:watchOutlet(outlet)
+    end
   end
   return true
 end
@@ -220,7 +230,9 @@ function BranchMeter:zeroPressed()
 end
 
 function BranchMeter:cancelReleased(shifted)
-  if not shifted then self.fader:restore() end
+  if not shifted then
+    self.fader:restore()
+  end
   return true
 end
 

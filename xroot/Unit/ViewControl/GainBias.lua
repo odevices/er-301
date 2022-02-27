@@ -85,8 +85,10 @@ GainBias:include(Base)
 
 function GainBias:init(args)
   -- required arguments
-  local button = args.button or app.logError("%s.init: button is missing.", self)
-  local branch = args.branch or app.logError("%s.init: branch is missing.", self)
+  local button = args.button or
+                     app.logError("%s.init: button is missing.", self)
+  local branch = args.branch or
+                     app.logError("%s.init: branch is missing.", self)
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
   local gainbias = args.gainbias or
@@ -118,9 +120,13 @@ function GainBias:init(args)
   end
   biasParam:enableSerialization()
 
-  if initialBias then biasParam:hardSet(initialBias) end
+  if initialBias then
+    biasParam:hardSet(initialBias)
+  end
 
-  if initialGain then gainParam:hardSet(initialGain) end
+  if initialGain then
+    gainParam:hardSet(initialGain)
+  end
 
   local graphic
   local readoutParam
@@ -200,7 +206,9 @@ function GainBias:init(args)
 
   branch:subscribe("contentChanged", self)
 
-  if swig_type(biasMap) == swigTypeLinearDialMap then self.canEdit = true end
+  if swig_type(biasMap) == swigTypeLinearDialMap then
+    self.canEdit = true
+  end
 end
 
 function GainBias:onRemove()
@@ -224,9 +232,15 @@ function GainBias:getPinControl()
 end
 
 function GainBias:setDefaults(args)
-  if args.biasMap == nil then args.biasMap = Encoder.getMap("bias") end
-  if args.gainMap == nil then args.gainMap = Encoder.getMap("gain") end
-  if args.biasUnits == nil then args.biasUnits = app.unitNone end
+  if args.biasMap == nil then
+    args.biasMap = Encoder.getMap("bias")
+  end
+  if args.gainMap == nil then
+    args.gainMap = Encoder.getMap("gain")
+  end
+  if args.biasUnits == nil then
+    args.biasUnits = app.unitNone
+  end
   if args.biasPrecision == nil then
     if args.biasMap:getRounding() > 0.9 or args.biasUnits == app.unitDecibels then
       args.biasPrecision = 1
@@ -234,7 +248,9 @@ function GainBias:setDefaults(args)
       args.biasPrecision = 3
     end
   end
-  if args.scaling == nil then args.scaling = app.linearScaling end
+  if args.scaling == nil then
+    args.scaling = app.linearScaling
+  end
   self.defaults = args
 end
 
@@ -255,10 +271,18 @@ function GainBias:customize(args)
     t[k] = v
   end
 
-  if args.name then self:rename(args.name) end
-  if args.description then self.description:setText(args.description) end
-  if args.biasUnits then self:setBiasUnits(args.biasUnits) end
-  if args.biasPrecision then self:setBiasPrecision(args.biasPrecision) end
+  if args.name then
+    self:rename(args.name)
+  end
+  if args.description then
+    self.description:setText(args.description)
+  end
+  if args.biasUnits then
+    self:setBiasUnits(args.biasUnits)
+  end
+  if args.biasPrecision then
+    self:setBiasPrecision(args.biasPrecision)
+  end
 
   if refreshBiasMap then
     local map = self.privateBiasMap
@@ -270,8 +294,12 @@ function GainBias:customize(args)
     local coarse = t.biasCoarseStep or map:coarseStep()
     local fine = t.biasFineStep or map:fineStep()
     local superFine = t.biasSuperFineStep or map:superFineStep()
-    if t.biasMin then map:setMin(t.biasMin) end
-    if t.biasMax then map:setMax(t.biasMax) end
+    if t.biasMin then
+      map:setMin(t.biasMin)
+    end
+    if t.biasMax then
+      map:setMax(t.biasMax)
+    end
     map:setSteps(superCoarse, coarse, fine, superFine)
     self:setBiasMap(map)
   end
@@ -286,8 +314,12 @@ function GainBias:customize(args)
     local coarse = t.gainCoarseStep or map:coarseStep()
     local fine = t.gainFineStep or map:fineStep()
     local superFine = t.gainSuperFineStep or map:superFineStep()
-    if t.gainMin then map:setMin(t.gainMin) end
-    if t.gainMax then map:setMax(t.gainMax) end
+    if t.gainMin then
+      map:setMin(t.gainMin)
+    end
+    if t.gainMax then
+      map:setMax(t.gainMax)
+    end
     map:setSteps(superCoarse, coarse, fine, superFine)
     self:setGainMap(map)
   end
@@ -544,7 +576,9 @@ function GainBias:deserialize(t)
     self.gainEncoderState = Encoder.deserialize(t.gainEncoderState)
   end
   self:removeCustomizations()
-  if t.customizations then self:customize(t.customizations) end
+  if t.customizations then
+    self:customize(t.customizations)
+  end
 end
 
 function GainBias:rename(name)
@@ -600,7 +634,9 @@ function GainBias:getGainMap()
 end
 
 function GainBias:setFocusedReadout(readout)
-  if readout then readout:save() end
+  if readout then
+    readout:save()
+  end
   self.focusedReadout = readout
   self:setSubCursorController(readout)
   if readout == self.gain then
@@ -656,7 +692,9 @@ function GainBias:zeroPressed()
 end
 
 function GainBias:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.focusedReadout:restore()
   return true
 end

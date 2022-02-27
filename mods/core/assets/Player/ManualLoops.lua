@@ -62,13 +62,17 @@ function ManualLoops:onLoadGraph(channelCount)
   self:addMonoBranch("start", lstart, "In", lstart, "Out")
   self:addMonoBranch("length", length, "In", length, "Out")
 
-  if channelCount > 1 then connect(head, "Right Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(head, "Right Out", self, "Out2")
+  end
 end
 
 function ManualLoops:serialize()
   local t = Unit.serialize(self)
   local sample = self.sample
-  if sample then t.sample = SamplePool.serializeSample(sample) end
+  if sample then
+    t.sample = SamplePool.serializeSample(sample)
+  end
   return t
 end
 
@@ -93,7 +97,9 @@ function ManualLoops:setSample(sample)
   end
 
   self.sample = sample
-  if self.sample then self.sample:claim(self) end
+  if self.sample then
+    self.sample:claim(self)
+  end
 
   if sample then
     self.objects.head:setSample(sample.pSample)
@@ -101,7 +107,9 @@ function ManualLoops:setSample(sample)
     self.objects.head:setSample(nil)
   end
 
-  if self.sampleEditor then self.sampleEditor:setSample(sample) end
+  if self.sampleEditor then
+    self.sampleEditor:setSample(sample)
+  end
 
   self:notifyControls("setSample", sample)
 end

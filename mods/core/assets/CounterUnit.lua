@@ -44,7 +44,9 @@ function CounterUnit:onLoadGraph(channelCount)
   self:addMonoBranch("finish", finish, "In", finish, "Out")
   self:addMonoBranch("gain", gain, "In", gain, "Out")
 
-  if channelCount > 1 then connect(counter, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(counter, "Out", self, "Out2")
+  end
 
   reset:simulateRisingEdge()
   reset:simulateFallingEdge()

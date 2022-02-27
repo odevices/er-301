@@ -151,7 +151,9 @@ function Creator:doStaging(sofar, morePaths)
     self:askForSources(paths)
   end
   local staging = FileStaging(sofar)
-  if morePaths then staging:addPaths(morePaths) end
+  if morePaths then
+    staging:addPaths(morePaths)
+  end
   staging:subscribe("done", doneTask)
   staging:subscribe("more", moreTask)
   staging:show()

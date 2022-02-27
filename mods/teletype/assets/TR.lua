@@ -19,7 +19,9 @@ end
 function TR:onLoadGraph(channelCount)
   local trig = self:addObject("trig", libteletype.TR(teletype.dispatcher))
   connect(trig, "Out", self, "Out1")
-  if channelCount > 1 then connect(trig, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(trig, "Out", self, "Out2")
+  end
 
   local port = self:addObject("port", app.ParameterAdapter())
   tie(trig, "Port", port, "Out")

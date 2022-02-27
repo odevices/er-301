@@ -1,10 +1,10 @@
 local app = app
 app.logInfo("Entering start.lua...")
 
-app.logInfo("X Root:"..app.roots.x)
-app.logInfo("Front Root:"..app.roots.front)
-app.logInfo("Rear Root:"..app.roots.rear)
-app.logInfo("Package Path: "..package.path)
+app.logInfo("X Root:" .. app.roots.x)
+app.logInfo("Front Root:" .. app.roots.front)
+app.logInfo("Rear Root:" .. app.roots.rear)
+app.logInfo("Package Path: " .. package.path)
 
 local function onError(msg)
   local trace = debug.traceback(nil, 2)
@@ -44,10 +44,10 @@ local function onError(msg)
 end
 
 local function start()
-  dofile(app.roots.x.."/boot/globals-setup.lua")
-  dofile(app.roots.x.."/boot/app-setup.lua")
-  --local Debug = require "Debug"
-  --Debug.traceRequires()
+  dofile(app.roots.x .. "/boot/globals-setup.lua")
+  dofile(app.roots.x .. "/boot/app-setup.lua")
+  -- local Debug = require "Debug"
+  -- Debug.traceRequires()
   app.logInfo("Entering Application")
   local Application = require "Application"
   Application.init()

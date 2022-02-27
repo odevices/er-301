@@ -34,7 +34,9 @@ function FileStaging:init(paths)
   -- self:setMainCommand(1, "sort", self.doSort)
 
   self.pathHash = {}
-  if paths then self:addPaths(paths) end
+  if paths then
+    self:addPaths(paths)
+  end
 end
 
 function FileStaging:doSort()
@@ -129,7 +131,9 @@ function FileStaging:optimize()
 
   local longestPath = app.LongestPath()
   local pathColumn = self:getColumnByName("path")
-  for i = 1, pathColumn:size() do longestPath:add(pathColumn:getData(i - 1)) end
+  for i = 1, pathColumn:size() do
+    longestPath:add(pathColumn:getData(i - 1))
+  end
   local longest = longestPath:calculate()
   if longest:len() > 2 then
     for i = 1, pathColumn:size() do

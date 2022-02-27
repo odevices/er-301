@@ -71,7 +71,9 @@ function Context:init(name, window)
   self.stack = {}
   self.mainGraphicContext = app.GraphicContext()
   self.subGraphicContext = app.GraphicContext()
-  if window == nil then app.logError("%s.init: window cannot be nil.", self) end
+  if window == nil then
+    app.logError("%s.init: window cannot be nil.", self)
+  end
   self:add(window)
 end
 
@@ -108,7 +110,7 @@ function Context:add(window)
   end
   if window.context then
     app.logError("%s.add(%s): window is already in %s.", self, window,
-             window.context)
+                 window.context)
   end
   local stack = self.stack
   local prev = stack[#stack]
@@ -128,13 +130,15 @@ function Context:remove(window)
   local stack = self.stack
   if #stack < 2 then
     app.logInfo("%s.remove(%s): ignoring attempt to remove last window.", self,
-           window)
+                window)
     return
   end
   local prev = stack[#stack]
   for i = 1, #stack do
     if stack[i] == window then
-      if self.visible and i == #stack then hideWindow(window) end
+      if self.visible and i == #stack then
+        hideWindow(window)
+      end
       table.remove(stack, i)
       window:broadcastDown("onClose")
       window.context = nil
@@ -145,7 +149,9 @@ function Context:remove(window)
   if prev ~= cur then
     -- top of the stack changed
     topChanged(self, prev, cur, "down")
-    if self.visible then showWindow(cur) end
+    if self.visible then
+      showWindow(cur)
+    end
   end
 end
 
@@ -155,11 +161,11 @@ function Context:replace(oldWindow, newWindow)
   end
   if oldWindow.context ~= self then
     app.logError("%s.replace(%s,%s): old window is not in this context.", self,
-             oldWindow, newWindow)
+                 oldWindow, newWindow)
   end
   if newWindow.context then
     app.logError("%s.replace(%s,%s): new window is already in a context.", self,
-             oldWindow, newWindow)
+                 oldWindow, newWindow)
   end
 
   local i = self:getStackIndex(oldWindow)
@@ -220,7 +226,9 @@ end
 function Context:notify(e, ...)
   -- pass the event through any local handlers first
   local handler = self[e]
-  if handler and handler(self, ...) then return end
+  if handler and handler(self, ...) then
+    return
+  end
   -- otherwise pass onto the focused widget
   local focus = self:top():getFocusedWidget(e)
   focus:sendUp(e, ...)
@@ -230,7 +238,9 @@ function Context:dump()
   app.logInfo("%s: stack dump", self)
   for i, o in ipairs(self.stack) do
     app.logInfo("  %d: %s", i, o)
-    for e, w in pairs(o.focus) do app.logInfo("  + %s --> %s", e, w) end
+    for e, w in pairs(o.focus) do
+      app.logInfo("  + %s --> %s", e, w)
+    end
   end
 end
 
@@ -240,7 +250,11 @@ end
 
 function Context:getStackIndex(window)
   local stack = self.stack
-  for i = 1, #stack do if window == stack[i] then return i end end
+  for i = 1, #stack do
+    if window == stack[i] then
+      return i
+    end
+  end
 end
 
 function Context:destroy()

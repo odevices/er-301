@@ -26,7 +26,9 @@ function QuantizeToClock:onLoadGraph(channelCount)
   connect(clockEdge, "Out", quantizer, "Clock")
   connect(quantizer, "Out", self, "Out1")
 
-  if channelCount > 1 then connect(quantizer, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(quantizer, "Out", self, "Out2")
+  end
 
   self:addMonoBranch("clock", clockEdge, "In", clockEdge, "Out")
 end

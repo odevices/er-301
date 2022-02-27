@@ -32,7 +32,9 @@ function EuclidsCatsUnit:onLoadGraph(channelCount)
   self:addMonoBranch("clock", clockComparator, "In", clockComparator, "Out")
   self:addMonoBranch("reset", resetComparator, "In", resetComparator, "Out")
 
-  if channelCount > 1 then connect(euclid, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(euclid, "Out", self, "Out2")
+  end
 end
 
 local views = {

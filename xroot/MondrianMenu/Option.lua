@@ -70,13 +70,17 @@ function Option:init(args)
 end
 
 function Option:onReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i > self.descWidth then
     local choiceIndex = i - self.descWidth - self.offset
     if choiceIndex <= #self.choices then
       local choice = self.choices[choiceIndex]
       local value = self:getValueFromChoice(choice)
-      if self.allowNone and self.value == value then value = self.noneValue end
+      if self.allowNone and self.value == value then
+        value = self.noneValue
+      end
       self:setValue(value)
     end
   end
@@ -87,7 +91,9 @@ end
 function Option:getChoiceFromValue(value)
   if self.values then
     for i, v in ipairs(self.values) do
-      if v == value then return self.choices[i] end
+      if v == value then
+        return self.choices[i]
+      end
     end
   else
     return value
@@ -95,10 +101,14 @@ function Option:getChoiceFromValue(value)
 end
 
 function Option:getValueFromChoice(choice)
-  if choice == nil then return self.noneValue end
+  if choice == nil then
+    return self.noneValue
+  end
   if self.values then
     for i, c in ipairs(self.choices) do
-      if c == choice then return self.values[i] end
+      if c == choice then
+        return self.values[i]
+      end
     end
   else
     return choice

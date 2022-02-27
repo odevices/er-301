@@ -16,7 +16,8 @@ function Fader:init(args)
   Base.init(self)
   self:setClassName("Unit.ViewControl.Fader")
   -- required arguments
-  local button = args.button or app.logError("%s.init: button is missing.", self)
+  local button = args.button or
+                     app.logError("%s.init: button is missing.", self)
   self:setInstanceName(button)
   local description = args.description or
                           app.logError("%s.init: description is missing.", self)
@@ -32,7 +33,9 @@ function Fader:init(args)
 
   param:enableSerialization()
 
-  if args.initial then param:hardSet(args.initial) end
+  if args.initial then
+    param:hardSet(args.initial)
+  end
 
   self.description = description
   graphic = app.Fader(0, 0, ply, 64)
@@ -49,14 +52,24 @@ function Fader:init(args)
 
   self.subGraphic = app.Graphic(0, 0, 128, 64)
 
-  if monitor then self:setScopeTarget(monitor) end
+  if monitor then
+    self:setScopeTarget(monitor)
+  end
 end
 
 function Fader:setDefaults(args)
-  if args.map == nil then args.map = Encoder.getMap("default") end
-  if args.units == nil then args.units = app.unitNone end
-  if args.scaling == nil then args.scaling = app.linearScaling end
-  if args.precision == nil then args.precision = 3 end
+  if args.map == nil then
+    args.map = Encoder.getMap("default")
+  end
+  if args.units == nil then
+    args.units = app.unitNone
+  end
+  if args.scaling == nil then
+    args.scaling = app.linearScaling
+  end
+  if args.precision == nil then
+    args.precision = 3
+  end
   self.defaults = args
 end
 
@@ -105,7 +118,9 @@ function Fader:setScopeTarget(monitor)
 end
 
 function Fader:onInsert()
-  if not self.hasMonitor then self:setScopeTarget(self.parent) end
+  if not self.hasMonitor then
+    self:setScopeTarget(self.parent)
+  end
 end
 
 function Fader:getScope()

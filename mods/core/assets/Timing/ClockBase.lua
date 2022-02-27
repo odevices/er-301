@@ -32,7 +32,9 @@ function ClockBase:loadBaseGraph(channelCount, clock)
   self:addMonoBranch("multiplier", multiplier, "In", multiplier, "Out")
   self:addMonoBranch("divider", divider, "In", divider, "Out")
 
-  if channelCount > 1 then connect(self.objects.clock, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(self.objects.clock, "Out", self, "Out2")
+  end
 end
 
 function ClockBase:loadBaseView(objects, branches)
@@ -126,7 +128,9 @@ function ClockBase:deserialize(t)
   Unit.deserialize(self, t)
   local Serialization = require "Persist.Serialization"
   local rational = Serialization.get("objects/clock/options/Rational", t)
-  if rational and rational == 0 then self:setAny() end
+  if rational and rational == 0 then
+    self:setAny()
+  end
 end
 
 return ClockBase

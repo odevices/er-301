@@ -2,7 +2,7 @@ local Class = require "Base.Class"
 local Widget = require "Base.Widget"
 local Busy = require "Busy"
 
-local OnsetWidget = Class{}
+local OnsetWidget = Class {}
 OnsetWidget:include(Widget)
 
 function OnsetWidget:init(parent)
@@ -12,7 +12,8 @@ function OnsetWidget:init(parent)
 end
 
 function OnsetWidget:show()
-  self:grabFocus("encoder","cancelReleased","enterReleased","mainReleased","mainPressed")
+  self:grabFocus("encoder", "cancelReleased", "enterReleased", "mainReleased",
+                 "mainPressed")
   Busy.start("Calculating candidate onsets...")
   self.parent.mainDisplay:showOnsetGadget()
   Busy.stop()
@@ -20,16 +21,17 @@ function OnsetWidget:show()
 end
 
 function OnsetWidget:hide()
-  self:releaseFocus("encoder","cancelReleased","enterReleased","mainReleased","mainPressed")
+  self:releaseFocus("encoder", "cancelReleased", "enterReleased",
+                    "mainReleased", "mainPressed")
   self.parent.mainDisplay:hideGadget()
   self.parent:showMainButtons()
 end
 
 function OnsetWidget:encoder(change, shifted)
   if self.parent.zooming then
-    self.parent:encoderZoom(change,shifted)
+    self.parent:encoderZoom(change, shifted)
   else
-    self.parent.mainDisplay:encoderOnsetThreshold(change,shifted,0.1)
+    self.parent.mainDisplay:encoderOnsetThreshold(change, shifted, 0.1)
   end
   return true
 end
@@ -45,11 +47,11 @@ function OnsetWidget:enterReleased()
   return true
 end
 
-function OnsetWidget:mainPressed(i,shifted)
+function OnsetWidget:mainPressed(i, shifted)
   return true
 end
 
-function OnsetWidget:mainReleased(i,shifted)
+function OnsetWidget:mainReleased(i, shifted)
   return true
 end
 

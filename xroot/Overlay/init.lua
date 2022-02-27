@@ -14,5 +14,5 @@ return {
   startFloatingMenu = FloatingMenu.open,
   selectFloatingMenu = FloatingMenu.select,
   endFloatingMenu = FloatingMenu.close,
-  clearAll = clearAll,
+  clearAll = clearAll
 }

@@ -35,7 +35,9 @@ end
 
 local function getLoadInfo(libraryKey, unitKey)
   local library = LoadedLibraryHash[libraryKey]
-  if library then return library:find(unitKey) end
+  if library then
+    return library:find(unitKey)
+  end
 end
 
 local function saveErrorReport(msg, trace, logFile)
@@ -60,7 +62,9 @@ local function saveErrorReport(msg, trace, logFile)
       local count = LogHistory:count()
       if count > 0 then
         f:write("Recent Log Messages:\n")
-        for i = 1, count do f:write(LogHistory:get(i), "\n") end
+        for i = 1, count do
+          f:write(LogHistory:get(i), "\n")
+        end
       end
       f:write("---ERROR REPORT END\n")
       f:close()
@@ -171,18 +175,26 @@ end
 
 local function loadLibraryFromTable(t)
   local library = Library()
-  if library:loadFromTable(t) then load(library) end
+  if library:loadFromTable(t) then
+    load(library)
+  end
 end
 
 local function loadLibraries()
-  for _, t in ipairs(LoadedLibraryList) do if t.onUnload then t.onUnload() end end
+  for _, t in ipairs(LoadedLibraryList) do
+    if t.onUnload then
+      t.onUnload()
+    end
+  end
   LoadedLibraryList = {}
   LoadedLibraryHash = {}
   CategoryList = {}
   CategoryHash = {}
   for _, t in ipairs(RegisteredLibraryList) do
     loadLibraryFromTable(t)
-    if t.onLoad then t.onLoad() end
+    if t.onLoad then
+      t.onLoad()
+    end
   end
 end
 
@@ -212,7 +224,9 @@ local function getCategories()
 end
 
 local function getBuiltin(name)
-  if name == nil then return nil end
+  if name == nil then
+    return nil
+  end
   name = name:gsub("/", ".")
   local loadInfo = getLoadInfo("builtins", name)
   if loadInfo then
@@ -224,12 +238,16 @@ end
 
 local function serializeLoadInfo(loadInfo)
   local t = Utils.shallowCopy(loadInfo)
-  if loadInfo.args then t.args = Utils.shallowCopy(loadInfo.args) end
+  if loadInfo.args then
+    t.args = Utils.shallowCopy(loadInfo.args)
+  end
   return t
 end
 
 local function deserializeLoadInfo(t, legacy)
-  if t then return t end
+  if t then
+    return t
+  end
   -- legacy support
   return getBuiltin(legacy.loadName)
 end
@@ -248,24 +266,36 @@ local function unregisterLibrary(name, refresh)
   if RegisteredLibraryHash[name] then
     for i, t in ipairs(RegisteredLibraryList) do
       if t.name == name then
-        if t.onUnregister then t.onUnregister() end
+        if t.onUnregister then
+          t.onUnregister()
+        end
         table.remove(RegisteredLibraryList, i)
         break
       end
     end
     RegisteredLibraryHash[name] = nil
   end
-  if refresh then loadLibraries() end
+  if refresh then
+    loadLibraries()
+  end
 end
 
 local function registerLibrary(t, refresh)
-  if t.name == nil then return false end
-  if RegisteredLibraryHash[t.name] then unregisterLibrary(t.name) end
+  if t.name == nil then
+    return false
+  end
+  if RegisteredLibraryHash[t.name] then
+    unregisterLibrary(t.name)
+  end
   clearLibraryModulesFromCache(t.name)
   RegisteredLibraryList[#RegisteredLibraryList + 1] = t
   RegisteredLibraryHash[t.name] = t
-  if t.onRegister then t.onRegister() end
-  if refresh then loadLibraries() end
+  if t.onRegister then
+    t.onRegister()
+  end
+  if refresh then
+    loadLibraries()
+  end
   return true
 end
 
@@ -299,7 +329,9 @@ end
 
 local function reloadLibraries()
   -- Unregister external libraries...
-  for _, t in ipairs(ExternalLibraryList) do unregisterLibrary(t.name) end
+  for _, t in ipairs(ExternalLibraryList) do
+    unregisterLibrary(t.name)
+  end
   local libRoot = FS.getRoot("libs")
   -- Register external libraries...
   if Path.exists(libRoot) then
@@ -307,7 +339,7 @@ local function reloadLibraries()
     for folderName in dir(libRoot) do
       if not IgnoredFolderNames[folderName] then
         if registerExternalLibrary(folderName, true) then
-          --app.logInfo("Unit library found: %s", folderName)
+          -- app.logInfo("Unit library found: %s", folderName)
         else
           app.logError("Unit library failed to register: %s", folderName)
         end

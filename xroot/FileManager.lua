@@ -1,2 +1,2 @@
 local FileChooser = require "Card.FileChooser"
-return FileChooser{}
+return FileChooser {}

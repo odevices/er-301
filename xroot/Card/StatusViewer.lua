@@ -154,12 +154,16 @@ function StatusViewer:encoder(change, shifted)
 end
 
 function StatusViewer:cancelReleased(shifted)
-  if not shifted then self:hide() end
+  if not shifted then
+    self:hide()
+  end
   return true
 end
 
 function StatusViewer:upReleased(shifted)
-  if not shifted then self:hide() end
+  if not shifted then
+    self:hide()
+  end
   return true
 end
 

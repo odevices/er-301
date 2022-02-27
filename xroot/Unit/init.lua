@@ -42,7 +42,9 @@ function Unit:init(args)
 
   local Source = require "Source.Internal"
   self.leftOutputSource = Source("local", self, 1)
-  if channelCount > 1 then self.rightOutputSource = Source("local", self, 2) end
+  if channelCount > 1 then
+    self.rightOutputSource = Source("local", self, 2)
+  end
 
   self.aliases = args.aliases or {}
   self.pUnit = args.pUnit or app.Unit(title, channelCount)
@@ -62,7 +64,9 @@ function Unit:init(args)
     collapsed = {}
   }
   -- register each control
-  for id, control in pairs(controls) do self:addControl(id, control) end
+  for id, control in pairs(controls) do
+    self:addControl(id, control)
+  end
 
   -- add scope contextual views (if any)
   local cviewDescriptors = {}
@@ -99,8 +103,12 @@ function Unit:init(args)
 
   -- Mark default set of controls and branches as builtin.
   -- This distinguishes them from the ControlBranches added later.
-  for _, control in pairs(self.controls) do control.isBuiltin = true end
-  for _, branch in pairs(self.branches) do branch.isBuiltin = true end
+  for _, control in pairs(self.controls) do
+    control.isBuiltin = true
+  end
+  for _, branch in pairs(self.branches) do
+    branch.isBuiltin = true
+  end
 
   self:saveView("expanded")
 end
@@ -112,16 +120,22 @@ end
 function Unit:findUnitByTitle(title)
   for _, branch in pairs(self.branches) do
     local unit = branch:findUnitByTitle(title)
-    if unit then return unit end
+    if unit then
+      return unit
+    end
   end
 end
 
 function Unit:findByInstanceKey(key)
-  if self:getInstanceKey() == key then return self end
+  if self:getInstanceKey() == key then
+    return self
+  end
 
   for _, branch in pairs(self.branches) do
     local o = branch:findByInstanceKey(key)
-    if o then return o end
+    if o then
+      return o
+    end
   end
 end
 
@@ -140,9 +154,15 @@ end
 function Unit:setTitle(title)
   self.title = title
   self:broadcastDown("unitTitleChanged", title)
-  for name, branch in pairs(self.branches) do branch:setTitle(title) end
-  if self.leftOutputSource then self.leftOutputSource:onRename() end
-  if self.rightOutputSource then self.rightOutputSource:onRename() end
+  for name, branch in pairs(self.branches) do
+    branch:setTitle(title)
+  end
+  if self.leftOutputSource then
+    self.leftOutputSource:onRename()
+  end
+  if self.rightOutputSource then
+    self.rightOutputSource:onRename()
+  end
 end
 
 -- syntax sugar for Unit definition
@@ -219,7 +239,9 @@ end
 
 function Unit:removeBranch(name)
   local branch = self.branches[name]
-  if branch then self.branches[name] = nil end
+  if branch then
+    self.branches[name] = nil
+  end
 end
 
 function Unit:getBranch(name)
@@ -227,7 +249,9 @@ function Unit:getBranch(name)
 end
 
 function Unit:enable(soft)
-  if not soft then self.disabled = false end
+  if not soft then
+    self.disabled = false
+  end
   if not self.disabled then
     self.pUnit:enable()
     self:notifyBranches("enable", true)
@@ -235,7 +259,9 @@ function Unit:enable(soft)
 end
 
 function Unit:disable(soft)
-  if not soft then self.disabled = true end
+  if not soft then
+    self.disabled = true
+  end
   self.pUnit:disable()
   self:notifyBranches("disable", true)
 end
@@ -263,7 +289,9 @@ end
 function Unit:enableBypass()
   self.pUnit:setBypass(true)
   self.chain:rebuildGraph()
-  if Settings.get("unitDisableOnBypass") == "yes" then self:disable() end
+  if Settings.get("unitDisableOnBypass") == "yes" then
+    self:disable()
+  end
   self.controls.header:bypassEnabled()
 end
 
@@ -286,12 +314,16 @@ function Unit:toggleBypass()
 end
 
 function Unit:getInwardConnection(ch)
-  if self.pUnit == nil then app.logError("Unit.getInwardConnection: pUnit is nil.") end
+  if self.pUnit == nil then
+    app.logError("Unit.getInwardConnection: pUnit is nil.")
+  end
   return self.pUnit:getInwardConnection(ch - 1)
 end
 
 function Unit:getOutput(ch)
-  if self.pUnit == nil then app.logError("Unit.getOutput: pUnit is nil.") end
+  if self.pUnit == nil then
+    app.logError("Unit.getOutput: pUnit is nil.")
+  end
   if self.channelCount == 1 or ch == nil or ch == 1 then
     return self.pUnit:getOutput(0)
   elseif ch == 2 then
@@ -325,13 +357,17 @@ function Unit:serialize()
   for cname, control in pairs(self.controls) do
     if control.isBuiltin and control.serialize then
       local tmp = control:serialize()
-      if next(tmp) ~= nil then controls[cname] = tmp end
+      if next(tmp) ~= nil then
+        controls[cname] = tmp
+      end
     end
   end
   t.controls = controls
 
   -- Make sure the menu generation code was run at least once.
-  if not self.menuLoadedAtLeastOnce then self:showMenu(true) end
+  if not self.menuLoadedAtLeastOnce then
+    self:showMenu(true)
+  end
 
   -- walk each object
   t.objects = Persist.serializeObjects(self.objects)
@@ -367,7 +403,9 @@ function Unit:deserialize(t)
   end
 
   self:setLastPreset(t.lastPresetPath, t.lastPresetFilename)
-  if t.instanceKey then self:setInstanceKey(t.instanceKey) end
+  if t.instanceKey then
+    self:setInstanceKey(t.instanceKey)
+  end
 
   if t.objects then
     Persist.deserializeObjects(self.objects, self.aliases, t.objects)
@@ -392,7 +430,9 @@ function Unit:deserialize(t)
     local branches = self.branches
     for bname, bdata in pairs(t.branches) do
       local branch = branches[bname]
-      if branch then branch:deserialize(bdata) end
+      if branch then
+        branch:deserialize(bdata)
+      end
     end
   else
     app.logInfo("%s:deserialize: no 'branches' table.", self)
@@ -409,15 +449,21 @@ function Unit:deserialize(t)
   end
 
   -- restore control order in each view
-  if t.controlOrder then self:applyControlOrder("expanded", t.controlOrder) end
+  if t.controlOrder then
+    self:applyControlOrder("expanded", t.controlOrder)
+  end
 
   -- tell all controls to update
   self:notifyControls("update")
 
-  if t.bypass then self:enableBypass() end
+  if t.bypass then
+    self:enableBypass()
+  end
 
   -- activate the saved view
-  if t.activeView then self:switchView(t.activeView) end
+  if t.activeView then
+    self:switchView(t.activeView)
+  end
 end
 
 function Unit:doRename()
@@ -471,7 +517,9 @@ local defaultMenuItems = {
   "editControls"
 }
 local isDefaultMenuItem = {}
-for i, cname in ipairs(defaultMenuItems) do isDefaultMenuItem[cname] = true end
+for i, cname in ipairs(defaultMenuItems) do
+  isDefaultMenuItem[cname] = true
+end
 
 function Unit:addDefaultMenuItems(order, controls)
   -- create default controls if needed
@@ -521,14 +569,18 @@ function Unit:addDefaultMenuItems(order, controls)
   Utils.removeValuesFromArray(order, isDefaultMenuItem)
 
   -- append the default items to the end
-  for _, cname in ipairs(defaultMenuItems) do order[#order + 1] = cname end
+  for _, cname in ipairs(defaultMenuItems) do
+    order[#order + 1] = cname
+  end
 end
 
 function Unit:showMenu(justLoad)
   local controls, order, sub = self:onShowMenu(self.objects, self.branches)
   self.menuLoadedAtLeastOnce = true
 
-  if justLoad then return end
+  if justLoad then
+    return
+  end
 
   order = order or {}
   controls = controls or {}
@@ -542,7 +594,9 @@ function Unit:showMenu(justLoad)
       menu:startNewRow()
     else
       local control = controls[cname]
-      if control then menu:addControl(control, control.isHeader) end
+      if control then
+        menu:addControl(control, control.isHeader)
+      end
     end
   end
 
@@ -575,7 +629,9 @@ end
 -----------------------------------------------
 
 function Unit:onGenerateTitle()
-  if self.suppressTitleGeneration then return end
+  if self.suppressTitleGeneration then
+    return
+  end
 
   local i = 1
   local title = self.title or "Unknown"
@@ -591,8 +647,12 @@ function Unit:onGenerateTitle()
 end
 
 function Unit:onRemove()
-  if self.leftOutputSource then self.leftOutputSource:onDelete() end
-  if self.rightOutputSource then self.rightOutputSource:onDelete() end
+  if self.leftOutputSource then
+    self.leftOutputSource:onDelete()
+  end
+  if self.rightOutputSource then
+    self.rightOutputSource:onDelete()
+  end
 
   self.pUnit:disable()
   -- self.pUnit:disconnectAllObjects()

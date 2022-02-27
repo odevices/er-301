@@ -24,7 +24,9 @@ function UnitSection:parseViewDescriptor(viewName, descriptor)
   vc[2] = controls.header
   for _, controlName in ipairs(descriptor) do
     local control = controls[controlName]
-    if control then vc[#vc + 1] = control end
+    if control then
+      vc[#vc + 1] = control
+    end
   end
   if #vc > 2 then
     -- add a divider after the header
@@ -38,11 +40,15 @@ function UnitSection:leftJustify()
 end
 
 function UnitSection:collapse()
-  if self.currentViewName ~= "collapsed" then self:switchView("collapsed") end
+  if self.currentViewName ~= "collapsed" then
+    self:switchView("collapsed")
+  end
 end
 
 function UnitSection:expand()
-  if self.currentViewName ~= "expanded" then self:switchView("expanded") end
+  if self.currentViewName ~= "expanded" then
+    self:switchView("expanded")
+  end
 end
 
 function UnitSection:isCollapsed()
@@ -127,7 +133,9 @@ function UnitSection:getControlOrder(viewName)
 end
 
 function UnitSection:applyControlOrder(viewName, order)
-  for i, id in ipairs(order) do self:moveControl(id, viewName, i) end
+  for i, id in ipairs(order) do
+    self:moveControl(id, viewName, i)
+  end
 end
 
 function UnitSection:saveView(name)
@@ -158,11 +166,15 @@ function UnitSection:moveControl(id, viewName, newPosition, currentPosition)
     if currentPosition == nil then
       -- must find it
       for i, c in ipairs(controls) do
-        if c == control then currentPosition = i - 2 end
+        if c == control then
+          currentPosition = i - 2
+        end
       end
     end
     -- +2 to skip the insert and header controls
-    if currentPosition then table.remove(controls, currentPosition + 2) end
+    if currentPosition then
+      table.remove(controls, currentPosition + 2)
+    end
     if newPosition + 2 > #controls then
       controls[#controls + 1] = control
     else
@@ -196,7 +208,9 @@ function UnitSection:removeControl(id)
   if control then
     controls[id] = nil
     -- remove the contextual view
-    if self.currentViewName == id then self:switchView("expanded") end
+    if self.currentViewName == id then
+      self:switchView("expanded")
+    end
     self:removeView(id)
     -- remove from all views
     local rebuildNeeded = false
@@ -204,7 +218,9 @@ function UnitSection:removeControl(id)
       for i, control2 in ipairs(view.controls) do
         if control2 == control then
           table.remove(view.controls, i)
-          if viewName == self.currentViewName then rebuildNeeded = true end
+          if viewName == self.currentViewName then
+            rebuildNeeded = true
+          end
           break
         end
       end
@@ -222,7 +238,9 @@ function UnitSection:notifyControls(method, ...)
   -- notify all the controls
   for _, control in pairs(self.controls) do
     local f = control[method]
-    if f ~= nil then f(control, ...) end
+    if f ~= nil then
+      f(control, ...)
+    end
   end
 end
 
@@ -243,7 +261,9 @@ function UnitSection:getControlPositionInView(viewName, control)
     -- app.logInfo("%s:getControlPositionInView(%s,%s)",self,viewName,control)
     for i, control2 in ipairs(view.controls) do
       -- app.logInfo("%s:getControlPositionInView: %s-->%s",self,i,control2)
-      if control == control2 then return i end
+      if control == control2 then
+        return i
+      end
     end
   end
 end
@@ -267,15 +287,21 @@ function UnitSection:generateUniqueControlName(prefix)
 end
 
 function UnitSection:validateControlName(candidate)
-  if candidate == "" then return false, "Blank names are not allowed." end
+  if candidate == "" then
+    return false, "Blank names are not allowed."
+  end
   for id, control in pairs(self.controls) do
-    if candidate == id then return false, candidate .. " already exists." end
+    if candidate == id then
+      return false, candidate .. " already exists."
+    end
   end
   return true
 end
 
 function UnitSection:addControlBranch(type, id, data)
-  if self.controlBranches[id] then self:removeControlBranch(id) end
+  if self.controlBranches[id] then
+    self:removeControlBranch(id)
+  end
 
   local BranchClass = require("Unit.ControlBranch." .. type)
   local controlBranch = BranchClass {
@@ -285,11 +311,15 @@ function UnitSection:addControlBranch(type, id, data)
   }
   self.controlBranches[id] = controlBranch
 
-  if data then controlBranch:deserialize(data) end
+  if data then
+    controlBranch:deserialize(data)
+  end
 
   self:addControl(id, controlBranch.control)
   self:addBranch(id, controlBranch)
-  if self.started then controlBranch:start() end
+  if self.started then
+    controlBranch:start()
+  end
 
   return controlBranch
 end
@@ -315,7 +345,9 @@ function UnitSection:removeControlBranch(id)
 end
 
 function UnitSection:removeAllControlBranches()
-  for id, branch in pairs(self.controlBranches) do self:removeControlBranch(id) end
+  for id, branch in pairs(self.controlBranches) do
+    self:removeControlBranch(id)
+  end
 end
 
 function UnitSection:homeReleased()

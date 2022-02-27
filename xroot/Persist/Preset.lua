@@ -35,11 +35,17 @@ end
 function Preset:getVersionString()
   local defaultVersion = "0.0.00"
 
-  if self.data == nil then return defaultVersion end
+  if self.data == nil then
+    return defaultVersion
+  end
   local V = self.data.firmwareVersion or self.data.version
-  if V == nil then return defaultVersion end
+  if V == nil then
+    return defaultVersion
+  end
 
-  if type(V) == "string" then return V end
+  if type(V) == "string" then
+    return V
+  end
 
   if type(V) == "table" then
     if V.SimpleString then

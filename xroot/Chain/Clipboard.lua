@@ -1,16 +1,16 @@
 local slots = {}
 
-local function copy(chain,slot,isCut)
+local function copy(chain, slot, isCut)
   local data, index0, index1 = chain:serializeMarkedUnits()
   data.isCut = isCut
   slots[slot] = data
   return index0, index1
 end
 
-local function paste(chain,position,slot)
+local function paste(chain, position, slot)
   local data = slots[slot]
   if data then
-    if position==nil then
+    if position == nil then
       -- load before the currently selected unit
       position = chain:getSelectedSectionPosition() - 1
       if position < 1 then
@@ -25,7 +25,7 @@ local function paste(chain,position,slot)
     else
       Persist.regenerateInstanceKeys(data)
     end
-    chain:deserializeUnits(data,position)
+    chain:deserializeUnits(data, position)
   end
 end
 
@@ -38,7 +38,7 @@ local function clear(slot)
 end
 
 local function hasData(slot)
-  return slots[slot]~=nil
+  return slots[slot] ~= nil
 end
 
 local function serialize()
@@ -51,12 +51,12 @@ end
 
 local function describe(slot)
   local data = slots[slot]
-  if data==nil then
+  if data == nil then
     return "nothing"
-  elseif #data==1 then
+  elseif #data == 1 then
     return "1 unit"
   else
-    return string.format("%d units",#data)
+    return string.format("%d units", #data)
   end
 end
 

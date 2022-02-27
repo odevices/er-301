@@ -18,7 +18,9 @@ local function saveCrashReport(msg, trace)
       f:write("Recent Log Messages:\n")
       local LogHistory = require "LogHistory"
       local count = LogHistory:count()
-      for i = 1, count do f:write(LogHistory:get(i), "\n") end
+      for i = 1, count do
+        f:write(LogHistory:get(i), "\n")
+      end
       f:write("---CRASH REPORT END\n")
       f:close()
       print("Crash report appended to 'crash.log'.")

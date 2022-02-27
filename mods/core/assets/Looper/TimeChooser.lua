@@ -37,7 +37,9 @@ function TimeChooser:init(channelCount)
     app.SubButton("zero", 3)
   }
 
-  for _, button in ipairs(self.subButtons) do self.subGraphic:addChild(button) end
+  for _, button in ipairs(self.subButtons) do
+    self.subGraphic:addChild(button)
+  end
 
   self.durationControl = app.DurationControl()
   self.durationControl:setCenter(app.BUTTON2_CENTER, line2)
@@ -80,8 +82,8 @@ function TimeChooser:init(channelCount)
   self.rateBox:setTextSize(10)
   self.rateBox:setCenter(app.BUTTON6_CENTER, line2)
   -- only support one sample rate at the moment
-  self.rateBox:addItem(
-      string.format("%dkHz", app.globalConfig.sampleRate // 1000))
+  self.rateBox:addItem(string.format("%dkHz",
+                                     app.globalConfig.sampleRate // 1000))
   self.rateBox:hideScrollbar()
   self.mainGraphic:addChild(self.rateBox)
 
@@ -207,7 +209,9 @@ function TimeChooser:encoder(change, shifted)
 end
 
 function TimeChooser:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   self:emitSignal("done")
   return true
@@ -227,7 +231,9 @@ function TimeChooser:enterReleased()
 end
 
 function TimeChooser:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   self:emitSignal("done")
   return true

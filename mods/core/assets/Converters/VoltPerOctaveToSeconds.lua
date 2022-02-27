@@ -28,7 +28,9 @@ function VoltPerOctaveToSeconds:onLoadGraph(channelCount)
   connect(negate, "Out", exp, "In")
   connect(exp, "Out", gain, "In")
   connect(gain, "Out", self, "Out1")
-  if channelCount > 1 then connect(gain, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(gain, "Out", self, "Out2")
+  end
   self:addMonoBranch("p0", p0, "In", p0, "Out")
 end
 

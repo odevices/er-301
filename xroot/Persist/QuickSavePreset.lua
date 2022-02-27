@@ -19,7 +19,9 @@ function QuickSavePreset:populateChainPresets()
   local legacy = data and data.chains
   local cdata = (data and data.channels and data.channels.chains) or legacy
   if cdata then
-    for i, chain in ipairs(cdata) do self.chains[i] = ChainPreset(chain) end
+    for i, chain in ipairs(cdata) do
+      self.chains[i] = ChainPreset(chain)
+    end
   end
 end
 
@@ -87,7 +89,7 @@ function QuickSavePreset:apply()
   Channels.mute()
   Channels.stop()
   Channels.clear()
-  
+
   local Pool = require "Sample.Pool"
   Pool.clear()
 
@@ -162,7 +164,9 @@ local function summarizeHelper(used, prefix, n)
   local exists = false
   for i = 1, n do
     keys[i] = prefix .. i
-    if used[keys[i]] then exists = true end
+    if used[keys[i]] then
+      exists = true
+    end
   end
   if exists then
     local x = prefix
@@ -187,10 +191,16 @@ end
 
 function QuickSavePreset:getUsedInputs(summarize)
   local used = {}
-  for _, chain in ipairs(self.chains) do chain:getUsedInputs(used) end
-  if summarize then summarizeUsedInputs(used) end
+  for _, chain in ipairs(self.chains) do
+    chain:getUsedInputs(used)
+  end
+  if summarize then
+    summarizeUsedInputs(used)
+  end
   local result = {}
-  for ch, _ in pairs(used) do result[#result + 1] = ch end
+  for ch, _ in pairs(used) do
+    result[#result + 1] = ch
+  end
   table.sort(result)
   return result
 end
@@ -230,7 +240,9 @@ function QuickSavePreset:getChannelCount(chain)
 end
 
 function QuickSavePreset:getLinks()
-  if self.data.channels == nil then return end
+  if self.data.channels == nil then
+    return
+  end
   local links = self.data.channels.links
   if links == nil then
     -- legacy
@@ -239,7 +251,9 @@ function QuickSavePreset:getLinks()
       false,
       false
     }
-    for _, i in ipairs(self.data.channels) do tmp[i] = true end
+    for _, i in ipairs(self.data.channels) do
+      tmp[i] = true
+    end
     links = {
       link12 = tmp[1],
       link23 = tmp[2],

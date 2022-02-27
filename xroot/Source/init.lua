@@ -65,7 +65,9 @@ local function findLegacySource(data, optionalChain)
     if chain:getClassName() == "Patch" then
       local unit = chain.unit
       for name, branch in pairs(unit.branches) do
-        if name == data then return branch:getOutputSource() end
+        if name == data then
+          return branch:getOutputSource()
+        end
       end
     end
   end
@@ -89,7 +91,9 @@ local function findLegacySource(data, optionalChain)
     channel = 2
   end
 
-  if chain then return chain:getOutputSource(channel) end
+  if chain then
+    return chain:getOutputSource(channel)
+  end
 end
 
 -- A Class function that returns a Source object (if found)
@@ -97,7 +101,8 @@ function Source.deserialize(data, optionalChain)
   local source
 
   if type(data) == "string" then
-    source = app.getExternalSource(data) or findLegacySource(data, optionalChain)
+    source = app.getExternalSource(data) or
+                 findLegacySource(data, optionalChain)
   elseif type(data) == "table" then
     if data.type == "global" then
       local GlobalChains = require "GlobalChains"
@@ -106,7 +111,9 @@ function Source.deserialize(data, optionalChain)
       if chain == nil and data.originalInstanceKey then
         chain = GlobalChains.findByInstanceKey(data.originalInstanceKey)
       end
-      if chain then source = chain:getOutputSource(data.channel or 1) end
+      if chain then
+        source = chain:getOutputSource(data.channel or 1)
+      end
     elseif data.type == "local" and optionalChain then
       local root = optionalChain:getRootChain()
       if root then
@@ -114,7 +121,9 @@ function Source.deserialize(data, optionalChain)
         if object == nil and data.originalInstanceKey then
           object = root:findByInstanceKey(data.originalInstanceKey)
         end
-        if object then source = object:getOutputSource(data.channel or 1) end
+        if object then
+          source = object:getOutputSource(data.channel or 1)
+        end
       end
     end
   end

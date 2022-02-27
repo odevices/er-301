@@ -113,7 +113,9 @@ function DelayUnit:setMaxDelayTime(secs)
   if allocated > 0 then
     local map = timeMap(allocated, 100)
     self.controls.delayL:setBiasMap(map)
-    if self.channelCount > 1 then self.controls.delayR:setBiasMap(map) end
+    if self.channelCount > 1 then
+      self.controls.delayR:setBiasMap(map)
+    end
   end
 end
 
@@ -241,22 +243,24 @@ function DelayUnit:deserializeLegacyPreset(t)
   -- v0.3.09: Changed Feedback from Constant to GainBias
   local fdbk = Serialization.get("objects/feedback/params/Value", t)
   if fdbk then
-    app.logInfo("%s:deserialize:legacy preset detected:setting feedback bias to %s",
-            self, fdbk)
+    app.logInfo(
+        "%s:deserialize:legacy preset detected:setting feedback bias to %s",
+        self, fdbk)
     self.objects.feedback:deserialize("Bias", fdbk)
   end
   -- v0.3.09: Changed Wet/Dry from Constant to GainBias
   local wet = Serialization.get("objects/fader/params/Value", t)
   if wet then
     app.logInfo("%s:deserialize:legacy preset detected:setting wet bias to %s",
-            self, wet)
+                self, wet)
     self.objects.fader:deserialize("Bias", wet)
   end
   -- v0.3.09: Changed Delay from parameter to ParameterAdapter
   local delay = Serialization.get("objects/delay/params/Delay", t)
   if delay then
-    app.logInfo("%s:deserialize:legacy preset detected:setting delay bias to %s",
-            self, delay)
+    app.logInfo(
+        "%s:deserialize:legacy preset detected:setting delay bias to %s", self,
+        delay)
     self.objects.secsL:deserialize("Bias", delay)
     if self.channelCount > 1 then
       self.objects.secsR:deserialize("Bias", delay)
@@ -264,15 +268,17 @@ function DelayUnit:deserializeLegacyPreset(t)
   end
   local delayL = Serialization.get("objects/delayL/params/Delay", t)
   if delayL then
-    app.logInfo("%s:deserialize:legacy preset detected:setting delayL bias to %s",
-            self, delayL)
+    app.logInfo(
+        "%s:deserialize:legacy preset detected:setting delayL bias to %s", self,
+        delayL)
     self.objects.secsL:deserialize("Bias", delayL)
   end
   if self.channelCount > 1 then
     local delayR = Serialization.get("objects/delayR/params/Delay", t)
     if delayR then
-      app.logInfo("%s:deserialize:legacy preset detected:setting delayR bias to %s",
-              self, delayR)
+      app.logInfo(
+          "%s:deserialize:legacy preset detected:setting delayR bias to %s",
+          self, delayR)
       self.objects.secsR:deserialize("Bias", delayR)
     end
   end
@@ -286,9 +292,13 @@ end
 
 function DelayUnit:deserialize(t)
   local time = t.maximumDelayTime
-  if time and time > 0 then self:setMaxDelayTime(time) end
+  if time and time > 0 then
+    self:setMaxDelayTime(time)
+  end
   Unit.deserialize(self, t)
-  if self:getPresetVersion(t) < 1 then self:deserializeLegacyPreset(t) end
+  if self:getPresetVersion(t) < 1 then
+    self:deserializeLegacyPreset(t)
+  end
 end
 
 function DelayUnit:onRemove()

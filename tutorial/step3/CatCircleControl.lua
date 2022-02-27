@@ -9,7 +9,6 @@ local ply = app.SECTION_PLY
 -- A unit view is simply a list of ViewControls.
 -- A view always starts with a Header (a type of ViewControl) which is followed by whatever ViewControls instantiated in the unit's onLoadViews method.
 
-
 -- This class implements a ViewControl that displays a CatCircle Graphic and nothing else.
 local CatCircleControl = Class {}
 CatCircleControl:include(ViewControl)

@@ -26,11 +26,17 @@ end
 function LogViewer:nextError(stopAt)
   local Utils = require "Utils"
   stopAt = stopAt or self.console:getSelectedIndex()
-  if not self.console:scrollDown() then self.console:scrollToTop() end
+  if not self.console:scrollDown() then
+    self.console:scrollToTop()
+  end
   repeat
     local text = self.console:getSelected()
-    if Utils.startsWith(text, "ERROR") then return end
-    if not self.console:scrollDown() then self.console:scrollToTop() end
+    if Utils.startsWith(text, "ERROR") then
+      return
+    end
+    if not self.console:scrollDown() then
+      self.console:scrollToTop()
+    end
   until self.console:getSelectedIndex() == stopAt
   local Overlay = require "Overlay"
   Overlay.flashMainMessage("No error found.")
@@ -44,7 +50,9 @@ function LogViewer:doSave()
       local f = io.open(result.fullpath, "w")
       if f then
         local n = self:count()
-        for i = 1, n do f:write(self:get(i), "\n") end
+        for i = 1, n do
+          f:write(self:get(i), "\n")
+        end
         f:close()
         local Overlay = require "Overlay"
         Overlay.flashMainMessage("Log file saved.")
@@ -82,8 +90,12 @@ end
 
 function LogViewer:add(text)
   self.console:addItem(text)
-  if self.console:size() > self.maxHistory then self.console:removeTopItem() end
-  if self.active then self.console:scrollToBottom() end
+  if self.console:size() > self.maxHistory then
+    self.console:removeTopItem()
+  end
+  if self.active then
+    self.console:scrollToBottom()
+  end
 end
 
 return LogViewer

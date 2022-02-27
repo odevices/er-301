@@ -124,7 +124,7 @@ function AliasingTriangle:deserialize(t)
     local f0 = Serialization.get("objects/osc/params/Fundamental", t)
     if f0 then
       app.logInfo("%s:deserialize:legacy preset detected:setting f0 bias to %s",
-              self, f0)
+                  self, f0)
       self.objects.f0:deserialize("Bias", f0)
     end
   end

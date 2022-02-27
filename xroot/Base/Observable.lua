@@ -31,16 +31,22 @@ function Observable:unsubscribe(s, f)
 end
 
 function Observable:unsubscribeAll(s)
-  if self.signals[s] then self.signals[s] = setmetatable({}, __strong__) end
+  if self.signals[s] then
+    self.signals[s] = setmetatable({}, __strong__)
+  end
 end
 
 function Observable:emitSignal(s, ...)
   local listeners = self.signals[s]
-  if listeners == nil then return end
+  if listeners == nil then
+    return
+  end
   -- Move invocations outside of the loop
   -- in case a handler manipulates the signal table.
   local tmp = {}
-  for x, _ in pairs(listeners) do tmp[#tmp + 1] = x end
+  for x, _ in pairs(listeners) do
+    tmp[#tmp + 1] = x
+  end
   for _, x in ipairs(tmp) do
     if type(x) == "table" then
       x[s](x, ...)

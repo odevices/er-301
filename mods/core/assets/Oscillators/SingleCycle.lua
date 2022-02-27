@@ -85,7 +85,9 @@ function SingleCycle:setSample(sample)
     self.sample = nil
   end
   self.sample = sample
-  if self.sample then self.sample:claim(self) end
+  if self.sample then
+    self.sample:claim(self)
+  end
 
   if sample == nil or sample:getChannelCount() == 0 then
     self.objects.osc:setSample(nil, nil)
@@ -93,7 +95,9 @@ function SingleCycle:setSample(sample)
     self.objects.osc:setSample(sample.pSample, sample.slices.pSlices)
   end
 
-  if self.slicingView then self.slicingView:setSample(sample) end
+  if self.slicingView then
+    self.slicingView:setSample(sample)
+  end
   self:notifyControls("setSample", sample)
 end
 
@@ -301,7 +305,9 @@ end
 function SingleCycle:serialize()
   local t = Unit.serialize(self)
   local sample = self.sample
-  if sample then t.sample = SamplePool.serializeSample(sample) end
+  if sample then
+    t.sample = SamplePool.serializeSample(sample)
+  end
   return t
 end
 

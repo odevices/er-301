@@ -53,13 +53,17 @@ function MasterGate:count()
 end
 
 function MasterGate:spotPressed(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.triggerGroup:onPressed()
   return true
 end
 
 function MasterGate:spotReleased(spot, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self.triggerGroup:onReleased()
   return true
 end
@@ -75,7 +79,9 @@ end
 function MasterGate:deserialize(t)
   Base.deserialize(self, t)
   local encoderState = t.encoderState
-  if encoderState then self.encoderState = Encoder.deserialize(encoderState) end
+  if encoderState then
+    self.encoderState = Encoder.deserialize(encoderState)
+  end
 end
 
 return MasterGate

@@ -22,7 +22,9 @@ end
 function EncoderControl:deserialize(t)
   ViewControl.deserialize(self, t)
   local encoderState = t.encoderState
-  if encoderState then self.encoderState = Encoder.deserialize(encoderState) end
+  if encoderState then
+    self.encoderState = Encoder.deserialize(encoderState)
+  end
 end
 
 function EncoderControl:dialPressed(shifted)

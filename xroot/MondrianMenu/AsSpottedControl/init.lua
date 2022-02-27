@@ -103,7 +103,9 @@ function MondrianMenu:encoder(change, shifted)
 end
 
 function MondrianMenu:upReleased(shifted)
-  if not shifted then self:unfocus() end
+  if not shifted then
+    self:unfocus()
+  end
   return true
 end
 
@@ -112,7 +114,9 @@ function MondrianMenu:mainPressed(i, shifted)
     self:unfocus()
     return false
   end
-  if not self.focused then return true end
+  if not self.focused then
+    return true
+  end
   local graphic = self.mlist:selectByButton(i - 1)
   if graphic then
     graphic:setBorderColor(app.WHITE)

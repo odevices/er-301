@@ -1,7 +1,7 @@
 local Class = require "Base.Class"
 local Widget = require "Base.Widget"
 
-local ShiftWidget = Class{}
+local ShiftWidget = Class {}
 ShiftWidget:include(Widget)
 
 function ShiftWidget:init(parent)
@@ -11,22 +11,24 @@ function ShiftWidget:init(parent)
 end
 
 function ShiftWidget:show()
-  self:grabFocus("encoder","cancelReleased","enterReleased","mainReleased","mainPressed")
+  self:grabFocus("encoder", "cancelReleased", "enterReleased", "mainReleased",
+                 "mainPressed")
   self.parent.mainDisplay:showShiftGadget()
   self.parent:hideMainButtons()
 end
 
 function ShiftWidget:hide()
-  self:releaseFocus("encoder","cancelReleased","enterReleased","mainReleased","mainPressed")
+  self:releaseFocus("encoder", "cancelReleased", "enterReleased",
+                    "mainReleased", "mainPressed")
   self.parent.mainDisplay:hideGadget()
   self.parent:showMainButtons()
 end
 
 function ShiftWidget:encoder(change, shifted)
   if self.parent.zooming then
-    self.parent:encoderZoom(change,shifted)
+    self.parent:encoderZoom(change, shifted)
   else
-    self.parent.mainDisplay:encoderSliceShift(change,shifted,2)
+    self.parent.mainDisplay:encoderSliceShift(change, shifted, 2)
   end
   return true
 end
@@ -42,11 +44,11 @@ function ShiftWidget:enterReleased()
   return true
 end
 
-function ShiftWidget:mainPressed(i,shifted)
+function ShiftWidget:mainPressed(i, shifted)
   return true
 end
 
-function ShiftWidget:mainReleased(i,shifted)
+function ShiftWidget:mainReleased(i, shifted)
   return true
 end
 

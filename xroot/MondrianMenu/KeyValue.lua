@@ -64,7 +64,9 @@ function KeyValue:setValue(value, invalidateLayout)
     graphic:fitHeight(3 * ply - 2)
   end
 
-  if invalidateLayout then self:callUp("invalidateLayout") end
+  if invalidateLayout then
+    self:callUp("invalidateLayout")
+  end
 end
 
 function KeyValue:getValue()

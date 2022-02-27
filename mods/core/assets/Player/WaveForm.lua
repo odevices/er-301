@@ -20,7 +20,9 @@ function WaveForm:init(args)
   local graphic
   graphic = app.Graphic(0, 0, width, 64)
   self.mainDisplay = app.HeadDisplay(head, 0, 0, width, 64)
-  if args.label then self.mainDisplay:setPointerLabel(args.label) end
+  if args.label then
+    self.mainDisplay:setPointerLabel(args.label)
+  end
   graphic:addChild(self.mainDisplay)
   self:setMainCursorController(self.mainDisplay)
   self:setControlGraphic(graphic)

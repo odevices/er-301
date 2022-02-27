@@ -82,8 +82,12 @@ function Chooser:init(opts)
 end
 
 function Chooser:onUnitListChanged()
-  if self.categoric then self.categoric:refresh() end
-  if self.alphabetic then self.alphabetic:refresh() end
+  if self.categoric then
+    self.categoric:refresh()
+  end
+  if self.alphabetic then
+    self.alphabetic:refresh()
+  end
 end
 
 function Chooser:getChannelCount()
@@ -123,8 +127,12 @@ function Chooser:hide()
 end
 
 function Chooser:subReleased(i, shifted)
-  if shifted then return false end
-  if i == self.index then return end
+  if shifted then
+    return false
+  end
+  if i == self.index then
+    return
+  end
   self:setChooser(i)
   return true
 end
@@ -155,7 +163,9 @@ function Chooser:setChooser(i)
   self.panels[2]:deselect()
   self.panels[3]:deselect()
   self.panels[i]:select()
-  if context then self.current:show(context) end
+  if context then
+    self.current:show(context)
+  end
 end
 
 function Chooser:loadChainPreset(fullpath)
@@ -276,7 +286,9 @@ function Chooser:load(loadInfo)
   self.current:hide()
   if self.goal == "insert" then
     local unit = self.chain:loadUnit(loadInfo)
-    if not unit then showMessage("Failed to load unit: %s", loadInfo.title) end
+    if not unit then
+      showMessage("Failed to load unit: %s", loadInfo.title)
+    end
   elseif self.goal == "replace" then
     local state = self.unit:serialize()
     local chain = self.chain
@@ -295,12 +307,16 @@ function Chooser:load(loadInfo)
 end
 
 function Chooser:cancelReleased(shifted)
-  if not shifted then self.current:hide() end
+  if not shifted then
+    self.current:hide()
+  end
   return true
 end
 
 function Chooser:upReleased(shifted)
-  if not shifted then self.current:hide() end
+  if not shifted then
+    self.current:hide()
+  end
   return true
 end
 

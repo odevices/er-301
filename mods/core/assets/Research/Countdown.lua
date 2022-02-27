@@ -83,7 +83,9 @@ function Countdown:onLoadGraph(channelCount)
 
   -- Finally, connect the output of the 'output' Gate to the unit output(s).
   connect(output, "Out", self, "Out1")
-  if channelCount > 1 then connect(output, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(output, "Out", self, "Out2")
+  end
 
   -- Force a reset to occur, so that the counter is ready to go.
   reset:simulateRisingEdge()

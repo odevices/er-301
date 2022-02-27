@@ -27,13 +27,17 @@ end
 function TrackSection:setInputSource(channelIndex, source)
   local view = self:getView("setup")
   local channel = view.controls[channelIndex or 1]
-  if channel then channel:setInputSource(source) end
+  if channel then
+    channel:setInputSource(source)
+  end
 end
 
 function TrackSection:getInputSource(channelIndex)
   local view = self:getView("setup")
   local channel = view.controls[channelIndex or 1]
-  if channel then return channel:getInputSource() end
+  if channel then
+    return channel:getInputSource()
+  end
 end
 
 return TrackSection

@@ -22,10 +22,10 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-]]--
-
+]] --
 local functions = {}
-local function _nothing_() end
+local function _nothing_()
+end
 local to_remove = {}
 
 local function update(dt)
@@ -62,9 +62,15 @@ local function update(dt)
 end
 
 local function during(delay, during, after)
-	local handle = { time = 0, during = during, after = after or _nothing_, limit = delay, count = 1 }
-	functions[handle] = true
-	return handle
+  local handle = {
+    time = 0,
+    during = during,
+    after = after or _nothing_,
+    limit = delay,
+    count = 1
+  }
+  functions[handle] = true
+  return handle
 end
 
 local function after(delay, func)
@@ -73,7 +79,13 @@ end
 
 local function every(delay, after, count)
   local count = count or math.huge -- exploit below: math.huge - 1 = math.huge
-  local handle = { time = 0, during = _nothing_, after = after, limit = delay, count = count }
+  local handle = {
+    time = 0,
+    during = _nothing_,
+    after = after,
+    limit = delay,
+    count = count
+  }
   functions[handle] = true
   return handle
 end
@@ -93,16 +105,16 @@ end
 local function script(f)
   local co = coroutine.wrap(f)
   co(function(t)
-      after(t, co)
-      coroutine.yield()
-    end)
+    after(t, co)
+    coroutine.yield()
+  end)
 end
 
-return { 
+return {
   update = update,
   after = after,
   every = every,
   active = active,
   cancel = cancel,
-  script = script,
+  script = script
 }

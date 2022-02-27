@@ -22,13 +22,19 @@ function MuteGroup:add(o)
 end
 
 function MuteGroup:remove(o)
-  if self.channels[o] == nil then return end
-  if self.soloist == o then self:unsolo() end
+  if self.channels[o] == nil then
+    return
+  end
+  if self.soloist == o then
+    self:unsolo()
+  end
   self.channels[o] = nil
 end
 
 function MuteGroup:solo(o)
-  if self.channels[o] == nil then return end
+  if self.channels[o] == nil then
+    return
+  end
   self.soloist = o
   for ch, muted in pairs(self.channels) do
     ch:onMuteStateChanged(muted, self.soloist)
@@ -37,11 +43,15 @@ end
 
 function MuteGroup:unsolo()
   self.soloist = nil
-  for ch, muted in pairs(self.channels) do ch:onMuteStateChanged(muted, nil) end
+  for ch, muted in pairs(self.channels) do
+    ch:onMuteStateChanged(muted, nil)
+  end
 end
 
 function MuteGroup:toggleSolo(o)
-  if self.channels[o] == nil then return end
+  if self.channels[o] == nil then
+    return
+  end
   if self.soloist == nil then
     self:solo(o)
   elseif self.soloist == o then
@@ -53,19 +63,25 @@ function MuteGroup:toggleSolo(o)
 end
 
 function MuteGroup:mute(o)
-  if self.channels[o] == nil then return end
+  if self.channels[o] == nil then
+    return
+  end
   self.channels[o] = true
   o:onMuteStateChanged(true, self.soloist)
 end
 
 function MuteGroup:unmute(o)
-  if self.channels[o] == nil then return end
+  if self.channels[o] == nil then
+    return
+  end
   self.channels[o] = false
   o:onMuteStateChanged(false, self.soloist)
 end
 
 function MuteGroup:toggleMute(o)
-  if self.channels[o] == nil then return end
+  if self.channels[o] == nil then
+    return
+  end
   if self.channels[o] then
     self:unmute(o)
   else

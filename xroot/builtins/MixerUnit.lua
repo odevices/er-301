@@ -158,8 +158,12 @@ end
 
 function MixerUnit:deserialize(t)
   Unit.deserialize(self, t)
-  if t.mute then self.controls.gain:mute() end
-  if t.solo then self.controls.gain:solo() end
+  if t.mute then
+    self.controls.gain:mute()
+  end
+  if t.solo then
+    self.controls.gain:solo()
+  end
 end
 
 -- Replace the default implementation for bypassing.

@@ -15,9 +15,15 @@ end
 local function install(self, archive)
   local failed = 0
 
-  if not installFile(self, archive, "MLO") then failed = failed + 1 end
-  if not installFile(self, archive, "SBL") then failed = failed + 1 end
-  if not installFile(self, archive, "kernel.bin") then failed = failed + 1 end
+  if not installFile(self, archive, "MLO") then
+    failed = failed + 1
+  end
+  if not installFile(self, archive, "SBL") then
+    failed = failed + 1
+  end
+  if not installFile(self, archive, "kernel.bin") then
+    failed = failed + 1
+  end
   if failed == 0 then
     if not installFile(self, archive, "core-FIRMWARE_VERSION.pkg") then
       failed = failed + 1

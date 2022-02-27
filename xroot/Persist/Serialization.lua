@@ -11,14 +11,20 @@ local function legacyDeserialize(data)
     end
   })
   local f, res = load('return ' .. data, nil, nil, env)
-  if not f then f, res = load(data, nil, nil, env) end
-  if not f then return f, res end
+  if not f then
+    f, res = load(data, nil, nil, env)
+  end
+  if not f then
+    return f, res
+  end
   return pcall(f)
 end
 
 local function legacyReadTable(filename)
   local stream = io.open(filename, "r")
-  if stream == nil then return nil end
+  if stream == nil then
+    return nil
+  end
   local encoded = stream:read("*all")
   stream:close()
   app.collectgarbage()
@@ -47,7 +53,9 @@ local function get(path, t)
   local keys = Utils.split(path, "/")
   for _, key in ipairs(keys) do
     t = t[key]
-    if t == nil then return nil end
+    if t == nil then
+      return nil
+    end
   end
   return t
 end

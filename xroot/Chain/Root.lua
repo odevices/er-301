@@ -92,7 +92,9 @@ end
 function Root:leaveScopeView()
   if self.scopeView:selectionChanged() then
     local xpath = self.scopeView:getXPath()
-    if xpath then self:navigateToXPath(xpath) end
+    if xpath then
+      self:navigateToXPath(xpath)
+    end
   end
 end
 

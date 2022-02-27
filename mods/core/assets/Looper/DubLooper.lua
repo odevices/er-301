@@ -83,7 +83,9 @@ function DubLooper:onLoadGraph(channelCount)
 end
 
 function DubLooper:setSample(sample)
-  if self.sample then self.sample:release(self) end
+  if self.sample then
+    self.sample:release(self)
+  end
   self.sample = sample
   if self.sample then
     self.sample:claim(self)
@@ -364,7 +366,9 @@ end
 
 function DubLooper:serialize()
   local t = Unit.serialize(self)
-  if self.sample then t.sample = SamplePool.serializeSample(self.sample) end
+  if self.sample then
+    t.sample = SamplePool.serializeSample(self.sample)
+  end
   return t
 end
 

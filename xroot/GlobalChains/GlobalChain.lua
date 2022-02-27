@@ -18,7 +18,9 @@ function GlobalChain:getOutputDisplayName(channel)
 end
 
 function GlobalChain:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   return true
 end

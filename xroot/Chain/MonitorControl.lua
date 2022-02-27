@@ -73,12 +73,16 @@ function MonitorControl:spotReleased(spot, shifted)
 end
 
 function MonitorControl:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     local Clipboard = require "Chain.Clipboard"
     if Clipboard.hasData(1) then
       local chain = self:getWindow()
-      if chain then Clipboard.paste(self:getWindow(), nil, 1) end
+      if chain then
+        Clipboard.paste(self:getWindow(), nil, 1)
+      end
     end
   elseif i == 3 then
     self:activateChooser()
@@ -92,7 +96,9 @@ function MonitorControl:selectReleased(i, shifted)
   local side = Channels.getSide(i)
   local outlet = self:callUp("getMonitoringOutput", side)
   self.scope:watchOutlet(outlet)
-  for _, meter in ipairs(self.meters) do meter:setForegroundColor(app.GRAY7) end
+  for _, meter in ipairs(self.meters) do
+    meter:setForegroundColor(app.GRAY7)
+  end
   self.meters[side]:setForegroundColor(app.WHITE)
   return true
 end

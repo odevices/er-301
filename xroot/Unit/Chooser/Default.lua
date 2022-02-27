@@ -75,7 +75,9 @@ end
 
 ------
 
-local Chooser = Class {recent={}}
+local Chooser = Class {
+  recent = {}
+}
 Chooser:include(MondrianMenu)
 
 local function allFromSameExternalLibrary(units)
@@ -109,10 +111,14 @@ function Chooser:addUnitsInCategory(category)
       else
         self:addCategory(units[1].libraryName .. " : " .. category)
       end
-      for _, loadInfo in ipairs(units) do self:addUnit(loadInfo, true) end
+      for _, loadInfo in ipairs(units) do
+        self:addUnit(loadInfo, true)
+      end
     else
       self:addCategory(category)
-      for _, loadInfo in ipairs(units) do self:addUnit(loadInfo) end
+      for _, loadInfo in ipairs(units) do
+        self:addUnit(loadInfo)
+      end
     end
   end
 end
@@ -135,7 +141,9 @@ function Chooser:refresh()
           self:addUnit(u)
         end
       end
-      if Clipboard.hasData(1) then self:addClipboard() end
+      if Clipboard.hasData(1) then
+        self:addClipboard()
+      end
     end
 
     local added = {}
@@ -179,7 +187,9 @@ function Chooser:refresh()
       local b = loadInfo.title:sub(1, 1):upper()
       if prev then
         local a = prev.title:sub(1, 1):upper()
-        if b >= "A" and a ~= b then self:addCategory(b) end
+        if b >= "A" and a ~= b then
+          self:addCategory(b)
+        end
       elseif b < "A" then
         self:addCategory("0-9")
       end
@@ -207,14 +217,18 @@ function Chooser:addClipboard()
 end
 
 function Chooser:updateRecent(loadInfo)
-  if loadInfo.title == nil then return end
+  if loadInfo.title == nil then
+    return
+  end
   local t = {
     loadInfo
   }
   for i, u in ipairs(Chooser.recent) do
     if u.title ~= loadInfo.title then
       t[#t + 1] = u
-      if #t > 5 then break end
+      if #t > 5 then
+        break
+      end
     end
   end
   Chooser.recent = t

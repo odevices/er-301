@@ -80,7 +80,9 @@ end
 
 local function deleteFrontCardDatabase(dbName)
   local path = pathToFrontDatabase(dbName)
-  if Path.exists(path) then app.deleteFile(path) end
+  if Path.exists(path) then
+    app.deleteFile(path)
+  end
 end
 
 local function pathToRearDatabase(dbName)
@@ -102,7 +104,9 @@ end
 
 local function deleteRearCardDatabase(dbName)
   local path = pathToRearDatabase(dbName)
-  if Path.exists(path) then app.deleteFile(path) end
+  if Path.exists(path) then
+    app.deleteFile(path)
+  end
 end
 
 local function confirmFirmwareVersionAndExecute(preset, task)
@@ -154,7 +158,9 @@ local function saveUnitPreset(unit, fullpath)
       suggested = suggested,
       history = history
     }
-    if suggested then chooser:choose(suggested) end
+    if suggested then
+      chooser:choose(suggested)
+    end
     chooser:subscribe("done", task)
     chooser:show()
   else
@@ -187,7 +193,9 @@ local function loadUnitPreset(unit, fullpath)
       path = FS.getRoot("unit-preset")
     end
     local history
-    if suggested == nil then history = unit.loadInfo.id .. "/Preset" end
+    if suggested == nil then
+      history = unit.loadInfo.id .. "/Preset"
+    end
     local chooser = FileChooser {
       msg = string.format("Load Unit (*.%s)", FS.getExt("unit-preset")),
       goal = "load file",
@@ -593,7 +601,9 @@ local function loadQuickSaveNames()
 end
 
 local function saveQuickSaveNames()
-  if quickSaveNames == nil then return end
+  if quickSaveNames == nil then
+    return
+  end
   local filename = FS.getRoot("quicksaves") .. "/names.lua"
   quickSaveNames.firmwareVersion = app.FIRMWARE_VERSION
   if not writeTable(filename, quickSaveNames) then
@@ -602,13 +612,17 @@ local function saveQuickSaveNames()
 end
 
 local function setQuickSaveName(slot, name)
-  if quickSaveNames == nil then loadQuickSaveNames() end
+  if quickSaveNames == nil then
+    loadQuickSaveNames()
+  end
   quickSaveNames[slot] = name
   saveQuickSaveNames()
 end
 
 local function getQuickSaveName(slot)
-  if quickSaveNames == nil then loadQuickSaveNames() end
+  if quickSaveNames == nil then
+    loadQuickSaveNames()
+  end
   return quickSaveNames[slot]
 end
 
@@ -674,7 +688,9 @@ local function quickSaveToSlot(slot, checkForUnsavedBuffers, after)
     app.logError("Quicksave:failed")
     Overlay.flashMainMessage("Quicksave to slot %d failed.", slot)
   end
-  if after then after() end
+  if after then
+    after()
+  end
 end
 
 local function quickSaveToFile(filename, checkForUnsavedBuffers, after)
@@ -690,7 +706,9 @@ local function quickSaveToFile(filename, checkForUnsavedBuffers, after)
   Busy.status("Writing save data to card...")
   preset:write(filename)
   Busy.stop()
-  if after then after() end
+  if after then
+    after()
+  end
 end
 
 local function getQuickSavePreset(slot)
@@ -747,7 +765,9 @@ local firstMount = true
 local function onCardMounted()
   Busy.start("Initializing quicksaves...")
   -- empty the quick save cache
-  for i = 1, quickSaveMaxSlots do quickSaveCache[i] = nil end
+  for i = 1, quickSaveMaxSlots do
+    quickSaveCache[i] = nil
+  end
   quickSaveNames = nil
 
   for i = 1, quickSaveMaxSlots do
@@ -817,7 +837,9 @@ local function getScreenShotFilename()
     local a, b = string.find(x, "[0-9][0-9][0-9][0-9]")
     if a and b then
       local tmp = tonumber(string.sub(x, a, b))
-      if tmp and tmp > maxId then maxId = tmp end
+      if tmp and tmp > maxId then
+        maxId = tmp
+      end
     end
   end
   return string.format("%s/%04d.png", FS.getRoot("screenshot"), maxId + 1)
@@ -838,7 +860,9 @@ local function init()
   }
   Signal.register("cardMounted", onCardMounted)
   -- if card was already mounted when loading this module...
-  if Card.mounted() then onCardMounted() end
+  if Card.mounted() then
+    onCardMounted()
+  end
 end
 
 local function generateInstanceKey()
@@ -858,7 +882,9 @@ local function regenerateInstanceKeysHelper(presetData, keys)
     -- app.logInfo("Regenerate Keys: %s becomes %s", originalKey, newKey)
   end
   for k, v in pairs(presetData) do
-    if type(v) == "table" then regenerateInstanceKeysHelper(v, keys) end
+    if type(v) == "table" then
+      regenerateInstanceKeysHelper(v, keys)
+    end
   end
   return keys
 end
@@ -869,7 +895,9 @@ local function propagateReplacements(presetData, replace)
       propagateReplacements(v, replace)
     elseif type(v) == "string" then
       local newValue = replace[v]
-      if newValue then presetData[k] = newValue end
+      if newValue then
+        presetData[k] = newValue
+      end
     end
   end
 end

@@ -156,7 +156,9 @@ function Keyboard:setValidator(func)
 end
 
 function Keyboard:learnDirection()
-  for _, col in ipairs(self.cols) do col:learnDirection() end
+  for _, col in ipairs(self.cols) do
+    col:learnDirection()
+  end
 end
 
 function Keyboard:mainPressed(i, shifted)
@@ -174,7 +176,9 @@ function Keyboard:mainPressed(i, shifted)
 end
 
 function Keyboard:subPressed(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     self.textEditor:doBackspace()
   elseif i == 2 then
@@ -190,7 +194,9 @@ function Keyboard:subPressed(i, shifted)
 end
 
 function Keyboard:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 2 then
     self.caretFocused = false
     self:setSubCursorController(nil)

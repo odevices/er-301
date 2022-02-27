@@ -22,8 +22,7 @@ function EuclidsCatsUnit:onLoadGraph(channelCount)
   clockComparator:setTriggerMode()
   local resetComparator = self:addObject("resetComparator", app.Comparator())
   resetComparator:setTriggerMode()
-  local euclid =
-      self:addObject("euclid", libFoo.EuclideanSequencer(32))
+  local euclid = self:addObject("euclid", libFoo.EuclideanSequencer(32))
 
   connect(clockComparator, "Out", euclid, "Trigger")
   connect(resetComparator, "Out", euclid, "Reset")
@@ -32,7 +31,9 @@ function EuclidsCatsUnit:onLoadGraph(channelCount)
   self:addMonoBranch("clock", clockComparator, "In", clockComparator, "Out")
   self:addMonoBranch("reset", resetComparator, "In", resetComparator, "Out")
 
-  if channelCount > 1 then connect(euclid, "Out", self, "Out2") end
+  if channelCount > 1 then
+    connect(euclid, "Out", self, "Out2")
+  end
 end
 
 local views = {

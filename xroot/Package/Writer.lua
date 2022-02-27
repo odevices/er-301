@@ -77,7 +77,9 @@ local function packagePreset(writer, srcPath, dstPath)
   end
   local data = Serialization.readTable(srcPath)
   Serialization.writeTable(tmpPath, data, hooks)
-  if not writer.archive:add(tmpPath, dstPath) then return false end
+  if not writer.archive:add(tmpPath, dstPath) then
+    return false
+  end
   app.deleteFile(tmpPath)
   -- Collect assets that were found while walking the preset table.
   for k, v in pairs(replaced) do

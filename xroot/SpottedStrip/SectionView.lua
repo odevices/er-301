@@ -24,7 +24,9 @@ function SectionView:rebuild(pSection)
   pSection:clear()
   self.spots = {}
 
-  for _, x in ipairs(self.dividers) do pSection:addVerticalDivider(x) end
+  for _, x in ipairs(self.dividers) do
+    pSection:addVerticalDivider(x)
+  end
 
   for _, control in ipairs(self.controls) do
     -- add the control's graphic to the end of the view
@@ -69,14 +71,18 @@ end
 
 function SectionView:contains(control)
   for _, control2 in ipairs(self.controls) do
-    if control == control2 then return true end
+    if control == control2 then
+      return true
+    end
   end
   return false
 end
 
 function SectionView:where(control)
   for i, control2 in ipairs(self.controls) do
-    if control == control2 then return i end
+    if control == control2 then
+      return i
+    end
   end
 end
 
@@ -88,7 +94,9 @@ end
 function SectionView:notifyControls(method, ...)
   for _, control in ipairs(self.controls) do
     local f = control[method]
-    if f ~= nil then f(control, ...) end
+    if f ~= nil then
+      f(control, ...)
+    end
   end
 end
 

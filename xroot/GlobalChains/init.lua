@@ -10,7 +10,9 @@ local function exists(name)
 end
 
 local function create(name, numChannels, position, continues)
-  if exists(name) then return end
+  if exists(name) then
+    return
+  end
   local chain = GlobalChain {
     title = name,
     channelCount = numChannels
@@ -20,13 +22,17 @@ local function create(name, numChannels, position, continues)
   -- add chain to audio engine
   chain:start()
   Signal.emit("onCreateGlobalChain", chain, name, position)
-  if not continues then Signal.emit("onGlobalChainCountChanged", chainCount) end
+  if not continues then
+    Signal.emit("onGlobalChainCountChanged", chainCount)
+  end
   return chain
 end
 
 local function rename(oldName, newName)
   local chain = chains[oldName]
-  if chain == nil then return end
+  if chain == nil then
+    return
+  end
   chains[oldName] = nil
   chains[newName] = chain
   chain:setTitle(newName)
@@ -35,23 +41,31 @@ end
 
 local function delete(name, continues)
   local chain = chains[name]
-  if chain == nil then return end
+  if chain == nil then
+    return
+  end
   local Busy = require "Busy"
   Busy.start("Deleting: %s", name)
   Signal.emit("onDeleteGlobalChain", chain, name)
   chains[name] = nil
   chainCount = chainCount - 1
   -- remove chain from audio engine
-  if not chain:isMuted() then chain:mute() end
+  if not chain:isMuted() then
+    chain:mute()
+  end
   chain:stop()
   chain:releaseResources()
   chain:hide()
-  if not continues then Signal.emit("onGlobalChainCountChanged", chainCount) end
+  if not continues then
+    Signal.emit("onGlobalChainCountChanged", chainCount)
+  end
   Busy.stop()
 end
 
 local function deleteAll()
-  for name, chain in pairs(chains) do delete(name, true) end
+  for name, chain in pairs(chains) do
+    delete(name, true)
+  end
   Signal.emit("onGlobalChainCountChanged", chainCount)
 end
 
@@ -73,19 +87,25 @@ end
 local function reverseTable(t)
   local reversedTable = {}
   local itemCount = #t
-  for k, v in ipairs(t) do reversedTable[itemCount + 1 - k] = v end
+  for k, v in ipairs(t) do
+    reversedTable[itemCount + 1 - k] = v
+  end
   return reversedTable
 end
 
 local function deserialize(t)
-  for name, chain in pairs(chains) do delete(name, true) end
+  for name, chain in pairs(chains) do
+    delete(name, true)
+  end
 
   if #t == 0 then
     if t.chains then
       -- legacy support
       local data = t.chains
       t = {}
-      for name, chain in pairs(data) do t[#t + 1] = chain end
+      for name, chain in pairs(data) do
+        t[#t + 1] = chain
+      end
       app.logInfo("GlobalChains.deserialize:loading %d legacy chains", #t)
     else
       app.logInfo("GlobalChains.deserialize: no chains")
@@ -103,7 +123,7 @@ local function deserialize(t)
       end
     else
       app.logInfo("GlobalChains.deserialize: %s has no name or channelCount",
-              data.name)
+                  data.name)
     end
   end
 
@@ -133,12 +153,16 @@ local function getByDisplayName(name)
     channel = 2
   end
 
-  if chain then return chain:getOutputSource(channel) end
+  if chain then
+    return chain:getOutputSource(channel)
+  end
 end
 
 local function findByInstanceKey(key)
   for name, chain in pairs(chains) do
-    if key == chain:getInstanceKey() then return chain end
+    if key == chain:getInstanceKey() then
+      return chain
+    end
   end
 end
 

@@ -12,7 +12,9 @@ function ControlBranch:init(args)
   self.objects = args.objects or
                      app.logError("%s:init: objects are missing.", self)
   local task = app.ObjectList(args.id)
-  for i, o in ipairs(args.objects) do task:add(o) end
+  for i, o in ipairs(args.objects) do
+    task:add(o)
+  end
   self.task = task
 end
 
@@ -64,8 +66,12 @@ function ControlBranch:serialize()
 end
 
 function ControlBranch:deserialize(t)
-  if t.objects then Persist.deserializeObjects(self.objects, nil, t.objects) end
-  if t.control then self.control:deserialize(t.control) end
+  if t.objects then
+    Persist.deserializeObjects(self.objects, nil, t.objects)
+  end
+  if t.control then
+    self.control:deserialize(t.control)
+  end
   Branch.deserialize(self, t)
 end
 

@@ -68,8 +68,12 @@ function ItemHeader:onCursorEnter()
 end
 
 function ItemHeader:spotReleased(spot, shifted)
-  if shifted then return false end
-  if self.canEdit then self:sendUp("doEditControl", self.id) end
+  if shifted then
+    return false
+  end
+  if self.canEdit then
+    self:sendUp("doEditControl", self.id)
+  end
   return true
 end
 
@@ -81,7 +85,9 @@ function ItemHeader:onCursorLeave()
 end
 
 function ItemHeader:subPressed(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 3 then
     self:grabFocus("encoder")
     self.controlGraphic:setBorder(3)
@@ -94,7 +100,9 @@ function ItemHeader:subReleased(i, shifted)
   self:releaseFocus("encoder")
   self.controlGraphic:setBorder(0)
   self.movePanel:setText("Hold to Move")
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 and self.canEdit then
     self:sendUp("doEditControl", self.id)
   elseif i == 2 and self.canDelete then
@@ -166,7 +174,9 @@ function Insert:onCursorLeave()
 end
 
 function Insert:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     self:sendUp("doInsertControl", "GainBias")
   elseif i == 2 then
@@ -233,7 +243,9 @@ function MenuHeader:onCursorLeave()
 end
 
 function MenuHeader:subReleased(i, shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if i == 1 then
     self:sendUp("doReset")
   elseif i == 2 then
@@ -277,13 +289,17 @@ function Editor:populate()
     self:appendSection(BeginMenu(unit.title))
     self:appendSection(Filler())
     for i, control in ipairs(view.controls) do
-      if i > 2 then self:insert(control) end
+      if i > 2 then
+        self:insert(control)
+      end
     end
   end
 end
 
 function Editor:insert(control, position)
-  if control.id == nil then app.logError("%s: no id", control) end
+  if control.id == nil then
+    app.logError("%s: no id", control)
+  end
   local item = Item(control)
   local n = self:getSectionCount()
   self.items[item.id] = item
@@ -297,7 +313,9 @@ function Editor:insert(control, position)
 end
 
 function Editor:remove(item)
-  if type(item) == "string" then item = self.items[item] end
+  if type(item) == "string" then
+    item = self.items[item]
+  end
   if item then
     self.items[item.id] = nil
     self:removeSection(item)
@@ -380,7 +398,9 @@ function Editor:reset()
   for i, control in ipairs(view.controls) do
     self:remove(control.id)
     if control.isBuiltin then
-      if control.removeCustomizations then control:removeCustomizations() end
+      if control.removeCustomizations then
+        control:removeCustomizations()
+      end
     else
       self.unit:removeControlBranch(control.id)
     end
@@ -436,7 +456,9 @@ function Editor:onChange()
 end
 
 function Editor:upReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   self:hide()
   return true
 end
@@ -447,7 +469,9 @@ function Editor:enterReleased()
 end
 
 function Editor:cancelReleased(shifted)
-  if shifted then return false end
+  if shifted then
+    return false
+  end
   if self.changeCount > 0 then
     local Verification = require "Verification"
     local dlg = Verification.Main("This will discard your edits.",

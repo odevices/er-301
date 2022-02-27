@@ -484,13 +484,19 @@ local units = {
 }
 
 local function find(moduleName)
-  for i, e in ipairs(units) do if e.moduleName == moduleName then return i end end
+  for i, e in ipairs(units) do
+    if e.moduleName == moduleName then
+      return i
+    end
+  end
 end
 
 if app.globalConfig.frameLength < 64 then
   -- remove the Convolution Unit from the low-latency firmware
   local index = find("ConvolutionUnit")
-  if index then table.remove(units, index) end
+  if index then
+    table.remove(units, index)
+  end
 end
 
 return {

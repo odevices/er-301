@@ -14,18 +14,19 @@ function SchroederAllPass:init(args)
 end
 
 function SchroederAllPass:createChannel(i, delayAdapter, gainAdapter)
-  local delay = self:addObject("delay"..i, libcore.Delay(1))
+  local delay = self:addObject("delay" .. i, libcore.Delay(1))
   delay:allocateTimeUpTo(0.05)
-  local feedBackMix = self:addObject("feedBackMix"..i, app.Sum())
-  local feedBackGain = self:addObject("feedBackGain"..i, app.ConstantGain())
-  local feedForwardMix = self:addObject("feedForwardMix"..i, app.Sum())
-  local feedForwardGain = self:addObject("feedForwardGain"..i, app.ConstantGain())
-  local limiter = self:addObject("limiter"..i, libcore.Limiter())
+  local feedBackMix = self:addObject("feedBackMix" .. i, app.Sum())
+  local feedBackGain = self:addObject("feedBackGain" .. i, app.ConstantGain())
+  local feedForwardMix = self:addObject("feedForwardMix" .. i, app.Sum())
+  local feedForwardGain = self:addObject("feedForwardGain" .. i,
+                                         app.ConstantGain())
+  local limiter = self:addObject("limiter" .. i, libcore.Limiter())
 
-  connect(self, "In"..i, feedBackMix, "Left")
+  connect(self, "In" .. i, feedBackMix, "Left")
   connect(feedBackMix, "Out", delay, "Left In")
   connect(delay, "Left Out", feedForwardMix, "Left")
-  connect(feedForwardMix, "Out", self, "Out"..i)
+  connect(feedForwardMix, "Out", self, "Out" .. i)
   connect(feedBackMix, "Out", feedForwardGain, "In")
   connect(feedForwardGain, "Out", feedForwardMix, "Right")
   connect(delay, "Left Out", feedBackGain, "In")
@@ -44,7 +45,7 @@ function SchroederAllPass:onLoadGraph(channelCount)
   for i = 1, channelCount do
     self:createChannel(i, delayAdapter, gainAdapter)
   end
- 
+
   self:addMonoBranch("delay", delayAdapter, "In", delayAdapter, "Out")
   self:addMonoBranch("gain", gainAdapter, "In", gainAdapter, "Out")
 

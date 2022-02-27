@@ -1,8 +1,8 @@
 local Class = require "Base.Class"
 
-local SectionSpot = Class{}
+local SectionSpot = Class {}
 
-function SectionSpot:init(handle,descriptor,control,positionOnControl)
+function SectionSpot:init(handle, descriptor, control, positionOnControl)
   self.handle = handle
   self.descriptor = descriptor
   self.control = control
