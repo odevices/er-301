@@ -30,8 +30,7 @@ return {
     description = "Load all into custom unit",
     run = runLoadAll,
     batch = true
-  },
-  {
+  }, {
     description = "Load chain preset into custom unit",
     run = runLoadChainPreset,
     batch = true

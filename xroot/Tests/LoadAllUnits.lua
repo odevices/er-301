@@ -45,8 +45,7 @@ return {
     description = "Load all units as mono.",
     batch = true,
     run = runMono
-  },
-  {
+  }, {
     description = "Load all units as stereo.",
     batch = true,
     run = runStereo

@@ -490,8 +490,7 @@ function GainBias:populateEditMenu(menu)
     choices = {
       0,
       1,
-      2,
-      3
+      2, 3
     },
     description = "Visible Digits",
     callback = "onOptionChanged"

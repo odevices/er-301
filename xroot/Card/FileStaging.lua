@@ -14,8 +14,7 @@ function FileStaging:init(paths)
         name = "number",
         width = 0.1
         -- justify = app.justifyRight
-      },
-      {
+      }, {
         name = "path",
         width = 0.9,
         showCheck = true,

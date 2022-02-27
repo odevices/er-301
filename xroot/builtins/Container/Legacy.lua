@@ -86,8 +86,7 @@ local descriptors = {
       "Ax+B"
     },
     create = createLinear
-  },
-  {
+  }, {
     description = "Decibel",
     prefix = "dB",
     aliases = {
@@ -95,8 +94,7 @@ local descriptors = {
       "dB(Ax+B)"
     },
     create = createDecibel
-  },
-  {
+  }, {
     description = "Pitch",
     prefix = "V/oct",
     aliases = {
@@ -104,8 +102,7 @@ local descriptors = {
       "V/oct"
     },
     create = createPitch
-  },
-  {
+  }, {
     description = "Gate",
     prefix = "gate",
     aliases = {
@@ -113,16 +110,14 @@ local descriptors = {
       "Gate"
     },
     create = createGate
-  },
-  {
+  }, {
     description = "Toggle",
     prefix = "sw",
     aliases = {
       "toggle"
     },
     create = createToggle
-  },
-  {
+  }, {
     description = "Trigger",
     prefix = "trig",
     aliases = {

@@ -19,8 +19,7 @@ function Interface:init()
         width = 0.6,
         showCheck = true,
         emptyText = "No packages found."
-      },
-      {
+      }, {
         name = "version",
         width = 0.4,
         justify = app.justifyRight
@@ -120,8 +119,7 @@ function Interface:refresh()
         label = package:getName(),
         data = id,
         checked = package.installed
-      },
-      {
+      }, {
         label = package:getVersion(),
         data = id
       }

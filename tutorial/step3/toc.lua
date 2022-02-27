@@ -9,8 +9,7 @@ return {
       category = "Learning",
       -- Which lua module contains the unit definition?
       moduleName = "FMOperator"
-    },
-    {
+    }, {
       title = "Euclid's Cats",
       category = "Learning",
       moduleName = "EuclidsCatsUnit"

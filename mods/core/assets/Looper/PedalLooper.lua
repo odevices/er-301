@@ -234,14 +234,12 @@ function PedalLooper:onShowMenu(objects, branches)
       justify = app.justifyCenter,
       text = "Maximum",
       fontSize = 10
-    },
-    {
+    }, {
       position = app.GRID5_LINE3 + 5,
       justify = app.justifyCenter,
       text = "Loop Time",
       fontSize = 10
-    },
-    {
+    }, {
       position = app.GRID4_LINE3,
       justify = app.justifyCenter,
       text = string.format("%0.1fs", allocated),

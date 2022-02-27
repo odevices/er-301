@@ -49,8 +49,7 @@ return {
     description = "Load core units as mono.",
     batch = true,
     run = runMono
-  },
-  {
+  }, {
     description = "Load core units as stereo.",
     batch = true,
     run = runStereo

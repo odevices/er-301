@@ -44,8 +44,7 @@ local alphabet = {
   'V',
   'W',
   'X',
-  'Y',
-  'Z'
+  'Y', 'Z'
 }
 
 function PinView:suggestPinSetName()
