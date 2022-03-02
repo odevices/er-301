@@ -98,6 +98,4 @@ local function init()
   app.onErrorHook = onError
 end
 
-return {
-  init = init
-}
+return {init = init}

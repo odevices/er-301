@@ -21,9 +21,7 @@ function fifo.new(...)
     empty = empty_default,
     head = 1,
     tail = select("#", ...),
-    data = {
-      ...
-    }
+    data = {...}
   }, fifo_mt)
 end
 

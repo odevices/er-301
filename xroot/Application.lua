@@ -190,18 +190,14 @@ end
 
 local function postEvent(target, e, ...)
   if target[e] then
-    local args = {
-      ...
-    }
+    local args = {...}
     post(function()
       target[e](target, table.unpack(args))
     end)
   end
 end
 
-local __weak__ = {
-  __mode = "k"
-}
+local __weak__ = {__mode = "k"}
 local pendingTriggers = setmetatable({}, __weak__)
 local elapsedTriggers = setmetatable({}, __weak__)
 local function postTrigger(key, task)

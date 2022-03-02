@@ -5,15 +5,7 @@ local LogViewer = Class {}
 LogViewer:include(Base)
 
 function LogViewer:init(title, maxHistory)
-  local opts = {
-    title = title,
-    columns = {
-      {
-        name = "console",
-        width = 1
-      }
-    }
-  }
+  local opts = {title = title, columns = {{name = "console", width = 1}}}
   Base.init(self, opts)
   self:setClassName("LogViewer")
   self.console = self:getColumnByName("console")

@@ -5,10 +5,7 @@ local Window = require "Base.Window"
 local Drawings = require "Drawings"
 local threshold = Env.EncoderThreshold.Default
 
-local defaultColumn = {
-  name = "default",
-  width = 1.0
-}
+local defaultColumn = {name = "default", width = 1.0}
 
 -- ListWindow
 local ListWindow = Class {}
@@ -18,9 +15,7 @@ function ListWindow:init(opts)
   Window.init(self)
   self:setClassName("ListWindow")
 
-  local columns = opts.columns or {
-    defaultColumn
-  }
+  local columns = opts.columns or {defaultColumn}
   local title = opts.title or "ListWindow"
 
   local x = 0
@@ -82,9 +77,7 @@ end
 
 function ListWindow:setColumnWidths(...)
   local x = 0
-  for i, width in ipairs {
-    ...
-  } do
+  for i, width in ipairs {...} do
     local w = width * self.gridWidth
     self.colByIndex[i]:setPosition(x, 0)
     self.colByIndex[i]:setSize(w, 64)

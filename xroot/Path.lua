@@ -1,13 +1,9 @@
 local app = app
 local Utils = require "Utils"
-local Path = {
-  sep = '/'
-}
+local Path = {sep = '/'}
 
 function Path.join(...)
-  local arg = {
-    ...
-  }
+  local arg = {...}
   return table.concat(arg, Path.sep)
 end
 

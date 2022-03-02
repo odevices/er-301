@@ -102,7 +102,4 @@ function SubMessage:subReleased(i, shifted)
   return true
 end
 
-return {
-  Main = MainMessage,
-  Sub = SubMessage
-}
+return {Main = MainMessage, Sub = SubMessage}

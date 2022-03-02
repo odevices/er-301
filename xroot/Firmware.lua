@@ -110,10 +110,7 @@ function Firmware:defaultInstallation(archive)
     local actualPath = Path.join(app.roots.rear, filename)
     if archive:extract(filename, tmpPath) then
       app.logInfo("%s copied successfully.", filename)
-      renames[#renames + 1] = {
-        tmp = tmpPath,
-        actual = actualPath
-      }
+      renames[#renames + 1] = {tmp = tmpPath, actual = actualPath}
     else
       self:msg("Update failed: could not copy %s.", filename)
       for _, e in ipairs(renames) do

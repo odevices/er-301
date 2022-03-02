@@ -129,7 +129,4 @@ function SubVerification:subReleased(i, shifted)
   return true
 end
 
-return {
-  Main = MainVerification,
-  Sub = SubVerification
-}
+return {Main = MainVerification, Sub = SubVerification}

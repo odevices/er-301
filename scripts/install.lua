@@ -35,6 +35,4 @@ local function install(self, archive)
   return failed == 0
 end
 
-return {
-  install = install
-}
+return {install = install}

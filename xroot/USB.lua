@@ -37,6 +37,4 @@ local function init()
   onUSBEnableChanged()
 end
 
-return {
-  init = init
-}
+return {init = init}

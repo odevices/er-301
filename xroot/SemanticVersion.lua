@@ -169,9 +169,7 @@ function methods:nextPatch()
   return semver(self.major, self.minor, self.patch + 1)
 end
 
-local mt = {
-  __index = methods
-}
+local mt = {__index = methods}
 function mt:__eq(other)
   return
       self.major == other.major and self.minor == other.minor and self.patch ==
@@ -201,9 +199,7 @@ function mt:__pow(other)
   return self.major == other.major and self.minor <= other.minor
 end
 function mt:__tostring()
-  local buffer = {
-    ("%d.%d.%d"):format(self.major, self.minor, self.patch)
-  }
+  local buffer = {("%d.%d.%d"):format(self.major, self.minor, self.patch)}
   if self.prerelease then
     table.insert(buffer, "-" .. self.prerelease)
   end

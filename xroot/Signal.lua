@@ -1,13 +1,8 @@
 local signals = {}
-local __weak__ = {
-  __mode = "k"
-}
+local __weak__ = {__mode = "k"}
 
 local function createSignal(s)
-  local slots = {
-    strong = {},
-    weak = setmetatable({}, __weak__)
-  }
+  local slots = {strong = {}, weak = setmetatable({}, __weak__)}
   signals[s] = slots
   return slots
 end
@@ -47,9 +42,7 @@ local function emit(s, ...)
 end
 
 local function remove(s, ...)
-  local f = {
-    ...
-  }
+  local f = {...}
   local slots = signals[s] or createSignal(s)
   local strong = slots.strong
   local weak = slots.weak
@@ -60,9 +53,7 @@ local function remove(s, ...)
 end
 
 local function clear(...)
-  local s = {
-    ...
-  }
+  local s = {...}
   for i = 1, select('#', ...) do
     createSignal(s[i])
   end

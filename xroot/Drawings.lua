@@ -1,10 +1,6 @@
 local app = app
 local ply = app.SECTION_PLY
-local Drawings = {
-  Main = {},
-  Sub = {},
-  Control = {}
-}
+local Drawings = {Main = {}, Sub = {}, Control = {}}
 
 local x
 
