@@ -1,4 +1,4 @@
-# Tutorial
+# ER-301 SDK Tutorial
 
 ![](tutorial-screenshot.png)
 
@@ -16,20 +16,20 @@
 
 ## Introduction
 
-This folder contains 3 example projects that progressively increase in complexity and sophistication.  In each step, you create a package (called tutorial) containing one or more units.  First you will create a unit (called FM Operator) using only lua scripting.  Next, you will create yet another unit (call Euclid's Cats) that has your C++ DSP code.  Finally, you will enhance the Euclid's Cats unit with your own custom graphics.
+This folder contains 3 example projects using the ER-301 SDK that progressively increase in complexity and sophistication.  In each step, you create a package (called tutorial) containing one or more units.  First you will create a unit (called FM Operator) using only lua scripting.  Next, you will create yet another unit (call Euclid's Cats) that utilizes some C++ DSP code.  Finally, you will enhance the Euclid's Cats unit with your own custom C++ graphics.
 
-:warning: You have a choice to either use these tutorial projects in-place OR you can copy them out and work on them outside of this source tree.  If you choose to copy them then make sure to edit the **SDKPATH** variable in each step's Makefile to point to the er-301 source tree.
+:warning: You have a choice to either use these tutorial projects in-place OR you can copy them out and work on them outside of this source tree.  If you choose to copy them to another location then make sure to edit the **SDKPATH** variable in each step's Makefile to point to the er-301 source tree.
 
 ## Step 1: Make your first unit
 
-Our first [unit](#unit) is 1-operator FM oscillator that is built entirely out of existing DSP objects that can be found in the firmware and the core library.  Since the implementation is pure Lua, there are no files to compile.  The *Step 1* makefile just zips up the *.lua files and names it appropriately with a version string.  
+The first [unit](#unit) is a 1-operator FM oscillator that is built entirely out of existing DSP objects that can be found in the firmware and the core library.  Since the implementation is pure Lua, there are no files to compile.  The *Step 1* makefile just zips up the *.lua files and names it appropriately with a version string.  
 
 ```bash
 cd step1
 make
 ```
 
-This will generate a file called **tutorial-0.0.1.pkg** in this directory.  To try it out, manually copy this pkg to the packages folder of the emulator or your SD card.  Since this package has only lua scripts, there is no need for cross-compilation.  Alternatively, you can use the make install targets:
+This will generate a file called **tutorial-0.0.1.pkg** in this directory.  To try it out, manually copy this pkg to the packages folder of the emulator or your ER-301's front SD card.  Since this package has only lua scripts, there is no need for cross-compilation.  Alternatively, you can use these make install targets to have the copying done for you:
 
 ```bash
 # To install to the emulator's package folder:
