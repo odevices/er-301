@@ -165,6 +165,20 @@ function Unit:setTitle(title)
   end
 end
 
+--- Set the background graphic for the named view
+-- @param name    The name of the view created by onLoadViews.
+-- @param graphic The background graphic to use.
+function Unit:setViewBackground(name, graphic)
+  local view = self:getView(name)
+  if view then
+    -- Place the background graphic position after the unit header.
+    graphic:setPosition(app.SECTION_PLY, 0)
+    view:setBackground(graphic)
+  else
+    app.logError("Unit.setViewBackground: view '%s' does not exist.", name)
+  end
+end
+
 -- syntax sugar for Unit definition
 function Unit:addToMuteGroup(control)
   self.chain:addToMuteGroup(control)

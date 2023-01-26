@@ -20,12 +20,21 @@ function SectionView:addDivider(x)
   self.dividers[#self.dividers + 1] = x
 end
 
+--- Set the background graphic for this section view.
+function SectionView:setBackground(graphic)
+  self.background = graphic
+end
+
 function SectionView:rebuild(pSection)
   pSection:clear()
   self.spots = {}
 
   for _, x in ipairs(self.dividers) do
     pSection:addVerticalDivider(x)
+  end
+
+  if self.background then
+    pSection:addChild(self.background)
   end
 
   for _, control in ipairs(self.controls) do
