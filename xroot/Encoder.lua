@@ -192,6 +192,10 @@ dialMaps["speedFactors"] = speedFactorMap()
 dialMaps["rate"] = rateMap()
 dialMaps["ADSR"] = bilinearMap(0, 0.99, 99, 1, 10, 99)
 dialMaps["tempo"] = linMap(1, 501, 10, 1, 0.1, 0.01)
+-- TODO: Can we register these dynamically?
+dialMaps["[1,300]"] = linMap(1, 300, 10, 1, 0.1, 0.01)
+dialMaps["[0.1,30]"] = linMap(0.1, 30, 10, 1, 0.1, 0.01)
+dialMaps["[-70,0]"] = linMap(-70, 0, 10, 1, 0.1, 0.01)
 
 local function dumpMap(name, map)
   app.logInfo("Map(%s)", name)
