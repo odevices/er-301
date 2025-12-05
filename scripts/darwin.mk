@@ -8,7 +8,7 @@
 # eventually they can use the same version.
 GCC_VERSION = 10
 ifeq ($(shell uname -p),arm)
-  GCC_VERSION = 11
+  GCC_VERSION = 15
 endif
 
 CC := gcc-$(GCC_VERSION) -fdiagnostics-color -fmax-errors=5

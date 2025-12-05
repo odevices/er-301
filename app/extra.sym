@@ -104,6 +104,7 @@ bcopy
 bsearch
 btowc
 bzero
+calloc
 clearerr
 difftime
 diprintf
@@ -139,6 +140,7 @@ fputs
 fputwc
 fputws
 fread
+free
 freopen
 fscanf
 fseek
@@ -195,6 +197,7 @@ lldiv
 localeconv
 setlocale
 lrand48
+malloc
 memccpy
 memchr
 memcmp

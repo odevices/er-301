@@ -1,10 +1,10 @@
 # top-level makefile
 
 # Define all build targets
-BUILD_TARGETS = firmware app-libs app core teletype emu
+BUILD_TARGETS = firmware app-libs app core teletype ladspa emu
 
 # Define all clean targets
-CLEAN_TARGETS = firmware-clean app-libs-clean app-clean core-clean teletype-clean emu-clean
+CLEAN_TARGETS = firmware-clean app-libs-clean app-clean core-clean teletype-clean ladspa emu-clean
 
 # Add new all and clean targets at the top
 .PHONY: all clean $(BUILD_TARGETS) $(CLEAN_TARGETS)
@@ -54,11 +54,20 @@ teletype:
 teletype-install:
 	+$(MAKE) -f scripts/teletype.mk install
 
+ladspa:
+	+$(MAKE) -f scripts/ladspa.mk
+
+ladspa-install:
+	+$(MAKE) -f scripts/ladspa.mk install
+
 core-clean:
 	+$(MAKE) -f scripts/core.mk clean
 
 teletype-clean:
 	+$(MAKE) -f scripts/teletype.mk clean
+
+ladspa-clean:
+	+$(MAKE) -f scripts/ladspa.mk clean
 
 sbl: 
 	+$(MAKE) -f scripts/sbl.mk
@@ -87,13 +96,13 @@ export ARCH_FLAGS=-march=native
 endif
 endif
 
-emu: 
+emu:
 	+$(MAKE) -f scripts/lua.mk
 	+$(MAKE) -f scripts/miniz.mk
 	+$(MAKE) -f scripts/lodepng.mk
 	+$(MAKE) -f scripts/emu.mk
 
-emu-clean: 
+emu-clean:
 	+$(MAKE) -f scripts/lua.mk clean
 	+$(MAKE) -f scripts/miniz.mk clean
 	+$(MAKE) -f scripts/lodepng.mk clean

@@ -122,7 +122,8 @@ end
 local librarySearchOrder = {
   "builtins",
   "core",
-  "teletype"
+  "teletype",
+  "ladspa"
 }
 
 local function instantiate(loadInfo, args)
